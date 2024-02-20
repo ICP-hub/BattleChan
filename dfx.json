@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "battle_chan_backend": {
+      "candid": "src/battle_chan_backend/battle_chan_backend.did",
+      "package": "battle_chan_backend",
+      "type": "rust"
+    },
+    "battle_chan_frontend": {
+      "dependencies": [
+        "battle_chan_backend"
+      ],
+      "source": [
+        "src/battle_chan_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "battle_chan_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
