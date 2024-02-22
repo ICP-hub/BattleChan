@@ -48,7 +48,7 @@ const Navbar = () => {
             <MdNotifications size={20} />
           </Link>
           <div className="flex cursor-pointer">
-            <img src="/public/user-icon.svg" alt="User Default" className="w-10 h-10 object-contain" />
+            <img src="/user-icon.svg" alt="User Default" className="w-10 h-10 object-contain" />
             <div className="flex flex-col ml-2">
               <span className="text-sm font-medium">Suraj Aswal</span>
               <span className="text-xs text-slate-500">ID: 23890329</span>
