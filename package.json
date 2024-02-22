@@ -17,5 +17,8 @@
   ],
   "devDependencies": {
     "workbox-cli": "^7.0.0"
+  },
+  "dependencies": {
+    "@dfinity/auth-client": "^1.0.1"
   }
 }

@@ -6,14 +6,14 @@
       "type": "rust"
     },
     "battle_chan_frontend": {
-      "dependencies": [
-        "battle_chan_backend"
-      ],
-      "source": [
-        "src/battle_chan_frontend/dist"
-      ],
+      "dependencies": ["battle_chan_backend"],
+      "source": ["src/battle_chan_frontend/dist"],
       "type": "assets",
       "workspace": "battle_chan_frontend"
+    },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
     }
   },
   "defaults": {
