@@ -1,5 +1,0 @@
-[workspace]
-members = [
-    "src/battle_chan_backend"
-]
-resolver = "2"

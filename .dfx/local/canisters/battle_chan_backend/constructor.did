@@ -1,0 +1,23 @@
+type Post = record {
+  id: nat64;
+  title: text;
+  content: text;
+  image_url: text;
+  author: text;
+  created_at: nat64;
+  updated_at: nat64;
+};
+
+type AllPostsData = record {
+  status: text;
+  data: vec Post;
+};
+
+service : {
+  // Adjusts the return type to AllPostsData to include the status message
+  "get_posts": () -> (AllPostsData) query;
+  
+  // Data Expected: title: String, content: String, image_url: String, author: String
+  // id, created_at, and updated_at are internally generated
+  "create_post": (text, text, text, text) -> ();
+}
