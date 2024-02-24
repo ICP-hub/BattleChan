@@ -1,0 +1,37 @@
+{
+  "canisters": {
+    "battlechan_backend": {
+      "main": "src/battlechan_backend/main.mo",
+      "type": "motoko"
+    },
+    "battlechan_frontend": {
+      "dependencies": [
+        "battlechan_backend"
+      ],
+      "source": [
+        "src/battlechan_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "battlechan_frontend"
+    },
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
