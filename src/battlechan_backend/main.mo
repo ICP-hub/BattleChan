@@ -8,24 +8,24 @@ import Result "mo:base/Result";
 import Random "mo:base/Random";
 import Hash "mo:base/Hash";
 import Nat32 "mo:base/Nat32";
+import Trie "mo:base/Trie";
 
 import Types "utils/types";
 import { createUserInfo } "controllers/userController";
 import { createPostInfo } "controllers/postController";
 import { getUniqueId } "utils/helper";
+import { principalKey; textKey } "keys";
 
 import { successMessage } "utils/message";
 actor {
-  private var userMap = HashMap.HashMap<Types.UserId, Types.UserInfo>(0, Principal.equal, Principal.hash);
-  private var postMap = HashMap.HashMap<Types.PostId, Types.PostInfo>(0, Text.equal, Text.hash);
 
-  private stable var userMapEntries : [(Types.UserId, Types.UserInfo)] = [];
-  private stable var postMapEntries : [(Types.PostId, Types.PostInfo)] = [];
+  private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
+  private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
 
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
-      let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userMap);
-      userMap.put(userId, userInfo);
+      let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
       #ok(successMessage.insert);
 
     } catch (e) {
@@ -36,7 +36,7 @@ actor {
   };
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
-    switch (userMap.get(userId)) {
+    switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
         { data = null; status = false; error = ?"Error! No user Exist" };
       };
@@ -49,9 +49,9 @@ actor {
   public shared query ({ caller = userId }) func createPost(postReq : Types.PostReq) : async Types.Result {
     try {
       let postId : Types.PostId = Nat32.toText(getUniqueId());
-      let postInfo : Types.PostInfo = createPostInfo(userId, postId, postReq, userMap);
-
-      postMap.put(postId, postInfo);
+      let { postInfo; updatedUserInfo } = createPostInfo(userId, postId, postReq, userTrieMap);
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, postInfo).0;
       #ok(successMessage.insert);
 
     } catch (e) {
@@ -61,14 +61,4 @@ actor {
     };
   };
 
-  system func preupgrade() {
-    userMapEntries := Iter.toArray(userMap.entries());
-
-  };
-  system func postupgrade() {
-    userMap := HashMap.fromIter(userMapEntries.vals(), userMapEntries.size(), Principal.equal, Principal.hash);
-    postMap := HashMap.fromIter(postMapEntries.vals(), postMapEntries.size(), Text.equal, Text.hash);
-    userMapEntries := [];
-    postMapEntries := [];
-  };
 };

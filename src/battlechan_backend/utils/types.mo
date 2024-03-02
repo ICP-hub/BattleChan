@@ -1,8 +1,10 @@
 import Result "mo:base/Result";
 import Principal "mo:base/Principal";
+import Trie "mo:base/Trie";
 import Error "mo:base/Error";
 
 module {
+    public type Key<K> = Trie.Key<K>;
     public type UserId = Principal;
     public type UserReq = {
         userName : Text;
