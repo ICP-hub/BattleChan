@@ -5,6 +5,7 @@ import Int "mo:base/Int";
 import HashMap "mo:base/HashMap";
 import { now } "mo:base/Time";
 import List "mo:base/List";
+import Trie "mo:base/Trie";
 
 // thapa technical
 // code step by step
@@ -12,8 +13,12 @@ import List "mo:base/List";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
+import { principalKey } "../keys";
 module {
-    public func createPostInfo(userId : Types.UserId, postId : Types.PostId, postReq : Types.PostReq, userMap : HashMap.HashMap<Types.UserId, Types.UserInfo>) : Types.PostInfo {
+    public func createPostInfo(userId : Types.UserId, postId : Types.PostId, postReq : Types.PostReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : {
+        postInfo : Types.PostInfo;
+        updatedUserInfo : Types.UserInfo;
+    } {
         if (anonymousCheck(userId) == true) {
             Debug.trap(reject.anonymous);
         };
@@ -22,7 +27,7 @@ module {
             Debug.trap(reject.noAccount);
         };
 
-        let userInfo : Types.UserInfo = switch (userMap.get(userId)) {
+        let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noAccount) };
         };
@@ -35,8 +40,6 @@ module {
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
-        
-        ignore userMap.replace(userId, updatedUserInfo);
 
         let postInfo : Types.PostInfo = {
             postId = postId;
@@ -45,6 +48,10 @@ module {
             createdBy = userId;
             createdAt = Int.toText(now());
             updatedAt = null;
+        };
+        {
+            postInfo;
+            updatedUserInfo;
         };
 
     };
