@@ -14,5 +14,8 @@
   "type": "module",
   "workspaces": [
     "src/battlechan_frontend"
-  ]
+  ],
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
 }
