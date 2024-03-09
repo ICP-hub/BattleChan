@@ -67,6 +67,9 @@ actor {
       #err(code, message);
     };
   };
+
+
+  
   // public shared query ({ caller = userId }) func createPost(postReq : Types.PostReq) : async Types.Result {
   //   try {
   //     let postId : Types.PostId = Nat32.toText(getUniqueId());
