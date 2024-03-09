@@ -1,12 +1,12 @@
 {
   "canisters": {
-    "battlechan_backend": {
+    "backend": {
       "main": "src/battlechan_backend/main.mo",
       "type": "motoko"
     },
     "battlechan_frontend": {
       "dependencies": [
-        "battlechan_backend"
+        "backend"
       ],
       "source": [
         "src/battlechan_frontend/dist"
