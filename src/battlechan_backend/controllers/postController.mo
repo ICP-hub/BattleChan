@@ -1,11 +1,11 @@
 import Debug "mo:base/Debug";
-import Nat32 "mo:base/Nat32";
 import Principal "mo:base/Principal";
 import Int "mo:base/Int";
-import HashMap "mo:base/HashMap";
 import { now } "mo:base/Time";
 import List "mo:base/List";
 import Trie "mo:base/Trie";
+import Text "mo:base/Text";
+import Nat32 "mo:base/Nat32";
 
 // thapa technical
 // code step by step
@@ -13,10 +13,11 @@ import Trie "mo:base/Trie";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
-import { principalKey } "../keys";
+import { getUniqueId } "../utils/helper";
+import { principalKey; textKey } "../keys";
 module {
-    public func createPostInfo(userId : Types.UserId, postId : Types.PostId, postReq : Types.PostReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : {
-        postInfo : Types.PostInfo;
+    public func createThreadInfo(boardId : Types.BoardName, userId : Types.UserId, postReq : Types.PostReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, boardTrieMap : Trie.Trie<Types.BoardName, Types.BoardInfo>) : {
+        updatedBoardInfo : Types.BoardInfo;
         updatedUserInfo : Types.UserInfo;
     } {
         if (anonymousCheck(userId) == true) {
@@ -31,28 +32,43 @@ module {
             case (?value) { value };
             case (null) { Debug.trap(reject.noAccount) };
         };
+        let boardInfo : Types.BoardInfo = switch (Trie.get(boardTrieMap, textKey boardId, Text.equal)) {
+            case (?board) { board };
+            case (null) { Debug.trap(reject.invalidBoard) };
+        };
+
+        let threadId : Types.PostId = Nat32.toText(getUniqueId());
 
         let updatedUserInfo : Types.UserInfo = {
             userId = userInfo.userId;
             userName = userInfo.userName;
             profileImg = userInfo.profileImg;
-            postIds = List.toArray(List.push(postId, List.fromArray(userInfo.postIds)));
+            threadIds = List.toArray(List.push(boardId # "#" # threadId, List.fromArray(userInfo.threadIds)));
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
 
-        let postInfo : Types.PostInfo = {
-            postId = postId;
+        let newPost : Types.PostInfo = {
+            postId = threadId;
             postName = postReq.postName;
             postMetaData = postReq.postMetaData;
+            replies = Trie.empty<Types.PostId, Types.PostInfo>();
             createdBy = userId;
             createdAt = Int.toText(now());
             updatedAt = null;
         };
-        {
-            postInfo;
-            updatedUserInfo;
+
+        let updatedBoardInfo : Types.BoardInfo = {
+            boardName = boardInfo.boardName;
+            boardDes = boardInfo.boardDes;
+            posts = Trie.put(boardInfo.posts, textKey threadId, Text.equal, newPost).0;
+            createdAt = boardInfo.createdAt;
+            updatedAt = ?Int.toText(now());
         };
 
+        return {
+            updatedBoardInfo;
+            updatedUserInfo;
+        };
     };
 };

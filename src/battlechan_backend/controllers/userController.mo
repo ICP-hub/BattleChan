@@ -1,8 +1,6 @@
 import { now } "mo:base/Time";
 import Debug "mo:base/Debug";
-import Nat "mo:base/Nat";
 import Int "mo:base/Int";
-import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 import Trie "mo:base/Trie";
 
@@ -27,11 +25,12 @@ module {
             case (null) {};
         };
 
-        let data : Types.UserInfo = {
+        return {
             userId = userId;
             userName = userData.userName;
             profileImg = userData.profileImg;
-            postIds = [];
+            boardIds = [];
+            threadIds = [];
             createdAt = Int.toText(now());
             updatedAt = null;
         };

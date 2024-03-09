@@ -10,12 +10,21 @@ module {
         userName : Text;
         profileImg : Text;
     };
+    public type BoardName = Text;
+
+    public type BoardInfo = {
+        boardName : Text;
+        boardDes : Text;
+        posts : Trie.Trie<PostId, PostInfo>;
+        createdAt : Text;
+        updatedAt : ?Text;
+    };
 
     public type UserInfo = {
         userId : UserId;
         userName : Text;
         profileImg : Text;
-        postIds : [Text];
+        threadIds : [Text];
         createdAt : Text;
         updatedAt : ?Text;
     };
@@ -31,9 +40,9 @@ module {
         postName : Text;
         postMetaData : Text;
         createdBy : Principal;
+        replies : Trie.Trie<PostId, PostInfo>;
         createdAt : Text;
         updatedAt : ?Text;
-
     };
 
     public type Message = Text;
