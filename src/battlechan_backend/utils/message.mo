@@ -11,6 +11,7 @@ module {
         outBound = "Text OverFlow!";
         alreadyExist = "Account already Exist!";
         noAccount = "No Access ! No account Exist.";
-        invalidBoard = "BoardName doesn't Exist! "; 
+        invalidBoard = "BoardName doesn't Exist! ";
+        noPost = "No Post Exist!";
     };
 };

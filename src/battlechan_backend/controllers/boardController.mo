@@ -18,10 +18,12 @@ module {
         let newBoard : Types.BoardInfo = {
             boardName;
             boardDes;
-            posts = Trie.empty<Types.PostId, Types.PostInfo>();
+            postIds = [];
+            upvotedTo = [];
+            downvotedTo = [];
             createdAt = Int.toText(now());
             updatedAt = null;
-        }; 
+        };
     };
 
 };
