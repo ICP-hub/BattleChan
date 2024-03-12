@@ -19,7 +19,7 @@
     @apply gap-2 font-semibold text-lg rounded-[3rem] px-8 py-3.5 text-light bg-green;
   }
   .white-button {
-    @apply gap-2 font-semibold text-lg rounded-[3rem] px-8 py-3.5 text-dark bg-light;
+    @apply gap-2 font-semibold text-lg rounded-[3rem] px-12 py-3 text-dark bg-light;
   }
 
   .buy-button {

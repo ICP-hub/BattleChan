@@ -1,20 +1,14 @@
 import React from "react";
 
-import {
-  ConnectButton,
-  ConnectDialog,
-  Connect2ICProvider,
-} from "@connect2ic/react";
-import { createClient } from "@connect2ic/core";
-import { defaultProviders } from "@connect2ic/core/providers";
+import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import backImage from "../../../images/background_img.png";
 import leftDesktop from "../../../images/left_desktop.png";
 import rightDesktop from "../../../images/right_desktop.png";
 import centerDesktop from "../../../images/center_desktop.png";
 
-const LandingHero = () => {
-  const className = "landingPageHeroSection";
+const HeroSection = () => {
+  const className = "landingPage__HeroSection";
   const theme: string = "dark";
   const darkColor: string = theme.includes("dark") ? "dark" : "light";
   const lightColor: string = !theme.includes("dark") ? "dark" : "light";
@@ -78,20 +72,4 @@ const LandingHero = () => {
   );
 };
 
-const client = createClient({
-  canisters: {},
-  providers: defaultProviders,
-  globalProviderConfig: {
-    /*
-     * Disables dev mode in production
-     * Should be enabled when using local canisters
-     */
-    dev: import.meta.env.DEV,
-  },
-});
-
-export default () => (
-  <Connect2ICProvider client={client}>
-    <LandingHero />
-  </Connect2ICProvider>
-);
+export default HeroSection;

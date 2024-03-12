@@ -7,8 +7,8 @@ import big_image from "../../../images/tablet.png";
 import dollarCoin from "../../../images/dollar_coin.png";
 import profile_pic from "../../../images/profilePic.png";
 
-const LandingAbout = () => {
-  const className = "LandingAbout";
+const About = () => {
+  const className = "LandingPage__About";
 
   return (
     <div
@@ -151,4 +151,4 @@ const Cards = () => {
   );
 };
 
-export default LandingAbout;
+export default About;
