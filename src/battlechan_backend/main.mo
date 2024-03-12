@@ -3,14 +3,13 @@ import Principal "mo:base/Principal";
 import Error "mo:base/Error";
 import Nat32 "mo:base/Nat32";
 import Trie "mo:base/Trie";
-import Option "mo:base/Option";
 import List "mo:base/List";
 
 import Types "utils/types";
-import { createBoardInfo } "controllers/boardController";
-import { createUserInfo } "controllers/userController";
-import { createCommentInfo; updateLikedComments } "controllers/commentController";
-import { createPostInfo; updateVoteStatus } "controllers/postController";
+import { createBoardInfo } "controllers/board";
+import { createUserInfo } "controllers/user";
+import { createCommentInfo; updateLikedComments } "controllers/comment";
+import { createPostInfo; updateVoteStatus } "controllers/post";
 import { getUniqueId; toBoardId } "utils/helper";
 import { principalKey; textKey } "keys";
 
