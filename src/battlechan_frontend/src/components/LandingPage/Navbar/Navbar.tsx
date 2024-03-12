@@ -1,19 +1,13 @@
 import React from "react";
 
-import {
-  ConnectButton,
-  ConnectDialog,
-  Connect2ICProvider,
-} from "@connect2ic/react";
-import { createClient } from "@connect2ic/core";
-import { defaultProviders } from "@connect2ic/core/providers";
+import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 
-const LandingNavbar = () => {
-  const className = "LandingNavbar";
+const Navbar = () => {
+  const className = "Landing__Navbar";
   const theme = "dark";
   const darkColor = theme.includes("dark") ? "dark" : "light";
   const lightColor = !theme.includes("dark") ? "dark" : "light";
@@ -41,12 +35,7 @@ const LandingNavbar = () => {
           }
         >
           1 Time Token:
-          <span
-            className={
-              className +
-              "__timeToken__amount text-light-green"
-            }
-          >
+          <span className={className + "__timeToken__amount text-light-green"}>
             $0.0050
           </span>
           <button
@@ -73,20 +62,4 @@ const LandingNavbar = () => {
   );
 };
 
-const client = createClient({
-  canisters: {},
-  providers: defaultProviders,
-  globalProviderConfig: {
-    /*
-     * Disables dev mode in production
-     * Should be enabled when using local canisters
-     */
-    dev: import.meta.env.DEV,
-  },
-});
-
-export default () => (
-  <Connect2ICProvider client={client}>
-    <LandingNavbar />
-  </Connect2ICProvider>
-);
+export default Navbar;
