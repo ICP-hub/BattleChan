@@ -2,52 +2,25 @@ import React from "react";
 
 import { FiArrowRight } from "react-icons/fi";
 import Sword from "../../../images/sword.png";
-import like from "../../../images/like.png";
-import tab from "../../../images/tablet.png";
+import like from "../../../images/likes.png";
+import big_image from "../../../images/tablet.png";
 import dollarCoin from "../../../images/dollar_coin.png";
 import profile_pic from "../../../images/profilePic.png";
-
-// interface contentTypes {
-//   index: number;
-//   name: string;
-//   constant: string;
-//   date_and_time: string;
-//   left_time: string;
-//   profile_photo: string;
-// }
-
-const content = [
-  {
-    index: 1,
-    name: "Lannister Grey",
-    constant:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.......",
-    date_and_time: "Oct 29,2023 : 13:30",
-    left_time: `5:00 min left`,
-    big_image: tab,
-    profile_photo: profile_pic,
-  },
-  {
-    index: 2,
-    name: "Lannister Grey",
-    constant:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.......",
-    date_and_time: "Oct 29,2023 : 13:30",
-    left_time: `0:52 min left`,
-    big_image: tab,
-    profile_photo: profile_pic,
-  },
-];
 
 const LandingAbout = () => {
   const className = "LandingAbout";
 
   return (
-    <div className={className + " w-full h-[80vh] bg-green flex-direction-row"}>
+    <div
+      className={
+        className +
+        " w-full h-[90vh] px-24 bg-green flex-direction-row relative"
+      }
+    >
       <section
         className={
           className +
-          "__leftSide w-1/3 h-full gap-8 pl-24 py-24 flex flex-col items-start justify-evenly"
+          "__leftSide w-1/3 h-full gap-8 py-24 flex flex-col items-start justify-evenly"
         }
       >
         <h1 className="text-5xl font-bold"> About Battlechan</h1>
@@ -65,50 +38,116 @@ const LandingAbout = () => {
         </button>
       </section>
 
-      <section className={className + "__rightSide relative"}>
-        {content &&
-          content.map((item, i) => (
-            <div
-              className="card bg-dark h-[160px] w-[760px] gap-8 m-8 rounded-2xl flex-row-center relative"
-              key={i}
-            >
-              <section className="image">
-                <img
-                  src={item.big_image}
-                  alt="Big Image"
-                  className=" bottom-12 pl-8 absolute"
-                />
-              </section>
+      <section
+        className={
+          className +
+          "__rightSide relative w-2/3 h-full flex-direction-col justify-around"
+        }
+      >
+        <Cards />
 
-              <section className="content flex-col-center">
-                <div className="top flex-row-center">
-                  <div className="profileImage relative">
-                    <img
-                      src={item.profile_photo}
-                      alt="Profile Photo"
-                      className="absolute bottom-4"
-                    />
-                  </div>
-                  <p className="name text-xl">{item.name}</p>
-                  <p className="date_and_time">{item.date_and_time}</p>
-                  <p className="left_time text-xl">{item.left_time}</p>
-                </div>
-
-                <p className="px-24 pb-8">{item.constant}</p>
-              </section>
-            </div>
-          ))}
-
-        <img src={Sword} alt="Sword" className="absolute" />
-        <img src={Sword} alt="Sword" className="absolute" />
-        <img src={like} alt="Thumbs up" className="absolute" />
-        <img src={like} alt="Thumbs up" className="absolute" />
-        <img src={like} alt="Thumbs up" className="absolute" />
-        <img src={like} alt="Thumbs up" className="absolute" />
-        <img src={dollarCoin} alt="dollar coin" className="absolute" />
-        <img src={dollarCoin} alt="dollar coin" className="absolute" />
+        <img
+          src={dollarCoin}
+          alt="dollar coin"
+          className="absolute pointer-events-none w-[150px] right-[20%] top-0"
+        />
+        <img
+          src={dollarCoin}
+          alt="dollar coin"
+          className="absolute pointer-events-none w-[50px] left-[40%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+        />
+        <img
+          src={Sword}
+          alt="Sword"
+          className="absolute pointer-events-none top-[10%]"
+        />
+        <img
+          src={Sword}
+          alt="Sword"
+          className="absolute pointer-events-none bottom-[10%] right-0 rotate-[180deg]"
+        />
+        <img
+          src={like}
+          alt="Thumbs up"
+          className="absolute pointer-events-none w-[200px] left-[70%] top-[47%] translate-x-[-50%] translate-y-[-50%]"
+        />
+        <img
+          src={like}
+          alt="Thumbs up"
+          className="absolute pointer-events-none w-[200px] left-[60%] bottom-[5%] translate-x-[-50%] translate-y-[-50%] rotate-[180deg]"
+        />
       </section>
     </div>
+  );
+};
+
+const Cards = () => {
+  return (
+    <React.Fragment>
+      <div className="card bg-dark h-[140px] w-[700px] gap-8 mt-40 rounded-2xl flex-row-center absolute right-0 top-0">
+        <section className="left_image w-1/3">
+          <img
+            src={big_image}
+            alt="Big Image"
+            className="h-full bottom-8 pl-8 absolute pointer-events-none"
+          />
+        </section>
+
+        <section className="right_content h-full pr-8 pt-4 pb-8 px-8 flex-direction-col justify-between">
+          <div className="right_content_top flex-direction-row items-end justify-between relative">
+            <div className="w-[5%]">
+              <img
+                src={profile_pic}
+                alt="Profile Photo"
+                className="absolute bottom-4 w-[50px] pointer-events-none"
+              />
+            </div>
+            <p className="name text-xl">Lannister Grey</p>
+            <p className="date_and_time">Oct 29,2023 ; 13:30</p>
+            <p className="left_time text-xl">
+              <span className="text-light-green">5:00</span> min left
+            </p>
+          </div>
+
+          <p className="content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore.......
+          </p>
+        </section>
+      </div>
+
+      <div className="card bg-dark h-[140px] w-[700px] gap-8 mb-36 rounded-2xl flex-row-center absolute bottom-0 left-0">
+        <section className="left_image w-1/3">
+          <img
+            src={big_image}
+            alt="Big Image"
+            className="h-full bottom-8 pl-8 absolute pointer-events-none"
+          />
+        </section>
+
+        <section className="right_content h-full pr-8 pt-4 pb-8 px-8 flex-direction-col justify-between">
+          <div className="right_content_top flex-direction-row items-end justify-between relative">
+            <div className="w-[5%]">
+              <img
+                src={profile_pic}
+                alt="Profile Photo"
+                className="absolute bottom-4 w-[50px] pointer-events-none"
+              />
+            </div>
+            <p className="name text-xl">Lannister Grey</p>
+            <p className="date_and_time">Oct 29,2023 ; 13:30</p>
+            <p className="left_time text-xl">
+              <span className="text-red">0:52</span> min left
+            </p>
+          </div>
+
+          <p className="content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore.......
+          </p>
+        </section>
+      </div>
+    </React.Fragment>
   );
 };
 

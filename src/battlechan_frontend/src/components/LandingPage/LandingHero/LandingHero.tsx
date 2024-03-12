@@ -54,23 +54,24 @@ const LandingHero = () => {
 
       <div
         className={
-          className + `__desktopsBlock w-full h-[80vh] mb-24 relative flex flex-row`
+          className +
+          `__desktopsBlock w-full h-[80vh] mb-24 relative flex flex-row`
         }
       >
         <img
           src={leftDesktop}
           alt="Left Desktop"
-          className="absolute w-3/12 left-16 bottom-8"
+          className="absolute pointer-events-none w-3/12 left-16 bottom-8"
         />
         <img
           src={centerDesktop}
           alt="Center Desktop"
-          className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          className="absolute pointer-events-none left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
         />
         <img
           src={rightDesktop}
           alt="Right Desktop"
-          className="absolute w-3/12 right-16 bottom-8"
+          className="absolute pointer-events-none w-3/12 right-16 bottom-8"
         />
       </div>
     </div>
