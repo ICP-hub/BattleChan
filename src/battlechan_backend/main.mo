@@ -10,8 +10,8 @@ import { createBoardInfo } "controllers/board";
 import { createUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
 import { createPostInfo; updateVoteStatus } "controllers/post";
-import { createReply } "controllers/reply";
-import { getUniqueId; toBoardId } "utils/helper";
+import { createReply; updateLikesInReplies } "controllers/reply";
+import { getUniqueId; toBoardId; getPostIdFromCommentId } "utils/helper";
 import { principalKey; textKey } "keys";
 
 import { successMessage } "utils/message";
@@ -106,7 +106,11 @@ actor {
   };
   public shared ({ caller = userId }) func createCommentReply(commentId : Types.CommentId, reply : Text) : async Types.Result {
     try {
-      let {updatedPostInfo ;updatedUserInfo} = createReply(userId ,commentId, reply, userTrieMap, postTrieMap);
+      let postId = getPostIdFromCommentId(commentId);
+
+      let { updatedPostInfo; updatedUserInfo } = createReply(userId, commentId, reply, userTrieMap, postTrieMap);
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
       #ok(successMessage.insert);
     } catch (e) {
       let message = Error.message(e);
@@ -114,6 +118,21 @@ actor {
       #err(code, message);
     };
   };
+  public shared ({ caller = userId }) func likeCommentReply(commentId : Types.CommentId, replyId : Types.ReplyId) : async Types.Result {
+    try {
+      let postId = getPostIdFromCommentId(commentId);
+
+      let postInfo : Types.PostInfo = updateLikesInReplies(userId, commentId, replyId, postTrieMap, userTrieMap);
+      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, postInfo).0;
+
+      #ok(successMessage.update);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+    };
+  };
+  
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {

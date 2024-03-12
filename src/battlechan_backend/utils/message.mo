@@ -14,5 +14,6 @@ module {
         invalidBoard = "BoardName doesn't Exist! ";
         noPost = "No Post Exist!";
         noComment = "No Comment found !";
+        noReply = "No Reply found !";
     };
 };

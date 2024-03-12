@@ -82,4 +82,58 @@ module {
         };
         { updatedPostInfo; updatedUserInfo };
     };
+    public func updateLikesInReplies(userId : Types.UserId, commentId : Types.CommentId, replyId : Types.ReplyId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : Types.PostInfo {
+
+        let postId = getPostIdFromCommentId(commentId);
+        let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+            case (null) { trap(reject.noAccount) };
+            case (?userData) { userData };
+        };
+        let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+            case (?value) { value };
+            case (null) { trap(reject.noPost) };
+        };
+        let commentInfo : Types.CommentInfo = switch (Trie.get(postInfo.comments, textKey commentId, Text.equal)) {
+            case (?value) { value };
+            case (null) { trap(reject.noPost) };
+        };
+
+        let replyInfo : Types.ReplyInfo = switch (Trie.get(commentInfo.replies, textKey replyId, Text.equal)) {
+            case (?value) { value };
+            case (null) { trap(reject.noReply) };
+        };
+
+        let newReply : Types.ReplyInfo = {
+            replyId = replyInfo.replyId;
+            reply = replyInfo.reply;
+            likes = replyInfo.likes +1;
+            createdAt = Int.toText(now());
+            updatedAt = null;
+        };
+
+        let updatedCommentInfo : Types.CommentInfo = {
+            commentId = commentInfo.commentId;
+            comment = commentInfo.comment;
+            likedBy = commentInfo.likedBy;
+            replies = Trie.put(commentInfo.replies, textKey replyId, Text.equal, newReply).0;
+            createdAt = commentInfo.createdAt;
+            updatedAt = ?Int.toText(now());
+        };
+        let updatedCommentTrie : Trie.Trie<Types.CommentId, Types.CommentInfo> = Trie.put(postInfo.comments, textKey commentId, Text.equal, updatedCommentInfo).0;
+        let updatedPostInfo : Types.PostInfo = {
+            postId = postInfo.postId;
+            postName = postInfo.postName;
+            upvotedBy = postInfo.upvotedBy;
+            downvotedBy = postInfo.downvotedBy;
+            upvotes = postInfo.upvotes;
+            downvotes = postInfo.downvotes;
+            postMetaData = postInfo.postMetaData;
+            createdBy = postInfo.createdBy;
+            comments = updatedCommentTrie;
+            createdAt = postInfo.createdAt;
+            updatedAt = ?Int.toText(now());
+        };
+
+        updatedPostInfo;
+    };
 };
