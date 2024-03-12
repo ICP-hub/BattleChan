@@ -32,7 +32,7 @@ module {
         upvotedTo : [PostId];
         downvotedTo : [PostId];
         likedComments : [CommentId];
-        replyIds: [ReplyId];
+        replyIds : [(CommentId, ReplyId)];
         postIds : [Text];
         createdAt : Text;
         updatedAt : ?Text;

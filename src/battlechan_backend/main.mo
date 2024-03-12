@@ -10,6 +10,7 @@ import { createBoardInfo } "controllers/board";
 import { createUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
 import { createPostInfo; updateVoteStatus } "controllers/post";
+import { createReply } "controllers/reply";
 import { getUniqueId; toBoardId } "utils/helper";
 import { principalKey; textKey } "keys";
 
@@ -103,8 +104,9 @@ actor {
       #err(code, message);
     };
   };
-  public shared ({ caller = userId }) func createCommentReply(commentId : Types.CommentId) : async Types.Result {
+  public shared ({ caller = userId }) func createCommentReply(commentId : Types.CommentId, reply : Text) : async Types.Result {
     try {
+      let {updatedPostInfo ;updatedUserInfo} = createReply(userId ,commentId, reply, userTrieMap, postTrieMap);
       #ok(successMessage.insert);
     } catch (e) {
       let message = Error.message(e);
@@ -142,7 +144,6 @@ actor {
 
   public shared query ({ caller }) func checkBoardExist(boardName : Text) : async Bool {
     let boardId = toBoardId(boardName);
-
     switch (Trie.get(boardTrieMap, textKey boardId, Text.equal)) {
       case (?board) { true };
       case (null) { false };

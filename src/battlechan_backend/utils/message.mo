@@ -13,5 +13,6 @@ module {
         noAccount = "No Access ! No account Exist.";
         invalidBoard = "BoardName doesn't Exist! ";
         noPost = "No Post Exist!";
+        noComment = "No Comment found !";
     };
 };
