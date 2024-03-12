@@ -28,7 +28,7 @@ const LandingNavbar = () => {
       <img
         src={darkColor.includes("dark") ? darkLogo : lightLogo}
         alt="BATTLE CHAN"
-        className={className + "__logo w-28 object-contain"}
+        className={className + "__logo w-28 object-contain pointer-events-none"}
       />
 
       <section
