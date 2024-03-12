@@ -1,8 +1,7 @@
-
-
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css" ; 
+import "./App.css";
+
 // Lazy load pages
 const Landing = lazy(() => import("./pages/Landing/Landing"));
 const DashboardRoutes = lazy(() => import("./pages/Routes"));
@@ -12,7 +11,6 @@ import Loader from "./components/Loader/Loader";
 function App() {
   return (
     <Router>
-      
       <div>
         <Routes>
           <Route
@@ -23,7 +21,7 @@ function App() {
               </Suspense>
             }
           />
-          
+
           <Route
             path="/dashboard/*"
             element={
@@ -38,6 +36,5 @@ function App() {
   );
 }
 
-export default App;
 
-
+export default App

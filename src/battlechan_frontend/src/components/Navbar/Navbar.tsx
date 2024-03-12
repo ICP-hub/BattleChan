@@ -1,5 +1,5 @@
 import * as React from 'react';
-import bclogo from "../../../images/battlechan 1.png"
+import bclogo from "../../images/dark_logo.png"
 export interface IAppProps {
 }
 
