@@ -29,10 +29,20 @@ module {
             userId = userId;
             userName = userData.userName;
             profileImg = userData.profileImg;
+            upvotedTo = [];
+            downvotedTo = [];
+            likedComments = [];
             boardIds = [];
-            threadIds = [];
+            replyIds = [];
+            postIds = [];
             createdAt = Int.toText(now());
             updatedAt = null;
         };
     };
+    // public func getAllUserPost(userId : Types.UserId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) {
+    //     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+    //         case (null) {return };
+    //         case (?userData) { userData.postIds};
+    //     };
+    // };
 };
