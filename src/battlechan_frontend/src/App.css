@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family :'istok';
+    src: url('../asset//IstokWeb-Regular.ttf');
+}
