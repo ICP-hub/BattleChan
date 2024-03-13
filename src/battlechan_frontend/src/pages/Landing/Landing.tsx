@@ -2,12 +2,15 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import Navbar from "../../components/LandingPage/Navbar/Navbar";
-import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
+import FAQs from "../../components/LandingPage/FAQs/FAQs";
 import About from "../../components/LandingPage/About/About";
+import Navbar from "../../components/LandingPage/Navbar/Navbar";
+import Footer from "../../components/LandingPage/Footer/Footer";
 import HowItWorks from "../../components/LandingPage/HowItWorks/HowItWorks";
 import TrendingPost from "../../components/LandingPage/TrendingPosts/TrendingPost";
-import Footer from "../../components/LandingPage/Footer/Footer";
+import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
+import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
+import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 
 function Landing() {
   const theme: string = "dark";
@@ -26,6 +29,9 @@ function Landing() {
       <About />
       <HowItWorks />
       <TrendingPost darkColor={darkColor} lightColor={lightColor} />
+      <WhyBattlechan darkColor={darkColor} lightColor={lightColor} />
+      <AttractiveCompo darkColor={darkColor} lightColor={lightColor} />
+      <FAQs />
       <Footer />
 
       <Link to="/dashboard" style={{ textDecoration: "none" }}>

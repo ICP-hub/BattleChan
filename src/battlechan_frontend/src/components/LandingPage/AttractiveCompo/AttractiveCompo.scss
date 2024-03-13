@@ -1,0 +1,32 @@
+.LandingPage__AttractivePage {
+  &__slidingImages {
+    .frame_one img {
+      animation: slide_backward 10s linear infinite;
+    }
+    .frame_two img {
+      animation: slide_forward 10s linear infinite;
+    }
+  }
+}
+
+.frame_one::-webkit-scrollbar,
+.frame_two::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes slide_backward {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes slide_forward {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}

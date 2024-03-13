@@ -9,7 +9,7 @@ export default class App extends React.Component<IAppProps> {
   public render() {
     return (
       <div className='bg-dark text-light'>
-        <h1 className='font-[800] text-center text-[30px]'>Recent Posts </h1>
+        <div className='font-[800] text-center text-[30px]'>Recent Posts </div>
         <Posts darkColor='dark' lightColor='light'/>
       </div>
     );

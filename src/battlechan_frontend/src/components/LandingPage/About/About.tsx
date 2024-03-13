@@ -8,7 +8,7 @@ import dollarCoin from "../../../images/dollar_coin.png";
 import profile_pic from "../../../images/profilePic.png";
 
 const About = () => {
-  const className = "LandingPage-->About";
+  const className = "LandingPage__About";
 
   return (
     <div
@@ -43,7 +43,7 @@ const About = () => {
       <section
         className={
           className +
-          "__rightSide relative w-2/3 h-full flex-direction-col justify-around"
+          "==>rightSide relative w-2/3 h-full flex-direction-col justify-around"
         }
       >
         <Cards />

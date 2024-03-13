@@ -31,14 +31,14 @@ const cardsData = [
 
 const HowItWorks = () => {
   const [hoveredIndex, setHoveredIndex] = React.useState(5);
-  const className = "LandingPage-->HowItWorks";
+  const className = "LandingPage__HowItWorks";
 
   return (
     <div className={className + " h-full w-full py-24 bg-dark text-light"}>
       <h1 className={className + "__heading font-bold text-5xl text-center"}>
         How It Works
       </h1>
-      <div className="__cards flex-row-center mt-24 gap-8 w-full justify-center">
+      <div className="__cards flex-row-center mt-24 gap-16 w-full justify-center">
         {cardsData &&
           cardsData.map((data, i: number) => (
             <div
