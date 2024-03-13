@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Wallet from "../../../images/wallet.png";
 import Voting from "../../../images/voting.png";
@@ -30,16 +30,15 @@ const cardsData = [
 ];
 
 const HowItWorks = () => {
-  const [hoveredIndex, setHoveredIndex] = useState(5);
+  const [hoveredIndex, setHoveredIndex] = React.useState(5);
   const className = "LandingPage-->HowItWorks";
 
   return (
-    <div className={className + " h-[110vh] py-16 bg-dark text-light"}>
+    <div className={className + " h-full w-full py-24 bg-dark text-light"}>
       <h1 className={className + "__heading font-bold text-5xl text-center"}>
         How It Works
       </h1>
-
-      <div className="__cards flex-row-center my-16 gap-8 w-full justify-center">
+      <div className="__cards flex-row-center mt-24 gap-8 w-full justify-center">
         {cardsData &&
           cardsData.map((data, i: number) => (
             <div
@@ -68,9 +67,13 @@ const HowItWorks = () => {
               <div
                 className={
                   "__displayed" +
-                  " h-[80%] w-full z-2 px-8 py-20 gap-4 flex-direction-col absolute top-0 transition-all" +
-                  " hover:translate-y-28 hover:ease-out hover:duration-500"
+                  " h-full w-full z-2 px-8 py-20 gap-4 flex-direction-col absolute top-0 transition-all" +
+                  " hover:ease-out hover:duration-500"
                 }
+                style={{
+                  transform: hoveredIndex === i ? "translateY(25%)" : "",
+                  height: hoveredIndex === i ? "80%" : "100%",
+                }}
               >
                 <h1 className="text-5xl font-bold self-start">{`0${data.index}`}</h1>
 
