@@ -4,6 +4,7 @@ import Error "mo:base/Error";
 import Nat32 "mo:base/Nat32";
 import Trie "mo:base/Trie";
 import List "mo:base/List";
+import Array "mo:base/Array";
 
 import Types "utils/types";
 import { createBoardInfo } "controllers/board";
@@ -118,6 +119,7 @@ actor {
       #err(code, message);
     };
   };
+
   public shared ({ caller = userId }) func likeCommentReply(commentId : Types.CommentId, replyId : Types.ReplyId) : async Types.Result {
     try {
       let postId = getPostIdFromCommentId(commentId);
@@ -132,7 +134,7 @@ actor {
       #err(code, message);
     };
   };
-  
+
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
@@ -142,6 +144,68 @@ actor {
         { data = ?userData; status = true; error = null };
       };
     };
+  };
+  public query func getAllBoardsData() : async () {
+
+  };
+  public shared query ({}) func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {
+    let postId : Types.PostId = getPostIdFromCommentId(commentId);
+    let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?"No user found" };
+      };
+    };
+
+    switch (Trie.get(postInfo.comments, textKey commentId, Text.equal)) {
+      case (?value) { return { data = ?value; status = true; error = null } };
+      case (null) {
+        return {
+          data = null;
+          status = false;
+          error = ?"No comment of this Id Found";
+        };
+      };
+    };
+  };
+  public query func getBoardsData() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
+
+    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = k; size = Array.size(v.postIds) });
+    if (Array.size(boardPostData) == 0) {
+      return { data = null; status = false; error = ?"no Data" };
+    };
+    return { data = ?boardPostData; status = true; error = null };
+  };
+
+  public query func getAllCommentOfPost(postId : Types.PostId) : async Types.Result_1<[Types.CommentInfo]> {
+    let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?"No user found" };
+      };
+    };
+    let allData = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+    return { data = ?allData; status = true; error = null };
+  };
+
+  public query func getAllRepliesofComment(commentId : Types.CommentId) : async Types.Result_1<[Types.ReplyInfo]> {
+    let postId : Types.PostId = getPostIdFromCommentId(commentId);
+
+    let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?"No user found" };
+      };
+    };
+
+    let commentInfo : Types.CommentInfo = switch (Trie.get(postInfo.comments, textKey commentId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?"No user found" };
+      };
+    };
+    let allData = Trie.toArray<Types.ReplyId, Types.ReplyInfo, Types.ReplyInfo>(commentInfo.replies, func(k, v) = v);
+    return { data = ?allData; status = true; error = null };
   };
 
   public shared query ({ caller = userId }) func getUserPost() : async Types.Result_1<[Types.PostInfo]> {
@@ -168,5 +232,4 @@ actor {
       case (null) { false };
     };
   };
-
 };
