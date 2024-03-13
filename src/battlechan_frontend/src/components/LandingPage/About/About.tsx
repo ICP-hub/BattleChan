@@ -8,15 +8,16 @@ import dollarCoin from "../../../images/dollar_coin.png";
 import profile_pic from "../../../images/profilePic.png";
 
 const About = () => {
-  const className = "LandingPage__About";
+  const className = "LandingPage-->About";
 
   return (
     <div
       className={
         className +
-        " w-full h-[90vh] px-24 bg-green flex-direction-row relative"
+        " w-full h-[90vh] px-24 bg-green flex-direction-row relative text-light"
       }
     >
+      {/* Texts on the left side */}
       <section
         className={
           className +
@@ -38,6 +39,7 @@ const About = () => {
         </button>
       </section>
 
+      {/* Images on the right side */}
       <section
         className={
           className +
@@ -84,6 +86,7 @@ const About = () => {
 const Cards = () => {
   return (
     <React.Fragment>
+      {/* Card 1 */}
       <div className="card bg-dark h-[140px] w-[700px] gap-8 mt-40 rounded-2xl flex-row-center absolute right-0 top-0">
         <section className="left_image w-1/3">
           <img
@@ -116,6 +119,7 @@ const Cards = () => {
         </section>
       </div>
 
+      {/* Card 2 */}
       <div className="card bg-dark h-[140px] w-[700px] gap-8 mb-36 rounded-2xl flex-row-center absolute bottom-0 left-0">
         <section className="left_image w-1/3">
           <img

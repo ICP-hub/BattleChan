@@ -31,10 +31,10 @@ const cardsData = [
 
 const HowItWorks = () => {
   const [hoveredIndex, setHoveredIndex] = useState(5);
-  const className = "LandingPage__HowItWorks";
+  const className = "LandingPage-->HowItWorks";
 
   return (
-    <div className={className + " h-[100vh] py-16 bg-dark"}>
+    <div className={className + " h-[110vh] py-16 bg-dark text-light"}>
       <h1 className={className + "__heading font-bold text-5xl text-center"}>
         How It Works
       </h1>
@@ -52,6 +52,7 @@ const HowItWorks = () => {
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(5)}
             >
+              {/* Image hidden in the back */}
               <div
                 className="__hidden h-full w-full absolute top-0 flex-col-center transition-opacity duration-500"
                 style={{ opacity: hoveredIndex === i ? 1 : 0 }}
@@ -63,6 +64,7 @@ const HowItWorks = () => {
                 />
               </div>
 
+              {/* The text on the font */}
               <div
                 className={
                   "__displayed" +
@@ -76,6 +78,7 @@ const HowItWorks = () => {
                 <p className="text-lg font-normal">{data.text2}</p>
               </div>
 
+              {/* Button */}
               <button type="button" className="white-button absolute bottom-8">
                 {data.buttonText}
               </button>
