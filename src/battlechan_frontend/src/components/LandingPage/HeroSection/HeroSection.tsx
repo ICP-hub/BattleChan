@@ -15,7 +15,7 @@ type Theme = {
 const HeroSection = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
-  const className = "LandingPage-->HeroSection";
+  const className = "LandingPage__HeroSection";
 
   return (
     <div className={className}>

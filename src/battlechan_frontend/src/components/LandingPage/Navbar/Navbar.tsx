@@ -14,7 +14,7 @@ type Theme = {
 const Navbar = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
-  const className = "LandingPage-->Navbar";
+  const className = "LandingPage__Navbar";
   
   return (
     <nav

@@ -9,10 +9,11 @@ import { IoLogoYoutube } from "react-icons/io";
 import { FaSquareXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
-  const className = "LandingPage-->Footer";
+  const className = "LandingPage__Footer";
+
   return (
     <footer
-      className={className + " w-full bg-dirty-light-green flex-direction-col"}
+      className={className + " w-full bg-dirty-light-green text-light flex-direction-col"}
     >
       <div className={className + "__top p-8 flex-direction-row"}>
         {/* Links */}

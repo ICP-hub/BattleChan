@@ -5,6 +5,7 @@ import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 
+import bg from "../../../images/trending_post_bg.png";
 import Cover_Image from "../../../images/trendingPost_coverImg.png";
 import Profile_Pic from "../../../images/trendingPost_profile.png";
 
@@ -59,7 +60,7 @@ const TrendingPost = (props: Theme) => {
   );
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
-  const className = "LandingPage-->TrendingPosts";
+  const className = "LandingPage__TrendingPosts";
 
   const handleVote = (index: number, vote: boolean) => {
     const newVotes = [...votes];
@@ -70,8 +71,12 @@ const TrendingPost = (props: Theme) => {
   return (
     <div
       className={
-        className + ` w-full gap-40 py-16 bg-${darkColor} flex-direction-col`
+        className +
+        ` w-full gap-40 pt-48 ${
+          darkColor ? "bg-[#121212]" : "light"
+        } flex-direction-col bg-contain bg-top bg-no-repeat`
       }
+      style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
     >
       {/* Trending data counts */}
       <section
@@ -106,7 +111,7 @@ const TrendingPost = (props: Theme) => {
         <div
           className={
             className +
-            "__postCards my-20 w-full gap-8 flex-row-center justify-center"
+            "__postCards my-20 w-full gap-12 flex-row-center justify-center"
           }
         >
           {/* Card */}
