@@ -6,12 +6,16 @@ import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 
-const Navbar = () => {
-  const className = "Landing__Navbar";
-  const theme = "dark";
-  const darkColor = theme.includes("dark") ? "dark" : "light";
-  const lightColor = !theme.includes("dark") ? "dark" : "light";
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+};
 
+const Navbar = (props: Theme) => {
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+  const className = "LandingPage-->Navbar";
+  
   return (
     <nav
       className={

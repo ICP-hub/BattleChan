@@ -7,28 +7,32 @@ import leftDesktop from "../../../images/left_desktop.png";
 import rightDesktop from "../../../images/right_desktop.png";
 import centerDesktop from "../../../images/center_desktop.png";
 
-const HeroSection = () => {
-  const className = "landingPage__HeroSection";
-  const theme: string = "dark";
-  const darkColor: string = theme.includes("dark") ? "dark" : "light";
-  const lightColor: string = !theme.includes("dark") ? "dark" : "light";
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+};
+
+const HeroSection = (props: Theme) => {
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+  const className = "LandingPage-->HeroSection";
 
   return (
     <div className={className}>
       <div
         className={
           className +
-          "__tagLines flex-col-center gap-8 h-5/6 w-full py-20 px-24 bg-no-repeat bg-center bg-contain"
+          "__tagLines flex-col-center gap-8 h-5/6 w-full py-20 bg-no-repeat bg-center bg-contain"
         }
         style={{ backgroundImage: `url(${backImage})` }}
       >
-        <h1 className={`text-${lightColor} text-5xl font-bold`}>
-          PrimePost Showdown: Where
+        <h1 className={`text-${lightColor} text-center text-5xl font-bold`}>
+          The Combat Of Ideas: Where
           {<br />}
           the Best Rise to the Top
         </h1>
 
-        <p className={`text-${lightColor} text-base font-normal`}>
+        <p className={`text-${lightColor} text-center text-base font-normal`}>
           Unleash Your Voice , Join the Battle for Visibility and
           {<br />}
           compete for the top position
