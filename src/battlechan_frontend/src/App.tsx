@@ -1,8 +1,11 @@
-
-
 import React, { Suspense, lazy } from "react";
+import "./App.css";
+
+import { Connect2ICProvider } from "@connect2ic/react";
+import { createClient } from "@connect2ic/core";
+import { defaultProviders } from "@connect2ic/core/providers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css" ; 
+
 // Lazy load pages
 const Landing = lazy(() => import("./pages/Landing/Landing"));
 const DashboardRoutes = lazy(() => import("./pages/Routes"));
@@ -12,7 +15,6 @@ import Loader from "./components/Loader/Loader";
 function App() {
   return (
     <Router>
-      
       <div>
         <Routes>
           <Route
@@ -23,7 +25,7 @@ function App() {
               </Suspense>
             }
           />
-          
+
           <Route
             path="/dashboard/*"
             element={
@@ -38,6 +40,13 @@ function App() {
   );
 }
 
-export default App;
+const client  = createClient({
+  canisters: {},
+  providers: defaultProviders,
+});
 
-
+export default () => (
+  <Connect2ICProvider client={client}>
+    <App />
+  </Connect2ICProvider>
+);

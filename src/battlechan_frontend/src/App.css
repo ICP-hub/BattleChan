@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .flex-direction-row {
+    @apply flex flex-row;
+  }
+  .flex-direction-col {
+    @apply flex flex-col;
+  }
+  .flex-row-center {
+    @apply flex flex-row items-center;
+  }
+  .flex-col-center {
+    @apply flex flex-col items-center;
+  }
+  .green-button {
+    @apply gap-2 font-semibold text-lg rounded-[3rem] px-8 py-3.5 text-light bg-green;
+  }
+  .white-button {
+    @apply gap-2 font-semibold text-lg rounded-[3rem] px-12 py-3 text-dark bg-light;
+  }
+
+  .buy-button {
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 2rem;
+    padding: 0.4rem 1.5rem;
+  }
+}
 @font-face {
     font-family :'istok';
     src: url('../asset//IstokWeb-Regular.ttf');
