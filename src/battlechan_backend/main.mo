@@ -170,7 +170,7 @@ actor {
   };
   public query func getBoardsData() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
 
-    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = k; size = Array.size(v.postIds) });
+    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
     if (Array.size(boardPostData) == 0) {
       return { data = null; status = false; error = ?"no Data" };
     };
