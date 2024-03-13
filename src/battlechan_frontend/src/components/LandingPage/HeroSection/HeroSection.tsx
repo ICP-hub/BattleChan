@@ -22,19 +22,19 @@ const HeroSection = (props: Theme) => {
       <div
         className={
           className +
-          "__tagLines flex-col-center gap-8 h-5/6 w-full py-20 bg-no-repeat bg-center bg-contain"
+          "__tagLines flex-col-center justify-center gap-8 h-[55vh] w-full bg-no-repeat bg-center bg-contain"
         }
         style={{ backgroundImage: `url(${backImage})` }}
       >
         <h1 className={`text-${lightColor} text-center text-5xl font-bold`}>
           The Combat Of Ideas: Where
-          {<br />}
+          <br />
           the Best Rise to the Top
         </h1>
 
         <p className={`text-${lightColor} text-center text-base font-normal`}>
           Unleash Your Voice , Join the Battle for Visibility and
-          {<br />}
+          <br />
           compete for the top position
         </p>
 
