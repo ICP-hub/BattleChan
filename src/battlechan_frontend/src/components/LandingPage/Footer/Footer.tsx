@@ -1,5 +1,8 @@
 import React from "react";
 
+import { HiLink } from "react-icons/hi";
+import { BsDiscord } from "react-icons/bs";
+
 import { SiMedium } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
 import { IoLogoYoutube } from "react-icons/io";
@@ -11,6 +14,70 @@ const Footer = () => {
     <footer
       className={className + " w-full bg-dirty-light-green flex-direction-col"}
     >
+      <div className={className + "__top p-8 flex-direction-row"}>
+        {/* Links */}
+        <section className="__left w-1/2 flex-direction-row justify-evenly">
+          {/* Left */}
+          <div className="flex-direction-col items-start">
+            <a href="#" className="m-4 gap-2 flex-row-center">
+              Partnership
+              <HiLink />
+            </a>
+            <a href="#" className="m-4">
+              Guide
+            </a>
+            <a href="#" className="m-4 gap-2 flex-row-center">
+              Internet Computer
+              <HiLink />
+            </a>
+            <a href="#" className="m-4">
+              Game Analytics
+            </a>
+            <a href="#" className="m-4 gap-2 flex-row-center">
+              Zealy Contest
+              <HiLink />
+            </a>
+          </div>
+
+          {/* Right */}
+          <div className="flex-direction-col items-start">
+            <a href="#" className="m-4">
+              Brand Toolkit
+            </a>
+            <a href="#" className="m-4 gap-2 flex-row-center">
+              Support
+              <BsDiscord />
+            </a>
+            <a href="#" className="m-4">
+              Team
+            </a>
+            <a href="#" className="m-4">
+              Partners
+            </a>
+          </div>
+        </section>
+
+        {/* Signup email input */}
+        <section className="__right w-1/2 flex-direction-col gap-4">
+          <p className="font-semibold">
+            Signup for latest updates to keep up to date with us
+          </p>
+
+          <div className="emailInput gap-4 flex-row-center">
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              className="emailInput rounded-[2rem] text-lg px-4 py-1"
+            />
+            <button type="button" className="small-button bg-dark text-light">
+              Get Updates
+            </button>
+          </div>
+        </section>
+      </div>
+
+      {/* Bottom */}
       <div
         className={
           className +

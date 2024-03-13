@@ -45,7 +45,7 @@ const Navbar = (props: Theme) => {
           <button
             className={
               className +
-              `__timeToken__butButton buy-button bg-${lightColor} text-${darkColor}`
+              `__timeToken__butButton small-button bg-${lightColor} text-${darkColor}`
             }
           >
             Buy

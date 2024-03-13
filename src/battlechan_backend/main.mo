@@ -53,7 +53,7 @@ actor {
   public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
     try {
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
-      let postId : Types.PostId = Nat32.toText(getUniqueId());
+      let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
 
       let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, postId, userId, postData, userTrieMap, boardTrieMap);
 
@@ -170,7 +170,7 @@ actor {
   };
   public query func getBoardsData() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
 
-    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = k; size = Array.size(v.postIds) });
+    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
     if (Array.size(boardPostData) == 0) {
       return { data = null; status = false; error = ?"no Data" };
     };
@@ -217,7 +217,9 @@ actor {
     };
     var allPosts : List.List<Types.PostInfo> = List.nil<Types.PostInfo>();
     for (postId in userPostIds.vals()) {
-      switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      let id = getPostIdFromCommentId(postId);
+      switch (Trie.get(postTrieMap, textKey id, Text.equal)) {
+
         case (null) {};
         case (?postInfo) { allPosts := List.push(postInfo, allPosts) };
       };

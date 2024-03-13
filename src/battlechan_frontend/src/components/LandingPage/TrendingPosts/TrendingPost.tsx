@@ -68,10 +68,14 @@ const TrendingPost = (props: Theme) => {
   };
 
   return (
-    <div className={className + ` py-20 w-full bg-${darkColor}`}>
+    <div
+      className={
+        className + ` w-full gap-40 py-16 bg-${darkColor} flex-direction-col`
+      }
+    >
       {/* Trending data counts */}
       <section
-        className={className + "__numbers my-16 flex-row-center justify-center"}
+        className={className + "__numbers flex-row-center justify-center"}
       >
         {trendingData &&
           trendingData.map((item, index) => (
@@ -88,10 +92,11 @@ const TrendingPost = (props: Theme) => {
           ))}
       </section>
 
-      <section className={className + "__trendingPosts w-full py-24"}>
-        <h1 className="font-bold text-5xl text-center my-8">
+      <section className={className + "__trendingPosts w-full"}>
+        <h1 className="font-bold text-5xl text-center">
           This Week Trending Posts
         </h1>
+        <br />
         <p className="text-2xl font-normal text-center">
           Stay Ahead with Trending Posts & Explore the Posts Everyone's Talking
           About
@@ -101,12 +106,12 @@ const TrendingPost = (props: Theme) => {
         <div
           className={
             className +
-            "__postCards p-20 w-full flex-row-center justify-between"
+            "__postCards my-20 w-full gap-8 flex-row-center justify-center"
           }
         >
           {/* Card */}
           {postList.slice(0, 3).map((post, index) => (
-            <div className="trendingPostCard w-[400px] max-h-[550px] rounded-lg bg-light text-dark shadow-md shadow-dark">
+            <div className="trendingPostCard w-[380px] rounded-lg bg-light text-dark shadow-md shadow-dark">
               {/* Cover Image */}
               <img
                 src={post.coverImg}
@@ -115,7 +120,7 @@ const TrendingPost = (props: Theme) => {
               />
 
               {/* Details */}
-              <div className="postData w-full p-6 flex-direction-col gap-6">
+              <div className="postData w-full p-6 flex-direction-col gap-4">
                 <div className="top flex-row-center justify-between">
                   {/* Owner Profile Photo and Name */}
                   <section className="owner flex-row-center gap-2">
@@ -124,7 +129,9 @@ const TrendingPost = (props: Theme) => {
                       alt="Profile Image"
                       className="w-[35px]"
                     />
-                    <span className="text-md font-semibold">{post.ownerName}</span>
+                    <span className="text-md font-semibold">
+                      {post.ownerName}
+                    </span>
                   </section>
 
                   {/* Date, Time and ID  */}
@@ -140,14 +147,19 @@ const TrendingPost = (props: Theme) => {
                   {/* Upvote and Downvote buttons */}
                   <section className="buttons flex-row-center gap-2 text-3xl">
                     <TbSquareChevronUpFilled
-                      className={`text-${
-                        votes[index] ? "dirty-light-green" : "#C1C1C1"
+                      className={`${
+                        votes[index]
+                          ? "text-dirty-light-green"
+                          : "text-[#C1C1C1]"
                       } cursor-pointer`}
                       onClick={() => handleVote(index, true)}
                     />
+
                     <TbSquareChevronDownFilled
-                      className={`text-${
-                        !votes[index] ? "dirty-light-green" : "#C1C1C1"
+                      className={`${
+                        !votes[index]
+                          ? "text-dirty-light-green"
+                          : "text-[#C1C1C1]"
                       } cursor-pointer`}
                       onClick={() => handleVote(index, false)}
                     />

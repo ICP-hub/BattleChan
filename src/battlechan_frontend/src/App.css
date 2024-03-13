@@ -22,7 +22,7 @@
     @apply gap-2 font-semibold text-lg rounded-[3rem] px-12 py-3 text-dark bg-light;
   }
 
-  .buy-button {
+  .small-button {
     font-weight: 600;
     font-size: 1.1rem;
     border-radius: 2rem;
