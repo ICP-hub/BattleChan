@@ -29,3 +29,7 @@
     padding: 0.4rem 1.5rem;
   }
 }
+@font-face {
+    font-family :'istok';
+    src: url('../asset//IstokWeb-Regular.ttf');
+}
