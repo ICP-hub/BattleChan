@@ -4,6 +4,7 @@ import Error "mo:base/Error";
 import Nat32 "mo:base/Nat32";
 import Trie "mo:base/Trie";
 import List "mo:base/List";
+import Array "mo:base/Array";
 
 import Types "utils/types";
 import { createBoardInfo } "controllers/board";
@@ -144,6 +145,9 @@ actor {
       };
     };
   };
+  public query func getAllBoardsData() : async () {
+
+  };
   public shared query ({}) func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {
     let postId : Types.PostId = getPostIdFromCommentId(commentId);
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
@@ -164,6 +168,15 @@ actor {
       };
     };
   };
+  public query func getBoardsData() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
+
+    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = k; size = Array.size(v.postIds) });
+    if (Array.size(boardPostData) == 0) {
+      return { data = null; status = false; error = ?"no Data" };
+    };
+    return { data = ?boardPostData; status = true; error = null };
+  };
+
   public query func getAllCommentOfPost(postId : Types.PostId) : async Types.Result_1<[Types.CommentInfo]> {
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
