@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -13,10 +13,16 @@ import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/Attrac
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 
 function Landing() {
-  const theme: string = "dark";
   const className: string = "LandingPage";
-  const darkColor: string = theme.includes("dark") ? "dark" : "light";
-  const lightColor: string = !theme.includes("dark") ? "dark" : "light";
+  const [dark, setDark] = React.useState(true);
+  const [light, setLight] = React.useState(true);
+  const darkColor: string = dark ? "dark" : "light";
+  const lightColor: string = !dark ? "dark" : "light";
+
+  function handleThemeSwitch() {
+    setDark(!dark);
+    setLight(!light);
+  }
 
   return (
     <main
@@ -24,9 +30,9 @@ function Landing() {
         className + ` w-full h-full bg-${darkColor} text-${lightColor}`
       }
     >
-      <Navbar darkColor={darkColor} lightColor={lightColor} />
+      <Navbar darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
       <HeroSection darkColor={darkColor} lightColor={lightColor} />
-      
+
       <About />
       <HowItWorks />
 
@@ -34,7 +40,7 @@ function Landing() {
       <WhyBattlechan darkColor={darkColor} lightColor={lightColor} />
       <AttractiveCompo darkColor={darkColor} lightColor={lightColor} />
       <FAQs darkColor={darkColor} lightColor={lightColor} />
-      
+
       <Footer />
     </main>
   );

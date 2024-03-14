@@ -23,7 +23,7 @@ const WhyBattlechan = (props: Theme) => {
       className={
         className +
         ` w-full py-40 px-36 flex-direction-row ${
-          darkColor ? "bg-[#121212]" : "light"
+          darkColor == "dark" ? "bg-[#121212]" : "light"
         } text-${lightColor}`
       }
     >
