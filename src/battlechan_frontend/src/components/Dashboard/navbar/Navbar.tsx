@@ -7,14 +7,15 @@ import userimg from "../../../images/User.png";
 import search from "../../../images/search.png";
 
 export interface IAppProps { }
+
 export default class App extends React.PureComponent<IAppProps> {
   public render() {
     return (
       <div className='bg-dark    w-full  font-istok text-light py-9 '>
 
         <div className=' w-full sm: mt-[5px] mb-6 flex flex-wrap justify-between '>
-
           <div className=' flex  items-center flex-wrap '>
+          <div className=' flex  items-center flex-wrap  '>
             <div className='flex flex-wrap  justify-start '>
               <img src={bclogo} className='pl-[43px] m-[5px] w-[120px] sm:w-[158px] h-[100px] sm:h-[76px]' alt="" />
             </div>
@@ -24,10 +25,8 @@ export default class App extends React.PureComponent<IAppProps> {
             </div>
           </div>
 
-
-
-
           <div className=' hidden md:flex items-center text-white'>
+          <div className=' hidden md:flex items-center text-white justify-between '>
             <div className='rounded-[3rem]  border-light-green border-[0.1px]  flex items-center  py-[5px]'>
               <div className='flex ml-[22px] text-[20px]'>
                 <div className='font-[700] text-[20px] bg-blue-800 text-white'>1 $Time Token:</div>
@@ -35,10 +34,16 @@ export default class App extends React.PureComponent<IAppProps> {
               </div>
               <div className='bg-light text-dark  font-[700] text-[18px]  text-center px-[38px] py-[11px] rounded-[2rem] mx-[11px]'>Buy</div>
             </div>
+
             <div className='ml-3'>
               <img src={notification} className='w-[27px] h-[32px]' alt="notification-icon" />
             </div>
           </div>
+         </div>
+         
+            <div className='  hidden md:flex items-center  '>
+              <img src={notification} className='w-[27px] h-[32px]' alt="notification-icon" />
+            </div>
 
           <div className='  flex  justify-center    p-[12px] sm:pl-18 pr-[93px] '>
             <div className='  justify-between  ml-[5px] sm:ml-[0px] mt px-4.5 text-[20px] font-[700] '>
@@ -66,4 +71,3 @@ export default class App extends React.PureComponent<IAppProps> {
     );
   }
 }
-
