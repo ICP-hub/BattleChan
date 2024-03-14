@@ -146,7 +146,6 @@ actor {
     };
   };
 
-  
   public shared query ({ caller = userId }) func getUserPost() : async Types.Result_1<[Types.PostInfo]> {
     let userPostIds : [Types.PostId] = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
@@ -165,7 +164,6 @@ actor {
     };
     return { data = ?List.toArray(allPosts); status = true; error = null };
   };
-
 
   public shared query ({}) func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {
     let postId : Types.PostId = getPostIdFromCommentId(commentId);
@@ -192,7 +190,7 @@ actor {
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
-        return { data = null; status = false; error = ?"No user found" };
+        return { data = null; status = false; error = ?notFound.noPost };
       };
     };
     let allData = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
@@ -218,8 +216,9 @@ actor {
     };
 
     let allData = Trie.toArray<Types.ReplyId, Types.ReplyInfo, Types.ReplyInfo>(commentInfo.replies, func(k, v) = v);
+
     if (allData.size() == 0) {
-      return { data = null; status = false; error = ?notFound.noComment };
+      return { data = null; status = false; error = ?notFound.noData };
     };
     return { data = ?allData; status = true; error = null };
   };
@@ -227,8 +226,9 @@ actor {
   public query func getBoardsData() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
 
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
+
     if (Array.size(boardPostData) == 0) {
-      return { data = null; status = false; error = ?"no Data" };
+      return { data = null; status = false; error = ?notFound.noData };
     };
     return { data = ?boardPostData; status = true; error = null };
   };
