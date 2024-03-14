@@ -121,7 +121,7 @@ const TrendingPost = (props: Theme) => {
               <img
                 src={post.coverImg}
                 alt="Post Cover Image"
-                className="postImage w-full"
+                className="postImage w-full pointer-events-none"
               />
 
               {/* Details */}
@@ -132,7 +132,7 @@ const TrendingPost = (props: Theme) => {
                     <img
                       src={post.ownerImage}
                       alt="Profile Image"
-                      className="w-[35px]"
+                      className="w-[35px] pointer-events-none"
                     />
                     <span className="text-md font-semibold">
                       {post.ownerName}
