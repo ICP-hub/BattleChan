@@ -1,0 +1,21 @@
+.LandingPage__FAQs {
+  &__right {
+    background-image: url("../../../images/faq_bg.png");
+    p::before {
+      content: "";
+      bottom: -50%;
+      left: 0px;
+      position: absolute;
+      min-width: 50px;
+      min-height: 50px;
+      background: linear-gradient(
+        150deg,
+        #fff 0%,
+        #fff 50%,
+        transparent 50%,
+        transparent
+      );
+      border-bottom-left-radius: 2rem;
+    }
+  }
+}

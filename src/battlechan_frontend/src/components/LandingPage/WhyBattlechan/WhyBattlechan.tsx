@@ -22,7 +22,7 @@ const WhyBattlechan = (props: Theme) => {
     <div
       className={
         className +
-        ` w-full py-40 px-40 flex-direction-row ${
+        ` w-full py-40 px-36 flex-direction-row ${
           darkColor ? "bg-[#121212]" : "light"
         } text-${lightColor}`
       }
@@ -73,12 +73,12 @@ const WhyBattlechan = (props: Theme) => {
         <img
           src={image1}
           alt="Reasons why choose battle chan image"
-          className="h-full w-[250px] "
+          className="h-full w-[250px] pointer-events-none"
         />
         <img
           src={image2}
           alt="Reasons why choose battle chan image"
-          className=" w-[250px] "
+          className=" w-[250px] pointer-events-none"
         />
       </section>
     </div>

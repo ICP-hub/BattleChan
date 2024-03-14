@@ -26,12 +26,15 @@ function Landing() {
     >
       <Navbar darkColor={darkColor} lightColor={lightColor} />
       <HeroSection darkColor={darkColor} lightColor={lightColor} />
+      
       <About />
       <HowItWorks />
+
       <TrendingPost darkColor={darkColor} lightColor={lightColor} />
       <WhyBattlechan darkColor={darkColor} lightColor={lightColor} />
       <AttractiveCompo darkColor={darkColor} lightColor={lightColor} />
-      <FAQs />
+      <FAQs darkColor={darkColor} lightColor={lightColor} />
+      
       <Footer />
 
       <Link to="/dashboard" style={{ textDecoration: "none" }}>
