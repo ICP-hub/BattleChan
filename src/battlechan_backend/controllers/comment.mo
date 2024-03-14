@@ -7,17 +7,17 @@ import Int "mo:base/Int";
 import { now } "mo:base/Time";
 import Debug "mo:base/Debug";
 import List "mo:base/List";
+import Result "mo:base/Result";
 
 import Types "../utils/types";
 
 import { reject } "../utils/message";
 import { checkText } "../utils/validations";
-import { getUniqueId } "../utils/helper";
+import { getUniqueId; getPostIdFromCommentId } "../utils/helper";
 import { principalKey; textKey } "../keys";
 
 module {
     public func createCommentInfo(userId : Types.UserId, postId : Types.PostId, comment : Text, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Types.PostInfo {
-
         if (checkText(comment, 200) == false) {
             trap(reject.outBound);
         };
@@ -42,6 +42,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes + 1;
@@ -95,6 +96,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;

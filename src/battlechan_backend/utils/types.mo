@@ -42,6 +42,7 @@ module {
 
     public type PostReq = {
         postName : Text;
+        postDes : Text;
         postMetaData : Text;
     };
     public type ReplyId = Text;
@@ -63,6 +64,7 @@ module {
     public type PostInfo = {
         postId : PostId;
         postName : Text;
+        postDes : Text;
         upvotedBy : [UserId];
         downvotedBy : [UserId];
         upvotes : Nat64;

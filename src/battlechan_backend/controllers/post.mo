@@ -54,6 +54,7 @@ module {
         let newPost : Types.PostInfo = {
             postId = postId;
             postName = postReq.postName;
+            postDes = postReq.postDes;
             postMetaData = postReq.postMetaData;
             upvotedBy = [];
             downvotedBy = [];
@@ -113,6 +114,7 @@ module {
                     updatedPostInfo : Types.PostInfo = {
                         postId = postInfo.postId;
                         postName = postInfo.postName;
+                        postDes = postInfo.postDes;
                         upvotedBy = List.toArray(List.push(userId, List.fromArray(postInfo.upvotedBy)));
                         downvotedBy = postInfo.downvotedBy;
                         upvotes = postInfo.upvotes + 1;
@@ -144,6 +146,7 @@ module {
                     updatedPostInfo : Types.PostInfo = {
                         postId = postInfo.postId;
                         postName = postInfo.postName;
+                        postDes = postInfo.postDes;
                         upvotedBy = postInfo.upvotedBy;
                         downvotedBy = List.toArray(List.push(userId, List.fromArray(postInfo.downvotedBy)));
                         upvotes = postInfo.upvotes;
