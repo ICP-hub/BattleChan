@@ -5,17 +5,19 @@ import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 type Theme = {
   darkColor: string;
   lightColor: string;
+  handleThemeSwitch: any;
 };
 
 const Navbar = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
-  
+
   return (
     <nav
       className={
@@ -32,6 +34,12 @@ const Navbar = (props: Theme) => {
       <section
         className={className + "__rightSection flex-row-center gap-8 font-bold"}
       >
+        <ThemeSwitch
+          handleThemeSwitch={props.handleThemeSwitch}
+          darkColor={props.darkColor}
+          lightColor={props.lightColor}
+        />
+        
         <div
           className={
             className +
