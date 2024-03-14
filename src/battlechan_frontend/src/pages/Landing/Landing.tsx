@@ -36,12 +36,6 @@ function Landing() {
       <FAQs darkColor={darkColor} lightColor={lightColor} />
       
       <Footer />
-
-      <Link to="/dashboard" style={{ textDecoration: "none" }}>
-        <button className="bg-dark text-light rounded-md p-3 m-3">
-          Go to Dashboard
-        </button>
-      </Link>
     </main>
   );
 }
