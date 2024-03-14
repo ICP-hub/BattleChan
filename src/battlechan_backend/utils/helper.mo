@@ -23,7 +23,7 @@ module {
     };
     public func getPostIdFromCommentId(commentId : Types.CommentId) : Types.PostId {
         let arr = Iter.toArray(Text.split(commentId, #char '_'));
-        let postId = arr[1];
+        let postId = arr[0];
         return postId;
     };
 };

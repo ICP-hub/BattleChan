@@ -57,6 +57,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes + 1;
@@ -123,6 +124,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;

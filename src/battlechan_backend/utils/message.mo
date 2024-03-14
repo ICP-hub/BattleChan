@@ -16,4 +16,11 @@ module {
         noComment = "No Comment found !";
         noReply = "No Reply found !";
     };
+    public let notFound = {
+        noUser = "No User Exist!";
+        noPost = "No Post Exist!";
+        noComment = "No comment Exist!";
+        noReply = "No Reply Exist!";
+        noData = "No Data Exist !";
+    };
 };
