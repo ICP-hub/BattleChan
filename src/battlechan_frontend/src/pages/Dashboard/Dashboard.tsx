@@ -1,7 +1,7 @@
 import React from 'react'
-import Navbar from "../../components/Dashboard-Components/navbar/Navbar"
-import Body from "../../components/Dashboard-Components/body/Body"
-import RecentPost from "../../components/Dashboard-Components/Recent-Posts/RecentPosts"
+import Navbar from "../../components/Dashboard/navbar/Navbar"
+import Body from "../../components/Dashboard/body/Body"
+import RecentPost from "../../components/Dashboard/Recent-Posts/RecentPosts"
 function Dashboard() {
   return (
    <div className='  '>
