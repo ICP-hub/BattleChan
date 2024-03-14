@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import "./App.css";
-
-import { Connect2ICProvider } from "@connect2ic/react";
+import { ConnectButton,ConnectDialog, Connect2ICProvider} from "@connect2ic/react";
+import "@connect2ic/core/style.css"
 import { createClient } from "@connect2ic/core";
 import { defaultProviders } from "@connect2ic/core/providers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -34,14 +34,17 @@ function App() {
               </Suspense>
             }
           />
+          
         </Routes>
       </div>
     </Router>
   );
 }
 
-const client  = createClient({
-  canisters: {},
+const client = createClient({
+  canisters: {
+    
+  },
   providers: defaultProviders,
 });
 
