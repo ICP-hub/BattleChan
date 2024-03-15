@@ -6,8 +6,8 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily:{
-        'istok' : ['istok','sans-serif'],
+      fontFamily: {
+        'istok': ['istok', 'sans-serif'],
       }
     },
     colors: {
@@ -19,7 +19,11 @@ export default {
       'dirty-light-green': "#345D3A",
       "light-green": "#18AF00",
     },
+    screens: {
+      'tablet': "870px",
+      'laptop': '1000px',
+      'xl': "1280px"
+    }
   },
   plugins: [],
 }
-

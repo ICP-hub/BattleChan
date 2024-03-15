@@ -43,7 +43,7 @@ const FAQs = (props: Theme) => {
     <div
       className={
         className +
-        ` w-full h-[90vh] ${
+        ` w-full h-[100%] ${
           darkColor == "dark" ? "bg-[#121212]" : "light"
         } text-${lightColor} flex-direction-row`
       }

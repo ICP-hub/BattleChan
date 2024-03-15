@@ -34,19 +34,31 @@ const HowItWorks = () => {
   const className = "LandingPage__HowItWorks";
 
   return (
-    <div className={className + " h-full w-full py-24 bg-dark text-light"}>
+    <div
+      className={
+        className + " h-full w-full xl:py-24 py-20 bg-dark text-light"
+      }
+    >
       <h1 className={className + "__heading font-bold text-5xl text-center"}>
         How It Works
       </h1>
-      <div className="__cards flex-row-center mt-24 gap-16 w-full justify-center">
+      
+      <div
+        className={
+          "__cards" +
+          " flex-row-center w-full justify-center" +
+          " xl:gap-12 gap-4 xl:mt-24 mt-16"
+        }
+      >
         {cardsData &&
           cardsData.map((data, i: number) => (
             <div
               key={i}
               className={
                 "howItWorks__card" +
-                " bg-dark-green h-[520px] w-[340px] z-1 flex-col-center rounded-lg cursor-default relative" +
-                " hover:bg-dirty-light-green hover:ease-in-out hover:duration-500"
+                " bg-dark-green z-1 flex-col-center rounded-lg cursor-default relative" +
+                " hover:bg-dirty-light-green hover:ease-in-out hover:duration-500" +
+                " xl:h-[520px] xl:w-[340px] laptop:h-[470px] laptop:w-[300px] h-[420px] w-[260px]"
               }
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(5)}
@@ -67,8 +79,9 @@ const HowItWorks = () => {
               <div
                 className={
                   "__displayed" +
-                  " h-full w-full z-2 px-8 py-20 gap-4 flex-direction-col absolute top-0 transition-all" +
-                  " hover:ease-out hover:duration-500"
+                  " h-full w-full z-2 flex-direction-col absolute top-0 transition-all" +
+                  " hover:ease-out hover:duration-500" +
+                  " xl:px-8 xl:py-20 px-4 py-16 xl:gap-4 gap-1"
                 }
                 style={{
                   transform: hoveredIndex === i ? "translateY(25%)" : "",
@@ -77,8 +90,8 @@ const HowItWorks = () => {
               >
                 <h1 className="text-5xl font-bold self-start">{`0${data.index}`}</h1>
 
-                <h3 className="text-2xl font-bold">{data.text1}</h3>
-                <p className="text-lg font-normal">{data.text2}</p>
+                <h3 className="font-bold laptop:text-2xl text-lg">{data.text1}</h3>
+                <p className="font-normal xl:text-lg text-base">{data.text2}</p>
               </div>
 
               {/* Button */}
