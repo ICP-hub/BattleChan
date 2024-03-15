@@ -43,7 +43,7 @@ const About = () => {
       <section
         className={
           className +
-          "==>rightSide relative w-2/3 h-full flex-direction-col justify-around"
+          "__rightSide relative w-2/3 h-full flex-direction-col justify-around"
         }
       >
         <Cards />
