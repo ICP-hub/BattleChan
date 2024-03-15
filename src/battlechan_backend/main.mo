@@ -5,6 +5,7 @@ import Nat32 "mo:base/Nat32";
 import Trie "mo:base/Trie";
 import List "mo:base/List";
 import Array "mo:base/Array";
+import Debug "mo:base/Debug";
 
 import Types "utils/types";
 import { createBoardInfo } "controllers/board";
@@ -12,7 +13,7 @@ import { createUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
 import { createPostInfo; updateVoteStatus } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
-import { getUniqueId; toBoardId; getPostIdFromCommentId } "utils/helper";
+import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId } "utils/helper";
 import { principalKey; textKey } "keys";
 
 import { successMessage; notFound } "utils/message";
@@ -69,7 +70,7 @@ actor {
     };
   };
 
-  public shared ({ caller = userId }) func upvoteOrDownvotePost(boardName : Text, postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
+  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
     try {
       let { updatedUserInfo; updatedPostInfo } = updateVoteStatus(userId, voteStatus, postId, postTrieMap, userTrieMap);
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
@@ -83,8 +84,9 @@ actor {
   };
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
     try {
-      let updatedPostInfo : Types.PostInfo = createCommentInfo(userId, postId, comment, userTrieMap, postTrieMap);
+      let { updatedPostInfo; updatedUserInfo } = createCommentInfo(userId, postId, comment, userTrieMap, postTrieMap);
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       #ok(successMessage.insert);
     } catch (e) {
       let code = Error.code(e);
@@ -149,20 +151,33 @@ actor {
   public shared query ({ caller = userId }) func getUserPost() : async Types.Result_1<[Types.PostInfo]> {
     let userPostIds : [Types.PostId] = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
-        return { data = null; status = false; error = ?"No user found" };
+        return { data = null; status = false; error = ?notFound.noPost };
       };
       case (?userData) { userData.postIds };
     };
     var allPosts : List.List<Types.PostInfo> = List.nil<Types.PostInfo>();
     for (postId in userPostIds.vals()) {
-      let id = getPostIdFromCommentId(postId);
+      let id = getPostId(postId);
       switch (Trie.get(postTrieMap, textKey id, Text.equal)) {
-
-        case (null) {};
+        case (null) { Debug.trap("No element of the this data found! " # id) };
         case (?postInfo) { allPosts := List.push(postInfo, allPosts) };
       };
     };
+
+    if (List.size(allPosts) == 0) {
+      return { data = null; status = false; error = ?notFound.noData };
+    };
     return { data = ?List.toArray(allPosts); status = true; error = null };
+  };
+
+  public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
+    let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?notFound.noPost };
+      };
+    };
+    { data = ?postInfo; status = true; error = null };
   };
 
   public shared query ({}) func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {

@@ -32,6 +32,7 @@ module {
             upvotedTo = [];
             downvotedTo = [];
             likedComments = [];
+            createdComments = [];
             boardIds = [];
             replyIds = [];
             postIds = [];
