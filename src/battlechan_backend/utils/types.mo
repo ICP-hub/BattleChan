@@ -32,6 +32,7 @@ module {
         upvotedTo : [PostId];
         downvotedTo : [PostId];
         likedComments : [CommentId];
+        createdComments : [CommentId];
         replyIds : [(CommentId, ReplyId)];
         postIds : [Text];
         createdAt : Text;
@@ -83,4 +84,5 @@ module {
         error : ?Text;
     };
     public type Result = Result.Result<Message, (Error.ErrorCode, Text)>;
+
 };

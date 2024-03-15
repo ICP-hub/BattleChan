@@ -26,4 +26,9 @@ module {
         let postId = arr[0];
         return postId;
     };
+    public func getPostId(id : Text) : Types.PostId {
+        let arr = Iter.toArray(Text.split(id, #char '-'));
+        let postId = arr[1];
+        return postId;
+    };
 };

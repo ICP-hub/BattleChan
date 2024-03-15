@@ -45,8 +45,9 @@ module {
             upvotedTo = userInfo.upvotedTo;
             downvotedTo = userInfo.downvotedTo;
             likedComments = userInfo.likedComments;
+            createdComments = userInfo.createdComments;
             replyIds = userInfo.replyIds;
-            postIds = List.toArray(List.push(boardId # "_" # postId, List.fromArray(userInfo.postIds)));
+            postIds = List.toArray(List.push(boardId # "-" # postId, List.fromArray(userInfo.postIds)));
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
@@ -106,6 +107,7 @@ module {
                         upvotedTo = List.toArray(List.push(postId, List.fromArray(userInfo.upvotedTo)));
                         downvotedTo = userInfo.downvotedTo;
                         likedComments = userInfo.likedComments;
+                        createdComments = userInfo.createdComments;
                         replyIds = userInfo.replyIds;
                         postIds = userInfo.postIds;
                         createdAt = userInfo.createdAt;
@@ -137,6 +139,7 @@ module {
                         upvotedTo = userInfo.upvotedTo;
                         downvotedTo = List.toArray(List.push(postId, List.fromArray(userInfo.upvotedTo)));
                         likedComments = userInfo.likedComments;
+                        createdComments = userInfo.createdComments;
                         replyIds = userInfo.replyIds;
                         postIds = userInfo.postIds;
                         createdAt = userInfo.createdAt;

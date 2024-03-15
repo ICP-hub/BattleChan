@@ -77,6 +77,7 @@ module {
             downvotedTo = userInfo.downvotedTo;
             likedComments = userInfo.likedComments;
             replyIds = List.toArray(List.push((commentId, replyId), List.fromArray(userInfo.replyIds)));
+            createdComments = userInfo.createdComments;
             postIds = userInfo.postIds;
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
