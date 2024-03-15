@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import './HeroSection.scss';
 
 import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
@@ -16,6 +17,18 @@ const HeroSection = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__HeroSection";
+
+  useEffect(() => {
+    const div = document.querySelector(
+      ".LandingPage__HeroSection__startPostingBtn"
+    )?.children[0];
+
+    if (div) {
+      div.innerHTML = "Start Posting";
+      div.setAttribute("data-value", "");
+      console.log(div);
+    }
+  }, []);
 
   return (
     <div className={className}>

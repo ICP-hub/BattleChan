@@ -1,0 +1,104 @@
+.connect-button::after {
+  content: " Wallet";
+}
+
+.dialog-styles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  padding: 30px;
+  cursor: pointer;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.dialog-container {
+  width: 100%;
+  display: grid;
+  grid-gap: 5px;
+  padding: 10px 30px;
+  max-width: 420px;
+  border-radius: 15px;
+  overflow: auto;
+  cursor: initial;
+  background: #345d3a;
+  box-sizing: border-box;
+  grid-template-columns: 1fr;
+}
+
+.button-styles {
+  color: #fff;
+  max-width: 100%;
+  width: 100%;
+  border: none;
+  outline: 0;
+  cursor: pointer;
+  margin-block: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 3rem;
+  background: transparent;
+  border: 2px solid #b0b0b0;
+  transition: transform 0.15s;
+
+  &:hover {
+    background-color: #295b31;
+  }
+}
+
+.img-styles {
+  height: 40px;
+  width: 40px;
+  padding: 10px;
+  margin-right: 20%;
+  box-sizing: content-box;
+}
+
+@media screen and (max-width: 650px) {
+  .App {
+    &__icp-login-greet {
+      h1 {
+        font-size: x-large;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .App {
+    &__connectedStatus {
+      font-size: medium;
+    }
+    &__icp-login-greet {
+      img {
+        width: 100px;
+      }
+      h1 {
+        font-size: large;
+      }
+    }
+  }
+
+  .connect-button {
+    font-size: medium;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+  }
+  .button-styles {
+    height: 50px;
+  }
+  .img-styles {
+    height: 35px;
+    width: 35px;
+    margin-right: 10%;
+  }
+}
