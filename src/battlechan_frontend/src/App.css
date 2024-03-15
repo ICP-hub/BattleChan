@@ -30,6 +30,6 @@
   }
 }
 @font-face {
-    font-family :'istok';
-    src: url('../asset//IstokWeb-Regular.ttf');
+  font-family: "istok";
+  src: url("../asset//IstokWeb-Regular.ttf");
 }
