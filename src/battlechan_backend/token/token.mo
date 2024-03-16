@@ -209,7 +209,7 @@ module {
         icrc1_minting_account : ?Account;
         feature_flags : ?FeatureFlags;
     };
-    public type Self = LedgerCanisterPayload -> async actor {
+    public type Token = actor {
         account_balance : shared query BinaryAccountBalanceArgs -> async Tokens;
         account_balance_dfx : shared query AccountBalanceArgs -> async Tokens;
         account_identifier : shared query Account -> async Blob;
