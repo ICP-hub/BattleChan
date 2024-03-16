@@ -44,7 +44,7 @@ const FAQs = (props: Theme) => {
       className={
         className +
         ` w-full h-[100%] ${
-          darkColor == "dark" ? "bg-[#121212]" : "light"
+          darkColor == "dark" ? "bg-[#121212]" : "bg-light"
         } text-${lightColor} flex-direction-row`
       }
     >
@@ -53,7 +53,7 @@ const FAQs = (props: Theme) => {
         className={
           className +
           "__left" +
-          " h-full pl-36 py-20 w-[55%] flex flex-col justify-between"
+          " h-full pl-36 py-20 w-[55%] gap-20 flex flex-col"
         }
       >
         <h1 className="font-bold text-5xl">Frequently Asked Questions</h1>

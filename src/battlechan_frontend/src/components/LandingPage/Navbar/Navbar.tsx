@@ -22,8 +22,8 @@ const Navbar = (props: Theme) => {
     <nav
       className={
         className +
-        ` flex-row-center justify-between text-${lightColor}` +
-        " laptop:py-8 laptop:px-8 px-8 py-8"
+        ` flex-row-center justify-between bg-${darkColor} text-${lightColor}` +
+        " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
       <img
@@ -48,7 +48,7 @@ const Navbar = (props: Theme) => {
         <div
           className={
             className +
-            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]`+
+            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
             "  laptop:p-1.5 laptop:pl-6 p-1.5 pl-4 text-base"
           }
         >
