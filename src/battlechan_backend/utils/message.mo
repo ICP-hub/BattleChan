@@ -16,6 +16,7 @@ module {
         noComment = "No Comment found !";
         noReply = "No Reply found !";
         alreadyVoted = "already Voted!";
+        noPageExist = "No Page Exist!";
     };
     public let notFound = {
         noUser = "No User Exist!";
@@ -23,5 +24,6 @@ module {
         noComment = "No comment Exist!";
         noReply = "No Reply Exist!";
         noData = "No Data Exist !";
+        noPageExist = "No Page Exist!";
     };
 };
