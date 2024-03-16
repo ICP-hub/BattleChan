@@ -3,6 +3,7 @@ import Int "mo:base/Int";
 import Text "mo:base/Text";
 import { now } "mo:base/Time";
 import Nat32 "mo:base/Nat32";
+import Array "mo:base/Array";
 import { hash } "mo:base/Text";
 
 import Trie "mo:base/Trie";
@@ -30,5 +31,11 @@ module {
         let arr = Iter.toArray(Text.split(id, #char '-'));
         let postId = arr[1];
         return postId;
+    };
+    public func checkVote<V>(arr : [V], value : V) : Bool {
+        switch (Array.find<V>(arr, func(x : V) : Bool { x == value })) {
+            case (?data) { return true };
+            case (null) { return false };
+        };
     };
 };

@@ -16,6 +16,7 @@ import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId } "utils/helper";
 import { principalKey; textKey } "keys";
 
+import Token "./token/token";
 import { successMessage; notFound } "utils/message";
 
 actor {
@@ -24,6 +25,7 @@ actor {
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
 
+  let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
@@ -256,6 +258,31 @@ actor {
     };
   };
 
+  public shared ({ caller }) func mintNewToken(mintTo : Principal, amount : Nat) : async Token.Result {
+    let ledger = actor (tokenCanisterId) : Token.Token;
+    await ledger.icrc1_transfer({
+      to = { owner = mintTo; subaccount = null };
+      fee = null;
+      memo = null;
+      from_subaccount = null;
+      created_at_time = null;
+      amount;
+    });
+  };
+  public shared ({ caller }) func bunt(amount : Nat) : async Token.Result {
+    let ledger = actor (tokenCanisterId) : Token.Token;
+    await ledger.icrc1_transfer({
+      to = {
+        owner = Principal.fromText("bw4dl-smaaa-aaaaa-qaacq-cai");
+        subaccount = null;
+      };
+      fee = null;
+      memo = null;
+      from_subaccount = null;
+      created_at_time = null;
+      amount;
+    });
+  };
   //  function for the testing
   public func clearData() {
     userTrieMap := Trie.empty<Types.UserId, Types.UserInfo>();
