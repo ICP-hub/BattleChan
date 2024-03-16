@@ -15,6 +15,7 @@ module {
         noPost = "No Post Exist!";
         noComment = "No Comment found !";
         noReply = "No Reply found !";
+        alreadyVoted = "already Voted!";
     };
     public let notFound = {
         noUser = "No User Exist!";

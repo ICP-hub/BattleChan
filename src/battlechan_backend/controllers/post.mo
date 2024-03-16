@@ -6,6 +6,7 @@ import List "mo:base/List";
 import Trie "mo:base/Trie";
 import Text "mo:base/Text";
 import Nat32 "mo:base/Nat32";
+import Array "mo:base/Array";
 
 // thapa technical
 // code step by step
@@ -13,7 +14,7 @@ import Nat32 "mo:base/Nat32";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
-import { getUniqueId } "../utils/helper";
+import { getUniqueId; checkVote } "../utils/helper";
 import { principalKey; textKey } "../keys";
 module {
     public func createPostInfo(boardId : Types.BoardName, postId : Types.PostId, userId : Types.UserId, postReq : Types.PostReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, boardTrieMap : Trie.Trie<Types.BoardName, Types.BoardInfo>) : {
@@ -95,6 +96,14 @@ module {
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
+        };
+
+        if (checkVote<Types.PostId>(userInfo.upvotedTo, postId) == true) {
+            Debug.trap(reject.alreadyVoted);
+        };
+
+        if (checkVote<Types.PostId>(userInfo.downvotedTo, postId) == true) {
+            Debug.trap(reject.alreadyVoted);
         };
 
         switch (voteStatus) {

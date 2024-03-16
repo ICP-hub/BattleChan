@@ -2,5 +2,8 @@
   "backend": {
     "ic": "jeupf-yyaaa-aaaan-ql7iq-cai"
   },
-  "battlechan_frontend": {}
+  "battlechan_frontend": {},
+  "ledger": {
+    "ic": "jkwcn-diaaa-aaaan-ql7jq-cai"
+  }
 }
