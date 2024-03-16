@@ -15,7 +15,9 @@ import { createPostInfo; updateVoteStatus } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId } "utils/helper";
 import { principalKey; textKey } "keys";
+import ledger "canister:ledger";
 
+import Token "./token/token";
 import { successMessage; notFound } "utils/message";
 
 actor {
@@ -254,6 +256,17 @@ actor {
       case (?board) { true };
       case (null) { false };
     };
+  };
+
+  public shared ({ caller }) func mintNewToken(mintTo : Principal, amount : Nat) : async Token.Result {
+    await ledger.icrc1_transfer({
+      to = { owner = mintTo; subaccount = null };
+      fee = null;
+      memo = null;
+      from_subaccount = null;
+      created_at_time = null;
+      amount;
+    });
   };
 
   //  function for the testing
