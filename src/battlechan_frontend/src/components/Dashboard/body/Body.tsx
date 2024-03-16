@@ -19,10 +19,7 @@ export default class App extends React.Component<IAppProps> {
                 <div className='flex  justify-center'>
 
                     <Link to="/createPost">
-                        {/* <div className='mx-10 bg-dirty-light-green w-[288px] h-[65px] px-[73px] py-[20px] text-center mt-[5px] font-[700] text-[22px] '> 
-                        Create Post</div> */}
-
-                        <div className=' flex mx-10 bg-dirty-light-green w-[340px] h-[65px] px-[73px] py-[20px] text-center mt-[5px] font-[700] text-[22px] '>
+                        <div className=' flex mx-10 bg-dirty-light-green w-[340px] h-[65px] px-[73px] py-[20px] text-center mt-[5px] rounded-[2rem] font-[700] text-[22px] '>
                             <img src={createimg} className="m-[7px] w-[22px] h-[22px]" alt="" />
                             <div className=''>Create Post</div>
                         </div>

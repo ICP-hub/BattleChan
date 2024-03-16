@@ -15,9 +15,11 @@ export default class App extends React.PureComponent<IAppProps> {
 
         <div className=' w-full sm: mt-[5px] mb-6 flex flex-wrap justify-between '>
 
-          <div className=' flex  items-center flex-wrap  '>
+          <div className=' mx-[70px] flex  items-center flex-wrap  '>
             <div className='flex flex-wrap  justify-start '>
-              <img src={bclogo} className='pl-[43px] m-[5px] w-[120px] sm:w-[158px] h-[100px] sm:h-[76px]' alt="" />
+ <img src={bclogo} className='  w-[120px] sm:w-[158px] h-[100px] sm:h-[76px]' alt="" />
+
+
             </div>
             <div className="hidden md:block relative ml-3 px-[50px] bg-dark">
               <input type="text" placeholder="Search here..." className="bg-dark py-1.5 pl-[40px] pr-2.25 rounded-full bg-black border-1 placeholder-[#FFFFFF80] text-white w-[551px] h-[48px] text-sm font-normal" />
