@@ -1,14 +1,33 @@
 import React from "react";
-import Navbar from "../../components/Dashboard/navbar/Navbar";
-import Body from "../../components/Dashboard/body/Body";
-import RecentPost from "../../components/Dashboard/Recent-Posts/RecentPosts";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import Body from "../../components/Dashboard/Body/Body";
+import RecentPosts from "../../components/Dashboard/RecentPosts/RecentPosts";
 
 function Dashboard() {
+  const className: string = "HomePage";
+  const [dark, setDark] = React.useState(true);
+  const [light, setLight] = React.useState(true);
+  const darkColor: string = dark ? "dark" : "light";
+  const lightColor: string = !dark ? "dark" : "light";
+
+  function handleThemeSwitch() {
+    setDark(!dark);
+    setLight(!light);
+  }
+
   return (
-    <div className="  ">
-      <Navbar />
+    <div
+      className={
+        className + ` ${darkColor == "dark" ? "bg-[#121212]" : "bg-[#ECECEC]"}`
+      }
+    >
+      <Navbar darkColor={darkColor} lightColor={lightColor} />
       <Body />
-      <RecentPost darkColor="dark" lightColor="light" />
+      <RecentPosts
+        darkColor={darkColor}
+        lightColor={lightColor}
+        handleThemeSwitch={handleThemeSwitch}
+      />
     </div>
   );
 }
