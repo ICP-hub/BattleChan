@@ -13,7 +13,7 @@ import { createUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
 import { createPostInfo; updateVoteStatus } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
-import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId } "utils/helper";
+import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId; paginate } "utils/helper";
 import { principalKey; textKey } "keys";
 
 import Token "./token/token";
@@ -25,16 +25,19 @@ actor {
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
 
-  let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
+  let tokenCanisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
-      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
-      #ok(successMessage.insert);
 
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
+
+      #ok(successMessage.insert);
     } catch (e) {
+
       let code = Error.code(e);
       let message = Error.message(e);
+
       #err(code, message);
     };
   };
@@ -43,12 +46,15 @@ actor {
     try {
       let newBoard : Types.BoardInfo = createBoardInfo(userId, boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
-      boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, newBoard).0;
-      #ok(successMessage.insert);
 
+      boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, newBoard).0;
+
+      #ok(successMessage.insert);
     } catch (e) {
+
       let code = Error.code(e);
       let message = Error.message(e);
+
       #err(code, message);
     };
   };
@@ -75,24 +81,32 @@ actor {
   public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
     try {
       let { updatedUserInfo; updatedPostInfo } = updateVoteStatus(userId, voteStatus, postId, postTrieMap, userTrieMap);
+
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+
       #ok(successMessage.update);
     } catch (e) {
+
       let code = Error.code(e);
       let message = Error.message(e);
+
       #err(code, message);
     };
   };
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
     try {
       let { updatedPostInfo; updatedUserInfo } = createCommentInfo(userId, postId, comment, userTrieMap, postTrieMap);
+
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+
       #ok(successMessage.insert);
     } catch (e) {
+
       let code = Error.code(e);
       let message = Error.message(e);
+
       #err(code, message);
     };
   };
@@ -100,12 +114,16 @@ actor {
   public shared ({ caller = userId }) func likeComment(postId : Types.PostId, commentId : Types.CommentId) : async Types.Result {
     try {
       let { updatedUserInfo; updatedPostInfo } = updateLikedComments(userId, postId, commentId, userTrieMap, postTrieMap);
+
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+
       #ok(successMessage.update);
     } catch (e) {
+
       let code = Error.code(e);
       let message = Error.message(e);
+
       #err(code, message);
     };
   };
@@ -114,12 +132,16 @@ actor {
       let postId = getPostIdFromCommentId(commentId);
 
       let { updatedPostInfo; updatedUserInfo } = createReply(userId, commentId, reply, userTrieMap, postTrieMap);
+
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+
       #ok(successMessage.insert);
     } catch (e) {
+
       let message = Error.message(e);
       let code = Error.code(e);
+
       #err(code, message);
     };
   };
@@ -127,12 +149,13 @@ actor {
   public shared ({ caller = userId }) func likeCommentReply(commentId : Types.CommentId, replyId : Types.ReplyId) : async Types.Result {
     try {
       let postId = getPostIdFromCommentId(commentId);
-
       let postInfo : Types.PostInfo = updateLikesInReplies(userId, commentId, replyId, postTrieMap, userTrieMap);
+
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, postInfo).0;
 
       #ok(successMessage.update);
     } catch (e) {
+
       let code = Error.code(e);
       let message = Error.message(e);
       #err(code, message);
@@ -140,6 +163,7 @@ actor {
   };
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
+
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
         { data = null; status = false; error = ?"Error! No user Exist" };
@@ -157,7 +181,9 @@ actor {
       };
       case (?userData) { userData.postIds };
     };
+
     var allPosts : List.List<Types.PostInfo> = List.nil<Types.PostInfo>();
+
     for (postId in userPostIds.vals()) {
       let id = getPostId(postId);
       switch (Trie.get(postTrieMap, textKey id, Text.equal)) {
@@ -169,21 +195,26 @@ actor {
     if (List.size(allPosts) == 0) {
       return { data = null; status = false; error = ?notFound.noData };
     };
+
     return { data = ?List.toArray(allPosts); status = true; error = null };
   };
 
   public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
+
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
+
     { data = ?postInfo; status = true; error = null };
   };
 
-  public shared query ({}) func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {
+  public shared query ({ caller = userId }) func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {
+
     let postId : Types.PostId = getPostIdFromCommentId(commentId);
+
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
@@ -203,26 +234,39 @@ actor {
     };
   };
 
-  public query func getAllCommentOfPost(postId : Types.PostId) : async Types.Result_1<[Types.CommentInfo]> {
+  public shared query ({ caller = userId }) func getAllCommentOfPost(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
+
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
-    let allData = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
-    return { data = ?allData; status = true; error = null };
+
+    let allData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+
+    let paginatedData = paginate<Types.CommentInfo>(allData, chunk_size);
+
+    if (paginatedData.size() < pageNo) {
+      return { data = null; status = false; error = ?notFound.noPageExist };
+    };
+
+    let page = paginatedData[pageNo];
+
+    return { data = ?page; status = true; error = null };
   };
 
-  public query func getAllRepliesofComment(commentId : Types.CommentId) : async Types.Result_1<[Types.ReplyInfo]> {
+  public shared query ({ caller = userId }) func getAllRepliesofComment(commentId : Types.CommentId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.ReplyInfo]> {
 
     let postId : Types.PostId = getPostIdFromCommentId(commentId);
+
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
+
     let commentInfo : Types.CommentInfo = switch (Trie.get(postInfo.comments, textKey commentId, Text.equal)) {
       case (null) {
         return { data = null; status = false; error = ?notFound.noComment };
@@ -237,10 +281,17 @@ actor {
     if (allData.size() == 0) {
       return { data = null; status = false; error = ?notFound.noData };
     };
+
+    let page = paginate<Types.ReplyInfo>(allData, chunk_size);
+
+    if (page.size() < pageNo) {
+      return { data = null; status = false; error = ?notFound.noPageExist };
+    };
+
     return { data = ?allData; status = true; error = null };
   };
 
-  public query func getBoardsData() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
+  public shared query ({ caller = userId }) func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
 
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
 
@@ -250,7 +301,7 @@ actor {
     return { data = ?boardPostData; status = true; error = null };
   };
 
-  public shared query ({ caller }) func checkBoardExist(boardName : Text) : async Bool {
+  public shared query ({ caller = userId }) func checkBoardExist(boardName : Text) : async Bool {
     let boardId = toBoardId(boardName);
     switch (Trie.get(boardTrieMap, textKey boardId, Text.equal)) {
       case (?board) { true };
@@ -258,8 +309,11 @@ actor {
     };
   };
 
-  public shared ({ caller }) func mintNewToken(mintTo : Principal, amount : Nat) : async Token.Result {
-    let ledger = actor (tokenCanisterId) : Token.Token;
+  ///  functionality for the token
+
+  let ledger = actor (tokenCanisterId) : Token.Token;
+  public func mintNewToken(mintTo : Principal, amount : Nat) : async Token.Result {
+
     await ledger.icrc1_transfer({
       to = { owner = mintTo; subaccount = null };
       fee = null;
@@ -269,20 +323,9 @@ actor {
       amount;
     });
   };
-  public shared ({ caller }) func bunt(amount : Nat) : async Token.Result {
-    let ledger = actor (tokenCanisterId) : Token.Token;
-    await ledger.icrc1_transfer({
-      to = {
-        owner = Principal.fromText("bw4dl-smaaa-aaaaa-qaacq-cai");
-        subaccount = null;
-      };
-      fee = null;
-      memo = null;
-      from_subaccount = null;
-      created_at_time = null;
-      amount;
-    });
-  };
+
+
+
   //  function for the testing
   public func clearData() {
     userTrieMap := Trie.empty<Types.UserId, Types.UserInfo>();

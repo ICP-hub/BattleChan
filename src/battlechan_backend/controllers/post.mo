@@ -17,6 +17,7 @@ import { anonymousCheck; checkText } "../utils/validations";
 import { getUniqueId; checkVote } "../utils/helper";
 import { principalKey; textKey } "../keys";
 module {
+
     public func createPostInfo(boardId : Types.BoardName, postId : Types.PostId, userId : Types.UserId, postReq : Types.PostReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, boardTrieMap : Trie.Trie<Types.BoardName, Types.BoardInfo>) : {
         updatedBoardInfo : Types.BoardInfo;
         updatedUserInfo : Types.UserInfo;
@@ -82,6 +83,7 @@ module {
             newPost;
         };
     };
+
     public func updateVoteStatus(userId : Types.UserId, voteStatus : Types.VoteStatus, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;

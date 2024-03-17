@@ -8,6 +8,7 @@ import { hash } "mo:base/Text";
 
 import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
+import List "mo:base/List";
 import Types "types";
 
 module {
@@ -37,5 +38,28 @@ module {
             case (?data) { return true };
             case (null) { return false };
         };
+    };
+    public func paginate<V>(array : [V], chunkSize : Nat) : [[V]] {
+
+        var paginationArray : List.List<[V]> = List.nil<[V]>();
+        var num_chunk : Nat = (array.size() + chunkSize -1) / chunkSize;
+        for (i in Iter.range(0, num_chunk -1)) {
+            var tempArray = List.nil<V>();
+            for (j in Iter.range(0, chunkSize -1)) {
+                var index = i * chunkSize + j;
+                if (index < array.size()) {
+                    tempArray := List.push(array[index], tempArray);
+                };
+            };
+            paginationArray := List.push(List.toArray(tempArray), paginationArray);
+        };
+        List.toArray(paginationArray);
+    };
+
+    public func validText(text : Text, value : Nat) : Bool {
+        if (Text.size(text) >= value or Text.size(text) == 0) {
+            return false;
+        };
+        true;
     };
 };
