@@ -34,7 +34,7 @@ const ThemeSwitch = (props: Theme) => {
         >
           <span
             className={`flex h-9 w-9 items-center justify-center rounded-[2rem] transition ease-in duration-500 ${
-              !isChecked ? "bg-dirty-light-green text-light" : "text-light"
+              !isChecked ? "bg-dirty-light-green text-light" : "text-dark"
             }`}
           >
             <svg
@@ -61,7 +61,7 @@ const ThemeSwitch = (props: Theme) => {
           </span>
           <span
             className={`flex h-9 w-9 items-center justify-center rounded-[2rem] transition ease-in duration-500 ${
-              isChecked ? "bg-dirty-light-green text-light" : "text-dark"
+              isChecked ? "bg-dirty-light-green text-light" : "text-light"
             }`}
           >
             <svg
