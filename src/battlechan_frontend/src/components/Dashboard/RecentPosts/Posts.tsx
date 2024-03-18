@@ -8,12 +8,6 @@ import { TbSquareChevronDownFilled } from "react-icons/tb";
 import Cover_Image from "../../../images/trendingPost_coverImg.png";
 import Profile_Pic from "../../../images/trendingPost_profile.png";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
-
 const postList = [
   {
     commentCount: "750",
@@ -104,13 +98,11 @@ const postList = [
   },
 ];
 
-const Post = (props: Theme) => {
+const Post = () => {
   const [votes, setVotes] = React.useState<boolean[]>(
     Array(postList.length).fill(true)
   );
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
-  const className = "LandingPage-->TrendingPosts";
+  const className = "LandingPage__TrendingPosts";
 
   const handleVote = (index: number, vote: boolean) => {
     const newVotes = [...votes];
@@ -121,16 +113,12 @@ const Post = (props: Theme) => {
   return (
     <div
       className={
-        className + ` w-full gap-40 py-16 bg-${darkColor} flex-direction-col`
+        className + ` w-full gap-40 flex-direction-col`
       }
     >
       {/* Trending data counts */}
       
-
       <section className={className + "__trendingPosts w-full"}>
-       
-        
-
         {/* Cards block */}
         <div
           className={
