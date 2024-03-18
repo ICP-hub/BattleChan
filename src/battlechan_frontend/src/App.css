@@ -24,7 +24,7 @@
   }
 
   .white-button {
-    @apply gap-2 font-semibold text-lg text-base rounded-[3rem] px-12 py-3 px-8 py-2 text-dark bg-light;
+    @apply gap-2 font-semibold laptop:text-lg text-base rounded-[3rem] laptop:px-12 laptop:py-3 px-8 py-2 text-dark bg-light;
   }
 
   .small-button {

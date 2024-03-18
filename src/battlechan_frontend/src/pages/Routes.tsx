@@ -1,12 +1,23 @@
 import React from "react";
-import { useLocation, useNavigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 
-function Routing() {
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+};
+
+function Routing(props: Theme) {
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route
+          path="/"
+          element={<Dashboard darkColor={darkColor} lightColor={lightColor} />}
+        />
       </Routes>
     </div>
   );

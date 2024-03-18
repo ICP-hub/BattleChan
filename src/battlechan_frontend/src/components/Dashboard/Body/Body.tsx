@@ -30,15 +30,19 @@ const Body = (props: Theme) => {
         className +
         `flex flex-col justify-between w-full text-${lightColor} bg-top bg-cover bg-no-repeat`
       }
-      style={{
-        backgroundImage: `url(${bg})`,
-      }}
+      style={
+        darkColor == "dark"
+          ? {
+              backgroundImage: `url(${bg})`,
+            }
+          : {}
+      }
     >
       <div
         className={
           className +
           "__navigation" +
-          " gap-12 my-8 flex-row-center justify-center font-semibold text-lg"
+          " gap-12 my-8 flex-row-center justify-center font-normal text-lg"
         }
       >
         <p
@@ -67,24 +71,32 @@ const Body = (props: Theme) => {
         </p>
       </div>
 
-      <div className={className + "__createPost" + " my-8 flex justify-center"}>
+      <div
+        className={className + "__createPost" + " mt-12 flex justify-center"}
+      >
         <Link to="/createPost">
-          <div className="px-16 py-4 text-2xl font-semibold rounded-[2rem] flex-row-center gap-1 bg-dirty-light-green">
+          <p className="green-button flex-row-center bg-dirty-light-green">
             <LuPlusCircle />
-            <div className="">Create Post</div>
-          </div>
+            <span>Create Post</span>
+          </p>
         </Link>
       </div>
 
       <div
         className={
-          className + "__tagLines" + " px-20 w-full flex flex-row my-16"
+          className + "__tagLines" + " px-20 w-full flex flex-row my-12"
         }
       >
-        <div className="w-1/2 text-5xl font-bold text-[#6DE580] leading-relaxed">
+        <div
+          className={`w-1/2 text-5xl font-bold ${
+            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+          } leading-relaxed`}
+        >
           BattleChan: Decentralized Discussion Battlefield
         </div>
-        <div className="w-1/2 text-light font-semibold text-lg text-start px-28">
+        <div
+          className={`w-1/2 text-${lightColor} font-semibold text-lg text-start px-28`}
+        >
           Welcome to BattleChan, where every post battles for supremacy
         </div>
       </div>
@@ -93,7 +105,7 @@ const Body = (props: Theme) => {
         className={
           className +
           "__steps" +
-          `w-full flex-row-center justify-evenly p-8 my-8 mx-16 border border-light-green rounded-xl bg-${darkColor} text-lg`
+          `w-full flex-row-center justify-evenly p-10 my-8 mx-16 border border-light-green rounded-xl bg-${darkColor} text-lg`
         }
       >
         <div className="flex flex-col gap-4 items-start">
@@ -130,7 +142,7 @@ const Body = (props: Theme) => {
           ` py-6 px-10 mx-36 my-28 border border-${lightColor} rounded-md`
         }
       >
-        <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl bg-dirty-light-green">
+        <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
           <div className="data__label py-6 px-2 px-4 h-full text-lg font-semibold">
             Name of Subject
           </div>
@@ -181,7 +193,7 @@ const Body = (props: Theme) => {
         </div>
 
         <div
-          className={`data__values px-4 flex-row-center flex-nowrap justify-between rounded-xl bg-${darkColor} text-${lightColor}`}
+          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-${lightColor}`}
         >
           <div className="data__label py-6 px-4 h-full text-lg font-semibold">
             Total Posts
