@@ -123,7 +123,7 @@ const Post = () => {
         <div
           className={
             className +
-            "__postCards my-20 w-full gap-8 flex flex-wrap px-[100px] justify-center"
+            "__postCards my-20 w-full gap-8 flex flex-wrap px-[100px] justify-center items-start"
           }
         >
           {/* Card */}
