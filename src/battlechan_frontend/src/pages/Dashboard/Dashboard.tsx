@@ -18,11 +18,11 @@ function Dashboard() {
   return (
     <div
       className={
-        className + ` ${darkColor == "dark" ? "bg-[#121212]" : "bg-[#ECECEC]"}`
+        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
       }
     >
       <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <Body />
+      <Body darkColor={darkColor} lightColor={lightColor} />
       <RecentPosts
         darkColor={darkColor}
         lightColor={lightColor}
