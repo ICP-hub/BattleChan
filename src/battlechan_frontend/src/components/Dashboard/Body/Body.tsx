@@ -219,8 +219,6 @@ const Body = (props: Theme) => {
           </div>
         </div>
       </div>
-
-      <div></div>
     </div>
   );
 };
