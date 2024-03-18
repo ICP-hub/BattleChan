@@ -48,23 +48,9 @@ export default class App extends React.Component<IAppProps> {
                     </div>
                 </div>
 
-                {/* <div className=' place-content-center    sm:py-[100px] sm:px-[200px] text-center  w-[1728px] h-[258px] border border-light-green rounded-[1.5rem] sm:mx-[100px] flex text-light font-[400] text-[30px] text-md justify-center'>
+                
 
-                    <div className=' sm:pr-[100px]  '>
-                        <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>1</div>
-                        <div>Connect your Wallet.</div>
-                    </div>
-                    <div className='   '>
-                        <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>2</div>
-                        <div>Make Post : Earn Time</div>
-                    </div>
-                    <div className=' sm:pl-[100px]'>
-                        <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>3</div>
-                        <div>Cast your vote</div>
-                    </div>
-                </div> */}
-
-                <div className=' text-[30px] font-[400] place-content-center  flex   p-[100px] border-light-green border-[2px] w-[1500px] rounded-[1rem] px[100px]  justify-between'>
+                <div className=' mx-[100px] text-[30px] font-[400] place-content-center  flex   p-[100px] border-light-green border-[2px] w-[1500px] rounded-[1rem] px[100px]  justify-between'>
 
                     <div className=' sm:pr-[100px]  '>
                         <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>1</div>
@@ -82,7 +68,7 @@ export default class App extends React.Component<IAppProps> {
 
 
 
-                <div className='  border-[0.5px] m-[25px] opacity-[80%] border-light px-[15px] rounded-md mt-5 pt-[20px] pb-[20px]'>
+                <div className=' mt-[90px] mx-[200px]  border-[0.5px] m-[25px] opacity-[80%] border-light px-[15px] rounded-md pt-[20px] pb-[20px]'>
 
                     <div className='  grid grid-cols-10 border rounded-[1rem] py-[18px] font-[400] text-[20px] bg-[#3A6841] gap-4 p-[5px]'>
                         <div className="flex col-span-3 border-r-[1px] h-full text-[20px] font-[700] px-[50px]">Name of Subject</div>
