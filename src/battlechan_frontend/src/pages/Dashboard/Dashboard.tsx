@@ -3,17 +3,15 @@ import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import Body from "../../components/Dashboard/Body/Body";
 import RecentPosts from "../../components/Dashboard/RecentPosts/RecentPosts";
 
-function Dashboard() {
-  const className: string = "HomePage";
-  const [dark, setDark] = React.useState(true);
-  const [light, setLight] = React.useState(true);
-  const darkColor: string = dark ? "dark" : "light";
-  const lightColor: string = !dark ? "dark" : "light";
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+};
 
-  function handleThemeSwitch() {
-    setDark(!dark);
-    setLight(!light);
-  }
+function Dashboard(props: Theme) {
+  const className: string = "HomePage";
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
 
   return (
     <div
@@ -23,11 +21,7 @@ function Dashboard() {
     >
       <Navbar darkColor={darkColor} lightColor={lightColor} />
       <Body darkColor={darkColor} lightColor={lightColor} />
-      <RecentPosts
-        darkColor={darkColor}
-        lightColor={lightColor}
-        handleThemeSwitch={handleThemeSwitch}
-      />
+      <RecentPosts darkColor={darkColor} lightColor={lightColor} />
     </div>
   );
 }

@@ -12,17 +12,17 @@ import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
 import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 
-function Landing() {
-  const className: string = "LandingPage";
-  const [dark, setDark] = React.useState(true);
-  const [light, setLight] = React.useState(true);
-  const darkColor: string = dark ? "dark" : "light";
-  const lightColor: string = !dark ? "dark" : "light";
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+  handleThemeSwitch: any;
+};
 
-  function handleThemeSwitch() {
-    setDark(!dark);
-    setLight(!light);
-  }
+function Landing(props: Theme) {
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+  const handleThemeSwitch = props.handleThemeSwitch;
+  const className = "LandingPage";
 
   return (
     <main
@@ -30,7 +30,11 @@ function Landing() {
         className + ` w-full h-full bg-${darkColor} text-${lightColor}`
       }
     >
-      <Navbar darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
+      <Navbar
+        darkColor={darkColor}
+        lightColor={lightColor}
+        handleThemeSwitch={handleThemeSwitch}
+      />
       <HeroSection darkColor={darkColor} lightColor={lightColor} />
 
       <About />
@@ -42,6 +46,13 @@ function Landing() {
       <FAQs darkColor={darkColor} lightColor={lightColor} />
 
       <Footer />
+
+      <Link
+        to="/dashboard"
+        className={`p-4 bg-dark text-light flex justify-center`}
+      >
+        Link to DASHBOARD
+      </Link>
     </main>
   );
 }

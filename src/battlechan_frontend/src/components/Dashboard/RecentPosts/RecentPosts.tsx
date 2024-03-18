@@ -4,7 +4,6 @@ import Posts from "./Posts";
 type Theme = {
   darkColor: string;
   lightColor: string;
-  handleThemeSwitch: any;
 };
 
 const RecentPosts = (props: Theme) => {
