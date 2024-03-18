@@ -7,7 +7,9 @@ type Theme = {
 };
 
 const ThemeSwitch = (props: Theme) => {
-  const [isChecked, setIsChecked] = React.useState(true);
+  const [isChecked, setIsChecked] = React.useState(
+    props.darkColor == "dark" ? true : false
+  );
   const className = "LandingPage__ThemeSwitch";
 
   const handleCheckboxChange = () => {
