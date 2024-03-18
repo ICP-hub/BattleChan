@@ -1,69 +1,84 @@
+import React from "react";
 
-import * as React from 'react';
-import bclogo from "../../../images/battlechan 1.png";
-import notification from "../../../images/notification.png";
-import goldcoin from "../../../images/goldcoin.png";
+import { FaRegBell } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
+
 import userimg from "../../../images/User.png";
-import search from "../../../images/search.png";
+import goldcoin from "../../../images/goldcoin.png";
+import dark_logo from "../../../images/dark_logo.png";
+import light_logo from "../../../images/light_logo.png";
 
-export interface IAppProps { }
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+};
 
-export default class App extends React.PureComponent<IAppProps> {
-  public render() {
-    return (
-      <div className='bg-dark    w-full  font-istok text-light py-9 '>
+const Navbar = (props: Theme) => {
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+  const className = "HomePage__Navbar";
 
-        <div className=' w-full sm: mt-[5px] mb-6 flex flex-wrap justify-between '>
+  return (
+    <div
+      className={
+        className +
+        ` flex-row-center justify-between bg-transparent text-${lightColor} py-8 px-16`
+      }
+    >
+      <img
+        src={darkColor == "dark" ? dark_logo : light_logo}
+        className={className + "__logo w-28 object-contain pointer-events-none"}
+        alt="BATTLE CHAN"
+      />
 
-          <div className=' mx-[70px] flex  items-center flex-wrap  '>
-            <div className='flex flex-wrap  justify-start '>
- <img src={bclogo} className='  w-[120px] sm:w-[158px] h-[100px] sm:h-[76px]' alt="" />
-
-
-            </div>
-            <div className="hidden md:block relative ml-3 px-[50px] bg-dark">
-              <input type="text" placeholder="Search here..." className="bg-dark py-1.5 pl-[40px] pr-2.25 rounded-full bg-black border-1 placeholder-[#FFFFFF80] text-white w-[551px] h-[48px] text-sm font-normal" />
-              <img src={search} className="  absolute left-[60px] top-1/2 transform -translate-y-1/2 w-3.75 h-3.75" />
-            </div>
-          </div>
-
-          <div className=' hidden md:flex items-center text-white justify-between '>
-            <div className='rounded-[3rem]  border-light-green border-[0.1px]  flex items-center  py-[5px]'>
-              <div className='flex ml-[22px] text-[20px]'>
-                <div className='font-[700] text-[20px] bg-blue-800 text-white'>1 $Time Token:</div>
-                <div className='text-green-500 ml-1.5'>$0.0050</div>
-              </div>
-              <div className='bg-light text-dark  font-[700] text-[18px]  text-center px-[38px] py-[11px] rounded-[2rem] mx-[11px]'>Buy</div>
-            </div>
-           
-          </div>
-          <div className='  hidden md:flex items-center  '>
-              <img src={notification} className='w-[27px] h-[32px]' alt="notification-icon" />
-            </div>
-
-          <div className='  flex  justify-center    p-[12px] sm:pl-18 pr-[93px] '>
-            <div className='  justify-between  ml-[5px] sm:ml-[0px] mt px-4.5 text-[20px] font-[700] '>
-              <div className=' font-[700] s text-center  '>Kristin Watson</div>
-              <div className='flex  text-center '>
-                <img src={goldcoin} className ="   " alt="" />
-                <div className=''>530</div>
-              </div>
-            </div>
-            <img src={userimg} className=' justify-end sm:justify-between ml-3  w-[40px] sm:w-[67px] h-[42px] sm:h-[67px] mt-[3px] sm:mt-[0px]' alt="" />
-          </div>
-
+      <section
+        className={className + "__rightSection flex-row-center font-bold gap-8"}
+      >
+        <div className="input relative flex-row-center text-[#767676]">
+          <IoSearch className={`absolute text-3xl ml-4 p-1`} />
+          <input
+            type="text"
+            name="search"
+            placeholder="Search here...."
+            className={`rounded-[2rem] w-[450px] pl-14 px-8 py-3.5 text-lg font-normal text-${lightColor} bg-${darkColor}`}
+          />
         </div>
 
-        <div className='px-1.5 opacity-50 '>
-          <hr />
+        <div
+          className={
+            className +
+            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
+            "  p-1.5 pl-6 text-base text-nowrap"
+          }
+        >
+          1 Time Token:
+          <span className={className + "__timeToken__amount text-light-green"}>
+            $0.0050
+          </span>
+          <button
+            className={
+              className +
+              `__timeToken__butButton small-button bg-${lightColor} text-${darkColor}`
+            }
+          >
+            Buy
+          </button>
         </div>
 
-        <div className='flex text-gray-400 font-normal text-md justify-center mt-[20px]'>
-          <div className='mx-[7.5px] text-light '>Home</div>
-          <div className='mx-[7.5px] text-gray'>Archive</div>
-          <div className='mx-[7.5px] text-gray'>Dashboard</div>
+        <FaRegBell className="min-w-[30px] text-3xl cursor-pointer" />
+
+        <div className="__userName_and_coins flex flex-col items-start">
+          <p className="text-nowrap">Kristin Watson</p>
+          <div className="coinsCount flex-row-center gap-2">
+            <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
+            <span>550</span>
+          </div>
         </div>
-      </div>
-    );
-  }
-}
+
+        <img src={userimg} alt="USER IMAGE" className="w-[50px]" />
+      </section>
+    </div>
+  );
+};
+
+export default Navbar;

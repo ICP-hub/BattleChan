@@ -1,17 +1,23 @@
-import * as React from 'react';
-import Posts from "./Posts"
-export interface IAppProps {
-  darkColor:string
-  lightColor:string
-}
+import React from "react";
+import Posts from "./Posts";
 
-export default class App extends React.Component<IAppProps> {
-  public render() {
-    return (
-      <div className='bg-dark text-light'>
-        <div className='font-[800] text-center text-[30px]'>Recent Posts </div>
-        <Posts darkColor='dark' lightColor='light'/>
-      </div>
-    );
-  }
-}
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+  handleThemeSwitch: any;
+};
+
+const RecentPosts = (props: Theme) => {
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+  const className = "HomePage__RecentPosts";
+
+  return (
+    <div className={className + "bg-dark text-light"}>
+      <div className="font-[800] text-center text-[30px]">Recent Post </div>
+      <Posts darkColor="dark" lightColor="light" />
+    </div>
+  );
+};
+
+export default RecentPosts;
