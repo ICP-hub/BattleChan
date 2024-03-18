@@ -142,7 +142,7 @@ const Body = (props: Theme) => {
           ` py-6 px-10 mx-36 my-28 border border-${lightColor} rounded-md`
         }
       >
-        <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl bg-dirty-light-green">
+        <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
           <div className="data__label py-6 px-2 px-4 h-full text-lg font-semibold">
             Name of Subject
           </div>
