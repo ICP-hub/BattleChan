@@ -72,8 +72,8 @@ const TrendingPost = (props: Theme) => {
     <div
       className={
         className +
-        ` w-full gap-40 pt-48 ${
-          darkColor ? "bg-[#121212]" : "light"
+        ` w-full gap-40 pt-48 bg-${
+          darkColor == "dark" ? "[#121212]" : "light"
         } flex-direction-col bg-contain bg-top bg-no-repeat`
       }
       style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}

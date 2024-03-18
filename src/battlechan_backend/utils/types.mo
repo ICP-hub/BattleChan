@@ -32,6 +32,7 @@ module {
         upvotedTo : [PostId];
         downvotedTo : [PostId];
         likedComments : [CommentId];
+        createdComments : [CommentId];
         replyIds : [(CommentId, ReplyId)];
         postIds : [Text];
         createdAt : Text;
@@ -42,6 +43,7 @@ module {
 
     public type PostReq = {
         postName : Text;
+        postDes : Text;
         postMetaData : Text;
     };
     public type ReplyId = Text;
@@ -60,9 +62,18 @@ module {
         createdAt : Text;
         updatedAt : ?Text;
     };
+    public type CommentRes = {
+        commentId : Text;
+        comment : Text;
+        likedBy : [UserId];
+        replies : [(ReplyId, ReplyInfo)];
+        createdAt : Text;
+        updatedAt : ?Text;
+    };
     public type PostInfo = {
         postId : PostId;
         postName : Text;
+        postDes : Text;
         upvotedBy : [UserId];
         downvotedBy : [UserId];
         upvotes : Nat64;
@@ -73,7 +84,20 @@ module {
         createdAt : Text;
         updatedAt : ?Text;
     };
-
+    public type PostRes = {
+        postId : PostId;
+        postName : Text;
+        postDes : Text;
+        upvotedBy : [UserId];
+        downvotedBy : [UserId];
+        upvotes : Nat64;
+        downvotes : Nat64;
+        postMetaData : Text;
+        createdBy : Principal;
+        comments : [(CommentId, CommentInfo)];
+        createdAt : Text;
+        updatedAt : ?Text;
+    };
     public type Message = Text;
     public type Result_1<V> = {
         data : ?V;
@@ -81,4 +105,5 @@ module {
         error : ?Text;
     };
     public type Result = Result.Result<Message, (Error.ErrorCode, Text)>;
+
 };

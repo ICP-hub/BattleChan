@@ -5,22 +5,25 @@ import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 type Theme = {
   darkColor: string;
   lightColor: string;
+  handleThemeSwitch: any;
 };
 
 const Navbar = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
-  
+
   return (
     <nav
       className={
         className +
-        ` py-10 px-20 flex-row-center justify-between text-${lightColor}`
+        ` flex-row-center justify-between bg-${darkColor} text-${lightColor}` +
+        " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
       <img
@@ -30,12 +33,23 @@ const Navbar = (props: Theme) => {
       />
 
       <section
-        className={className + "__rightSection flex-row-center gap-8 font-bold"}
+        className={
+          className +
+          "__rightSection flex-row-center font-bold" +
+          " laptop:gap-4 gap-2"
+        }
       >
+        <ThemeSwitch
+          handleThemeSwitch={props.handleThemeSwitch}
+          darkColor={props.darkColor}
+          lightColor={props.lightColor}
+        />
+
         <div
           className={
             className +
-            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green p-2 pl-6 rounded-[3rem]`
+            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
+            "  laptop:p-1.5 laptop:pl-6 p-1.5 pl-4 text-base"
           }
         >
           1 Time Token:

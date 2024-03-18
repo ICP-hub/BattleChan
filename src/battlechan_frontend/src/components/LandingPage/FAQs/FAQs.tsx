@@ -1,5 +1,6 @@
 import React from "react";
-import "./FAQs.scss";
+
+import bg from "../../../images/faq_bg.png";
 
 type Theme = {
   darkColor: string;
@@ -42,8 +43,8 @@ const FAQs = (props: Theme) => {
     <div
       className={
         className +
-        ` w-full h-[90vh] ${
-          darkColor ? "bg-[#121212]" : "light"
+        ` w-full h-[100%] ${
+          darkColor == "dark" ? "bg-[#121212]" : "bg-light"
         } text-${lightColor} flex-direction-row`
       }
     >
@@ -52,7 +53,7 @@ const FAQs = (props: Theme) => {
         className={
           className +
           "__left" +
-          " h-full pl-36 py-20 w-[55%] flex flex-col justify-between"
+          " h-full pl-36 py-20 w-[55%] gap-20 flex flex-col"
         }
       >
         <h1 className="font-bold text-5xl">Frequently Asked Questions</h1>
@@ -79,6 +80,7 @@ const FAQs = (props: Theme) => {
           "__right" +
           " w-[45%] pr-36 bg-contain bg-no-repeat flex-col-center relative"
         }
+        style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
       >
         <p
           className={`bg-${lightColor} text-${darkColor} font-semibold top-[30%] absolute p-4 rounded-lg`}

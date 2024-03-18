@@ -1,7 +1,9 @@
 import React, { Suspense, lazy } from "react";
 import "./App.css";
-import { ConnectButton,ConnectDialog, Connect2ICProvider} from "@connect2ic/react";
-import "@connect2ic/core/style.css"
+
+import { Connect2ICProvider} from "@connect2ic/react";
+import './Connect2ic/Connect2ic.scss';
+
 import { createClient } from "@connect2ic/core";
 import { defaultProviders } from "@connect2ic/core/providers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -43,7 +45,7 @@ function App() {
 
 const client = createClient({
   canisters: {
-    
+
   },
   providers: defaultProviders,
 });

@@ -1,6 +1,9 @@
 {
   "backend": {
-    "ic": "ht6wt-jqaaa-aaaan-ql6la-cai"
+    "ic": "jeupf-yyaaa-aaaan-ql7iq-cai"
   },
-  "battlechan_frontend": {}
+  "battlechan_frontend": {},
+  "ledger": {
+    "ic": "j7rta-caaaa-aaaan-ql7ka-cai"
+  }
 }

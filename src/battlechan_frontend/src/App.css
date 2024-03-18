@@ -6,30 +6,33 @@
   .flex-direction-row {
     @apply flex flex-row;
   }
+
   .flex-direction-col {
     @apply flex flex-col;
   }
+
   .flex-row-center {
     @apply flex flex-row items-center;
   }
+
   .flex-col-center {
     @apply flex flex-col items-center;
   }
+
   .green-button {
-    @apply gap-2 font-semibold text-lg rounded-[3rem] px-8 py-3.5 text-light bg-green;
+    @apply gap-2 font-semibold laptop:text-lg text-base rounded-[3rem] laptop:px-8 laptop:py-3.5 px-4 py-3 text-light bg-green;
   }
+
   .white-button {
-    @apply gap-2 font-semibold text-lg rounded-[3rem] px-12 py-3 text-dark bg-light;
+    @apply gap-2 font-semibold text-lg text-base rounded-[3rem] px-12 py-3 px-8 py-2 text-dark bg-light;
   }
 
   .small-button {
-    font-weight: 600;
-    font-size: 1.1rem;
-    border-radius: 2rem;
-    padding: 0.4rem 1.5rem;
+    @apply font-semibold laptop:text-lg text-base rounded-[2rem] laptop:py-2 laptop:px-6 py-1.5 px-4;
   }
 }
+
 @font-face {
-    font-family :'istok';
-    src: url('../asset//IstokWeb-Regular.ttf');
+  font-family: "istok";
+  src: url("../asset//IstokWeb-Regular.ttf");
 }

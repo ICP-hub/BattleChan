@@ -1,0 +1,3 @@
+.LandingPage__HeroSection__startPostingBtn button::after {
+  content: attr(data-value);
+}

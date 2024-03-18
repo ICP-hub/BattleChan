@@ -6,6 +6,7 @@ import List "mo:base/List";
 import Trie "mo:base/Trie";
 import Text "mo:base/Text";
 import Nat32 "mo:base/Nat32";
+import Array "mo:base/Array";
 
 // thapa technical
 // code step by step
@@ -13,9 +14,10 @@ import Nat32 "mo:base/Nat32";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
-import { getUniqueId } "../utils/helper";
+import { getUniqueId; checkVote } "../utils/helper";
 import { principalKey; textKey } "../keys";
 module {
+
     public func createPostInfo(boardId : Types.BoardName, postId : Types.PostId, userId : Types.UserId, postReq : Types.PostReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, boardTrieMap : Trie.Trie<Types.BoardName, Types.BoardInfo>) : {
         updatedBoardInfo : Types.BoardInfo;
         updatedUserInfo : Types.UserInfo;
@@ -45,8 +47,9 @@ module {
             upvotedTo = userInfo.upvotedTo;
             downvotedTo = userInfo.downvotedTo;
             likedComments = userInfo.likedComments;
+            createdComments = userInfo.createdComments;
             replyIds = userInfo.replyIds;
-            postIds = List.toArray(List.push(boardId # "_" # postId, List.fromArray(userInfo.postIds)));
+            postIds = List.toArray(List.push(boardId # "-" # postId, List.fromArray(userInfo.postIds)));
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
@@ -54,6 +57,7 @@ module {
         let newPost : Types.PostInfo = {
             postId = postId;
             postName = postReq.postName;
+            postDes = postReq.postDes;
             postMetaData = postReq.postMetaData;
             upvotedBy = [];
             downvotedBy = [];
@@ -79,6 +83,7 @@ module {
             newPost;
         };
     };
+
     public func updateVoteStatus(userId : Types.UserId, voteStatus : Types.VoteStatus, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;
@@ -95,6 +100,14 @@ module {
             case (null) { Debug.trap(reject.noPost) };
         };
 
+        if (checkVote<Types.PostId>(userInfo.upvotedTo, postId) == true) {
+            Debug.trap(reject.alreadyVoted);
+        };
+
+        if (checkVote<Types.PostId>(userInfo.downvotedTo, postId) == true) {
+            Debug.trap(reject.alreadyVoted);
+        };
+
         switch (voteStatus) {
             case (#upvote) {
                 return {
@@ -105,6 +118,7 @@ module {
                         upvotedTo = List.toArray(List.push(postId, List.fromArray(userInfo.upvotedTo)));
                         downvotedTo = userInfo.downvotedTo;
                         likedComments = userInfo.likedComments;
+                        createdComments = userInfo.createdComments;
                         replyIds = userInfo.replyIds;
                         postIds = userInfo.postIds;
                         createdAt = userInfo.createdAt;
@@ -113,6 +127,7 @@ module {
                     updatedPostInfo : Types.PostInfo = {
                         postId = postInfo.postId;
                         postName = postInfo.postName;
+                        postDes = postInfo.postDes;
                         upvotedBy = List.toArray(List.push(userId, List.fromArray(postInfo.upvotedBy)));
                         downvotedBy = postInfo.downvotedBy;
                         upvotes = postInfo.upvotes + 1;
@@ -135,6 +150,7 @@ module {
                         upvotedTo = userInfo.upvotedTo;
                         downvotedTo = List.toArray(List.push(postId, List.fromArray(userInfo.upvotedTo)));
                         likedComments = userInfo.likedComments;
+                        createdComments = userInfo.createdComments;
                         replyIds = userInfo.replyIds;
                         postIds = userInfo.postIds;
                         createdAt = userInfo.createdAt;
@@ -144,6 +160,7 @@ module {
                     updatedPostInfo : Types.PostInfo = {
                         postId = postInfo.postId;
                         postName = postInfo.postName;
+                        postDes = postInfo.postDes;
                         upvotedBy = postInfo.upvotedBy;
                         downvotedBy = List.toArray(List.push(userId, List.fromArray(postInfo.downvotedBy)));
                         upvotes = postInfo.upvotes;

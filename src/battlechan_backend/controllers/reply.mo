@@ -57,6 +57,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes + 1;
@@ -76,6 +77,7 @@ module {
             downvotedTo = userInfo.downvotedTo;
             likedComments = userInfo.likedComments;
             replyIds = List.toArray(List.push((commentId, replyId), List.fromArray(userInfo.replyIds)));
+            createdComments = userInfo.createdComments;
             postIds = userInfo.postIds;
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
@@ -123,6 +125,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;

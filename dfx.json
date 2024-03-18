@@ -5,14 +5,15 @@
       "type": "motoko"
     },
     "battlechan_frontend": {
-      "dependencies": [
-        "backend"
-      ],
-      "source": [
-        "src/battlechan_frontend/dist"
-      ],
+      "dependencies": ["backend"],
+      "source": ["src/battlechan_frontend/dist"],
       "type": "assets",
       "workspace": "battlechan_frontend"
+    },
+    "ledger": {
+      "type": "custom",
+      "candid": "https://raw.githubusercontent.com/dfinity/ic/91bf38ff3cb927cb94027d9da513cd15f91a5b04/rs/rosetta-api/icrc1/ledger/ledger.did",
+      "wasm": "https://download.dfinity.systems/ic/91bf38ff3cb927cb94027d9da513cd15f91a5b04/canisters/ic-icrc1-ledger.wasm.gz"
     },
     "internet_identity": {
       "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",

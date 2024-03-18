@@ -7,17 +7,20 @@ import Int "mo:base/Int";
 import { now } "mo:base/Time";
 import Debug "mo:base/Debug";
 import List "mo:base/List";
+import Result "mo:base/Result";
 
 import Types "../utils/types";
 
 import { reject } "../utils/message";
 import { checkText } "../utils/validations";
-import { getUniqueId } "../utils/helper";
+import { getUniqueId; getPostIdFromCommentId } "../utils/helper";
 import { principalKey; textKey } "../keys";
 
 module {
-    public func createCommentInfo(userId : Types.UserId, postId : Types.PostId, comment : Text, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Types.PostInfo {
-
+    public func createCommentInfo(userId : Types.UserId, postId : Types.PostId, comment : Text, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
+        updatedPostInfo : Types.PostInfo;
+        updatedUserInfo : Types.UserInfo;
+    } {
         if (checkText(comment, 200) == false) {
             trap(reject.outBound);
         };
@@ -29,6 +32,7 @@ module {
             case (null) { trap(reject.noPost) };
             case (?postData) { postData };
         };
+
         let commentId = postId # "_" # Nat32.toText(getUniqueId());
         let newComment : Types.CommentInfo = {
             commentId;
@@ -38,10 +42,23 @@ module {
             createdAt = Int.toText(now());
             updatedAt = null;
         };
-
+        let updatedUserInfo : Types.UserInfo = {
+            userId = userInfo.userId;
+            userName = userInfo.userName;
+            profileImg = userInfo.profileImg;
+            upvotedTo = userInfo.upvotedTo;
+            downvotedTo = userInfo.downvotedTo;
+            likedComments = userInfo.likedComments;
+            createdComments = List.toArray(List.push(commentId, List.fromArray(userInfo.createdComments)));
+            replyIds = userInfo.replyIds;
+            postIds = userInfo.postIds;
+            createdAt = userInfo.createdAt;
+            updatedAt = ?Int.toText(now());
+        };
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes + 1;
@@ -53,7 +70,10 @@ module {
             updatedAt = ?Int.toText(now());
 
         };
-        return updatedPostInfo;
+        return {
+            updatedPostInfo;
+            updatedUserInfo;
+        };
     };
     public func updateLikedComments(userId : Types.UserId, postId : Types.PostId, commentId : Types.CommentId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
         updatedPostInfo : Types.PostInfo;
@@ -78,6 +98,7 @@ module {
             upvotedTo = userInfo.upvotedTo;
             downvotedTo = userInfo.downvotedTo;
             likedComments = List.toArray(List.push(commentId, List.fromArray(userInfo.likedComments)));
+            createdComments = userInfo.createdComments;
             replyIds = userInfo.replyIds;
             postIds = userInfo.postIds;
             createdAt = userInfo.createdAt;
@@ -95,6 +116,7 @@ module {
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
+            postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;
