@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import FAQs from "../../components/LandingPage/FAQs/FAQs";
 import About from "../../components/LandingPage/About/About";
@@ -11,6 +11,7 @@ import TrendingPost from "../../components/LandingPage/TrendingPosts/TrendingPos
 import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
 import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
+import { useConnect } from "@connect2ic/react";
 
 type Theme = {
   darkColor: string;
@@ -23,6 +24,17 @@ function Landing(props: Theme) {
   const lightColor = props.lightColor;
   const handleThemeSwitch = props.handleThemeSwitch;
   const className = "LandingPage";
+
+  const { isConnected } = useConnect();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (isConnected) {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+  }, [isConnected, navigate]);
 
   return (
     <main
