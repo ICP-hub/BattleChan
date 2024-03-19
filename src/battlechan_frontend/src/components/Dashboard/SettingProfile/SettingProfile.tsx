@@ -17,7 +17,11 @@ const SettingProfile = (props: Theme) => {
   const className = "SettingProfile";
 
   return (
-    <div className={className + ` bg-${darkColor}`}>
+    <div
+      className={
+        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
+      }
+    >
       <Navbar darkColor={darkColor} lightColor={lightColor} />
       <NavButtons darkColor={darkColor} lightColor={lightColor} />
       <div
@@ -70,7 +74,9 @@ const SettingProfile = (props: Theme) => {
         </section>
 
         <section className="image p-4 m-8 flex-col-center">
-          <button className="green-button" type="button">Update</button>
+          <button className="green-button" type="button">
+            Update
+          </button>
         </section>
       </div>
     </div>

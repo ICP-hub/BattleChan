@@ -17,7 +17,7 @@ const NavButtons = (props: Theme) => {
       className={
         className +
         "__navigation" +
-        ` gap-12 py-8 flex-row-center justify-center font-normal text-lg bg-${darkColor}`
+        ` gap-12 py-8 flex-row-center justify-center font-normal text-lg bg-transparent`
       }
     >
       <p

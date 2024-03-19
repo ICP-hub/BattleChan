@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // import { useConnect } from "@connect2ic/react";
 
 import FAQs from "../../components/LandingPage/FAQs/FAQs";
@@ -58,13 +58,6 @@ function Landing(props: Theme) {
       <FAQs darkColor={darkColor} lightColor={lightColor} />
 
       <Footer />
-
-      <Link
-        to="/dashboard"
-        className={`p-4 bg-dark text-light flex justify-center`}
-      >
-        Link to DASHBOARD
-      </Link>
     </main>
   );
 }

@@ -23,7 +23,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-${darkColor} text-${lightColor} py-8 px-16 border-b border-grey`
+        ` flex-row-center justify-between bg-transparent text-${lightColor} py-8 px-16 border-b border-grey`
       }
     >
       <img
