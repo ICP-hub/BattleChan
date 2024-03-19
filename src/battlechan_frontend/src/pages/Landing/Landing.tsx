@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 
-import { Link } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+// import { useConnect } from "@connect2ic/react";
 
 import FAQs from "../../components/LandingPage/FAQs/FAQs";
 import About from "../../components/LandingPage/About/About";
@@ -24,6 +25,17 @@ function Landing(props: Theme) {
   const handleThemeSwitch = props.handleThemeSwitch;
   const className = "LandingPage";
 
+  // const { isConnected } = useConnect();
+  // const navigate = useNavigate();
+
+  // React.useEffect(() => {
+  //   if (isConnected) {
+  //     navigate("/dashboard");
+  //   } else {
+  //     navigate("/");
+  //   }
+  // }, [isConnected, navigate]);
+
   return (
     <main
       className={
@@ -46,13 +58,6 @@ function Landing(props: Theme) {
       <FAQs darkColor={darkColor} lightColor={lightColor} />
 
       <Footer />
-
-      <Link
-        to="/dashboard"
-        className={`p-4 bg-dark text-light flex justify-center`}
-      >
-        Link to DASHBOARD
-      </Link>
     </main>
   );
 }

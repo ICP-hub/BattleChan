@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { LuPlusCircle } from "react-icons/lu";
-
 import { FiBox } from "react-icons/fi";
 import { FaRunning } from "react-icons/fa";
 import { BiMoviePlay } from "react-icons/bi";
+import { LuPlusCircle } from "react-icons/lu";
 import { GiPublicSpeaker } from "react-icons/gi";
 import { MdOutlineAddBusiness } from "react-icons/md";
 import { IoHardwareChipOutline } from "react-icons/io5";
 import { IoGameControllerOutline } from "react-icons/io5";
 
 import bg from "../../../images/dashboard_bg.png";
+import NavButtons from "../NavButtons/NavButtons";
 
 type Theme = {
   darkColor: string;
@@ -19,7 +19,6 @@ type Theme = {
 };
 
 const Body = (props: Theme) => {
-  const [active, setActive] = React.useState("Home");
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "Home";
@@ -28,7 +27,7 @@ const Body = (props: Theme) => {
     <div
       className={
         className +
-        `flex flex-col justify-between w-full text-${lightColor} bg-top bg-cover bg-no-repeat`
+        `flex flex-col justify-between w-full text-${lightColor} bg-bottom bg-contain bg-no-repeat`
       }
       style={
         darkColor == "dark"
@@ -38,38 +37,7 @@ const Body = (props: Theme) => {
           : {}
       }
     >
-      <div
-        className={
-          className +
-          "__navigation" +
-          " gap-12 my-8 flex-row-center justify-center font-normal text-lg"
-        }
-      >
-        <p
-          className={`${
-            active === "Home" ? `text-${lightColor}` : "text-grey"
-          }`}
-          onClick={() => setActive("Home")}
-        >
-          Home
-        </p>
-        <p
-          className={`${
-            active === "Archive" ? `text-${lightColor}` : "text-grey"
-          }`}
-          onClick={() => setActive("Archive")}
-        >
-          Archive
-        </p>
-        <p
-          className={`${
-            active === "Dashboard" ? `text-${lightColor}` : "text-grey"
-          }`}
-          onClick={() => setActive("Dashboard")}
-        >
-          Dashboard
-        </p>
-      </div>
+      <NavButtons darkColor={darkColor} lightColor={lightColor} />
 
       <div
         className={className + "__createPost" + " mt-12 flex justify-center"}
@@ -87,18 +55,18 @@ const Body = (props: Theme) => {
           className + "__tagLines" + " px-20 w-full flex flex-row my-12"
         }
       >
-        <div
+        <h1
           className={`w-1/2 text-5xl font-bold ${
             darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
           } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
-        </div>
-        <div
+        </h1>
+        <p
           className={`w-1/2 text-${lightColor} font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
-        </div>
+        </p>
       </div>
 
       <div

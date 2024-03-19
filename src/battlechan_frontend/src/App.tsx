@@ -15,7 +15,7 @@ const DashboardRoutes = lazy(() => import("./pages/Routes"));
 import Loader from "./components/Loader/Loader";
 
 function App() {
-  const [dark, setDark] = React.useState(true);
+  const [dark, setDark] = React.useState(false);
   const [light, setLight] = React.useState(true);
   const darkColor: string = dark ? "dark" : "light";
   const lightColor: string = !dark ? "dark" : "light";

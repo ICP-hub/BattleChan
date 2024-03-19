@@ -1,4 +1,8 @@
 import React from "react";
+
+// import { useConnect } from "@connect2ic/react";
+// import { useNavigate } from "react-router-dom";
+
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import Body from "../../components/Dashboard/Body/Body";
 import RecentPosts from "../../components/Dashboard/RecentPosts/RecentPosts";
@@ -12,6 +16,17 @@ function Dashboard(props: Theme) {
   const className: string = "HomePage";
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
+
+  // const { isConnected } = useConnect();
+  // const navigate = useNavigate();
+
+  // React.useEffect(() => {
+  //   if (isConnected) {
+  //     navigate("/dashboard");
+  //   } else {
+  //     navigate("/");
+  //   }
+  // }, [isConnected, navigate]);
 
   return (
     <div

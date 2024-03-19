@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
+import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
 
 type Theme = {
   darkColor: string;
@@ -17,6 +18,12 @@ function Routing(props: Theme) {
         <Route
           path="/"
           element={<Dashboard darkColor={darkColor} lightColor={lightColor} />}
+        />
+        <Route
+          path="/settingProfile"
+          element={
+            <SettingProfile darkColor={darkColor} lightColor={lightColor} />
+          }
         />
       </Routes>
     </div>
