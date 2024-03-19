@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { FaRegBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
@@ -22,7 +23,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between text-${lightColor} py-8 px-16 border-b border-grey`
+        ` flex-row-center justify-between bg-${darkColor} text-${lightColor} py-8 px-16 border-b border-grey`
       }
     >
       <img
@@ -75,7 +76,9 @@ const Navbar = (props: Theme) => {
           </div>
         </div>
 
-        <img src={userimg} alt="USER IMAGE" className="w-[50px]" />
+        <Link to="/dashboard/settingProfile">
+          <img src={userimg} alt="USER IMAGE" className="w-[50px]" />
+        </Link>
       </section>
     </div>
   );
