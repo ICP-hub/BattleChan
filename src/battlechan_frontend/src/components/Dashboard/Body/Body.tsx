@@ -1,129 +1,238 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-export interface IAppProps {
-}
-import Business from "../../../../asset/icons/Bussiness.png"
-import Cinema from "../../../../asset/icons/Cinema.png"
-import Crypto from "../../../../asset/icons/Crypto.png"
-import Games from "../../../../asset/icons/Games.png"
-import Politics from "../../../../asset/icons/Politics.png"
-import Sports from "../../../../asset/icons/Sports.png"
-import Technology from "../../../../asset/icons/Technology.png"
-import createimg from "../../../../asset/icons/Create.png"
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default class App extends React.Component<IAppProps> {
-    public render() {
-        return (
-            // <div className='bg-dark w-full text-light'>
-            <div className='min-h-screen bg-dark text-light pb-[80px] justify-center'>
+import { LuPlusCircle } from "react-icons/lu";
 
-                <div className='flex justify-center text-[18px] font-[400] py-[50px] '>
-                    <div  >Home</div>
-                    <div className='opacity-[30%] mx-[50px]'>Archive</div>
-                    <div className='opacity-[30%]'>Dashboard</div>
-                </div>
+import { FiBox } from "react-icons/fi";
+import { FaRunning } from "react-icons/fa";
+import { BiMoviePlay } from "react-icons/bi";
+import { GiPublicSpeaker } from "react-icons/gi";
+import { MdOutlineAddBusiness } from "react-icons/md";
+import { IoHardwareChipOutline } from "react-icons/io5";
+import { IoGameControllerOutline } from "react-icons/io5";
 
-                <div className='flex  justify-center'>
+import bg from "../../../images/dashboard_bg.png";
 
-                    <Link to="/createPost">
-                        
+type Theme = {
+  darkColor: string;
+  lightColor: string;
+};
 
-                        <div className=' rounded-[2rem] flex mx-10 bg-dirty-light-green w-[340px] h-[65px] px-[73px] py-[20px] text-center mt-[5px] font-[700] text-[22px] '>
-                            <img src={createimg} className="m-[7px] w-[22px] h-[22px]" alt="" />
-                            <div className=''>Create Post</div>
-                        </div>
-                    </Link>
+const Body = (props: Theme) => {
+  const [active, setActive] = React.useState("Home");
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+  const className = "Home";
 
-                </div>
+  return (
+    <div
+      className={
+        className +
+        `flex flex-col justify-between w-full text-${lightColor} bg-top bg-cover bg-no-repeat`
+      }
+      style={
+        darkColor == "dark"
+          ? {
+              backgroundImage: `url(${bg})`,
+            }
+          : {}
+      }
+    >
+      <div
+        className={
+          className +
+          "__navigation" +
+          " gap-12 my-8 flex-row-center justify-center font-normal text-lg"
+        }
+      >
+        <p
+          className={`${
+            active === "Home" ? `text-${lightColor}` : "text-grey"
+          }`}
+          onClick={() => setActive("Home")}
+        >
+          Home
+        </p>
+        <p
+          className={`${
+            active === "Archive" ? `text-${lightColor}` : "text-grey"
+          }`}
+          onClick={() => setActive("Archive")}
+        >
+          Archive
+        </p>
+        <p
+          className={`${
+            active === "Dashboard" ? `text-${lightColor}` : "text-grey"
+          }`}
+          onClick={() => setActive("Dashboard")}
+        >
+          Dashboard
+        </p>
+      </div>
 
+      <div
+        className={className + "__createPost" + " mt-12 flex justify-center"}
+      >
+        <Link to="/createPost">
+          <p className="green-button flex-row-center bg-dirty-light-green">
+            <LuPlusCircle />
+            <span>Create Post</span>
+          </p>
+        </Link>
+      </div>
 
+      <div
+        className={
+          className + "__tagLines" + " px-20 w-full flex flex-row my-12"
+        }
+      >
+        <div
+          className={`w-1/2 text-5xl font-bold ${
+            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+          } leading-relaxed`}
+        >
+          BattleChan: Decentralized Discussion Battlefield
+        </div>
+        <div
+          className={`w-1/2 text-${lightColor} font-semibold text-lg text-start px-28`}
+        >
+          Welcome to BattleChan, where every post battles for supremacy
+        </div>
+      </div>
 
-                <div className='flex  font-[700]  sm:mt-[76px]  pt-[76px] mx-[100px] '>
-                    <div className='text-[#6DE580] text-[70px] sm:w-[1033px] sm:h-[285px] sm:text-[70px] sm:ml-[112px] pb-[70px] '>
-                        BattleChan: Decentralized
-                        Discussion Battlefield
-                    </div>
-                    <div className='text-[24px] text-light font-[400]  sm:w-[630px] sm:h-[72px] ' >
-                        Welcome to BattleChan, where every post battles for supremacy
-                    </div>
-                </div>
+      <div
+        className={
+          className +
+          "__steps" +
+          `w-full flex-row-center justify-evenly p-10 my-8 mx-16 border border-light-green rounded-xl bg-${darkColor} text-lg`
+        }
+      >
+        <div className="flex flex-col gap-4 items-start">
+          <span
+            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
+          >
+            1
+          </span>
+          <span>Connect your Wallet.</span>
+        </div>
 
-                
+        <div className="flex flex-col gap-4 items-start">
+          <span
+            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
+          >
+            2
+          </span>
+          <span>Make Post : Earn Time</span>
+        </div>
+        <div className="flex flex-col gap-4 items-start">
+          <span
+            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
+          >
+            3
+          </span>
+          <span>Cast your vote</span>
+        </div>
+      </div>
 
-                <div className=' mx-[100px] text-[30px] font-[400] place-content-center  flex   p-[100px] border-light-green border-[2px] w-[1500px] rounded-[1rem] px[100px]  justify-between'>
+      <div
+        className={
+          className +
+          "__postsNumber" +
+          ` py-6 px-10 mx-36 my-28 border border-${lightColor} rounded-md`
+        }
+      >
+        <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl bg-dirty-light-green">
+          <div className="data__label py-6 px-2 px-4 h-full text-lg font-semibold">
+            Name of Subject
+          </div>
 
-                    <div className=' sm:pr-[100px]  '>
-                        <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>1</div>
-                        <div>Connect your Wallet.</div>
-                    </div>
-                    <div className='  mx-[50px] '>
-                        <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>2</div>
-                        <div>Make Post : Earn Time</div>
-                    </div>
-                    <div className=' sm:pl-[100px]'>
-                        <div className=' bg-light text-dark text-center rounded-full w-[52px] h-[48px] p-[7px]'>3</div>
-                        <div>Cast your vote</div>
-                    </div>
-                </div>
-
-
-
-                <div className=' mt-[90px] mx-[200px]  border-[0.5px] m-[25px] opacity-[80%] border-light px-[15px] rounded-md pt-[20px] pb-[20px]'>
-
-                    <div className='  grid grid-cols-10 border rounded-[1rem] py-[18px] font-[400] text-[20px] bg-[#3A6841] gap-4 p-[5px]'>
-                        <div className="flex col-span-3 border-r-[1px] h-full text-[20px] font-[700] px-[50px]">Name of Subject</div>
-
-
-                        <div className="flex items-center flex-wrap col-span-1 border-r-[1px]">
-                            <img src={Business} alt="" className=' h-[22px] w-[20px] mr-[12px] ' />
-                            <div>Business</div>
-                            </div>
-                        <div className="col-span-1  flex items-center flex-wrap  border-r-[1px]">
-                            <img src={Politics} alt=""  className=' h-[22px] w-[20px] mr-[12px] '/>
-                            <div>Politics</div>
-                            </div>
-                        <div className="col-span-1 border-r-[1px] flex items-center flex-wrap">
-                            <img src={Sports} alt="" className=' h-[22px] w-[20px] mr-[12px] ' />
-                            <div>Sports</div>
-                            </div>
-                        <div className="col-span-1  border-r-[1px] flex items-center flex-wrap ">
-                            <img src={Games} alt="" className=' h-[22px] w-[20px] mr-[12px] ' />
-                            <div>Games</div>
-                            </div>
-                        <div className="col-span-1  border-r-[1px] flex items-center flex-wrap">
-                            <img src={Technology} alt="" className=' h-[22px] w-[20px] mr-[12px] ' />
-                            <div>Technology</div>
-                            </div>
-                        <div className="col-span-1  border-r-[1px] flex items-center flex-wrap">
-                            <img src={Crypto} alt="" className=' h-[22px] w-[20px] mr-[12px] ' />
-                            <div>Crypto</div>
-                            </div>
-                        <div className="col-span-1 flex items-center flex-wrap">
-                            <img src={Cinema} alt="" className=' h-[22px] w-[20px] mr-[12px] ' />
-                            <div>Cinema</div>
-                            </div>
-                    </div>
-
-
-                    <div className="grid grid-cols-10 border-0 p-[10px] mt-0 gap-4 ">
-                        <div className="col-span-3 font-[700] px-[50px]   border-r-[1px] ">Total Posts</div>
-                        <div className="...  border-r-[1px] ">01</div>
-                        <div className="...  border-r-[1px] ">02</div>
-                        <div className="...  border-r-[1px] ">03</div>
-                        <div className="...  border-r-[1px]  ">04</div>
-                        <div className="...  border-r-[1px]  ">05</div>
-                        <div className="...  border-r-[1px] ">06</div>
-                        <div className="...   ">07</div>
-                    </div>
-
-                </div>
-
-                <div>
-                </div>
-
+          <div className="data__labels flex-row-center text-lg text-light">
+            <div className="w-[7.5rem] py-6 flex-nowrap border-r">
+              <p className="flex-row-center gap-2 justify-center">
+                <MdOutlineAddBusiness />
+                Business
+              </p>
             </div>
+            <div className="w-[7.5rem] py-6 flex-nowrap border-r">
+              <p className="flex-row-center gap-2 justify-center">
+                <GiPublicSpeaker />
+                Politics
+              </p>
+            </div>
+            <div className="w-[7.5rem] py-6 flex-nowrap border-r">
+              <p className="flex-row-center gap-2 justify-center">
+                <FaRunning />
+                Sports
+              </p>
+            </div>
+            <div className="w-[7.5rem] py-6 flex-nowrap border-r">
+              <p className="flex-row-center gap-2 justify-center">
+                <IoGameControllerOutline />
+                Games
+              </p>
+            </div>
+            <div className="w-[9.5rem] py-6 flex-nowrap border-r">
+              <p className="flex-row-center gap-2 justify-center">
+                <IoHardwareChipOutline />
+                Technology
+              </p>
+            </div>
+            <div className="w-[7.5rem] py-6 flex-nowrap border-r">
+              <p className="flex-row-center gap-2 justify-center">
+                <FiBox />
+                Crypto
+              </p>
+            </div>
+            <div className="w-[7.5rem] py-6 flex-nowrap">
+              <p className="flex-row-center gap-2 justify-center">
+                <BiMoviePlay /> Cinema
+              </p>
+            </div>
+          </div>
+        </div>
 
+        <div
+          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-${lightColor}`}
+        >
+          <div className="data__label py-6 px-4 h-full text-lg font-semibold">
+            Total Posts
+          </div>
 
-        );
-    }
-}
+          <div className="data__numbers flex-row-center justify-between">
+            <div className="w-[7.5rem] text-center flex-col-center border-r">
+              <span>01</span>
+              <span>2 hrs ago</span>
+            </div>
+            <div className="w-[7.5rem] text-center flex-col-center border-r">
+              <span>02</span>
+              <span>2 hrs ago</span>
+            </div>
+            <div className="w-[7.5rem] text-center flex-col-center border-r">
+              <span>03</span>
+              <span>2 hrs ago</span>
+            </div>
+            <div className="w-[7.5rem] text-center flex-col-center border-r">
+              <span>04</span>
+              <span>2 hrs ago</span>
+            </div>
+            <div className="w-[9.5rem] text-center flex-col-center border-r">
+              <span>05</span>
+              <span>2 hrs ago</span>
+            </div>
+            <div className="w-[7.5rem] text-center flex-col-center border-r">
+              <span>06</span>
+              <span>2 hrs ago</span>
+            </div>
+            <div className="w-[7.5rem] text-center flex-col-center">
+              <span>07</span>
+              <span>2 hrs ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Body;

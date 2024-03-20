@@ -15,6 +15,7 @@ export default {
       'light': "#fff",
       'red': "#FF4343",
       'green': "#3A6841",
+      'grey': "#9a9a9a",
       'dark-green': "#0C150D",
       'dirty-light-green': "#345D3A",
       "light-green": "#18AF00",

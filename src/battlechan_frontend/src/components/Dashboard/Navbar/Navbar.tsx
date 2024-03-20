@@ -22,7 +22,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-transparent text-${lightColor} py-8 px-16`
+        ` flex-row-center justify-between text-${lightColor} py-8 px-16 border-b border-grey`
       }
     >
       <img
@@ -71,7 +71,7 @@ const Navbar = (props: Theme) => {
           <p className="text-nowrap">Kristin Watson</p>
           <div className="coinsCount flex-row-center gap-2">
             <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
-            <span>550</span>
+            <span className="text-light-green">550</span>
           </div>
         </div>
 
