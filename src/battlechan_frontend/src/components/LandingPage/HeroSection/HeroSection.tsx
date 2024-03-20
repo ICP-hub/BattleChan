@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./HeroSection.scss";
 
-import { ConnectButton, ConnectDialog } from "@connect2ic/react";
+// import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import desktops from "../../../images/desktops.png";
 import backImage from "../../../images/background_img.png";
@@ -65,10 +65,10 @@ const HeroSection = (props: Theme) => {
           }
         >
           {/* Start Posting */}
-          <ConnectButton />
+          {/* <ConnectButton /> */}
         </button>
 
-        <ConnectDialog />
+        {/* <ConnectDialog /> */}
       </div>
 
       <div

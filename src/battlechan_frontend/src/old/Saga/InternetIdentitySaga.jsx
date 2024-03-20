@@ -18,8 +18,8 @@ function* clientInfo(authClient) {
   
   const principal = identity.getPrincipal().toText();
 
-  // console.log("Identity check:", identity);
-  // console.log("Principal check:", principal);
+  console.log("Identity check:", identity);
+  console.log("Principal check:", principal);
 
   yield put(loginSuccess({
     isAuthenticated: true,

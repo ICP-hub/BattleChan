@@ -18,6 +18,7 @@ function Landing() {
   const [light, setLight] = React.useState(true);
   const darkColor: string = dark ? "dark" : "light";
   const lightColor: string = !dark ? "dark" : "light";
+  
 
   function handleThemeSwitch() {
     setDark(!dark);

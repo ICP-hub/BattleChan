@@ -7,6 +7,7 @@ const rootReducer = combineReducers({
   role: RoleReducer,
   actors:actorReducer,
   internet: internetIdentityReducer,
+  users:userLoginReducer,
 });
 
 export default rootReducer;

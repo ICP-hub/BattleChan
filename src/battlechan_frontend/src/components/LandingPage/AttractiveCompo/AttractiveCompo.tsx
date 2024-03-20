@@ -5,7 +5,7 @@ import { MdArrowOutward } from "react-icons/md";
 
 import frame_1 from "../../../images/frame1.png";
 import frame_2 from "../../../images/frame2.png";
-import { ConnectButton, ConnectDialog } from "@connect2ic/react";
+// import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 type Theme = {
   darkColor: string;
@@ -56,11 +56,11 @@ const AttractiveCompo = (props: Theme) => {
         </p>
 
         <button type="button" className="white-button flex-row-center">
-          <ConnectButton />
+          {/* <ConnectButton /> */}
           <MdArrowOutward />
         </button>
 
-        <ConnectDialog />
+        {/* <ConnectDialog /> */}
       </div>
     </div>
   );

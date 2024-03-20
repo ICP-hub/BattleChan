@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ConnectButton, ConnectDialog } from "@connect2ic/react";
+// import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
@@ -71,10 +71,11 @@ const Navbar = (props: Theme) => {
             className + "__connectWalletBtn flex-row-center green-button"
           }
         >
-          <ConnectButton /> <MdArrowOutward />
+          {/* <ConnectButton />  */}
+          <MdArrowOutward />
         </button>
 
-        <ConnectDialog />
+        {/* <ConnectDialog /> */}
       </section>
     </nav>
   );
