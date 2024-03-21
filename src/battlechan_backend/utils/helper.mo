@@ -2,7 +2,6 @@ import Hash "mo:base/Hash";
 import Int "mo:base/Int";
 import Text "mo:base/Text";
 import { now } "mo:base/Time";
-import Nat32 "mo:base/Nat32";
 import Array "mo:base/Array";
 import { hash } "mo:base/Text";
 
@@ -10,8 +9,6 @@ import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
 import List "mo:base/List";
 import Nat "mo:base/Nat";
-import { reject } "./message";
-import Debug "mo:base/Debug";
 import Types "types";
 
 module {
