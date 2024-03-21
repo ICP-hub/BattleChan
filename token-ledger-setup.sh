@@ -17,33 +17,34 @@ PRE_MINTED_TOKENS=10000000000000
 
 dfx deploy ledger --argument "(variant {Init = 
 record {
-     token_symbol = \"${TOKEN_SYMBOL}\";
-     token_name = \"${TOKEN_NAME}\";
-     minting_account = record { owner = principal \"${MINTER}\" };
-     transfer_fee = ${TRANSFER_FEE};
+     token_symbol = \"time\";
+     token_name = \"time_token\";
+     minting_account = record { owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\" };
+     transfer_fee = 100;
      metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; ${PRE_MINTED_TOKENS}; }; };
+     initial_balances = vec { record { record { owner = principal \"bkyz2-fmaaa-aaaaa-qaaaq-cai\"; }; 1000000 }; };
      archive_options = record {
          num_blocks_to_archive = 1000000000;
          trigger_threshold = 1000000000;
-         controller_id = principal \"${DEFAULT}\";
+         controller_id = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\";
      };
      feature_flags = opt record {icrc2 = true;};
  }
 })"
 
 dfx deploy ledger --argument "(variant {Init = 
-record {ting_account = record { owner = principal \"bd3sg-teaaa-aaaaa-qaaba-cai\" };
+record {
      token_symbol = \"Time\";
      token_name = \"time_token\";
-     minting_account = record { owner = principal \"bd3sg-teaaa-aaaaa-qaaba-cai\" };u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe\"; }; 10000000; }; };
-     transfer_fee = 100;ecord {
-     metadata = vec {};archive = 1000000000;
-     initial_balances = vec { record { record { owner = principal \"m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe\"; }; 10000000; }; };
-     archive_options = record {pal \"m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe\";
+     minting_account = record { owner = principal \"bkyz2-fmaaa-aaaaa-qaaaq-cai\" };
+     transfer_fee = 100;
+     metadata = vec {};
+     initial_balances = vec { record { record { owner = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\";  1000000000; }; };
+     archive_options = record {
          num_blocks_to_archive = 1000000000;
-         trigger_threshold = 1000000000; true;};
-         controller_id = principal \"m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe\";
-     };
+         trigger_threshold = 1000000000;
+         controller_id = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae";
+         };
      feature_flags = opt record {icrc2 = true;};
  }
+})"

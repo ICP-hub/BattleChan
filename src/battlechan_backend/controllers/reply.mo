@@ -65,6 +65,7 @@ module {
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
             comments = Trie.put(postInfo.comments, textKey commentId, Text.equal, updatedCommentInfo).0;
+            expireAt = postInfo.expireAt;
             createdAt = postInfo.createdAt;
             updatedAt = ?Int.toText(now());
 
@@ -133,6 +134,7 @@ module {
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
             comments = updatedCommentTrie;
+            expireAt = postInfo.expireAt;
             createdAt = postInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };

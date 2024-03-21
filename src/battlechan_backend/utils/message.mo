@@ -1,5 +1,3 @@
-import Error "mo:base/Error";
-import Types "types";
 module {
     public let successMessage = {
         insert = "Sucessfully Inserted Data!";
@@ -17,6 +15,8 @@ module {
         noReply = "No Reply found !";
         alreadyVoted = "already Voted!";
         noPageExist = "No Page Exist!";
+        noAccess = "no Access";
+        unknown = "unknown";
     };
     public let notFound = {
         noUser = "No User Exist!";

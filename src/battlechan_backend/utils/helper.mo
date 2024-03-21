@@ -9,6 +9,9 @@ import { hash } "mo:base/Text";
 import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
 import List "mo:base/List";
+import Nat "mo:base/Nat";
+import { reject } "./message";
+import Debug "mo:base/Debug";
 import Types "types";
 
 module {
@@ -61,5 +64,15 @@ module {
             return false;
         };
         true;
+    };
+    public func calcExpireTime(time : Int) : Int {
+        now() + time * 60 * 1000000000;
+    };
+
+    public func decreaseExpireTime(time : Int, expireTime : Int) : Int {
+        expireTime - (time * 60 * 1000000000);
+    };
+    public func increaseExpireTime(time : Int, expireTime : Int) : Int {
+        expireTime + (time * 60 * 1000000000);
     };
 };

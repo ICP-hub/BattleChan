@@ -82,6 +82,7 @@ module {
         createdBy : Principal;
         comments : Trie.Trie<CommentId, CommentInfo>;
         createdAt : Text;
+        expireAt : Int;
         updatedAt : ?Text;
     };
     public type PostRes = {
