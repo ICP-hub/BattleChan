@@ -2,13 +2,13 @@ import Hash "mo:base/Hash";
 import Int "mo:base/Int";
 import Text "mo:base/Text";
 import { now } "mo:base/Time";
-import Nat32 "mo:base/Nat32";
 import Array "mo:base/Array";
 import { hash } "mo:base/Text";
 
 import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
 import List "mo:base/List";
+import Nat "mo:base/Nat";
 import Types "types";
 
 module {
@@ -61,5 +61,15 @@ module {
             return false;
         };
         true;
+    };
+    public func calcExpireTime(time : Int) : Int {
+        now() + time * 60 * 1000000000;
+    };
+
+    public func decreaseExpireTime(time : Int, expireTime : Int) : Int {
+        expireTime - (time * 60 * 1000000000);
+    };
+    public func increaseExpireTime(time : Int, expireTime : Int) : Int {
+        expireTime + (time * 60 * 1000000000);
     };
 };

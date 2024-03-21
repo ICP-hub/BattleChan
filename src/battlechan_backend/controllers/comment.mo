@@ -7,13 +7,12 @@ import Int "mo:base/Int";
 import { now } "mo:base/Time";
 import Debug "mo:base/Debug";
 import List "mo:base/List";
-import Result "mo:base/Result";
 
 import Types "../utils/types";
 
 import { reject } "../utils/message";
 import { checkText } "../utils/validations";
-import { getUniqueId; getPostIdFromCommentId } "../utils/helper";
+import { getUniqueId } "../utils/helper";
 import { principalKey; textKey } "../keys";
 
 module {
@@ -66,6 +65,7 @@ module {
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
             comments = Trie.put(postInfo.comments, textKey commentId, Text.equal, newComment).0;
+            expireAt = postInfo.expireAt;
             createdAt = postInfo.createdAt;
             updatedAt = ?Int.toText(now());
 
@@ -124,6 +124,7 @@ module {
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
             comments = updatedCommentTrie;
+            expireAt = postInfo.expireAt;
             createdAt = postInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };

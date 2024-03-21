@@ -1,5 +1,4 @@
 import Text "mo:base/Text";
-import Trie "mo:base/Trie";
 import Int "mo:base/Int";
 import { now } "mo:base/Time";
 import { trap } "mo:base/Debug";
@@ -24,6 +23,7 @@ module {
             createdAt = Int.toText(now());
             updatedAt = null;
         };
+        newBoard;
     };
 
 };
