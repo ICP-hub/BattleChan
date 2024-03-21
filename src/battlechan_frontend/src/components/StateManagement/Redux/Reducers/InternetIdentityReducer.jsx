@@ -6,7 +6,6 @@ const initialState = {
   principal: null,
   loading: false,
   error: null,
-  navi: null,
 };
 
 const internetIdentitySlice = createSlice({
@@ -23,13 +22,12 @@ const internetIdentitySlice = createSlice({
     },
     loginSuccess: (state, action) => {
       // console.log("loginSuccess run =>", action);
-      const { isAuthenticated, identity, principal, navi } = action.payload;
+      const { isAuthenticated, identity, principal } = action.payload;
       state.isAuthenticated = isAuthenticated;
       state.identity = identity;
       state.principal = principal;
       state.loading = false;
       state.error = null;
-      state.navi = navi;
     },
     loginFailure: (state, action) => {
       // console.log("loginFailure run =>", action);

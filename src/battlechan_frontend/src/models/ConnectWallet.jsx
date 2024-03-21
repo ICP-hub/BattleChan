@@ -5,13 +5,13 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/StateManagement/useContext/useAuth";
-
+// import useAuth from "../components/StateManagement/useContext/useAuth"
 const ConnectWallet = ({ isModalOpen, onClose }) => {
-  const roleNavigate = useSelector((currState) => currState.internet.navi);
-  const userRole = useSelector((currState) => currState.current.specificRole);
-  const hasSelectedRole = useSelector(
-    (currState) => currState.current.hasSelectedRole
-  );
+  // const roleNavigate = useSelector((currState) => currState.internet.navi);
+  // const userRole = useSelector((currState) => currState.current.specificRole);
+  // const hasSelectedRole = useSelector(
+  //   (currState) => currState.current.hasSelectedRole
+  // );
   const isAuthenticated = useSelector(
     (currState) => currState.internet.isAuthenticated
   );
@@ -84,6 +84,7 @@ const ConnectWallet = ({ isModalOpen, onClose }) => {
                     onClick={onClose}
                   >
                     {closeModalSvg}
+                    {/* <h1>shviam gupta svg</h1> */}
                   </button>
                   <h3 className="text-lg font-semibold text-gray-900 grow text-center">
                     Log in or Sign up
@@ -101,6 +102,8 @@ const ConnectWallet = ({ isModalOpen, onClose }) => {
                       </div>
                     ))}
                   </ul>
+
+                  {/* <h2>hi shivam wallet</h2> */}
                   <div></div>
                 </div>
               </div>

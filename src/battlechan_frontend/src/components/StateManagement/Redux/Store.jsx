@@ -1,3 +1,4 @@
+
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import rootReducer from "./Reducers/RootReducer";
@@ -21,7 +22,7 @@ const sagaMiddleware = createSagaMiddleware();
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["role", "hubs", "current"],
+  whitelist: [],
   // transforms: [encryptor], // encrypt k lie kia
 };
 

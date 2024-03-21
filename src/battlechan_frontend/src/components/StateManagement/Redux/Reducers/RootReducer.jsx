@@ -1,9 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit";
 // import RoleReducer from "./RoleReducer";
 // import AllHubReducer from "./All_IcpHubReducer";
-import actorReducer from "./actorBindReducer";
-import internetIdentityReducer from "./InternetIdentityReducer";
-import userReducer from "./userRegisteredData";
+import actorReducer from "./actorBindReducer.jsx";
+import internetIdentityReducer from "./InternetIdentityReducer.jsx";
+// import userReducer from "./userRegisteredData";
 // import mentorReducer from "./mentorRegisteredData";
 // import hubReducer from "./hubRegisteredData";
 // import investorReducer from "./investorRegisteredData";
@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
   // hubs: AllHubReducer,
   actors: actorReducer,
   internet: internetIdentityReducer,
-  current: userReducer,
+  // current: userReducer,
   // mentorData: mentorReducer,
   // projectData: projectReducer,
   // userData: userReducer,
@@ -34,4 +34,5 @@ const rootReducer = combineReducers({
   // currentRoleStatus: userCurrentRoleStatusReducer
 });
 
+export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

@@ -12,7 +12,7 @@ import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
 import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 
-function Landing() {
+function Landing({ setModalOpen }: { setModalOpen: (open: boolean) => void }) {
   const className: string = "LandingPage";
   const [dark, setDark] = React.useState(true);
   const [light, setLight] = React.useState(true);
@@ -31,7 +31,14 @@ function Landing() {
         className + ` w-full h-full bg-${darkColor} text-${lightColor}`
       }
     >
-      <Navbar darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
+      {/* <Navbar darkColor={darkColor} lightColor={lightColor}    handleThemeSwitch={handleThemeSwitch} /> */}
+      <Navbar
+ darkColor="darkColorValue"
+ lightColor="lightColorValue"
+ handleThemeSwitch={handleThemeSwitch}
+ setModalOpen={setModalOpen}
+/>
+
       <HeroSection darkColor={darkColor} lightColor={lightColor} />
 
       <About />

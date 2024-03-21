@@ -1,6 +1,7 @@
 import { AuthClient } from "@dfinity/auth-client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { createActor } from "../../../../../declarations/IcpAccelerator_backend/index";
+// import { createActor } from "../../../../../declarations/IcpAccelerator_backend/index";
+import { createActor } from "../../../../../declarations/backend";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { useDispatch } from "react-redux";
 import { setActor } from "../Redux/Reducers/actorBindReducer";
@@ -33,7 +34,7 @@ const defaultOptions = {
     identityProvider:
       process.env.DFX_NETWORK === "ic"
         ? "https://identity.ic0.app/#authorize"
-        : `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943`,
+        : `http://be2us-64aaa-aaaaa-qaabq-cai.localhost:4943/`,
   },
 };
 
@@ -111,10 +112,10 @@ export const useAuthClient = (options = defaultOptions) => {
     setPrincipal(principal);
     setAuthClient(client);
     const agent = new HttpAgent({ identity });
-    const actor = createActor(process.env.CANISTER_ID_ICPACCELERATOR_BACKEND, {
+    const actor = createActor( process.env.CANISTER_ID_BACKEND, {
       agent,
     });
-
+   
     console.log("actor in useauth -<<<<", actor);
     if (isAuthenticated === true) {
       dispatch(
@@ -141,9 +142,11 @@ export const useAuthClient = (options = defaultOptions) => {
     }
   }
 
-  const canisterId =
-    process.env.CANISTER_ID_ICPACCELERATOR_BACKEND ||
-    process.env.ICPACCELERATOR_BACKEND_CANISTER_ID;
+  // const canisterId =
+  //   process.env.CANISTER_ID_ICPACCELERATOR_BACKEND ||
+  //   process.env.ICPACCELERATOR_BACKEND_CANISTER_ID;
+
+  const canisterId = process.env.CANISTER_ID_BACKEND
 
   const actor = createActor(canisterId, { agentOptions: { identity } });
   

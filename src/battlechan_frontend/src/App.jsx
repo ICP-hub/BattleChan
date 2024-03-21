@@ -35,10 +35,6 @@
 //     setDark(!dark);
 //     setLight(!light);
 //   }
-
-  
-
-  
 //   return (
 //     <Router>
 //       <div>
@@ -86,12 +82,26 @@
 // //    </Connect2ICProvider>
 // );
 
-import React, { useState } from "react";
+// ------------------------ --------------
+
+
+
+
+import React, { useState , useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router } from "react-router-dom";
-import AppRoutes from "./AppRoutes.jsx"; // Ensure this path is correct
-import ConnectWallet from "./models/ConnectWallet.jsx"
-
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import AppRoutes from "./AppRoutes.jsx"; 
+// import ConnectWallet from "./models/ConnectWallet.jsx"
+import { handleActorRequest } from "./components/StateManagement/Redux/Reducers/actorBindReducer.jsx";
+import {useAuth} from "./components/StateManagement/useContext/useAuth.jsx"
+import Landing from "./pages/Landing/Landing.tsx";
+import DashBoard from "./pages/Dashboard/Dashboard.tsx";
+import ConnectWallet from "./models/ConnectWallet.jsx";
+import { checkLoginOnStart } from "./components/StateManagement/Redux/Reducers/InternetIdentityReducer";
+import { userRegisteredHandlerRequest } from "./components/StateManagement/Redux/Reducers/userRegisteredData";
+// --------------------
 
 function App() {
   const [dark, setDark] = useState(true);
@@ -99,15 +109,52 @@ function App() {
   function handleThemeSwitch() {
     setDark(!dark);
   }
+
+  // const identity = useSelector((currState) => currState.internet.identity);
+  // const isAuthenticated = useSelector(
+  //   (currState) => currState.internet.isAuthenticated
+  // );
+  // const specificRole = useSelector(
+  //   (currState) => currState.current.specificRole
+  // );
+
+  const { reloadLogin } = useAuth();
+
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    reloadLogin();
+  }, []);
+
+  // useEffect(() => {
+  //   if (isAuthenticated && identity) {
+  //     dispatch(handleActorRequest());
+  //   }
+  // }, [isAuthenticated, identity, dispatch]);
+  // useEffect(() => {
+  //   if (isAuthenticated && identity) {
+  //     dispatch(multiChainHandlerRequest());
+  //   }
+  // }, [isAuthenticated, identity, dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(userRoleHandler());
+  // }, [isAuthenticated, identity, dispatch]);
+
+ 
+  // useEffect(() => {
+  //   dispatch(userRegisteredHandlerRequest());
+  // }, [isAuthenticated, dispatch]);
 
   return (
     <Router>
       <div>
+        <ConnectWallet isModalOpen={isModalOpen} onClose={() => setModalOpen(false)} />
 
-        {/* <ConnectWallet isModalOpen={isModalOpen} onClose={() => setModalOpen(false)} /> */}
-        <AppRoutes />
+        <AppRoutes  setModalOpen={setModalOpen} />
       </div>
     </Router>
   );

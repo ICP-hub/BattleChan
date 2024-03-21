@@ -1,22 +1,44 @@
 import React from "react";
 
-// import { ConnectButton, ConnectDialog } from "@connect2ic/react";
+import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+import { useSelector } from "react-redux";
+
+// type Theme = {
+//   darkColor: string;
+//   lightColor: string;
+//   handleThemeSwitch: any;
+// };
 
 type Theme = {
   darkColor: string;
   lightColor: string;
   handleThemeSwitch: any;
+  setModalOpen: (open: boolean) => void; // Include setModalOpen in the Theme type
 };
 
-const Navbar = (props: Theme) => {
+const Navbar = (props: Theme,) => {
+
+
+  // const principal = useSelector((currState) => currState.internet.principal);
+  const principal = useSelector((state: RootState) => state.internet.principal);
+
+
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
+
+  // const manageHandler = () => {
+  //   !principal ? setModalOpen(true) : setModalOpen(false);
+  // };
+  const manageHandler = () => {
+    !principal ? props.setModalOpen(true) : props.setModalOpen(false);
+  };
+
 
   return (
     <nav
@@ -65,12 +87,18 @@ const Navbar = (props: Theme) => {
             Buy
           </button>
         </div>
-
+        {/* <button onClick={manageHandler}>connect wallet</button>
         <button
           className={
             className + "__connectWalletBtn flex-row-center green-button"
           }
-        >
+        > */}
+        <button onClick={manageHandler}>connect wallet</button>
+      <button
+        className={
+          className + "__connectWalletBtn flex-row-center green-button"
+        }
+      >
           {/* <ConnectButton />  */}
           <MdArrowOutward />
         </button>
