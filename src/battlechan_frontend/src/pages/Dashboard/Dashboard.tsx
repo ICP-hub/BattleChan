@@ -30,22 +30,24 @@ interface BoardDetail {
   boardName: string;
 }
 
-async function consolePostData() {
-  let x = await backend.getTotalPostInBoard();
-  // Check that x.data is not undefined and that the first element is an array
-  if (x.data && Array.isArray(x.data[0])) {
-      const [boardDetails] = x.data as [BoardDetail[]]; // Type assertion here
+// func to conosle data from getTotalPostInBoard
 
-        console.log("below is boardDetails data")
-      console.log(boardDetails)
-      // Ensure boardDetails is not undefined before iterating
-      // boardDetails?.forEach(({ size, boardName }) => {
-      //     console.log(`Board Name: ${boardName}, Size: ${size}`);
-      // });
-  } else {
-      console.log("No board details available");
-  }
-}
+// async function consolePostData() {
+//   let x = await backend.getTotalPostInBoard();
+//   // Check that x.data is not undefined and that the first element is an array
+//   if (x.data && Array.isArray(x.data[0])) {
+//       const [boardDetails] = x.data as [BoardDetail[]]; // Type assertion here
+
+//         console.log("below is boardDetails data")
+//       console.log(boardDetails)
+//       // Ensure boardDetails is not undefined before iterating
+//       // boardDetails?.forEach(({ size, boardName }) => {
+//       //     console.log(`Board Name: ${boardName}, Size: ${size}`);
+//       // });
+//   } else {
+//       console.log("No board details available");
+//   }
+// }
 
    
   
@@ -57,7 +59,7 @@ async function consolePostData() {
         className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
       }
     >
-      <button onClick={consolePostData}  className="bg-green font-[700] text-[40px] ">consolePostData</button>
+      {/* <button onClick={consolePostData}  className="bg-green font-[700] text-[40px] ">consolePostData</button> */}
       <Navbar darkColor={darkColor} lightColor={lightColor} />
       <Body darkColor={darkColor} lightColor={lightColor} />
       <RecentPosts

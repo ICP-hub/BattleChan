@@ -33,6 +33,8 @@ const AppRoutes = ({ setModalOpen}) => {
 
   const publicRoutes = [
     { path: "/", element: <Landing  setModalOpen={setModalOpen} /> },
+    { path: "/dashboard", element: <DashBoard   /> },
+
   ];
 
   // const protectedRoutes = [
