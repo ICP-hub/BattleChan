@@ -34,5 +34,5 @@ const rootReducer = combineReducers({
   // currentRoleStatus: userCurrentRoleStatusReducer
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+// export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;
