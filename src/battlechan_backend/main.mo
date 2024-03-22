@@ -15,7 +15,7 @@ import Types "utils/types";
 import { createBoardInfo } "controllers/board";
 import { createUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
-import { createPostInfo; updateVoteStatus; archivePost } "controllers/post";
+import { createPostInfo; updateVoteStatus; archivePost; postVisiblity } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId; paginate } "utils/helper";
 import { principalKey; textKey } "keys";
@@ -29,12 +29,12 @@ actor {
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
   private stable var postIdTimerIdTrie = Trie.empty<Types.PostId, Nat>();
-  private stable var userAchivedPostMap = Trie.empty<Types.UserId, Trie.Trie<Types.PostId, Types.PostInfo>>();
+  private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<Types.PostInfo>>();
   private stable let freePostTime = 5;
   private stable let voteTime = 1;
   private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
-  let tokenCanisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
+  let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
@@ -74,14 +74,15 @@ actor {
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
 
       let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, postId, freePostTime, userId, postData, userTrieMap, boardTrieMap);
+
       let timerId = Timer.setTimer<system>(
         #seconds(freePostTime * 60 - abs(now() / 1_000_000_000) % freePostTime * 60),
         func() : async () {
-          let { updatedPostTrieMap; updatedUserTrieMap } = await archivePost(userId, postId, userTrieMap, postTrieMap);
+          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
           postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
-          userTrieMap := updatedUserTrieMap;
-          postTrieMap := updatedPostTrieMap;
-
+          userTrieMap := updatedUserTrie;
+          postTrieMap := updatedPostTrie;
+          userAchivedPostTrie := updatedArchivedTrie;
         },
       );
       postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, timerId).0;
@@ -90,27 +91,41 @@ actor {
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, newPost).0;
 
       #ok(successMessage.insert);
+
     } catch (e) {
       let code = Error.code(e);
       let message = Error.message(e);
       #err(code, message);
     };
   };
-  public shared ({ caller = userId }) func updatePostVisiblity(time : Nat, postId : Types.PostId) : async Types.Result {
+  public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
     try {
       let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
         case (null) { Debug.trap("noPostFound") };
         case (?v) { v };
       };
+
+      let { updatedPostTrieMap; updatedExpireTime } = postVisiblity(postId, postTrieMap, time);
+      postTrieMap := updatedPostTrieMap;
+
       Timer.cancelTimer(timeId);
-      let timer = Timer.setTimer<system>(
-        #seconds(time * 60 - abs(now() / 1_000_000_000) % time * 60),
+
+      let updatedTimerId = Timer.setTimer<system>(
+
+        #seconds(updatedExpireTime * 60 - abs(now() / 1_000_000_000) % updatedExpireTime * 60),
         func() : async () {
-          let { updatedPostTrieMap; updatedUserTrieMap } = await archivePost(userId, postId, userTrieMap, postTrieMap);
-          userTrieMap := updatedUserTrieMap;
-          postTrieMap := updatedPostTrieMap;
+          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
+
+          userTrieMap := updatedUserTrie;
+          postTrieMap := updatedPostTrie;
+          userAchivedPostTrie := updatedArchivedTrie;
+          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
+
         },
       );
+
+      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, updatedTimerId).0;
+
       #ok("successfully added Time");
     } catch (e) {
       let code = Error.code(e);
@@ -121,10 +136,32 @@ actor {
 
   public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
     try {
-      let { updatedUserInfo; updatedPostInfo } = updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
+      let { updatedUserInfo; updatedPostInfo; updateExpireTime } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
+
+      let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
+        case (null) { Debug.trap("noPostFound") };
+        case (?v) { v };
+      };
 
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+
+      Timer.cancelTimer(timeId);
+
+      let updatedTimerId = Timer.setTimer<system>(
+
+        #seconds(updateExpireTime * 60 - abs(now() / 1_000_000_000) % updateExpireTime * 60),
+        func() : async () {
+          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
+
+          userTrieMap := updatedUserTrie;
+          postTrieMap := updatedPostTrie;
+          userAchivedPostTrie := updatedArchivedTrie;
+          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
+
+        },
+      );
+      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, updatedTimerId).0;
 
       #ok(successMessage.update);
     } catch (e) {
@@ -360,7 +397,7 @@ actor {
   public func burnToken(amount : Nat) : async Token.Result_2 {
     await ledger.icrc1_transfer({
       to = {
-        owner = paymentCanisterId;
+        owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
         subaccount = null;
       };
       fee = null;
@@ -385,6 +422,17 @@ actor {
       memo = null;
       created_at_time = null;
     };
+  };
+  public shared ({ caller = userId }) func icrc2_transferFrom(transferto : Principal, amount : Nat) : async Token.Result_2 {
+    await ledger.icrc2_transfer_from({
+      spender_subaccount = null;
+      from = { owner = userId; subaccount = null };
+      to = { owner = transferto; subaccount = null };
+      amount;
+      fee = null;
+      memo = null;
+      created_at_time = null;
+    });
   };
 
   //  function for the testing

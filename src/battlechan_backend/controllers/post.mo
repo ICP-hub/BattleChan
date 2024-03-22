@@ -6,6 +6,7 @@ import List "mo:base/List";
 import Trie "mo:base/Trie";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
+import Nat "mo:base/Nat";
 // thapa technical
 // code step by step
 // namaster javascript
@@ -82,9 +83,10 @@ module {
         };
     };
 
-    public func updateVoteStatus(userId : Types.UserId, voteTime : Int, voteStatus : Types.VoteStatus, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : {
+    public func updateVoteStatus(userId : Types.UserId, voteTime : Int, voteStatus : Types.VoteStatus, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : async {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;
+        updateExpireTime : Nat;
     } {
         if (anonymousCheck(userId) == true) {
             Debug.trap(reject.anonymous);
@@ -108,6 +110,11 @@ module {
 
         switch (voteStatus) {
             case (#upvote) {
+                let expireTime = increaseExpireTime(voteTime, postInfo.expireAt);
+                let updateExpireTime = switch (Nat.fromText(Int.toText(expireTime))) {
+                    case (?v) { v };
+                    case (null) { Debug.trap(reject.notValid) };
+                };
                 return {
                     updatedUserInfo : Types.UserInfo = {
                         userId = userInfo.userId;
@@ -133,14 +140,20 @@ module {
                         postMetaData = postInfo.postMetaData;
                         createdBy = postInfo.createdBy;
                         comments = postInfo.comments;
-                        expireAt = increaseExpireTime(voteTime, postInfo.expireAt);
+                        expireAt = expireTime;
                         createdAt = postInfo.createdAt;
                         updatedAt = ?Int.toText(now());
 
                     };
+                    updateExpireTime;
                 };
             };
             case (#downvote) {
+                let expireTime = decreaseExpireTime(voteTime, postInfo.expireAt);
+                let updateExpireTime = switch (Nat.fromText(Int.toText(expireTime))) {
+                    case (?v) { v };
+                    case (null) { Debug.trap(reject.notValid) };
+                };
                 return {
                     updatedUserInfo : Types.UserInfo = {
                         userId = userInfo.userId;
@@ -167,10 +180,11 @@ module {
                         postMetaData = postInfo.postMetaData;
                         createdBy = postInfo.createdBy;
                         comments = postInfo.comments;
-                        expireAt = decreaseExpireTime(voteTime, postInfo.expireAt);
+                        expireAt = expireTime;
                         createdAt = postInfo.createdAt;
                         updatedAt = ?Int.toText(now());
                     };
+                    updateExpireTime;
                 };
             };
         };
@@ -203,15 +217,21 @@ module {
         };
         return Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
     };
-    public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : async {
-        updatedUserTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>;
-        updatedPostTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>;
+    public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<Types.PostInfo>>) : {
+        updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo>;
+        updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
+        updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<Types.PostInfo>>;
     } {
 
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noAccount) };
         };
+        let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+            case (?value) { value };
+            case (null) { Debug.trap(reject.noPost) };
+        };
+
         let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x == postId);
         let updateUserInfo : Types.UserInfo = {
             userId = userInfo.userId;
@@ -226,10 +246,61 @@ module {
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
-        let updatedUserTrieMap : Trie.Trie<Types.UserId, Types.UserInfo> = Trie.put(userTrieMap, principalKey userId, Principal.equal, updateUserInfo).0;
-        let updatedPostTrieMap : Trie.Trie<Types.PostId, Types.PostInfo> = Trie.remove(postTrieMap, textKey postId, Text.equal).0;
 
-        return { updatedUserTrieMap; updatedPostTrieMap }
+        var achivedPostList : List.List<Types.PostInfo> = List.nil<Types.PostInfo>();
+
+        switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
+            case (?value) { achivedPostList := List.push(postInfo, value) };
+            case (null) {
+                achivedPostList := List.push(postInfo, achivedPostList);
+            };
+        };
+
+        let updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo> = Trie.put(userTrieMap, principalKey userId, Principal.equal, updateUserInfo).0;
+        let updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo> = Trie.remove(postTrieMap, textKey postId, Text.equal).0;
+        let updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<Types.PostInfo>> = Trie.put(userAchivedPostTrie, principalKey userId, Principal.equal, achivedPostList).0;
+        return {
+            updatedUserTrie;
+            updatedPostTrie;
+            updatedArchivedTrie;
+        };
 
     };
+    public func postVisiblity(postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, increaseTime : Int) : {
+        updatedPostTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>;
+        updatedExpireTime : Nat;
+    } {
+
+        let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+            case (null) { Debug.trap("noPostFound") };
+            case (?v) { v };
+        };
+        let newIncreasedTime = increaseExpireTime(postInfo.expireAt, increaseTime);
+        let updatedPostInfo : Types.PostInfo = {
+            postId = postInfo.postId;
+            postName = postInfo.postName;
+            postDes = postInfo.postDes;
+            upvotedBy = postInfo.upvotedBy;
+            downvotedBy = postInfo.downvotedBy;
+            upvotes = postInfo.upvotes;
+            downvotes = postInfo.downvotes + 1;
+            postMetaData = postInfo.postMetaData;
+            createdBy = postInfo.createdBy;
+            comments = postInfo.comments;
+            expireAt = newIncreasedTime;
+            createdAt = postInfo.createdAt;
+            updatedAt = ?Int.toText(now());
+        };
+
+        let updatedPostTrieMap = Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+        let updatedExpireTime : Nat = switch (Nat.fromText(Int.toText(newIncreasedTime))) {
+            case (?v) { v };
+            case (null) { Debug.trap(reject.notValid) };
+        };
+        {
+            updatedPostTrieMap;
+            updatedExpireTime;
+        };
+    };
+
 };
