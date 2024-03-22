@@ -12,6 +12,54 @@ import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
 import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 
+
+
+// -----------------
+import { AuthClient } from "@dfinity/auth-client";
+import { createContext, useContext,  useState } from "react";
+// import { createActor } from "../../../../../declarations/IcpAccelerator_backend/index";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { useDispatch } from "react-redux";
+
+
+const plugWalletHandler = async () => {
+  let ic : any , plug: any; 
+  // console.log(window)
+  // console.log(ic)
+  // console.log("plug" , plug)
+
+
+  if (window?.ic?.plug) {
+    try {
+      // Request connection to the user's Plug Wallet.
+      await window.ic.plug.requestConnect();
+      const isConnected = await window.ic.plug.isConnected();
+      if (isConnected) {
+        console.log("Plug Wallet is connected!");
+
+        // Ensure the Plug agent is available for use.
+        if (!window.ic.plug.agent) {
+          await window.ic.plug.createAgent();
+        }
+
+        // Obtain the principal from the Plug agent and do something with it.
+        const principal = await window.ic.plug.agent.getPrincipal();
+        const principalText = principal.toText();
+        console.log("Plug principal", principalText);
+
+        // Here you could dispatch an action or update some state.
+        // For example, this might be dispatching an action to Redux.
+        // dispatch(walletHandler({ principalText: principalText, WalletType: "plug" }));
+      }
+    } catch (error) {
+      console.error("Error connecting to Plug Wallet:", error);
+    }
+  } else {
+    alert("Plug Wallet extension is not installed!");
+  }
+};
+
+
 function Landing({ setModalOpen }: { setModalOpen: (open: boolean) => void }) {
   const className: string = "LandingPage";
   const [dark, setDark] = React.useState(true);
@@ -40,6 +88,8 @@ function Landing({ setModalOpen }: { setModalOpen: (open: boolean) => void }) {
 />
 
       <HeroSection darkColor={darkColor} lightColor={lightColor} />
+
+      <button className="bg-red" onClick={plugWalletHandler}>Hello shivam</button>
 
       <About />
       <HowItWorks />

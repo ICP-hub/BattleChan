@@ -98,8 +98,10 @@ const ConnectWallet = ({ isModalOpen, onClose }) => {
                   <ul className="my-4 space-y-3 cursor-pointer">
                     {walletModalSvg.map((wallet, index) => (
                       <div key={index} onClick={loginHandler}>
+                      
                         {wallet.content}
                       </div>
+                      
                     ))}
                   </ul>
 
@@ -116,3 +118,4 @@ const ConnectWallet = ({ isModalOpen, onClose }) => {
 };
 
 export default ConnectWallet;
+
