@@ -16,7 +16,7 @@ module {
         alreadyVoted = "already Voted!";
         noPageExist = "No Page Exist!";
         noAccess = "no Access";
-        unknown = "unknown";
+        notValid = "not Valid Text";
     };
     public let notFound = {
         noUser = "No User Exist!";
