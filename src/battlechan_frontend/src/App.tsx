@@ -1,5 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { PlugWallet} from "@connect2ic/core/providers";
+import { InternetIdentity} from "@connect2ic/core/providers";
+
 import "./App.css";
 
 import { Connect2ICProvider } from "@connect2ic/react";
@@ -62,7 +64,7 @@ function App() {
 
 const client = createClient({
   canisters: {},
-  providers: [new PlugWallet()],
+  providers: [new PlugWallet() , new InternetIdentity()],
 });
 
 export default () => (
