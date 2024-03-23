@@ -216,7 +216,9 @@ module {
         archives : shared query () -> async Archives;
         decimals : shared query () -> async Decimals;
         icrc1_balance_of : shared query Account -> async Nat;
-        icrc1_decimals : shared query () -> async Nat8;
+        icrc1_decimals : shared query () -> async Nat8; 
+
+    
         icrc1_fee : shared query () -> async Nat;
         icrc1_metadata : shared query () -> async [(Text, MetadataValue)];
         icrc1_minting_account : shared query () -> async ?Account;
