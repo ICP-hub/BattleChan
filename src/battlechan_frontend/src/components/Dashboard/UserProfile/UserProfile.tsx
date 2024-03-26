@@ -18,14 +18,14 @@ const UserProfile = (props: Theme) => {
   const lightColor = props.lightColor;
 
   return (
-    <>
-      <div className="min-h-lvh bg-[#ECECEC]">
+    <> 
+      <div  className={`min-h-lvh bg-[#ECECEC]`}>
         {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
       <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
 
         <div className="container py-12 mx-auto px-4 tablet:px-12">
           <div className="mb-12">
-          <UserProfileHeader />
+            <UserProfileHeader />
           </div>
 
           <div className="container border border-green rounded-2xl tablet:px-12">

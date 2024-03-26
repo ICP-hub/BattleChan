@@ -1,25 +1,30 @@
 import React from "react";
 
-const PostGrid = () => {
+interface PostGridProps {
+  type: string;
+}
+
+const PostGrid = (props: PostGridProps) => {
+  const type = props.type;
   const posts = [
-    { id: 1, imageUrl: "https://picsum.photos/600/400/?random" },
-    { id: 2, imageUrl: "https://picsum.photos/600/400/?random" },
-    { id: 3, imageUrl: "https://picsum.photos/600/400/?random" },
-    { id: 4, imageUrl: "https://picsum.photos/600/400/?random" },
-    { id: 5, imageUrl: "https://picsum.photos/600/400/?random" },
-    { id: 6, imageUrl: "https://picsum.photos/600/400/?random" },
+    { id: 1, imageUrl: "/src/images/post-basketball.jpg" },
+    { id: 2, imageUrl: "/src/images/post-basketball.jpg" },
+    { id: 3, imageUrl: "/src/images/post-basketball.jpg" },
+    { id: 4, imageUrl: "/src/images/post-basketball.jpg" },
+    { id: 5, imageUrl: "/src/images/post-basketball.jpg" },
+    { id: 6, imageUrl: "/src/images/post-basketball.jpg" },
   ];
 
   return (
     <>
       <div className="flex flex-wrap -mx-1 laptop:-mx-3">
         {posts.map((post) => (
-          <div key={post.id} className="my-1 px-1 w-full tablet:w-1/2 laptop:my-2 laptop:px-2 laptop:w-1/3">
+          <div key={post.id} className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2">
             <article className="overflow-hidden rounded-lg shadow-lg">
               <a href="#">
                 <img
                   alt="Placeholder"
-                  className="block h-auto w-full"
+                  className={`block h-auto w-full ${type === 'Archive' ? 'grayscale' : ''}`}
                   src={post.imageUrl}
                 />
               </a>

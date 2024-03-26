@@ -22,21 +22,26 @@ const ProfileTabs: React.FC = () => {
   };
 
   return (
-    <div className="container my-12 mx-auto px-4 tablet:px-12">
+    <div className="container mt-2 mb-24 tablet:my-6 mx-auto px-4 tablet:px-12">
+      {/* tab navigation */}
       <div className="flex flex-col tablet:flex-row justify-between items-center mb-6">
         <ul
-          className="relative flex flex-wrap p-1 list-none"
+          className="w-full relative flex flex-wrap p-1 list-none justify-around tablet:justify-start"
           data-tabs="tabs"
           role="list"
         >
           {tabs.map((tab) => (
-            <li key={tab.id} className={`z-30 w-[79px] tablet:w-[94px] text-center rounded-full text-[#000] text-opacity-50 ${
+            <li key={tab.id} className={`z-30 text-center rounded-full text-[#000] text-opacity-50 ${
                 activeTab === tab.id
-                  ? "text-[hsl(0,0%,100%)] text-opacity-100 bg-green font-semibold"
+                  ? "text-[#fff] bg-green "
                   : ""
-              } `}>
+              } ${tab.id === "shared" ? "hidden tablet:inline-block" : ""} `}>
               <a
-                className={`z-30 flex items-center justify-center w-full py-2 mb-0 transition-all ease-in-out border-0  cursor-pointer bg-inherit`}
+                className={`px-4 font-semibold text-[10px] tablet:text-base z-30 flex items-center justify-center py-2 transition-all ease-in-out border-0 cursor-pointer bg-inherit ${
+                  activeTab === tab.id
+                    ? "text-[#fff] text-opacity-100 font-semibold"
+                    : ""
+                }`}
                 data-tab-target=""
                 role="tab"
                 aria-selected={activeTab === tab.id ? "true" : "false"}
@@ -69,6 +74,7 @@ const ProfileTabs: React.FC = () => {
           <span className="ml-1 leading-5">CreatePost</span>
         </button>
       </div>
+      {/* tab content */}
       <div data-tab-content="">
         {tabs.map((tab) => (
           <div
