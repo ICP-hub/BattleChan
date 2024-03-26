@@ -28,7 +28,7 @@
   }
 
   .small-button {
-    @apply font-semibold laptop:text-lg text-base rounded-[2rem] laptop:py-2 laptop:px-6 py-1.5 px-4;
+    @apply font-semibold tablet:text-lg text-sm rounded-[2rem] tablet:py-2 tablet:px-6 py-1 px-3;
   }
 }
 

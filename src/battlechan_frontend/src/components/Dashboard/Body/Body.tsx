@@ -103,7 +103,7 @@ const Body = (props: Theme) => {
         </div>
       </div>
 
-      <div
+      {/* <div
         className={
           className +
           "__postsNumber" +
@@ -198,7 +198,7 @@ const Body = (props: Theme) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
