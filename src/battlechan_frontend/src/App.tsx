@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState, useEffect } from "react";
 import { PlugWallet} from "@connect2ic/core/providers";
 import { InternetIdentity} from "@connect2ic/core/providers";
 
@@ -17,15 +17,35 @@ const DashboardRoutes = lazy(() => import("./pages/Routes"));
 
 import Loader from "./components/Loader/Loader";
 
+type Theme = "dark" | "light";
+
 function App() {
+  const [theme, setTheme] = useState<Theme>("light")
   const [dark, setDark] = React.useState(false);
   const [light, setLight] = React.useState(true);
   const darkColor: string = dark ? "dark" : "light";
   const lightColor: string = !dark ? "dark" : "light";
 
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      setTheme("dark");
+      setDark(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   function handleThemeSwitch() {
     setDark(!dark);
     setLight(!light);
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }
 
   return (
