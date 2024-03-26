@@ -31,7 +31,7 @@ const ProfileTabs: React.FC = () => {
           role="list"
         >
           {tabs.map((tab) => (
-            <li key={tab.id} className={`z-30 text-center rounded-full text-[#000] text-opacity-50 ${
+            <li key={tab.id} className={`z-30 text-center rounded-full text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 ${
                 activeTab === tab.id
                   ? "text-[#fff] bg-green "
                   : ""
@@ -53,7 +53,7 @@ const ProfileTabs: React.FC = () => {
             </li>
           ))}
         </ul>
-        <button className="hidden tablet:flex items-center justify-center px-8 py-2 bg-[#000] text-[#fff] rounded-full font-semibold">
+        <button className="hidden tablet:flex items-center justify-center px-8 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-full font-semibold">
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white"
             aria-hidden="true"
