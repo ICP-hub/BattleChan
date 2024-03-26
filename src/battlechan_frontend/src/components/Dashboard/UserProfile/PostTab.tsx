@@ -15,16 +15,17 @@ const PostTab = () => {
   };
   return (
     <>
+    {/* post tabs for desktop */}
       <div className="hidden tablet:block">
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-2xl font-bold">Popular</h1>
+          <h1 className="text-2xl font-bold dark:text-[#fff]">Popular</h1>
           <div className="flex items-center justify-center gap-2">
-            <button className="border border-[#000] text-[#000] rounded-md px-6 py-2 font-semibold">
+            <button className="border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-6 py-2 font-semibold">
               Sports
             </button>
-            <button className="flex items-center justify-center bg-[#000] text-[#fff] rounded-md px-6 py-2 font-semibold">
+            <button className="flex items-center justify-center bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-md px-6 py-2 font-semibold">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-5 h-5 text-gray-800 dark:text-white"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -45,10 +46,11 @@ const PostTab = () => {
         </div>
         <PostGrid type="Popular" />
         <div className="flex items-center justify-between m-4">
-          <h1 className="text-2xl font-bold">Archive</h1>
+          <h1 className="text-2xl font-bold dark:text-[#fff]">Archive</h1>
         </div>
         <PostGrid type="Archive" />
       </div>
+      {/* post tabs for mobile */}
       <div className="tablet:hidden">
         <div className="flex items-center justify-between">
           {/* dropdown button*/}
@@ -56,13 +58,13 @@ const PostTab = () => {
             <button
               id="dropdownDefaultButton"
               data-dropdown-toggle="dropdown"
-              className="text-[#000] bg-transparent focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-4 py-1 text-center inline-flex items-center"
+              className="text-[#000] dark:text-[#fff] bg-transparent focus:ring-2 focus:ring-green font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center"
               type="button"
               onClick={toggleDropdown}
             >
               {activeSelection}
               <svg
-                className="w-2.5 h-2.5 ms-3"
+                className="w-2.5 h-2.5 ms-3 mt-1"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -81,10 +83,10 @@ const PostTab = () => {
           {/* sports and filter button  */}
           <div className="flex items-center justify-between gap-1">
             <div className="flex items-center justify-center">
-            <button className="border border-[#000] text-[#000] rounded-md px-4 py-1 text-xs font-semibold">
+            <button className="border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-4 py-1 text-xs font-semibold">
               Sports
             </button>
-            <button className="flex items-center justify-center bg-transparent text-[#000] rounded-md px-1 py-1 text-xs font-semibold">
+            <button className="flex items-center justify-center bg-transparent text-[#000] dark:text-[#fff] dark:text-opacity-50 rounded-md px-1 py-1 text-xs font-semibold">
               <svg
                 className="w-5 h-5 text-gray-800 dark:text-white"
                 aria-hidden="true"
@@ -103,9 +105,9 @@ const PostTab = () => {
               </svg>
             </button>
             </div>
-            <button className="flex items-center justify-center px-4 py-2 bg-[#000] text-[#fff] text-xs rounded-full font-semibold">
+            <button className="flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] text-xs rounded-full font-semibold">
               <svg
-                className="w-4 h-4 text-gray-800"
+                className="w-4 h-4"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -133,13 +135,13 @@ const PostTab = () => {
               className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
             >
               <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                className="py-2 text-sm text-[#000] dark:text-[#fff]"
                 aria-labelledby="dropdownDefaultButton"
               >
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block px-4 py-2"
                     onClick={() => handleSelection("Popular")}
                   >
                     Popular
@@ -148,7 +150,7 @@ const PostTab = () => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block px-4 py-2"
                     onClick={() => handleSelection("Archive")}
                   >
                     Archive

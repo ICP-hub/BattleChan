@@ -19,7 +19,7 @@ const UserProfile = (props: Theme) => {
 
   return (
     <> 
-      <div className={`min-h-lvh bg-[#ECECEC] dark:bg-dark`}>
+      <div className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`}>
         {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
       <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
 
