@@ -25,7 +25,7 @@ export default {
       'transparent': "#00000000"
     },
     screens: {
-      'tablet': "870px",
+      'tablet': "670px",
       'laptop': '1000px',
       'xl': "1280px"
     }

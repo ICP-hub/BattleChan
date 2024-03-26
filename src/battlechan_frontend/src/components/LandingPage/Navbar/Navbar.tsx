@@ -49,7 +49,7 @@ const Navbar = (props: Theme) => {
           className={
             className +
             `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
-            "  laptop:p-1.5 laptop:pl-6 p-1.5 pl-4 text-base"
+            "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
           }
         >
           1 Time Token:

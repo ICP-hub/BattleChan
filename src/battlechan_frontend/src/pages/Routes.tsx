@@ -7,6 +7,7 @@ import UserProfile from "../components/Dashboard/UserProfile/UserProfile";
 type Theme = {
   darkColor: string;
   lightColor: string;
+  handleThemeSwitch: Function;
 };
 
 function Routing(props: Theme) {
@@ -18,7 +19,13 @@ function Routing(props: Theme) {
       <Routes>
         <Route
           path="/"
-          element={<Dashboard darkColor={darkColor} lightColor={lightColor} />}
+          element={
+            <Dashboard
+              darkColor={darkColor}
+              lightColor={lightColor}
+              handleThemeSwitch={props.handleThemeSwitch}
+            />
+          }
         />
         <Route
           path="/settingProfile"
