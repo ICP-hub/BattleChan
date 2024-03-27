@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
 import UserProfile from "../components/Dashboard/UserProfile/UserProfile";
+import MainPosts from "../components/Dashboard/MainPosts/MainPosts";
 
 type Theme = {
   darkColor: string;
@@ -30,6 +31,12 @@ function Routing(props: Theme) {
           path="/userProfile"
           element={
             <UserProfile darkColor={darkColor} lightColor={lightColor} />
+          }
+        />
+        <Route
+          path="/mainPosts"
+          element={
+            <MainPosts />
           }
         />
       </Routes>
