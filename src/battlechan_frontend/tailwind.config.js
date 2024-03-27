@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'green-gradient': "url('/src/images/dashboard_bg.png')",
+      },
       fontFamily: {
         'istok': ['istok', 'sans-serif'],
       }
@@ -22,10 +25,11 @@ export default {
       'transparent': "#00000000"
     },
     screens: {
-      'tablet': "870px",
+      'tablet': "670px",
       'laptop': '1000px',
       'xl': "1280px"
     }
   },
   plugins: [],
+  darkMode: 'class',
 }

@@ -8,7 +8,6 @@ type Theme = {
 
 const NavButtons = (props: Theme) => {
   const [active, setActive] = React.useState("Home");
-  const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "Home__NavButtons";
 
