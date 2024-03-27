@@ -1,4 +1,5 @@
 import React from "react";
+import { useState , useEffect} from "react";
 import { Link } from "react-router-dom";
 
 import { FiBox } from "react-icons/fi";
@@ -12,10 +13,39 @@ import { IoGameControllerOutline } from "react-icons/io5";
 
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
+import { backend } from "../../../../../declarations/backend/index"
 
 const Body = () => {
   const darkColor = document.documentElement.className;
   const className = "Home";
+
+
+  async function fetchBoardNames() {
+    const response = await backend.getTotalPostInBoard() as BackendResponse;
+    const boards = response.data[0];
+
+    if (boards && boards.length > 0) {
+      const names = boards.map((board) => board.boardName);
+      const sizes = boards.map((board) => board.size.toString() );
+      console.log("size is " ,sizes) ; 
+      console.log("ended")
+
+      setBoardNames(names); // Update the state with all board names.
+      setBoardSizes(sizes); // Update the state with all board names.
+
+    } else {
+      console.log("No boards found.");
+    }
+    console.log(boardSizes[0]) ;
+  }
+
+  // async function getPost() {
+  //   const posts = await backend.getUserInfo() as BackendResponse;
+    
+  // }
+
+
+
 
   return (
     <div
@@ -31,6 +61,7 @@ const Body = () => {
           : {}
       }
     >
+      
       <NavButtons />
 
       <div
@@ -113,45 +144,47 @@ const Body = () => {
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
                 <MdOutlineAddBusiness />
-                Business
+                {boardNames[0]}
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
                 <GiPublicSpeaker />
-                Politics
+                {boardNames[1]}
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
                 <FaRunning />
-                Sports
+                {boardNames[2]}
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
                 <IoGameControllerOutline />
-                Games
+                {boardNames[3]}
               </p>
             </div>
             <div className="w-[9.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
                 <IoHardwareChipOutline />
-                Technology
+                {boardNames[4]}
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
                 <FiBox />
-                Crypto
+                {boardNames[5]}
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap">
               <p className="flex-row-center gap-2 justify-center">
-                <BiMoviePlay /> Cinema
+                <BiMoviePlay />
+                {boardNames[6]}
               </p>
             </div>
           </div>
+          
         </div>
 
         <div
@@ -163,31 +196,31 @@ const Body = () => {
 
           <div className="data__numbers flex-row-center justify-between">
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span>01</span>
+              <span  >{boardSizes[0]  }</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span>02</span>
+              <span>{boardSizes[1]} </span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span>03</span>
+              <span>{boardSizes[2]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span>04</span>
+              <span>{boardSizes[3]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[9.5rem] text-center flex-col-center border-r">
-              <span>05</span>
+              <span>{boardSizes[4]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span>06</span>
+              <span>{boardSizes[5]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center">
-              <span>07</span>
+              <span>{boardSizes[6]}</span>
               <span>2 hrs ago</span>
             </div>
           </div>

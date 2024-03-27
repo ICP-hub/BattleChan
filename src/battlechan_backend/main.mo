@@ -36,6 +36,7 @@ actor {
 
   let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     try {
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
 
@@ -52,6 +53,7 @@ actor {
   };
 
   public shared ({ caller = userId }) func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     try {
       let newBoard : Types.BoardInfo = createBoardInfo(userId, boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
@@ -68,7 +70,10 @@ actor {
     };
   };
 
+
+
   public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     try {
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
@@ -98,6 +103,7 @@ actor {
       #err(code, message);
     };
   };
+
   public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
     try {
       let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
@@ -243,6 +249,7 @@ actor {
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
 
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
         { data = null; status = false; error = ?"Error! No user Exist" };
@@ -254,6 +261,9 @@ actor {
   };
 
   public shared query ({ caller = userId }) func getUserPost() : async Types.Result_1<[Types.PostInfo]> {
+    
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+
     let userPostIds : [Types.PostId] = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
@@ -279,6 +289,8 @@ actor {
   };
 
   public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
+
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
 
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
