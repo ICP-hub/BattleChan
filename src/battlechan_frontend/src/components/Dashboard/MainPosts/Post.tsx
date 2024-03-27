@@ -88,7 +88,7 @@ const Post: React.FC<PostProps> = ({
               <div className="tablet:text-xs">
                 <span className="text-[#18AF00]">{duration}</span> left
               </div>
-              <div className="hidden tablet:inline-flex text-[#000] dark:text-[#fff]">
+              {/* <div className="hidden tablet:inline-flex text-[#000] dark:text-[#fff]">
                 <svg
                   className="w-4 h-2"
                   viewBox="0 0 22 4"
@@ -117,7 +117,7 @@ const Post: React.FC<PostProps> = ({
                     fill="currentColor"
                   />
                 </svg>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="mt-1 tablet:text-sm">{content}</div>

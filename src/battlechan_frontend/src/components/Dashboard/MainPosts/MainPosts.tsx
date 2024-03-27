@@ -5,6 +5,8 @@ import Post from "./Post";
 import Pagination from "./Pagination";
 import Posts from "./Posts";
 import Catalog from "./Catalog";
+import { Link } from "react-router-dom";
+import CreatePostBtn from "../Body/CreatePostBtn";
 
 const postsData = [
   {
@@ -261,7 +263,11 @@ const postsData = [
   },
 ];
 
-const MainPosts = () => {
+type Theme = {
+  handleThemeSwitch: Function;
+};
+
+const MainPosts = (props: Theme) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Rank");
   const [postsPerPage, setPostsPerPage] = useState(10);
@@ -303,30 +309,35 @@ const MainPosts = () => {
       <div
         className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat`}
       >
+        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+        <NavButtons />
         {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
       <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
 
         <div className="container py-6 mx-auto px-4 tablet:px-0 dark:text-[#fff] overflow-hidden">
           {/* create post button for desktop  */}
-          <div className="hidden tablet:flex justify-center">
-            <button className="mb-24 flex items-center justify-center px-14 py-4 bg-green dark:bg-green text-[#fff] rounded-full font-semibold text-base">
-              <svg
-                className="w-5 h-5 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <span className="ml-1 leading-5">CreatePost</span>
-            </button>
+          <div className="mb-24 hidden tablet:flex justify-center">
+            <Link to="/dashboard/createPost">
+              <CreatePostBtn />
+              {/* <button className=" flex items-center justify-center px-14 py-4 bg-green dark:bg-green text-[#fff] rounded-full font-semibold text-base">
+                <svg
+                  className="w-5 h-5 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+                <span className="ml-1 leading-5">CreatePost</span>
+              </button> */}
+            </Link>
           </div>
 
           {/* most popular heading & create post button  */}
@@ -355,7 +366,7 @@ const MainPosts = () => {
           </div>
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-          <Catalog />
+            <Catalog />
           </div>
           {/* catalog and pagination and sort for desktop  */}
           <div className="flex justify-between items-center tablet:px-10">
@@ -527,9 +538,8 @@ const MainPosts = () => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Rank" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Rank" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Rank")}
                     >
                       Rank
@@ -538,9 +548,8 @@ const MainPosts = () => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "New" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "New" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("New")}
                     >
                       New
@@ -549,9 +558,8 @@ const MainPosts = () => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Last Reply")}
                     >
                       Last Reply
