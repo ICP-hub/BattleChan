@@ -14,15 +14,12 @@ import light_logo from "../../../images/light_logo.png";
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 
 type Theme = {
-  darkColor: string;
-  lightColor: string;
   handleThemeSwitch: Function;
 };
 
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+  const darkColor = document.documentElement.className;
 
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is800px = useMediaQuery("(min-width: 800px)");
@@ -32,7 +29,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-transparent text-${lightColor} laptop:py-8 tablet:py-6 py-4 xl:px-16 laptop:px-12 tablet:px-10 px-5 gap-2 border-b border-grey`
+        ` flex-row-center justify-between bg-transparent text-dark dark:text-light laptop:py-8 tablet:py-6 py-4 xl:px-16 laptop:px-12 tablet:px-10 px-5 gap-2 border-b border-grey`
       }
     >
       <img
@@ -57,7 +54,7 @@ const Navbar = (props: Theme) => {
               type="text"
               name="search"
               placeholder="Search here...."
-              className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-${lightColor} bg-${darkColor}`}
+              className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor}`}
             />
           </div>
         )}
@@ -65,7 +62,7 @@ const Navbar = (props: Theme) => {
         <div
           className={
             className +
-            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
+            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
             "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
           }
         >
@@ -76,7 +73,7 @@ const Navbar = (props: Theme) => {
           <button
             className={
               className +
-              `__timeToken__butButton small-button bg-${lightColor} text-${darkColor}`
+              `__timeToken__butButton small-button text-light dark:text-dark bg-dark dark:bg-light`
             }
           >
             Buy
@@ -117,7 +114,6 @@ const Navbar = (props: Theme) => {
         <ProfileOverlay
           display={showOverlay}
           setProfilePopUp={setShowOverlay}
-          darkColor={darkColor}
           handleThemeSwitch={props.handleThemeSwitch}
         />
       </section>

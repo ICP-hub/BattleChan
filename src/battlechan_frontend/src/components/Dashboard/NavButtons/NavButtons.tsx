@@ -1,14 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
 
-const NavButtons = (props: Theme) => {
+const NavButtons = () => {
   const [active, setActive] = React.useState("Home");
-  const lightColor = props.lightColor;
   const className = "Home__NavButtons";
 
   return (
@@ -20,14 +15,14 @@ const NavButtons = (props: Theme) => {
       }
     >
       <p
-        className={`${active === "Home" ? `text-${lightColor}` : "text-grey"}`}
+        className={`${active === "Home" ? `text-dark dark:text-light` : "text-grey"}`}
         onClick={() => setActive("Home")}
       >
         Home
       </p>
       <p
         className={`${
-          active === "Archive" ? `text-${lightColor}` : "text-grey"
+          active === "Archive" ? `text-dark dark:text-light` : "text-grey"
         }`}
         onClick={() => setActive("Archive")}
       >
@@ -35,7 +30,7 @@ const NavButtons = (props: Theme) => {
       </p>
       <p
         className={`${
-          active === "Dashboard" ? `text-${lightColor}` : "text-grey"
+          active === "Dashboard" ? `text-dark dark:text-light` : "text-grey"
         }`}
         onClick={() => setActive("Dashboard")}
       >

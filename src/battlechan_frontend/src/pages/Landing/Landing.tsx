@@ -1,3 +1,4 @@
+import React from "react";
 
 import FAQs from "../../components/LandingPage/FAQs/FAQs";
 import About from "../../components/LandingPage/About/About";
@@ -13,27 +14,12 @@ import { backend } from "../../../../declarations/backend/index"
 
 
 type Theme = {
-  darkColor: string;
-  lightColor: string;
   handleThemeSwitch: any;
 };
 
 function Landing(props: Theme) {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
   const handleThemeSwitch = props.handleThemeSwitch;
   const className = "LandingPage";
-
-  // const { isConnected } = useConnect();
-  // const navigate = useNavigate();
-
-  // React.useEffect(() => {
-  //   if (isConnected) {
-  //     navigate("/dashboard");
-  //   } else {
-  //     navigate("/");
-  //   }
-  // }, [isConnected, navigate]);
 
   type BackendResponseDirect = {
     status: boolean;
@@ -59,29 +45,28 @@ async function Helo() {
   console.log(boards)
 }
 
-
-  
-
   return (
     <main
       className={
-        className + ` w-full h-full bg-${darkColor} text-${lightColor}`
+        className +
+        ` w-full h-full text-dark dark:text-light bg-light dark:bg-dark`
       }
     >
-      <Navbar
-        darkColor={darkColor}
-        lightColor={lightColor}
-        handleThemeSwitch={handleThemeSwitch}
-      />
-      <HeroSection darkColor={darkColor} lightColor={lightColor} />
+      <Navbar handleThemeSwitch={handleThemeSwitch} />
+
+      <HeroSection />
 
       <About />
+
       <HowItWorks />
 
-      <TrendingPost darkColor={darkColor} lightColor={lightColor} />
-      <WhyBattlechan darkColor={darkColor} lightColor={lightColor} />
-      <AttractiveCompo darkColor={darkColor} lightColor={lightColor} />
-      <FAQs darkColor={darkColor} lightColor={lightColor} />
+      <TrendingPost />
+
+      <WhyBattlechan />
+
+      <AttractiveCompo />
+
+      <FAQs />
 
       <Footer />
     </main>

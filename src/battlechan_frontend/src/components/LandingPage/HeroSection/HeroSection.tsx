@@ -6,14 +6,7 @@ import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 import desktops from "../../../images/desktops.png";
 import backImage from "../../../images/background_img.png";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
-const HeroSection = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+const HeroSection = () => {
   const className = "LandingPage__HeroSection";
 
   useEffect(() => {
@@ -39,7 +32,7 @@ const HeroSection = (props: Theme) => {
       >
         <h1
           className={
-            `text-${lightColor} text-center font-bold` +
+            `text-dark dark:text-light text-center font-bold` +
             " tablet:text-5xl text-4xl"
           }
         >
@@ -50,7 +43,7 @@ const HeroSection = (props: Theme) => {
 
         <p
           className={
-            `text-${lightColor} text-center font-normal` +
+            `text-dark dark:text-light text-center font-normal` +
             " tablet:text-base text-sm"
           }
         >

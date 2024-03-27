@@ -8,14 +8,8 @@ import image1 from "../../../images/why_battlechan1.png";
 import image2 from "../../../images/why_battlechan2.png";
 import bg from "../../../images/why_battalechan_bg.png";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
-const WhyBattlechan = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+const WhyBattlechan = () => {
+  const darkColor = document.documentElement.className;
   const className = "LandingPage__WhyBattelchan";
 
   return (
@@ -24,7 +18,7 @@ const WhyBattlechan = (props: Theme) => {
         className +
         ` w-full py-40 px-36 flex-direction-row ${
           darkColor == "dark" ? "bg-[#121212]" : "light"
-        } text-${lightColor}`
+        } text-dark dark:text-light`
       }
     >
       {/* Texts and content */}
