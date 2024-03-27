@@ -11,29 +11,22 @@ type Theme = {
 };
 
 const CreatePost = (props: Theme) => {
-  const darkColor = document.documentElement.className;
   const className = "HomePage__CreatePost";
 
   return (
-    <div
-      className="bg-[#ECECEC] dark:bg-dark bg-top bg-contain bg-no-repeat"
-      style={
-        darkColor == "dark"
-          ? {
-              backgroundImage: `url(${bg})`,
-            }
-          : {}
-      }
-    >
+    <div className="bg-[#ECECEC] dark:bg-dark relative z-0">
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+
       <NavButtons />
 
+      <img
+        src={bg}
+        alt="Background image"
+        className="w-screen -z-10 h-screen absolute top-0 object-cover"
+      />
+
       <div
-        className={
-          className +
-          " " +
-          "text-dark dark:text-light flex flex-col"
-        }
+        className={className + " " + "text-dark dark:text-light flex flex-col"}
       >
         <div className="createPost">
           <h1 className="text-3xl font-semibold text-center py-12">

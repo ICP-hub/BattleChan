@@ -1,13 +1,14 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
-import CreatePostBtn from "./CreatePostBtn";
-import DataNumbers from "./DataNumbers";
+
 import Steps from "./Steps";
-import { backend } from "../../../../../declarations/backend/index"
+import DataNumbers from "./DataNumbers";
+import CreatePostBtn from "./CreatePostBtn";
+
+// import { backend } from "../../../../../declarations/backend/index";
 
 interface Board {
   boardName: string;
@@ -32,19 +33,19 @@ const Body = () => {
   const className = "Dashboard__Body";
 
   async function fetchBoardNames() {
-    const response = await backend.getTotalPostInBoard() as BackendResponse;
-    const boards = response.data[0];
-    if (boards && boards.length > 0) {
-      const names = boards.map((board) => board.boardName);
-      const sizes = boards.map((board) => board.boardSize.toString());
-      console.log("size is ", sizes);
-      console.log("ended")
-      setBoardNames(names); // Update the state with all board names.
-      setBoardSizes(sizes); // Update the state with all board names.
-    } else {
-      console.log("No boards found.");
-    }
-    console.log(boardSizes[0]);
+    // const response = (await backend.getTotalPostInBoard()) as BackendResponse;
+    // const boards = response.data[0];
+    // if (boards && boards.length > 0) {
+    //   const names = boards.map((board) => board.boardName);
+    //   const sizes = boards.map((board) => board.boardSize.toString());
+    //   console.log("size is ", sizes);
+    //   console.log("ended");
+    //   setBoardNames(names); // Update the state with all board names.
+    //   setBoardSizes(sizes); // Update the state with all board names.
+    // } else {
+    //   console.log("No boards found.");
+    // }
+    // console.log(boardSizes[0]);
   }
 
   // async function getPost() {
@@ -56,19 +57,19 @@ const Body = () => {
     <div
       className={
         className +
-        `flex flex-col justify-between w-full text-dark dark:text-light bg-bottom bg-contain bg-no-repeat`
-      }
-      style={
-        darkColor == "dark"
-          ? {
-              backgroundImage: `url(${bg})`,
-            }
-          : {}
+        " " +
+        `flex flex-col justify-between w-full text-dark dark:text-light z-0 relative`
       }
     >
       <NavButtons />
 
       <CreatePostBtn />
+
+      <img
+        src={bg}
+        alt="Background image"
+        className="w-screen -z-10 h-screen absolute top-0 object-cover"
+      />
 
       <div
         className={
@@ -90,7 +91,7 @@ const Body = () => {
       </div>
 
       <Steps />
-      
+
       <DataNumbers />
     </div>
   );

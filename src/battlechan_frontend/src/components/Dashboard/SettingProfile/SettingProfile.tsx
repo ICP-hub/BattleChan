@@ -10,28 +10,21 @@ type Theme = {
 };
 
 const SettingProfile = (props: Theme) => {
-  const darkColor = document.documentElement.className;
   const className = "Dashboard__SettingProfile";
 
   return (
-    <React.Fragment>
+    <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+
       <NavButtons />
 
-      <div
-        className={
-          className +
-          " " +
-          `bg-[#ECECEC] dark:bg-dark h-full w-full py-10 px-40 text-dark dark:text-light bg-bottom bg-contain bg-no-repeat`
-        }
-        style={
-          darkColor == "dark"
-            ? {
-                backgroundImage: `url(${bg})`,
-              }
-            : {}
-        }
-      >
+      <img
+        src={bg}
+        alt="Background image"
+        className="w-screen -z-10 h-screen absolute top-0 object-cover"
+      />
+
+      <div className={`h-full w-full py-10 px-40 text-dark dark:text-light`}>
         <h1 className="text-3xl font-bold text-center">Customize Profile</h1>
 
         <section className="profileName p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">
@@ -74,7 +67,7 @@ const SettingProfile = (props: Theme) => {
           </button>
         </section>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 
