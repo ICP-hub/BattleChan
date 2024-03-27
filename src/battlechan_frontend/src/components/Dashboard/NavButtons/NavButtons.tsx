@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 const NavButtons = () => {
   const [active, setActive] = React.useState("Home");
   const className = "Home__NavButtons";
@@ -15,7 +14,9 @@ const NavButtons = () => {
       }
     >
       <p
-        className={`${active === "Home" ? `text-dark dark:text-light` : "text-grey"}`}
+        className={`${
+          active === "Home" ? `text-dark dark:text-light` : "text-grey"
+        }`}
         onClick={() => setActive("Home")}
       >
         Home
