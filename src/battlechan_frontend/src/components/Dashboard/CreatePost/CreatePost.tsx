@@ -19,11 +19,13 @@ const CreatePost = (props: Theme) => {
 
       <NavButtons />
 
-      <img
-        src={bg}
-        alt="Background image"
-        className="w-screen -z-10 h-screen absolute top-0 object-cover"
-      />
+      {document.documentElement.className == "dark" && (
+        <img
+          src={bg}
+          alt="Background image"
+          className="w-screen -z-10 h-screen absolute top-0 object-cover"
+        />
+      )}
 
       <div
         className={className + " " + "text-dark dark:text-light flex flex-col"}
