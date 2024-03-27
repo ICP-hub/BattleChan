@@ -21,6 +21,7 @@ const SettingProfile = (props: Theme) => {
     >
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <NavButtons />
+
       <div
         className={
           className +
