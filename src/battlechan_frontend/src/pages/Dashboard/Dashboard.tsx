@@ -7,26 +7,14 @@ import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import Body from "../../components/Dashboard/Body/Body";
 import RecentPosts from "../../components/Dashboard/RecentPosts/RecentPosts";
 
+
 type Theme = {
-  darkColor: string;
-  lightColor: string;
+  handleThemeSwitch: Function;
 };
 
 function Dashboard(props: Theme) {
   const className: string = "HomePage";
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
-
-  // const { isConnected } = useConnect();
-  // const navigate = useNavigate();
-
-  // React.useEffect(() => {
-  //   if (isConnected) {
-  //     navigate("/dashboard");
-  //   } else {
-  //     navigate("/");
-  //   }
-  // }, [isConnected, navigate]);
+  const darkColor = document.documentElement.className;
 
   return (
     <div
@@ -34,9 +22,9 @@ function Dashboard(props: Theme) {
         className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
       }
     >
-      <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <Body darkColor={darkColor} lightColor={lightColor} />
-      <RecentPosts darkColor={darkColor} lightColor={lightColor} />
+      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+      <Body />
+      <RecentPosts />
     </div>
   );
 }

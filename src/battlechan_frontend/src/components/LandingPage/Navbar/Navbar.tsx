@@ -8,21 +8,18 @@ import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 type Theme = {
-  darkColor: string;
-  lightColor: string;
   handleThemeSwitch: any;
 };
 
 const Navbar = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+  const darkColor = document.documentElement.className;
   const className = "LandingPage__Navbar";
 
   return (
     <nav
       className={
         className +
-        ` flex-row-center justify-between bg-${darkColor} text-${lightColor}` +
+        ` flex-row-center justify-between text-dark dark:text-light bg-light dark:bg-dark` +
         " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
@@ -39,17 +36,13 @@ const Navbar = (props: Theme) => {
           " laptop:gap-4 gap-2"
         }
       >
-        <ThemeSwitch
-          handleThemeSwitch={props.handleThemeSwitch}
-          darkColor={props.darkColor}
-          lightColor={props.lightColor}
-        />
+        <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />
 
         <div
           className={
             className +
-            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
-            "  laptop:p-1.5 laptop:pl-6 p-1.5 pl-4 text-base"
+            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
+            "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
           }
         >
           1 Time Token:
@@ -59,7 +52,7 @@ const Navbar = (props: Theme) => {
           <button
             className={
               className +
-              `__timeToken__butButton small-button bg-${lightColor} text-${darkColor}`
+              `__timeToken__butButton small-button text-light dark:text-dark bg-dark dark:bg-light`
             }
           >
             Buy
