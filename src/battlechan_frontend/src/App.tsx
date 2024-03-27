@@ -54,11 +54,7 @@ function App() {
           path="/"
           element={
             <Suspense fallback={<Loader />}>
-              <Landing
-                darkColor={darkColor}
-                lightColor={lightColor}
-                handleThemeSwitch={handleThemeSwitch}
-              />
+              <Landing handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
           }
         />
@@ -67,11 +63,7 @@ function App() {
           path="/dashboard/*"
           element={
             <Suspense fallback={<Loader />}>
-              <DashboardRoutes
-                darkColor={darkColor}
-                lightColor={lightColor}
-                handleThemeSwitch={handleThemeSwitch}
-              />
+              <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
           }
         />

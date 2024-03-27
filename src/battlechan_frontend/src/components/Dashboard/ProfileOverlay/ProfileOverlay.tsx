@@ -13,15 +13,14 @@ import { SiInternetcomputer } from "react-icons/si";
 type Props = {
   display: boolean;
   setProfilePopUp: any;
-  darkColor: string;
   handleThemeSwitch: any;
 };
 
 const ProfileOverlay = (props: Props) => {
   const className = "ProfileOverlay";
   const display = props.display;
-  const darkColor = props.darkColor;
   const setProfilePopUp = props.setProfilePopUp;
+  const darkColor = document.documentElement.className;
 
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
@@ -78,7 +77,7 @@ const ProfileOverlay = (props: Props) => {
 
           <Link to="/dashboard/settingProfile">
             <button className="flex-row-center gap-2 px-4 py-2">
-              <TbSettings />
+              <BsPersonCircle />
               My Profile
             </button>
           </Link>
@@ -98,8 +97,8 @@ const ProfileOverlay = (props: Props) => {
 
           <div className="flex-row-center justify-between p-4">
             <p className="flex-row-center gap-2">
-              {darkColor == "light" ? <GrSun /> : <BiMoon />}
-              <span>{darkColor == "light" ? "Light Mode" : "Dark Mode"}</span>
+              {darkColor == "dark" ? <BiMoon /> : <GrSun />}
+              <span>{darkColor == "dark" ? "Dark Mode" : "Light Mode"}</span>
             </p>
 
             <label className="inline-flex items-center cursor-pointer">
@@ -114,12 +113,12 @@ const ProfileOverlay = (props: Props) => {
           </div>
         </fieldset>
 
-          <button
-            type="button"
-            className="mt-8 white-button bg-dark-green text-light"
-          >
-            Logout
-          </button>
+        <button
+          type="button"
+          className="mt-8 white-button bg-dark-green text-light"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

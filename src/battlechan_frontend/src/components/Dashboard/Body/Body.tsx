@@ -13,21 +13,15 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
-const Body = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+const Body = () => {
+  const darkColor = document.documentElement.className;
   const className = "Home";
 
   return (
     <div
       className={
         className +
-        `flex flex-col justify-between w-full text-${lightColor} bg-bottom bg-contain bg-no-repeat`
+        `flex flex-col justify-between w-full text-dark dark:text-light bg-bottom bg-contain bg-no-repeat`
       }
       style={
         darkColor == "dark"
@@ -37,7 +31,7 @@ const Body = (props: Theme) => {
           : {}
       }
     >
-      <NavButtons darkColor={darkColor} lightColor={lightColor} />
+      <NavButtons />
 
       <div
         className={className + "__createPost" + " mt-12 flex justify-center"}
@@ -63,7 +57,7 @@ const Body = (props: Theme) => {
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`w-1/2 text-${lightColor} font-semibold text-lg text-start px-28`}
+          className={`w-1/2 text-dark dark:text-light font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
@@ -78,7 +72,7 @@ const Body = (props: Theme) => {
       >
         <div className="flex flex-col gap-4 items-start">
           <span
-            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
+            className={`py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
           >
             1
           </span>
@@ -87,7 +81,7 @@ const Body = (props: Theme) => {
 
         <div className="flex flex-col gap-4 items-start">
           <span
-            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
+            className={`py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
           >
             2
           </span>
@@ -95,7 +89,7 @@ const Body = (props: Theme) => {
         </div>
         <div className="flex flex-col gap-4 items-start">
           <span
-            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
+            className={`py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
           >
             3
           </span>
@@ -107,7 +101,7 @@ const Body = (props: Theme) => {
         className={
           className +
           "__postsNumber" +
-          ` py-6 px-10 mx-36 my-24 border border-${lightColor} rounded-md`
+          ` py-6 px-10 mx-36 my-24 border border-dark dark:border-light rounded-md`
         }
       >
         <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
@@ -161,7 +155,7 @@ const Body = (props: Theme) => {
         </div>
 
         <div
-          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-${lightColor}`}
+          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-dark dark:text-light`}
         >
           <div className="data__label py-6 px-4 h-full text-lg font-semibold">
             Total Posts
