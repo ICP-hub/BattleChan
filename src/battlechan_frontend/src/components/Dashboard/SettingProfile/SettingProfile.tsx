@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState} from "react";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 
@@ -10,11 +10,17 @@ type Theme = {
   lightColor: string;
 };
 
-const SettingProfile = (props: Theme) => {
-  const darkColor = props.darkColor;
+const SettingProfile = (props: Theme) =>  {
+  const darkColor  = props.darkColor;
   const lightColor = props.lightColor;
 
+  
+
   const className = "SettingProfile";
+
+  function handleThemeSwitch() {
+    
+  }
 
   return (
     <div
@@ -22,7 +28,7 @@ const SettingProfile = (props: Theme) => {
         className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
       }
     >
-      <Navbar darkColor={darkColor} lightColor={lightColor} />
+      <Navbar darkColor={darkColor} lightColor={lightColor}  handleThemeSwitch={handleThemeSwitch} />
       <NavButtons darkColor={darkColor} lightColor={lightColor} />
       <div
         className={

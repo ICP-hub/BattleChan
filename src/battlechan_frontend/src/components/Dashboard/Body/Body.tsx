@@ -1,5 +1,5 @@
-import React from "react";
-import { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
+
 import { Link } from "react-router-dom";
 
 import { FiBox } from "react-icons/fi";
@@ -23,8 +23,9 @@ type Theme = {
 };
 
 interface Board {
+  [x: string]: any;
   boardName: string;
-  boardSize: string ; 
+  boardSize: string;
   // Include other properties as needed, such as 'size'.
 }
 interface BackendResponse {
@@ -36,14 +37,14 @@ interface BackendResponse {
 
 const Body = (props: Theme) => {
 
-  
+
   const [boardNames, setBoardNames] = useState<string[]>([]);
   const [boardSizes, setBoardSizes] = useState<string[]>([]);
 
 
   useEffect(() => {
     fetchBoardNames();
-}, []);
+  }, []);
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "Home";
@@ -55,8 +56,8 @@ const Body = (props: Theme) => {
 
     if (boards && boards.length > 0) {
       const names = boards.map((board) => board.boardName);
-      const sizes = boards.map((board) => board.size.toString() );
-      console.log("size is " ,sizes) ; 
+      const sizes = boards.map((board) => board.size.toString());
+      console.log("size is ", sizes);
       console.log("ended")
 
       setBoardNames(names); // Update the state with all board names.
@@ -65,12 +66,12 @@ const Body = (props: Theme) => {
     } else {
       console.log("No boards found.");
     }
-    console.log(boardSizes[0]) ;
+    console.log(boardSizes[0]);
   }
 
   // async function getPost() {
   //   const posts = await backend.getUserInfo() as BackendResponse;
-    
+
   // }
 
 
@@ -85,8 +86,8 @@ const Body = (props: Theme) => {
       style={
         darkColor == "dark"
           ? {
-              backgroundImage: `url(${bg})`,
-            }
+            backgroundImage: `url(${bg})`,
+          }
           : {}
       }
     >
@@ -110,9 +111,8 @@ const Body = (props: Theme) => {
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${
-            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-          } leading-relaxed`}
+          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+            } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
@@ -214,9 +214,9 @@ const Body = (props: Theme) => {
             </div>
           </div>
 
-         
 
-          
+
+
         </div>
 
         <div
@@ -228,7 +228,7 @@ const Body = (props: Theme) => {
 
           <div className="data__numbers flex-row-center justify-between">
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span  >{boardSizes[0]  }</span>
+              <span  >{boardSizes[0]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">

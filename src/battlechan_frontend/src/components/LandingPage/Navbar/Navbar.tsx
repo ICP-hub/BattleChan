@@ -6,6 +6,13 @@ import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+import { RootState } from "../types/stateTypes";
+// store
+import { useSelector, useDispatch } from 'react-redux';
+import {authenticate, logout } from '../../../../src/redux/actions/authActions.js';
+
+// import { setName } from "../../../../src/redux/actions/nameAction.js";
+
 
 type Theme = {
   darkColor: string;
@@ -13,10 +20,16 @@ type Theme = {
   handleThemeSwitch: any;
 };
 
+
 const Navbar = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
+  let state : any = "" ; 
+  
+const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+
 
   return (
     <nav
@@ -71,7 +84,18 @@ const Navbar = (props: Theme) => {
             className + "__connectWalletBtn flex-row-center green-button"
           }
         >
-          <ConnectButton /> <MdArrowOutward />
+          <ConnectButton 
+          onConnect={() => {
+            dispatch(authenticate())
+            console.log(`connected to wallet auth =, ${isAuthenticated}`)
+            
+          }}
+          onDisconnect={() => {
+            dispatch(logout())
+            console.log(`disconnected to wallet auth =, ${isAuthenticated}`)
+
+          }}
+          /> <MdArrowOutward />
         </button>
 
         <ConnectDialog />
