@@ -1,5 +1,5 @@
 import React from "react";
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { FiBox } from "react-icons/fi";
@@ -15,7 +15,26 @@ import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 import { backend } from "../../../../../declarations/backend/index"
 
+interface Board {
+  boardName: string;
+  boardSize: string;
+  // Include other properties as needed, such as 'size'.
+}
+interface BackendResponse {
+  status: boolean;
+  data: Board[][]; // Assuming 'data' is an array of arrays of Board objects.
+  error: string[];
+}
+
 const Body = () => {
+  const [boardNames, setBoardNames] = useState<string[]>([]);
+  const [boardSizes, setBoardSizes] = useState<string[]>([]);
+
+
+  useEffect(() => {
+    fetchBoardNames();
+  }, []);
+
   const darkColor = document.documentElement.className;
   const className = "Home";
 
@@ -26,8 +45,8 @@ const Body = () => {
 
     if (boards && boards.length > 0) {
       const names = boards.map((board) => board.boardName);
-      const sizes = boards.map((board) => board.size.toString() );
-      console.log("size is " ,sizes) ; 
+      const sizes = boards.map((board) => board.boardSize.toString());
+      console.log("size is ", sizes);
       console.log("ended")
 
       setBoardNames(names); // Update the state with all board names.
@@ -36,12 +55,12 @@ const Body = () => {
     } else {
       console.log("No boards found.");
     }
-    console.log(boardSizes[0]) ;
+    console.log(boardSizes[0]);
   }
 
   // async function getPost() {
   //   const posts = await backend.getUserInfo() as BackendResponse;
-    
+
   // }
 
 
@@ -56,12 +75,12 @@ const Body = () => {
       style={
         darkColor == "dark"
           ? {
-              backgroundImage: `url(${bg})`,
-            }
+            backgroundImage: `url(${bg})`,
+          }
           : {}
       }
     >
-      
+
       <NavButtons />
 
       <div
@@ -81,9 +100,8 @@ const Body = () => {
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${
-            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-          } leading-relaxed`}
+          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+            } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
@@ -184,7 +202,7 @@ const Body = () => {
               </p>
             </div>
           </div>
-          
+
         </div>
 
         <div
@@ -196,7 +214,7 @@ const Body = () => {
 
           <div className="data__numbers flex-row-center justify-between">
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span  >{boardSizes[0]  }</span>
+              <span  >{boardSizes[0]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">
