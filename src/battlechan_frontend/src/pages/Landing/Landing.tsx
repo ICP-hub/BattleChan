@@ -10,7 +10,7 @@ import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
 import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 
-import { backend } from "../../../../declarations/backend/index";
+// import { backend } from "../../../../declarations/backend/index";
 
 type Theme = {
   handleThemeSwitch: any;
