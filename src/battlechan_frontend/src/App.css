@@ -20,7 +20,7 @@
   }
 
   .green-button {
-    @apply gap-2 font-semibold laptop:text-lg text-base rounded-[3rem] laptop:px-8 laptop:py-3.5 px-4 py-3 text-light bg-green;
+    @apply gap-2 font-semibold tablet:text-lg text-base rounded-[3rem] tablet:px-8 tablet:py-3.5 px-4 py-2.5 text-light bg-green;
   }
 
   .white-button {
@@ -28,7 +28,7 @@
   }
 
   .small-button {
-    @apply font-semibold tablet:text-lg text-sm rounded-[2rem] tablet:py-2 tablet:px-6 py-1 px-3;
+    @apply font-semibold tablet:text-lg text-sm rounded-[2rem] tablet:py-2 tablet:px-6 py-1.5 px-3;
   }
 }
 

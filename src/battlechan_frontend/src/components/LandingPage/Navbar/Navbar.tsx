@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import "./Navbar.scss";
+import { useMediaQuery } from "@mui/material";
 
 import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
@@ -13,20 +15,40 @@ type Theme = {
 
 const Navbar = (props: Theme) => {
   const darkColor = document.documentElement.className;
+  const is550px = useMediaQuery("(min-width: 550px)");
+  const is780px = useMediaQuery("(min-width: 780px)");
   const className = "LandingPage__Navbar";
+
+  useEffect(() => {
+    const div = document.querySelector(".LandingPage__Navbar__connectWalletBtn")
+      ?.children[0];
+
+    console.log(div);
+
+    if (div && !is780px) {
+      div.innerHTML = "";
+      div.setAttribute("data-value", "");
+    } else if (div) {
+      div.innerHTML = "Connect";
+      div.setAttribute("data-value", " Wallet");
+    }
+  }, [is780px]);
 
   return (
     <nav
       className={
         className +
         ` flex-row-center justify-between text-dark dark:text-light bg-light dark:bg-dark` +
-        " laptop:py-8 laptop:px-16 px-8 py-8"
+        " laptop:py-8 laptop:px-16 tablet:px-8 tablet:py-8 p-4"
       }
     >
       <img
         src={darkColor.includes("dark") ? darkLogo : lightLogo}
         alt="BATTLE CHAN"
-        className={className + "__logo w-28 object-contain pointer-events-none"}
+        className={
+          className +
+          "__logo tablet:w-28 w-20 object-contain pointer-events-none"
+        }
       />
 
       <section
@@ -36,7 +58,9 @@ const Navbar = (props: Theme) => {
           " laptop:gap-4 gap-2"
         }
       >
-        <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />
+        {is550px && (
+          <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />
+        )}
 
         <div
           className={
@@ -61,10 +85,12 @@ const Navbar = (props: Theme) => {
 
         <button
           className={
-            className + "__connectWalletBtn flex-row-center green-button"
+            className +
+            "__connectWalletBtn flex-row-center green-button laptop:gap-2 gap-0"
           }
         >
-          <ConnectButton /> <MdArrowOutward />
+          <ConnectButton />
+          <MdArrowOutward className="tablet:text-2xl text-lg" />
         </button>
 
         <ConnectDialog />
