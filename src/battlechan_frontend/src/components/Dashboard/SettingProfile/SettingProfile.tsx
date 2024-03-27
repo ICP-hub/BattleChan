@@ -17,12 +17,14 @@ const SettingProfile = (props: Theme) => {
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
       <NavButtons />
-
-      <img
-        src={bg}
-        alt="Background image"
-        className="w-screen -z-10 h-screen absolute top-0 object-cover"
-      />
+      
+      {document.documentElement.className == "dark" && (
+        <img
+          src={bg}
+          alt="Background image"
+          className="w-screen -z-10 h-screen absolute top-0 object-cover"
+        />
+      )}
 
       <div className={`h-full w-full py-10 px-40 text-dark dark:text-light`}>
         <h1 className="text-3xl font-bold text-center">Customize Profile</h1>

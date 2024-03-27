@@ -33,7 +33,7 @@ const ProfileOverlay = (props: Props) => {
         " " +
         `${
           display ? "block" : "hidden"
-        } fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
+        } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
     >
@@ -75,7 +75,7 @@ const ProfileOverlay = (props: Props) => {
             </div>
           </section>
 
-          <Link to="/dashboard/settingProfile">
+          <Link to="/dashboard/userProfile">
             <button className="flex-row-center gap-2 px-4 py-2">
               <BsPersonCircle />
               My Profile

@@ -65,12 +65,14 @@ const Body = () => {
 
       <CreatePostBtn />
 
-      <img
-        src={bg}
-        alt="Background image"
-        className="w-screen -z-10 h-screen absolute top-0 object-cover"
-      />
-
+      {document.documentElement.className == "dark" && (
+        <img
+          src={bg}
+          alt="Background image"
+          className="w-screen -z-10 h-screen absolute top-0 object-cover"
+        />
+      )}
+      
       <div
         className={
           className + "__tagLines" + " px-20 w-full flex flex-row my-12"
