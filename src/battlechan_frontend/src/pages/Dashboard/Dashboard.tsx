@@ -7,6 +7,7 @@ import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import Body from "../../components/Dashboard/Body/Body";
 import RecentPosts from "../../components/Dashboard/RecentPosts/RecentPosts";
 
+
 type Theme = {
   darkColor: string;
   lightColor: string;

@@ -17,6 +17,8 @@ const DashboardRoutes = lazy(() => import("./pages/Routes"));
 
 import Loader from "./components/Loader/Loader";
 
+import { backend } from "../../declarations/backend/index"
+
 function App() {
   const [dark, setDark] = React.useState(false);
   const [light, setLight] = React.useState(true);
