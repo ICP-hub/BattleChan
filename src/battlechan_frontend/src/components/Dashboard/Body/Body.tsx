@@ -15,7 +15,7 @@ import NavButtons from "../NavButtons/NavButtons";
 
 const Body = () => {
   const darkColor = document.documentElement.className;
-  const className = "Home";
+  const className = "Dashboard__Body";
 
   return (
     <div
@@ -67,7 +67,7 @@ const Body = () => {
         className={
           className +
           "__steps" +
-          `w-full flex-row-center justify-evenly p-10 my-8 mx-16 border border-light-green rounded-xl bg-${darkColor} text-lg`
+          ` w-full flex-row-center justify-evenly p-10 my-8 mx-16 border border-light-green rounded-xl bg-${darkColor} text-lg`
         }
       >
         <div className="flex flex-col gap-4 items-start">

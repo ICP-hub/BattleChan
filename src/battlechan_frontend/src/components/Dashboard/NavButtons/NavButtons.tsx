@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 const NavButtons = () => {
   const [active, setActive] = React.useState("Home");
   const className = "Home__NavButtons";
@@ -11,11 +10,13 @@ const NavButtons = () => {
       className={
         className +
         "__navigation" +
-        ` gap-12 py-8 flex-row-center justify-center font-normal text-lg bg-transparent`
+        ` gap-12 py-8 flex-row-center justify-center font-normal text-lg bg-[#ECECEC] dark:bg-dark`
       }
     >
       <p
-        className={`${active === "Home" ? `text-dark dark:text-light` : "text-grey"}`}
+        className={`${
+          active === "Home" ? `text-dark dark:text-light` : "text-grey"
+        }`}
         onClick={() => setActive("Home")}
       >
         Home

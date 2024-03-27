@@ -13,14 +13,9 @@ type Theme = {
 
 function Dashboard(props: Theme) {
   const className: string = "HomePage";
-  const darkColor = document.documentElement.className;
 
   return (
-    <div
-      className={
-        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
-      }
-    >
+    <div className={className + " " + `bg-[#ECECEC] dark:bg-dark`}>
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <Body />
       <RecentPosts />
