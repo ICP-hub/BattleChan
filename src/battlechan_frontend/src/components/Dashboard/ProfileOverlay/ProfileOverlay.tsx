@@ -75,7 +75,7 @@ const ProfileOverlay = (props: Props) => {
             </div>
           </section>
 
-          <Link to="/dashboard/settingProfile">
+          <Link to="/dashboard/userProfile">
             <button className="flex-row-center gap-2 px-4 py-2">
               <BsPersonCircle />
               My Profile
