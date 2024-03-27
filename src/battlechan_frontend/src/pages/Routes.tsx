@@ -4,6 +4,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
 import UserProfile from "../components/Dashboard/UserProfile/UserProfile";
 import PostDetails from "../components/Dashboard/PostDetails/PostDetails";
+import CreatePost from "../components/Dashboard/CreatePost/CreatePost";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -28,6 +29,10 @@ function Routing(props: Theme) {
         <Route
           path="/postDetails"
           element={<PostDetails handleThemeSwitch={props.handleThemeSwitch} />}
+        />
+        <Route
+          path="/createPost"
+          element={<CreatePost handleThemeSwitch={props.handleThemeSwitch} />}
         />
       </Routes>
     </React.Fragment>
