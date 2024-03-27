@@ -2,15 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { FiBox } from "react-icons/fi";
-import { FaRunning } from "react-icons/fa";
-import { BiMoviePlay } from "react-icons/bi";
-import { LuPlusCircle } from "react-icons/lu";
-import { GiPublicSpeaker } from "react-icons/gi";
-import { MdOutlineAddBusiness } from "react-icons/md";
-import { IoHardwareChipOutline } from "react-icons/io5";
-import { IoGameControllerOutline } from "react-icons/io5";
-
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 import CreatePostBtn from "./CreatePostBtn";
