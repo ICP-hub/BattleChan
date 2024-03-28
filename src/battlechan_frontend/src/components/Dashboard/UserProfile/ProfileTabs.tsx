@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import PostTab from "./PostTab";
+import CommentTab from "./CommentTab";
+import UpvoteTab from "./UpvoteTab";
 
 interface TabProps {
   id: string;
@@ -88,10 +90,10 @@ const ProfileTabs: React.FC = () => {
             <p className="block font-sans text-base">
               {/* Content for each tab */}
               {tab.id === "post" && <><PostTab /></>}
-              {tab.id === "comments" && <>comments</>}
+              {tab.id === "comments" && <><CommentTab /></>}
               {tab.id === "shared" && <>shared</>}
-              {tab.id === "upvote" && <>upvote</>}
-              {tab.id === "downvote" && <>downvote</>}
+              {tab.id === "upvote" && <><UpvoteTab /></>}
+              {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}
             </p>
           </div>
         ))}
