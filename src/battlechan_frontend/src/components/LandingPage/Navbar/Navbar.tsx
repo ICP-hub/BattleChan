@@ -1,37 +1,76 @@
 import React from "react";
 
-import { useMediaQuery } from "@mui/material";
-import { ConnectDialog } from "@connect2ic/react";
+import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
+import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import NavConnectButton from "./NavConnectButton";
+
+
+
+
+import { useConnect , Connect2ICProvider } from "@connect2ic/react";
+import { connect } from "react-redux";
 
 type Theme = {
+  darkColor: string;
+  lightColor: string;
   handleThemeSwitch: any;
 };
 
-const Navbar = (props: Theme) => {
+
+const  Navbar = (props: Theme) => {
+  const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
-  const is550px = useMediaQuery("(min-width: 550px)");
+  // const is550px = useMediaQuery("(min-width: 550px)");
   const darkColor = document.documentElement.className;
+
+  const {
+    principal,
+    isConnected,
+    connect,
+    disconnect,
+  } = useConnect({
+    onConnect: async () => {
+      // Define an async function inside the onConnect callback
+      const fetchData = async () => {
+        console.log('Principal (inside async function):', principal);
+      };
+
+      fetchData(); // Call the async function
+
+      console.log('Principal (immediately in onConnect):', principal);
+    },
+    onDisconnect: () => {
+      disconnect();
+      console.log('Disconnected. Principal:', principal);
+    },
+  });
+
+  function get() {
+    console.log(isConnected, principal)
+  }
+
+  React.useEffect(() => {
+    if (principal) {
+        console.log('Principalm eff:', principal);
+    }
+}, [principal]); // This effect runs whenever `principal` changes.
+
 
   return (
     <nav
       className={
         className +
-        ` flex-row-center justify-between text-dark dark:text-light bg-light dark:bg-dark` +
-        " laptop:py-8 laptop:px-16 tablet:px-8 tablet:py-8 p-4"
+        ` flex-row-center justify-between bg-${darkColor} text-${lightColor}` +
+        " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
       <img
         src={darkColor.includes("dark") ? darkLogo : lightLogo}
         alt="BATTLE CHAN"
-        className={
-          className +
-          "__logo tablet:w-28 w-20 object-contain pointer-events-none"
-        }
+        className={className + "__logo w-28 object-contain pointer-events-none"}
       />
 
       <section
@@ -41,12 +80,16 @@ const Navbar = (props: Theme) => {
           " laptop:gap-4 gap-2"
         }
       >
-        {is550px && <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />}
+        <ThemeSwitch
+          handleThemeSwitch={props.handleThemeSwitch}
+          darkColor={props.darkColor}
+          lightColor={props.lightColor}
+        />
 
         <div
           className={
             className +
-            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
+            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
             "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
           }
         >
@@ -57,7 +100,7 @@ const Navbar = (props: Theme) => {
           <button
             className={
               className +
-              `__timeToken__butButton small-button text-light dark:text-dark bg-dark dark:bg-light`
+              `__timeToken__butButton small-button bg-${lightColor} text-${darkColor}`
             }
           >
             Buy
@@ -69,7 +112,10 @@ const Navbar = (props: Theme) => {
             className + "__connectWalletBtn flex-row-center green-button"
           }
         >
-          <NavConnectButton />
+          
+
+          <ConnectButton/>
+           <MdArrowOutward /> 
         </button>
 
         <ConnectDialog />
