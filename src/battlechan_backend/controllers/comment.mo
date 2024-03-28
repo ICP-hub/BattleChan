@@ -75,6 +75,7 @@ module {
             updatedUserInfo;
         };
     };
+    
     public func updateLikedComments(userId : Types.UserId, postId : Types.PostId, commentId : Types.CommentId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
         updatedPostInfo : Types.PostInfo;
         updatedUserInfo : Types.UserInfo;
