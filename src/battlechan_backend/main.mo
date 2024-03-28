@@ -10,6 +10,8 @@ import Debug "mo:base/Debug";
 import Char "mo:base/Char";
 import { abs } "mo:base/Int";
 import { now } "mo:base/Time";
+import TrieMap "mo:base/TrieMap";
+import Prelude "mo:base/Prelude";
 
 import Types "utils/types";
 import Search "./controllers/search";
@@ -39,7 +41,7 @@ actor {
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<Types.PostInfo>>();
   private stable let freePostTime = 5;
   private stable let voteTime = 1;
-  stable  var postNameRootNode : Search.Node = Search.createNode();
+  stable var postNameRootNode : Search.Node = Search.createNode();
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
@@ -333,17 +335,53 @@ actor {
     { data = ?postInfo; status = true; error = null };
   };
 
-  public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat) : async Types.Result_1<[Types.PostInfo]> {
+  public shared ({ caller = userId }) func getArchivedPost(chunk_size:Nat, pageNo:Nat) : async Types.Result_1<[Types.PostInfo]> {
+   let postArray :[Types.PostInfo]= switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
+      case (null) { return { data = null; status = true; error = ?notFound.noPost }};
+      case (?result) { List.toArray(result) };
+    }; 
+    if(postArray.size()<= chunk_size){
+      return  { data = ?postArray; status = true; error = null }
+    };
+    let pages:[[Types.PostInfo]] = paginate<Types.PostInfo>(postArray,chunk_size);
+    if(pages.size() < pageNo){
+      return { data = null; status = true; error = ?notFound.noPageExist }
+    };
+    return { data = ?pages[pageNo]; status = true; error = ?notFound.noPost }
+    
+  };
 
-    let allPosts : [Types.PostInfo] = Trie.toArray<Types.PostId, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
+  public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostInfo]> {
 
-    let sortedData : [var Types.PostInfo] = bubbleSortPost(Array.thaw<Types.PostInfo>(allPosts), filterOptions);
+    let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
 
-    let paginatedPostData : [[Types.PostInfo]]= paginate<Types.PostInfo>(Array.freeze<Types.PostInfo>(sortedData), chunk_size);
-    if (paginatedPostData.size() < pageNo) {
+    let postMap = TrieMap.fromEntries<Types.BoardName, [Types.PostId]>(allPosts.vals(), Text.equal, Text.hash);
+
+    let postIds : [Types.PostId] = switch (postMap.get(boardName)) {
+      case (null) {
+        return { data = null; status = false; error = ?notFound.noBoardExist };
+      };
+      case (?r) { r };
+    };
+    var postList = List.nil<Types.PostInfo>();
+    for (i in postIds.vals()) {
+      switch (Trie.get(postTrieMap, textKey i, Text.equal)) {
+        case (?r) { postList := List.push(r, postList) };
+        case (null) {
+          return { data = null; status = false; error = ?notFound.noPost };
+        };
+      };
+    };
+    let postArray = List.toArray(postList);
+    if (postArray.size() <= chunk_size) {
+      return { data = ?postArray; status = false; error = null };
+    };
+    let sortedData : [var Types.PostInfo] = bubbleSortPost(Array.thaw<Types.PostInfo>(postArray), filterOptions);
+    let paginatedPostInfo : [[Types.PostInfo]] = paginate<Types.PostInfo>(Array.freeze<Types.PostInfo>(sortedData), chunk_size);
+    if (paginatedPostInfo.size() < pageNo) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
-    let page = paginatedPostData[pageNo];
+    let page = paginatedPostInfo[pageNo];
     return { data = ?page; status = true; error = null };
   };
 
