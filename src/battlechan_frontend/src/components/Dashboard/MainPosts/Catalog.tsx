@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import CatalogSVG from "./CatalogSVG";
 
 const Catalog = () => {
+  const [activeItem, setActiveItem] = useState<number>(1);
+
+  const handleClick = (itemId: number) => {
+    setActiveItem(itemId);
+  };
+
   const items = [
     { id: 1, label: "Business" },
     { id: 2, label: "Politics" },
     { id: 3, label: "Sports" },
     { id: 4, label: "Games" },
     { id: 5, label: "Technology" },
-    { id: 6, label: "Cinema" },
-    { id: 7, label: "Random" },
-    { id: 8, label: "Astrology" },
-    // Add more items as needed
+    { id: 6, label: "Crypto" },
+    { id: 7, label: "Cinema" },
   ];
 
   return (
@@ -18,21 +23,8 @@ const Catalog = () => {
       <ul className="flex items-center justify-start">
         {items.map((item) => (
           <li key={item.id} className="mr-4">
-            <button className="inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 bg-[#EDEDED] dark:bg-[#fff] text-[#0D0D0D] text-opacity-50 dark:text-[#000] rounded-full font-semibold shadow-sm shadow-[#0000001F]">
-              <svg
-                className="w-6 h-5"
-                viewBox="0 0 26 23"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  fill="currentColor"
-                  d="M20.8 23V19.0571H16.9V17.7429H20.8V13.8H22.1V17.7429H26V19.0571H22.1V23H20.8ZM1.599 19.7143V11.8286H0V10.5143L1.5002 3.94286H19.2998L20.8 10.5143V11.8286H19.201V16.1263H17.901V11.8286H11.999V19.7143H1.599ZM2.899 18.4H10.699V11.8286H2.899V18.4ZM1.5002 1.31429V0H19.2998V1.31429H1.5002ZM1.3156 10.5143H19.4844L18.2806 5.25714H2.5194L1.3156 10.5143Z"
-                />
-              </svg>
+            <button onClick={() => handleClick(item.id)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === item.id ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]": "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
+              <CatalogSVG label={item.label} />
               <span className="ml-1 leading-5">{item.label}</span>
               <svg
                 className="w-[6px] h-[3px] tablet:w-[13px] tablet:h-[7px]"

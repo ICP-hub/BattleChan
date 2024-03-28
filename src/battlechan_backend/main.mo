@@ -7,15 +7,22 @@ import List "mo:base/List";
 import Array "mo:base/Array";
 import Timer "mo:base/Timer";
 import Debug "mo:base/Debug";
+import Char "mo:base/Char";
 import { abs } "mo:base/Int";
 import { now } "mo:base/Time";
-// import payment "./token/main";
 
 import Types "utils/types";
+import Search "./controllers/search";
 import { createBoardInfo } "controllers/board";
-import { createUserInfo } "controllers/user";
+import { createUserInfo; updateUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
-import { createPostInfo; updateVoteStatus; archivePost; postVisiblity } "controllers/post";
+import {
+  createPostInfo;
+  updateVoteStatus;
+  archivePost;
+  postVisiblity;
+  bubbleSortPost;
+} "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId; paginate } "utils/helper";
 import { principalKey; textKey } "keys";
@@ -32,9 +39,12 @@ actor {
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<Types.PostInfo>>();
   private stable let freePostTime = 5;
   private stable let voteTime = 1;
-  private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
+  stable  var postNameRootNode : Search.Node = Search.createNode();
+
+  // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
   let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
+
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     try {
@@ -51,23 +61,49 @@ actor {
       #err(code, message);
     };
   };
+  public shared ({ caller = userId }) func updatedUserAccount(userReq : Types.UserReq) : async Types.Result {
+    try {
+      let userInfo : Types.UserInfo = updateUserInfo(userId, userReq, userTrieMap);
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
+      #ok(successMessage.update);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+    };
+  };
 
   public shared ({ caller = userId }) func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
     let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     try {
       let newBoard : Types.BoardInfo = createBoardInfo(userId, boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
-
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, newBoard).0;
-
       #ok(successMessage.insert);
     } catch (e) {
-
       let code = Error.code(e);
       let message = Error.message(e);
-
       #err(code, message);
     };
+  };
+
+  func insertNameNode(postName : Text, userId : Text) : () {
+    var newNode : Search.Node = postNameRootNode;
+    for (char in Text.toIter(postName)) {
+      let data = Char.toText(char);
+      switch (Trie.get(newNode.children, Search.textKey data, Text.equal)) {
+        case (null) {
+          newNode.children := Trie.put(newNode.children, Search.textKey data, Text.equal, Search.createNode()).0;
+        };
+        case (?_) {};
+      };
+      switch (Trie.get(newNode.children, Search.textKey data, Text.equal)) {
+        case (?node) { newNode := node };
+        case (null) { () };
+      };
+    };
+    newNode.isEndOfWord := true;
+    newNode.user := Array.append<Text>(newNode.user, [userId]);
   };
 
 
@@ -77,9 +113,8 @@ actor {
     try {
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
-
+      insertNameNode(postData.postName, postId);
       let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, postId, freePostTime, userId, postData, userTrieMap, boardTrieMap);
-
       let timerId = Timer.setTimer<system>(
         #seconds(freePostTime * 60 - abs(now() / 1_000_000_000) % freePostTime * 60),
         func() : async () {
@@ -121,7 +156,6 @@ actor {
         #seconds(updatedExpireTime * 60 - abs(now() / 1_000_000_000) % updatedExpireTime * 60),
         func() : async () {
           let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-
           userTrieMap := updatedUserTrie;
           postTrieMap := updatedPostTrie;
           userAchivedPostTrie := updatedArchivedTrie;
@@ -270,9 +304,7 @@ actor {
       };
       case (?userData) { userData.postIds };
     };
-
     var allPosts : List.List<Types.PostInfo> = List.nil<Types.PostInfo>();
-
     for (postId in userPostIds.vals()) {
       let id = getPostId(postId);
       switch (Trie.get(postTrieMap, textKey id, Text.equal)) {
@@ -280,39 +312,58 @@ actor {
         case (?postInfo) { allPosts := List.push(postInfo, allPosts) };
       };
     };
-
     if (List.size(allPosts) == 0) {
       return { data = null; status = false; error = ?notFound.noData };
     };
-
     return { data = ?List.toArray(allPosts); status = true; error = null };
   };
 
+  public query func searchPost(postName : Text) : async [Text] {
+    var node = postNameRootNode;
+    var result : [Text] = [];
+    for (char in Text.toIter(postName)) {
+      let data = Char.toText(char);
+      switch (Trie.get(node.children, Search.textKey data, Text.equal)) {
+        case (null) return result;
+        case (?childNode) node := childNode;
+      };
+    };
+    result := Search.collectUsers(node, result);
+    return result;
+  };
+
   public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
-
-    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
-
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
-
     { data = ?postInfo; status = true; error = null };
   };
 
+  public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat) : async Types.Result_1<[Types.PostInfo]> {
+
+    let allPosts : [Types.PostInfo] = Trie.toArray<Types.PostId, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
+
+    let sortedData : [var Types.PostInfo] = bubbleSortPost(Array.thaw<Types.PostInfo>(allPosts), filterOptions);
+
+    let paginatedPostData : [[Types.PostInfo]]= paginate<Types.PostInfo>(Array.freeze<Types.PostInfo>(sortedData), chunk_size);
+    if (paginatedPostData.size() < pageNo) {
+      return { data = null; status = false; error = ?notFound.noPageExist };
+    };
+    let page = paginatedPostData[pageNo];
+    return { data = ?page; status = true; error = null };
+  };
+
   public query func getSingleComment(commentId : Types.CommentId) : async Types.Result_1<Types.CommentInfo> {
-
     let postId : Types.PostId = getPostIdFromCommentId(commentId);
-
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
-
     switch (Trie.get(postInfo.comments, textKey commentId, Text.equal)) {
       case (?value) { return { data = ?value; status = true; error = null } };
       case (null) {
@@ -326,38 +377,29 @@ actor {
   };
 
   public query func getAllCommentOfPost(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
-
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
-
     let allData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
-
     let paginatedData = paginate<Types.CommentInfo>(allData, chunk_size);
-
     if (paginatedData.size() < pageNo) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
-
     let page = paginatedData[pageNo];
-
     return { data = ?page; status = true; error = null };
   };
 
   public query func getAllRepliesofComment(commentId : Types.CommentId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.ReplyInfo]> {
-
     let postId : Types.PostId = getPostIdFromCommentId(commentId);
-
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
       };
     };
-
     let commentInfo : Types.CommentInfo = switch (Trie.get(postInfo.comments, textKey commentId, Text.equal)) {
       case (null) {
         return { data = null; status = false; error = ?notFound.noComment };
@@ -366,26 +408,19 @@ actor {
         comment;
       };
     };
-
     let allData = Trie.toArray<Types.ReplyId, Types.ReplyInfo, Types.ReplyInfo>(commentInfo.replies, func(k, v) = v);
-
     if (allData.size() == 0) {
       return { data = null; status = false; error = ?notFound.noData };
     };
-
     let page = paginate<Types.ReplyInfo>(allData, chunk_size);
-
     if (page.size() < pageNo) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
-
     return { data = ?allData; status = true; error = null };
   };
 
   public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
-
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
-
     if (Array.size(boardPostData) == 0) {
       return { data = null; status = false; error = ?notFound.noData };
     };
@@ -400,10 +435,6 @@ actor {
     };
   };
 
-  ///  functionality for the token
-  // public func mintToken(amount:Nat) : async Text {
-  //   payment
-  // };
   let ledger = actor (tokenCanisterId) : Token.Token;
 
   public func burnToken(amount : Nat) : async Token.Result_2 {
@@ -435,6 +466,7 @@ actor {
       created_at_time = null;
     };
   };
+
   public shared ({ caller = userId }) func icrc2_transferFrom(transferto : Principal, amount : Nat) : async Token.Result_2 {
     await ledger.icrc2_transfer_from({
       spender_subaccount = null;
@@ -452,7 +484,6 @@ actor {
     userTrieMap := Trie.empty<Types.UserId, Types.UserInfo>();
     boardTrieMap := Trie.empty<Types.BoardName, Types.BoardInfo>();
     postTrieMap := Trie.empty<Types.PostId, Types.PostInfo>();
-
   };
 
 };

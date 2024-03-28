@@ -99,6 +99,11 @@ module {
         createdAt : Text;
         updatedAt : ?Text;
     };
+    public type FilterOptions = {
+        #upvote;
+        #downvote;
+        #recent;
+    };
     public type Message = Text;
     public type Result_1<V> = {
         data : ?V;

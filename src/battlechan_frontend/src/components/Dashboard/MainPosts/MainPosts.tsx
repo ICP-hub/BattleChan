@@ -6,6 +6,10 @@ import Pagination from "./Pagination";
 import Posts from "./Posts";
 import Catalog from "./Catalog";
 
+type Theme = {
+  handleThemeSwitch: Function;
+};
+
 const postsData = [
   {
     id: "#123056043",
@@ -261,7 +265,7 @@ const postsData = [
   },
 ];
 
-const MainPosts = () => {
+const MainPosts = (props: Theme) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Rank");
   const [postsPerPage, setPostsPerPage] = useState(10);
@@ -303,8 +307,8 @@ const MainPosts = () => {
       <div
         className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat`}
       >
-        {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
+        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+        <NavButtons />
 
         <div className="container py-6 mx-auto px-4 tablet:px-0 dark:text-[#fff] overflow-hidden">
           {/* create post button for desktop  */}
@@ -355,7 +359,7 @@ const MainPosts = () => {
           </div>
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-          <Catalog />
+            <Catalog />
           </div>
           {/* catalog and pagination and sort for desktop  */}
           <div className="flex justify-between items-center tablet:px-10">
