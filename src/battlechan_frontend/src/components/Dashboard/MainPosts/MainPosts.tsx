@@ -430,7 +430,7 @@ const MainPosts = (props: Theme) => {
             <div className="tablet:hidden flex items-center">
               {/* catalog button  */}
               <button className="flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-full font-semibold text-xs">
-                <svg
+                {/* <svg
                   className="w-4 h-4"
                   viewBox="0 0 26 23"
                   fill="none"
@@ -443,9 +443,9 @@ const MainPosts = (props: Theme) => {
                     fill="currentColor"
                     d="M20.8 23V19.0571H16.9V17.7429H20.8V13.8H22.1V17.7429H26V19.0571H22.1V23H20.8ZM1.599 19.7143V11.8286H0V10.5143L1.5002 3.94286H19.2998L20.8 10.5143V11.8286H19.201V16.1263H17.901V11.8286H11.999V19.7143H1.599ZM2.899 18.4H10.699V11.8286H2.899V18.4ZM1.5002 1.31429V0H19.2998V1.31429H1.5002ZM1.3156 10.5143H19.4844L18.2806 5.25714H2.5194L1.3156 10.5143Z"
                   />
-                </svg>
+                </svg> */}
 
-                <span className="ml-1 leading-5">Business</span>
+                <span className="ml-1 leading-5">Business1</span>
               </button>
               {/* filter button  */}
               <button className="flex items-center justify-center bg-transparent text-[#000] dark:text-[#fff] dark:text-opacity-50 rounded-md px-1 py-1 text-xs mx-1">

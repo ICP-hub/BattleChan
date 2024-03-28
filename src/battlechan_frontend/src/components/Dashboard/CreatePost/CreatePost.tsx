@@ -5,8 +5,12 @@ import NavButtons from "../NavButtons/NavButtons";
 
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
-
 import { backend } from "../../../../../declarations/backend";
+import { useCanister, useConnect } from "@connect2ic/react";
+// Custom hook : initialize the backend Canister
+const useBackend = () => {
+  return useCanister("backend");
+};
 
 interface Board {
   boardName: string;
@@ -24,12 +28,14 @@ type Theme = {
 };
 
 const CreatePost = (props: Theme) => {
+
   const [communities, setCommunities] = useState<string[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
   const [postName, setPostName] = useState("");
   const [postDes, setPostDes] = useState("");
   const [postMetaData, setPostMetaData] = useState("");
-  
+  // const [backend] = useBackend();
+  // console.log(backend);
   useEffect(() => {
     // Fetch data from backend canister function getTotalPostInBoard
     const fetchData = async () => {
@@ -41,7 +47,7 @@ const CreatePost = (props: Theme) => {
         }
 
         const boards = response.data[0];
-        // console.log(boards);
+        console.log(boards);
 
         if (boards && boards.length > 0) {
           const names = boards.map((board) => board.boardName);
@@ -56,6 +62,28 @@ const CreatePost = (props: Theme) => {
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
+
+  const handleCreatePost = async () => {
+    try {
+      const postData = {
+        postName: "", // Add your postName data here
+        postDes: "", // Add your postDes data here
+        postMetaData: "", // Add your postMetaData data here
+      };
+      const response = await backend.createPost(selectedCommunity, postData);
+      console.log(response);
+      // if (response.status) {
+      //   console.log("Post created successfully");
+      //   // Clear form fields or show success message
+      // } else {
+      //   console.error("Failed to create post:", response.error);
+      //   // Handle error, show error message, etc.
+      // }
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
 
   const className = "HomePage__CreatePost";
 
@@ -131,6 +159,7 @@ const CreatePost = (props: Theme) => {
                 <button
                   type="button"
                   className="small-button bg-dirty-light-green"
+                  onClick={handleCreatePost}
                 >
                   Post
                 </button>
