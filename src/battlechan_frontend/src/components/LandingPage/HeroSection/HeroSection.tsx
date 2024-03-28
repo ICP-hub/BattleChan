@@ -26,14 +26,14 @@ const HeroSection = () => {
         className={
           className +
           "__tagLines" +
-          " flex-col-center justify-center h-[55vh] w-full bg-no-repeat bg-center bg-contain gap-8"
+          " flex-col-center justify-center phone:h-[55vh] h-[40vh] w-full bg-no-repeat bg-center bg-contain gap-8"
         }
         style={{ backgroundImage: `url(${backImage})` }}
       >
         <h1
           className={
             `text-dark dark:text-light text-center font-bold` +
-            " tablet:text-5xl text-4xl"
+            " tablet:text-5xl phone:text-4xl text-2xl"
           }
         >
           The Combat Of Ideas: Where
@@ -44,7 +44,7 @@ const HeroSection = () => {
         <p
           className={
             `text-dark dark:text-light text-center font-normal` +
-            " tablet:text-base text-sm"
+            " tablet:text-base phone:text-sm text-xs"
           }
         >
           Unleash Your Voice , Join the Battle for Visibility and

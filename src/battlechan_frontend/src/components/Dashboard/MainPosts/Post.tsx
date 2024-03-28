@@ -11,6 +11,7 @@ interface PostProps {
   likes: string;
   comments: number;
   expireAt: BigInt
+  type?: string;
 }
 
 const Post: React.FC<PostProps> = ({
@@ -23,7 +24,8 @@ const Post: React.FC<PostProps> = ({
   content,
   likes,
   comments,
-  expireAt
+  expireAt,
+  type,
 }) => {
 
   const [time, setTime] = useState("0:00");
@@ -54,17 +56,18 @@ const Post: React.FC<PostProps> = ({
   };
 
   return (
-    <div className="flex gap-2 text-[10px] tablet:gap-6 p-2 pb-4 tablet:px-5 tablet:py-6 rounded-md border border-[#000] dark:border-[#FEFFFE] border-opacity-50">
-      {/* first children: Post image  */}
+    <div className={`flex gap-2 text-[10px] tablet:gap-6 p-2 pb-4 tablet:px-5 tablet:py-6 rounded-md border border-[#000] dark:border-[#FEFFFE] border-opacity-50 ${type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]": ""}`}>
+      {/* first children: Post image and upvote and downvote button */}
       <div className="flex flex-col items-center justify-center gap-4">
         <img
           alt="post image"
           className={`block w-28 tablet:w-52 rounded-[4px] aspect-square object-cover`}
           src={imageUrl}
         />
+        {/* upvote and downvote button  */}
         <div className="flex gap-2">
           <button
-            className="inline-flex items-center justify-center h-5 w-5  tablet:w-8 tablet:h-8 select-none rounded-sm bg-green text-center align-middle text-[10px] font-medium uppercase text-[#fff] shadow-md shadow-green/10 transition-all hover:shadow-lg hover:shadow-[rgb(17 24 39 / 0.2)] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+            className={`inline-flex items-center justify-center h-5 w-5  tablet:w-8 tablet:h-8 select-none rounded-[10px] bg-green text-center align-middle text-[10px] font-medium uppercase shadow-md shadow-green/10 transition-all hover:shadow-lg hover:shadow-[rgb(17 24 39 / 0.2)] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none ${type === "archive" ? "text-[#000] dark:text-[#fff]": "text-[#fff]"}`}
             type="button"
           >
             <svg
@@ -80,7 +83,7 @@ const Post: React.FC<PostProps> = ({
             </svg>
           </button>
           <button
-            className="inline-flex items-center justify-center h-5 w-5  tablet:w-8 tablet:h-8 select-none rounded-sm bg-[#A2A2A2] text-center align-middle text-[10px] font-medium uppercase text-[#fff] shadow-md shadow-green/10 transition-all hover:shadow-lg hover:shadow-[rgb(17 24 39 / 0.2)] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+            className={`inline-flex items-center justify-center h-5 w-5  tablet:w-8 tablet:h-8 select-none rounded-[10px] bg-[#A2A2A2] text-center align-middle text-[10px] font-medium uppercase shadow-md shadow-green/10 transition-all hover:shadow-lg hover:shadow-[rgb(17 24 39 / 0.2)] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none ${type === "archive" ? "text-[#000] dark:text-[#fff]": "text-[#fff]"}`}
             type="button"
           >
             <svg
@@ -97,7 +100,7 @@ const Post: React.FC<PostProps> = ({
           </button>
         </div>
       </div>
-      {/* second children: User details  */}
+      {/* second children: User details and post content  */}
       <div className="flex flex-col justify-between gap-1">
         {/* user avatar, name etc and post content */}
         <div>
@@ -110,14 +113,14 @@ const Post: React.FC<PostProps> = ({
               />
               <div>
                 <h1>{userName}</h1>
-                <div className="tablet: text-xs text-[10px] text-[#000] dark:text-[#fff] text-opacity-50">
+                <div className="tablet:text-xs text-[10px] text-[#000] dark:text-[#fff] text-opacity-50">
                   {timestamp} ; {id}
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <div className="tablet:text-xs">
-                <span className="text-[#18AF00]">{time}</span> left
+                <span className={`${type === "archive" ? "text-[#FF4343]": "text-[#18AF00]"}`}>{type === "archive" ? "0:00": duration}</span> left
               </div>
               {/* <div className="hidden tablet:inline-flex text-[#000] dark:text-[#fff]">
                 <svg

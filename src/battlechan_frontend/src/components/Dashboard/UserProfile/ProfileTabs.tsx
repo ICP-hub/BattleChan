@@ -31,7 +31,7 @@ const ProfileTabs: React.FC = () => {
           role="list"
         >
           {tabs.map((tab) => (
-            <li key={tab.id} className={`z-30 text-center rounded-full text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 ${
+            <li key={tab.id} className={`text-center rounded-full text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 ${
                 activeTab === tab.id
                   ? "text-[#fff] bg-green "
                   : ""

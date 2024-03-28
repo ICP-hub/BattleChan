@@ -12,9 +12,10 @@ interface PostData {
 
 interface PostsProps {
   currentPosts: PostData[];
+  type?: string;
 }
 let comments = 0;
-const Posts: React.FC<PostsProps> = ({ currentPosts }) => {
+const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
   return (
     <>
       {currentPosts.map((post, index) => (

@@ -264,6 +264,8 @@ import { backend } from "../../../../../declarations/backend";
 //   },
 // ];
 
+
+
 function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
   const date = new Date(milliseconds); // Convert milliseconds to a Date object
@@ -283,6 +285,7 @@ function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
 
 type Theme = {
   handleThemeSwitch: Function;
+  type?: string;
 };
 
 type PostInfo = {
@@ -366,8 +369,6 @@ const MainPosts = (props: Theme) => {
       >
         <Navbar handleThemeSwitch={props.handleThemeSwitch} />
         <NavButtons />
-        {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
 
         <div className="container py-6 mx-auto px-4 tablet:px-0 dark:text-[#fff] overflow-hidden">
           {/* create post button for desktop  */}
@@ -398,7 +399,7 @@ const MainPosts = (props: Theme) => {
           {/* most popular heading & create post button  */}
           <div className="flex justify-between tablet:justify-center items-center mb-4">
             <h1 className="font-bold tablet:text-3xl tablet:mb-14">
-              Most Popular
+              {props.type === "archive" ? "Archive" : "Most Popular"}
             </h1>
             <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
               <svg
@@ -626,7 +627,7 @@ const MainPosts = (props: Theme) => {
           </div>
           {/* posts  */}
           <div className="tablet:px-10 flex flex-col flex-wrap tablet:flex-row  items-center tablet:justify-center">
-            <Posts currentPosts={postsData} />
+            <Posts currentPosts={currentPosts} type={props.type} />
           </div>
         </div>
       </div>

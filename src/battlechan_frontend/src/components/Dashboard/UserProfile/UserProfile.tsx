@@ -17,16 +17,11 @@ const UserProfile = (props: Theme) => {
   return (
     <React.Fragment>
       <div
-        className={
-          className +
-          " " +
-          `min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`
-        }
+        className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`}
       >
-        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
-        <NavButtons />
-        {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
+          <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+
+          <NavButtons />
 
         <div className="container py-12 mx-auto px-4 tablet:px-12">
           <div className="mb-12">

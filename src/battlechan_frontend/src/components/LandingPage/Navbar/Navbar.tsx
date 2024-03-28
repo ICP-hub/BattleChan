@@ -1,38 +1,21 @@
-import React, { useEffect } from "react";
-import "./Navbar.scss";
+import React from "react";
+
 import { useMediaQuery } from "@mui/material";
+import { ConnectDialog } from "@connect2ic/react";
 
-import { ConnectButton, ConnectDialog } from "@connect2ic/react";
-
-import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+import NavConnectButton from "./NavConnectButton";
 
 type Theme = {
   handleThemeSwitch: any;
 };
 
 const Navbar = (props: Theme) => {
-  const darkColor = document.documentElement.className;
-  const is550px = useMediaQuery("(min-width: 550px)");
-  const is780px = useMediaQuery("(min-width: 780px)");
   const className = "LandingPage__Navbar";
-
-  useEffect(() => {
-    const div = document.querySelector(".LandingPage__Navbar__connectWalletBtn")
-      ?.children[0];
-
-    console.log(div);
-
-    if (div && !is780px) {
-      div.innerHTML = "";
-      div.setAttribute("data-value", "");
-    } else if (div) {
-      div.innerHTML = "Connect";
-      div.setAttribute("data-value", " Wallet");
-    }
-  }, [is780px]);
+  const is550px = useMediaQuery("(min-width: 550px)");
+  const darkColor = document.documentElement.className;
 
   return (
     <nav
@@ -58,9 +41,7 @@ const Navbar = (props: Theme) => {
           " laptop:gap-4 gap-2"
         }
       >
-        {is550px && (
-          <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />
-        )}
+        {is550px && <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />}
 
         <div
           className={
@@ -85,12 +66,10 @@ const Navbar = (props: Theme) => {
 
         <button
           className={
-            className +
-            "__connectWalletBtn flex-row-center green-button laptop:gap-2 gap-0"
+            className + "__connectWalletBtn flex-row-center green-button"
           }
         >
-          <ConnectButton />
-          <MdArrowOutward className="tablet:text-2xl text-lg" />
+          <NavConnectButton />
         </button>
 
         <ConnectDialog />
