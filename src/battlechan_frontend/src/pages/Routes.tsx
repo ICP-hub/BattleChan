@@ -25,8 +25,8 @@ function Routing(props: Theme) {
             <SettingProfile handleThemeSwitch={props.handleThemeSwitch} />
           }
         />
-        <Route path="/userProfile" element={<UserProfile />} />
-        <Route path="/mainPosts" element={<MainPosts />} />
+        <Route path="/userProfile" element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch} />} />
 
         <Route
           path="/postDetails"
