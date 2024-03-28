@@ -23,7 +23,7 @@ const Card = ({ post, index, postList }: PostType) => {
   };
 
   return (
-    <div className="trendingPostCard phone:min-w-[380px] min-w-[360px] rounded-lg bg-light text-dark shadow-md shadow-dark">
+    <div className="trendingPostCard phone:min-w-[380px] min-w-[360px] my-2 rounded-lg bg-light text-dark shadow-md shadow-dark">
       {/* Cover Image */}
       <img
         src={post.coverImg}
