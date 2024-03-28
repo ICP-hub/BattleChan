@@ -7,75 +7,98 @@ import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import image1 from "../../../images/why_battlechan1.png";
 import image2 from "../../../images/why_battlechan2.png";
 import bg from "../../../images/why_battalechan_bg.png";
+import { useMediaQuery } from "@mui/material";
 
 const WhyBattlechan = () => {
   const darkColor = document.documentElement.className;
+  const is550px = useMediaQuery("(min-width: 550px)");
   const className = "LandingPage__WhyBattelchan";
 
   return (
-    <div
-      className={
-        className +
-        ` w-full py-40 px-36 flex-direction-row ${
-          darkColor == "dark" ? "bg-[#121212]" : "light"
-        } text-dark dark:text-light`
-      }
-    >
-      {/* Texts and content */}
-      <section className="__texts w-1/2 flex-direction-col justify-between">
-        <h1 className=" text-5xl font-bold">Why Battlechan?</h1>
-
-        <div className="answersList gap-8 flex flex-col">
-          <div className="answer_1 flex flex-row items-base gap-4">
-            <GoPasskeyFill className="text-3xl" />
-            <div className="__text flex flex-col gap-4">
-              <h3 className="font-bold text-2xl">Post Ownership</h3>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, to
-              </p>
-            </div>
-          </div>
-          <div className="answer_2 flex flex-row items-base gap-4">
-            <MdVerifiedUser className="text-3xl" />
-            <div className="__text flex flex-col gap-4">
-              <h3 className="font-bold text-2xl">Transparency and Trust</h3>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, to
-              </p>
-            </div>
-          </div>
-          <div className="answer_3 flex flex-row items-base gap-4">
-            <FaMoneyBillTrendUp className="text-3xl" />
-            <div className="__text flex flex-col gap-4">
-              <h3 className="font-bold text-2xl">Economic Incentives</h3>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, to
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Images */}
-      <section
-        className="__images w-1/2 bg-no-repeat bg-center bg-contain flex-row-center justify-center"
-        style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
+    <React.Fragment>
+      {!is550px && (
+        <h1
+          className={`laptop:text-5xl text-4xl text-center font-bold ${
+            darkColor == "dark" ? "bg-[#121212]" : "light"
+          }`}
+        >
+          Why Battlechan?
+        </h1>
+      )}
+      <div
+        className={
+          className +
+          ` w-full xl:py-40 laptop:py-32 phone:py-24 py-16 xl:px-36 laptop:px-12 tablet:px-32 phone:px-20 px-12 gap-4 laptop:flex-direction-row flex-col-center flex-col-reverse ${
+            darkColor == "dark" ? "bg-[#121212]" : "light"
+          } text-dark dark:text-light`
+        }
       >
-        <img
-          src={image1}
-          alt="Reasons why choose battle chan image"
-          className="h-full w-[250px] pointer-events-none"
-        />
-        <img
-          src={image2}
-          alt="Reasons why choose battle chan image"
-          className=" w-[250px] pointer-events-none"
-        />
-      </section>
-    </div>
+        {/* Texts and content */}
+
+        <section className="__texts laptop:w-1/2 w-full gap-16 flex-direction-col justify-between">
+          {is550px && (
+            <h1 className="laptop:text-5xl text-4xl font-bold">
+              Why Battlechan?
+            </h1>
+          )}
+          <div className="answersList gap-8 flex flex-col">
+            <div className="answer_1 flex flex-row items-base gap-4">
+              <GoPasskeyFill className="text-3xl text-dirty-light-green" />
+              <div className="__text flex flex-col gap-4">
+                <h3 className="font-bold laptop:text-2xl text-lg">
+                  Post Ownership
+                </h3>
+                <p className="laptop:text-base text-sm">
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                  accusantium doloremque laudantium, to
+                </p>
+              </div>
+            </div>
+            <div className="answer_2 flex flex-row items-base gap-4">
+              <MdVerifiedUser className="text-3xl text-dirty-light-green" />
+              <div className="__text flex flex-col gap-4">
+                <h3 className="font-bold laptop:text-2xl text-lg">
+                  Transparency and Trust
+                </h3>
+                <p className="laptop:text-base text-sm">
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                  accusantium doloremque laudantium, to
+                </p>
+              </div>
+            </div>
+            <div className="answer_3 flex flex-row items-base gap-4">
+              <FaMoneyBillTrendUp className="text-3xl text-dirty-light-green" />
+              <div className="__text flex flex-col gap-4">
+                <h3 className="font-bold laptop:text-2xl text-lg">
+                  Economic Incentives
+                </h3>
+                <p className="laptop:text-base text-sm">
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                  accusantium doloremque laudantium, to
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Images */}
+        <section
+          className="__images laptop:w-1/2 w-full bg-no-repeat bg-center bg-contain flex-row-center justify-center"
+          style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
+        >
+          <img
+            src={image1}
+            alt="Reasons why choose battle chan image"
+            className="h-full xl:w-[250px] w-[220px] object-contain pointer-events-none"
+          />
+          <img
+            src={image2}
+            alt="Reasons why choose battle chan image"
+            className=" xl:w-[250px] w-[220px] object-contain pointer-events-none"
+          />
+        </section>
+      </div>
+    </React.Fragment>
   );
 };
 

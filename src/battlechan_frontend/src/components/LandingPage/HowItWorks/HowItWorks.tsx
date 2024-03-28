@@ -31,7 +31,7 @@ const HowItWorks = () => {
                 "howItWorks__card" +
                 " bg-dark-green z-1 flex-col-center rounded-lg cursor-default relative" +
                 " hover:bg-dirty-light-green hover:ease-in-out hover:duration-500" +
-                " xl:h-[520px] xl:w-[340px] laptop:h-[470px] laptop:w-[300px] big_tablet:h-[420px] big_tablet:w-[260px] phone:h-[470px] phone:w-[330px] h-[390px] w-[75vw]"
+                " xl:h-[520px] xl:w-[340px] laptop:h-[470px] laptop:w-[300px] big_tablet:h-[420px] big_tablet:w-[260px] phone:h-[470px] phone:w-[330px] h-[400px] w-[75vw]"
               }
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(5)}
@@ -54,7 +54,7 @@ const HowItWorks = () => {
                   "__displayed" +
                   " h-full w-full z-2 flex-direction-col absolute top-0 transition-all" +
                   " hover:ease-out hover:duration-500" +
-                  " xl:px-8 xl:py-20 px-4 py-16 xl:gap-4 big_tablet:gap-1 phone:gap-4 gap-2"
+                  " xl:px-8 xl:py-20 px-4 py-16 xl:gap-4 big_tablet:gap-1 phone:gap-4 gap-4"
                 }
                 style={{
                   transform: hoveredIndex === i ? "translateY(25%)" : "",

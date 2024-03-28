@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 
@@ -24,6 +24,15 @@ const Navbar = (props: Theme) => {
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is800px = useMediaQuery("(min-width: 800px)");
   const className = "HomePage__Navbar";
+
+  useEffect(() => {
+    const body = document.querySelector("body")?.style;
+    if (body && showOverlay == true) {
+      body.overflow = "hidden";
+    } else if (body) {
+      body.overflow = "auto";
+    }
+  }, [showOverlay]);
 
   return (
     <div
