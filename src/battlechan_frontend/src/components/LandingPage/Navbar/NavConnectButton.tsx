@@ -6,13 +6,12 @@ import { MdArrowOutward } from "react-icons/md";
 import { ConnectButton } from "@connect2ic/react";
 
 const NavConnectButton = () => {
-  const is780px = useMediaQuery("(min-width: 780px)");
+  const is820px = useMediaQuery("(min-width: 820px)");
 
   useEffect(() => {
     const button = document.querySelector(".connect-button");
-    console.log(button);
 
-    if (button && !is780px) {
+    if (button && !is820px) {
       button.setAttribute("data-value", "");
     }
   });
@@ -20,7 +19,7 @@ const NavConnectButton = () => {
   return (
     <ConnectButton>
       <span className="flex-row-center">
-        {is780px && "Connect Wallet "}
+        {is820px && "Connect Wallet "}
         <MdArrowOutward className="tablet:text-2xl text-lg" />
       </span>
     </ConnectButton>
