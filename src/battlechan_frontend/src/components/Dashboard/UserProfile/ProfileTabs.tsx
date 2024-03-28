@@ -14,7 +14,6 @@ const ProfileTabs: React.FC = () => {
   const tabs: TabProps[] = [
     { id: "post", label: "Post" },
     { id: "comments", label: "Comments" },
-    { id: "shared", label: "Shared" },
     { id: "upvote", label: "Upvote" },
     { id: "downvote", label: "Downvote" },
   ];
@@ -91,7 +90,6 @@ const ProfileTabs: React.FC = () => {
               {/* Content for each tab */}
               {tab.id === "post" && <><PostTab /></>}
               {tab.id === "comments" && <><CommentTab /></>}
-              {tab.id === "shared" && <>shared</>}
               {tab.id === "upvote" && <><UpvoteTab /></>}
               {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}
             </p>
