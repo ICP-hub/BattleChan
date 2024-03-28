@@ -6,7 +6,7 @@ import NavButtons from "../NavButtons/NavButtons";
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
 
-import { backend } from "../../../../../declarations/backend";
+// import { backend } from "../../../../../declarations/backend";
 
 interface Board {
   boardName: string;
