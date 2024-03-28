@@ -13,23 +13,23 @@ const AttractiveCompo = () => {
   return (
     <div
       className={
-        className + ` w-full h-[70vh] bg-light dark:bg-dark text-light relative`
+        className + ` w-full xl:h-[70vh] laptop:h-[60vh] tablet:h-[50vh] h-[40vh] bg-light dark:bg-dark text-light relative`
       }
     >
       <div
         className={
           className +
           "__slidingImages" +
-          " h-full flex-direction-col justify-center gap-8 absolute"
+          " h-full flex-direction-col justify-center gap-8 laptop:py-20 py-12 absolute"
         }
       >
-        <div className="frame_one w-full flex-direction-row flex-nowrap overflow-auto">
+        <div className="frame_one w-full h-1/2 flex-direction-row flex-nowrap overflow-auto">
           <img src={frame_1} alt="Frame1" />
           <img src={frame_1} alt="Frame1" />
           <img src={frame_1} alt="Frame1" />
         </div>
 
-        <div className="frame_two w-full flex-direction-row flex-nowrap overflow-auto">
+        <div className="frame_two w-full h-1/2 flex-direction-row flex-nowrap overflow-auto">
           <img src={frame_2} alt="Frame1" />
           <img src={frame_2} alt="Frame1" />
           <img src={frame_2} alt="Frame1" />
@@ -42,9 +42,9 @@ const AttractiveCompo = () => {
           "__texts h-full w-full bg-[#0000009e] z-10 absolute top-0 left-0 gap-8 flex-col-center justify-center"
         }
       >
-        <h1 className="text-5xl font-bold">Your Voice Matters Here!</h1>
+        <h1 className="tablet:text-5xl text-3xl font-bold">Your Voice Matters Here!</h1>
 
-        <p className="text-base font-semibold">
+        <p className="tablet:text-base text-sm font-semibold">
           Shape Contents and Earn Rewards
         </p>
 
