@@ -9,11 +9,6 @@ import bg from "../../../images/trending_post_bg.png";
 import Cover_Image from "../../../images/trendingPost_coverImg.png";
 import Profile_Pic from "../../../images/trendingPost_profile.png";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
 const trendingData = [
   { number: "4k+", title: "Community Members" },
   { number: "200", title: "Active Users" },
@@ -54,12 +49,11 @@ const postList = [
   },
 ];
 
-const TrendingPost = (props: Theme) => {
+const TrendingPost = () => {
   const [votes, setVotes] = React.useState<boolean[]>(
     Array(postList.length).fill(true)
   );
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+  const darkColor = document.documentElement.className;
   const className = "LandingPage__TrendingPosts";
 
   const handleVote = (index: number, vote: boolean) => {
@@ -85,9 +79,9 @@ const TrendingPost = (props: Theme) => {
         {trendingData &&
           trendingData.map((item, index) => (
             <div
-              className={`dataCard w-[220px] h-[90px] text-${lightColor} flex-col-center justify-between ${
+              className={`dataCard w-[220px] h-[90px] text-dark dark:text-light flex-col-center justify-between ${
                 index >= 0 && index < trendingData.length - 1
-                  ? `border-e-2 border-${lightColor}`
+                  ? `border-e-2 border-dark dark:border-light`
                   : ""
               }`}
             >

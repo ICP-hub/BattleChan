@@ -7,20 +7,13 @@ import frame_1 from "../../../images/frame1.png";
 import frame_2 from "../../../images/frame2.png";
 import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
-const AttractiveCompo = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+const AttractiveCompo = () => {
   const className = "LandingPage__AttractivePage";
 
   return (
     <div
       className={
-        className + ` w-full h-[70vh] bg-${darkColor} text-light relative`
+        className + ` w-full h-[70vh] bg-light dark:bg-dark text-light relative`
       }
     >
       <div

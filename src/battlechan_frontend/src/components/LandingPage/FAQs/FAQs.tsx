@@ -2,11 +2,6 @@ import React from "react";
 
 import bg from "../../../images/faq_bg.png";
 
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
-
 const list = [
   {
     index: 1,
@@ -34,9 +29,8 @@ const list = [
   },
 ];
 
-const FAQs = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
+const FAQs = () => {
+  const darkColor = document.documentElement.className;
   const className = "LandingPage__FAQs";
 
   return (
@@ -45,7 +39,7 @@ const FAQs = (props: Theme) => {
         className +
         ` w-full h-[100%] ${
           darkColor == "dark" ? "bg-[#121212]" : "bg-light"
-        } text-${lightColor} flex-direction-row`
+        } text-dark dark:text-light flex-direction-row`
       }
     >
       {/* Questions section */}
@@ -63,7 +57,7 @@ const FAQs = (props: Theme) => {
             list.map((item) => (
               <p className="questionPara flex-row-center p-2 border border-green rounded-[2rem]">
                 <span
-                  className={`py-1 px-3 font-semibold bg-${lightColor} text-${darkColor} rounded-[50%]`}
+                  className={`py-1 px-3 font-semibold text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
                 >
                   {item.index}
                 </span>
@@ -83,7 +77,7 @@ const FAQs = (props: Theme) => {
         style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
       >
         <p
-          className={`bg-${lightColor} text-${darkColor} font-semibold top-[30%] absolute p-4 rounded-lg`}
+          className={`text-light dark:text-dark bg-dark dark:bg-light font-semibold top-[30%] absolute p-4 rounded-lg`}
         >
           Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis
           suscipit laboriosam, nisi l
