@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 interface PostProps {
   id: string;
   imageUrl: string;
@@ -9,6 +10,7 @@ interface PostProps {
   content: string;
   likes: string;
   comments: number;
+  expireAt: BigInt
 }
 
 const Post: React.FC<PostProps> = ({
@@ -21,7 +23,36 @@ const Post: React.FC<PostProps> = ({
   content,
   likes,
   comments,
+  expireAt
 }) => {
+
+  const [time, setTime] = useState("0:00");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
+      const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+
+      if (remainingTime <= 0) {
+        clearInterval(interval);
+        setTime("0:00");
+        console.log('Post archived');
+      } else {
+        setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [expireAt]); // Run effect when expireAt changes
+
+  const formatTime = (remainingTime: bigint) => {
+    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
+    const minutes = Math.floor(seconds / 60); // Get remaining minutes
+    const remainingSeconds = seconds % 60; // Get remaining seconds
+    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
+
   return (
     <div className="flex gap-2 text-[10px] tablet:gap-6 p-2 pb-4 tablet:px-5 tablet:py-6 rounded-md border border-[#000] dark:border-[#FEFFFE] border-opacity-50">
       {/* first children: Post image  */}
@@ -86,7 +117,7 @@ const Post: React.FC<PostProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <div className="tablet:text-xs">
-                <span className="text-[#18AF00]">{duration}</span> left
+                <span className="text-[#18AF00]">{time}</span> left
               </div>
               {/* <div className="hidden tablet:inline-flex text-[#000] dark:text-[#fff]">
                 <svg
