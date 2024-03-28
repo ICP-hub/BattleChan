@@ -8,6 +8,7 @@ import Catalog from "./Catalog";
 
 type Theme = {
   handleThemeSwitch: Function;
+  type?: string;
 };
 
 const postsData = [
@@ -336,7 +337,7 @@ const MainPosts = (props: Theme) => {
           {/* most popular heading & create post button  */}
           <div className="flex justify-between tablet:justify-center items-center mb-4">
             <h1 className="font-bold tablet:text-3xl tablet:mb-14">
-              Most Popular
+              {props.type === "archive" ? "Archive" : "Most Popular"}
             </h1>
             <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
               <svg
@@ -567,7 +568,7 @@ const MainPosts = (props: Theme) => {
           </div>
           {/* posts  */}
           <div className="tablet:px-10 flex flex-col flex-wrap tablet:flex-row  items-center tablet:justify-center">
-            <Posts currentPosts={currentPosts} />
+            <Posts currentPosts={currentPosts} type={props.type} />
           </div>
         </div>
       </div>
