@@ -3,6 +3,7 @@ import React from "react";
 // import { useConnect } from "@connect2ic/react";
 // import { useNavigate } from "react-router-dom";
 
+import { useConnect } from "@connect2ic/react";
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import Body from "../../components/Dashboard/Body/Body";
 import RecentPosts from "../../components/Dashboard/RecentPosts/RecentPosts";
@@ -29,6 +30,18 @@ function Dashboard(props: Theme) {
   //     navigate("/");
   //   }
   // }, [isConnected, navigate]);
+const {
+   principal,
+  isConnected,
+  connect ,
+  disconnect,
+  status,
+  isInitializing,
+  isIdle,
+  isConnecting,
+  isDisconnecting,
+  activeProvider,} = useConnect()
+
 
   return (
     <div
@@ -41,6 +54,7 @@ function Dashboard(props: Theme) {
         lightColor={lightColor}
         handleThemeSwitch={props.handleThemeSwitch}
       />
+      <h1 className="bg-light "> hleo shivam {principal }</h1>
       <Body darkColor={darkColor} lightColor={lightColor} />
       <RecentPosts darkColor={darkColor} lightColor={lightColor} />
     </div>

@@ -9,7 +9,7 @@
 // import { createClient } from "@connect2ic/core";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Provider } from "react-redux";
-// import store from "../src/redux/store/store.js"
+// // import store from "../src/redux/store/store.js"
 
 // // Lazy load pages
 // const Landing = lazy(() => import("./pages/Landing/Landing"));
@@ -53,7 +53,7 @@
 //   }
 
 //   return (
-//     <Provider store={store}>
+//     // <Provider store={store}>
 //     <Router>
 //       <Routes>
 //         <Route
@@ -83,7 +83,7 @@
 //         />
 //       </Routes>
 //     </Router>
-//     </Provider>
+//     // </Provider>
 //   );
 // }
 
@@ -109,8 +109,8 @@ import { createClient } from "@connect2ic/core";
 import { PlugWallet } from "@connect2ic/core/providers";
 import { InternetIdentity } from "@connect2ic/core/providers";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "../src/redux/store/store.js";
+import {  } from "react-redux";
+// import store from "../src/redux/store/store.js";
 import AppRoutes from './AppRoutes'; // Make sure the path is correct
 
 import { backend } from "../../declarations/backend/index";
@@ -148,17 +148,18 @@ function App() {
   }
 
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
       <Router>
         <AppRoutes darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
       </Router>
-    </Provider>
+    // </Provider>
   );
 }
 
 const client = createClient({
   canisters: {},
   providers: [new InternetIdentity(), new PlugWallet()],
+
 });
 
 export default () => (

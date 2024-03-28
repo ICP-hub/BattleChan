@@ -6,13 +6,12 @@ import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import { RootState } from "../types/stateTypes";
-// store
-import { useSelector, useDispatch } from 'react-redux';
-import {authenticate, logout } from '../../../../src/redux/actions/authActions.js';
 
-// import { setName } from "../../../../src/redux/actions/nameAction.js";
 
+
+
+import { useConnect , Connect2ICProvider } from "@connect2ic/react";
+import { connect } from "react-redux";
 
 type Theme = {
   darkColor: string;
@@ -21,14 +20,43 @@ type Theme = {
 };
 
 
-const Navbar = (props: Theme) => {
+const  Navbar = (props: Theme) => {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
-  let state : any = "" ; 
-  
-const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const dispatch = useDispatch();
+
+  const {
+    principal,
+    isConnected,
+    connect,
+    disconnect,
+  } = useConnect({
+    onConnect: async () => {
+      // Define an async function inside the onConnect callback
+      const fetchData = async () => {
+        console.log('Principal (inside async function):', principal);
+      };
+
+      fetchData(); // Call the async function
+
+      console.log('Principal (immediately in onConnect):', principal);
+    },
+    onDisconnect: () => {
+      disconnect();
+      console.log('Disconnected. Principal:', principal);
+    },
+  });
+
+  function get() {
+    console.log(isConnected, principal)
+  }
+
+  React.useEffect(() => {
+    if (principal) {
+        console.log('Principalm eff:', principal);
+        // Perform any other actions that depend on the updated principal value
+    }
+}, [principal]); // This effect runs whenever `principal` changes.
 
 
   return (
@@ -39,6 +67,7 @@ const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthentic
         " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
+      <h1 onClick={get}>get value </h1>
       <img
         src={darkColor.includes("dark") ? darkLogo : lightLogo}
         alt="BATTLE CHAN"
@@ -84,19 +113,12 @@ const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthentic
             className + "__connectWalletBtn flex-row-center green-button"
           }
         >
-          <ConnectButton 
-          onConnect={() => {
-            dispatch(authenticate())
-            console.log(`connected to wallet auth =, ${isAuthenticated}`)
-            
-          }}
-          onDisconnect={() => {
-            dispatch(logout())
-            console.log(`disconnected to wallet auth =, ${isAuthenticated}`)
+          
 
-          }}
-          /> <MdArrowOutward />
+          <ConnectButton/>
+           <MdArrowOutward /> 
         </button>
+          <button className="bg-red" onClick={disconnect}>Disconnect Wallet </button>
 
         <ConnectDialog />
       </section>
