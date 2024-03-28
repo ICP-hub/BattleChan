@@ -63,12 +63,18 @@
   box-sizing: content-box;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 550px) {
   .App {
     &__icp-login-greet {
       h1 {
         font-size: x-large;
       }
     }
+  }
+
+  .img-styles {
+    height: 30px;
+    width: 30px;
+    margin-right: 10%;
   }
 }
