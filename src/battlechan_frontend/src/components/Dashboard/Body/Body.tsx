@@ -16,7 +16,7 @@ import { MdOutlineAddBusiness } from "react-icons/md";
 import { IoHardwareChipOutline } from "react-icons/io5";
 import { IoGameControllerOutline } from "react-icons/io5";
 
-import { backend } from "../../../../../declarations/backend";
+// import { backend } from "../../../../../declarations/backend";
 
 interface Board {
   boardName: string;

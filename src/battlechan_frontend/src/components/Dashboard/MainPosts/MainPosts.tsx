@@ -7,7 +7,7 @@ import Posts from "./Posts";
 import Catalog from "./Catalog";
 import { Link } from "react-router-dom";
 import CreatePostBtn from "../Body/CreatePostBtn";
-import { backend } from "../../../../../declarations/backend";
+// import { backend } from "../../../../../declarations/backend";
 
 // const postsData = [
 //   {
