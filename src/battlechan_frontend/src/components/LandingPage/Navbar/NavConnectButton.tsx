@@ -10,7 +10,6 @@ const NavConnectButton = () => {
 
   useEffect(() => {
     const button = document.querySelector(".connect-button");
-    console.log(button);
 
     if (button && !is820px) {
       button.setAttribute("data-value", "");
