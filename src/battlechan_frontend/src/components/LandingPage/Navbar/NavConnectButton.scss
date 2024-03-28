@@ -1,0 +1,3 @@
+.connect-button::after {
+  content: attr(data-value);
+}
