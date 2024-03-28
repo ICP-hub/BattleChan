@@ -39,7 +39,7 @@ actor {
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<Types.PostInfo>>();
   private stable let freePostTime = 5;
   private stable let voteTime = 1;
-  stable  var postNameRootNode : Search.Node = Search.createNode();
+  stable var postNameRootNode : Search.Node = Search.createNode();
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
@@ -62,6 +62,7 @@ actor {
     };
   };
   public shared ({ caller = userId }) func updatedUserAccount(userReq : Types.UserReq) : async Types.Result {
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     try {
       let userInfo : Types.UserInfo = updateUserInfo(userId, userReq, userTrieMap);
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
@@ -105,8 +106,6 @@ actor {
     newNode.isEndOfWord := true;
     newNode.user := Array.append<Text>(newNode.user, [userId]);
   };
-
-
 
   public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
     let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
@@ -295,7 +294,7 @@ actor {
   };
 
   public shared query ({ caller = userId }) func getUserPost() : async Types.Result_1<[Types.PostInfo]> {
-    
+
     let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
 
     let userPostIds : [Types.PostId] = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
@@ -348,7 +347,7 @@ actor {
 
     let sortedData : [var Types.PostInfo] = bubbleSortPost(Array.thaw<Types.PostInfo>(allPosts), filterOptions);
 
-    let paginatedPostData : [[Types.PostInfo]]= paginate<Types.PostInfo>(Array.freeze<Types.PostInfo>(sortedData), chunk_size);
+    let paginatedPostData : [[Types.PostInfo]] = paginate<Types.PostInfo>(Array.freeze<Types.PostInfo>(sortedData), chunk_size);
     if (paginatedPostData.size() < pageNo) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
@@ -477,6 +476,19 @@ actor {
       memo = null;
       created_at_time = null;
     });
+  };
+
+  public query func getPostsByBoard() : async Types.Result_1<[Types.PostInfo]> {
+
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+
+    // let postDataAll = Trie.toArray<Text, Types.PostInfo, { <Types.PostInfo> }>(postTrieMap, func(k, v) = v);
+    let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
+
+    if (Array.size(postDataAll) == 0) {
+      return { data = null; status = false; error = ?notFound.noData };
+    };
+    return { data = ?postDataAll; status = true; error = null };
   };
 
   //  function for the testing

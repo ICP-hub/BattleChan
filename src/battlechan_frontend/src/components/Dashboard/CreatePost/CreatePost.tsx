@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import KnowMore from "./KnowMore";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
@@ -6,11 +6,57 @@ import NavButtons from "../NavButtons/NavButtons";
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
 
+import { backend } from "../../../../../declarations/backend";
+
+interface Board {
+  boardName: string;
+  boardSize: string;
+  // Include other properties as needed, such as 'size'.
+}
+interface BackendResponse {
+  status: boolean;
+  data: Board[][]; // Assuming 'data' is an array of arrays of Board objects.
+  error: string[];
+}
+
 type Theme = {
   handleThemeSwitch: Function;
 };
 
 const CreatePost = (props: Theme) => {
+  const [communities, setCommunities] = useState<string[]>([]);
+  const [selectedCommunity, setSelectedCommunity] = useState<string>("");
+  const [postName, setPostName] = useState("");
+  const [postDes, setPostDes] = useState("");
+  const [postMetaData, setPostMetaData] = useState("");
+  
+  useEffect(() => {
+    // Fetch data from backend canister function getTotalPostInBoard
+    const fetchData = async () => {
+      try {
+        // Make a fetch call to your backend API
+        const response = (await backend.getTotalPostInBoard()) as BackendResponse;
+        if (response.status == false) {
+          throw new Error("Failed to fetch communities");
+        }
+
+        const boards = response.data[0];
+        // console.log(boards);
+
+        if (boards && boards.length > 0) {
+          const names = boards.map((board) => board.boardName);
+          setCommunities(names); // Update the state with all board names.
+        } else {
+          console.log("No boards found.");
+        }
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      }
+    };
+
+    fetchData(); // Call fetchData function when component mounts
+  }, []);
+
   const className = "HomePage__CreatePost";
 
   return (
@@ -64,12 +110,15 @@ const CreatePost = (props: Theme) => {
               <select
                 name="community"
                 className="w-full p-4 text-dark dark:text-light bg-light dark:bg-dark bg-light dark:bg-dark border border-light-green rounded-md"
+                value={selectedCommunity}
+                onChange={(e) => setSelectedCommunity(e.target.value)}
               >
-                <option value="0">
-                  Choose A Community Your Post Belongs To
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
+                <option value="0">Choose A Community Your Post Belongs To</option>
+                {communities.map((community, index: number) => (
+                  <option key={index} value={community}>
+                    {community}
+                  </option>
+                ))}
               </select>
 
               <div className="buttons w-full gap-4 flex-row-center py-8 justify-end">
@@ -82,7 +131,6 @@ const CreatePost = (props: Theme) => {
                 <button
                   type="button"
                   className="small-button bg-dirty-light-green"
-                  disabled
                 >
                   Post
                 </button>
