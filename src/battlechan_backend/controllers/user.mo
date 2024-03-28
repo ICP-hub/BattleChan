@@ -33,12 +33,39 @@ module {
             downvotedTo = [];
             likedComments = [];
             createdComments = [];
-            boardIds = [];
+            // boardIds = [];
             replyIds = [];
             postIds = [];
             createdAt = Int.toText(now());
             updatedAt = null;
         };
+    };
+    public func updateUserInfo(userId : Types.UserId, userData : Types.UserReq, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : Types.UserInfo {
+        if (checkText(userData.userName, 70) == false) {
+            Debug.trap(reject.outBound);
+        };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
+        let userInfo :Types.UserInfo= switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+            case (?value) { value };
+            case (null) {Debug.trap(reject.noAccount)};
+        };
+        return {
+            userId = userInfo.userId;
+            userName = userData.userName;
+            profileImg = userData.profileImg;
+            upvotedTo = userInfo.upvotedTo;
+            downvotedTo = userInfo.downvotedTo;
+            likedComments = userInfo.likedComments;
+            createdComments = userInfo.createdComments;
+            // boardIds = userInfo.boardIds;
+            replyIds = userInfo.replyIds;
+            postIds = userInfo.postIds;
+            createdAt = userInfo.createdAt;
+            updatedAt = ?Int.toText(now());
+        }
+
     };
     // public func getAllUserPost(userId : Types.UserId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) {
     //     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {

@@ -43,7 +43,7 @@ record {
      archive_options = record {
          num_blocks_to_archive = 1000000000;
          trigger_threshold = 1000000000;
-         controller_id = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae";
+         controller_id = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\";
          };
      feature_flags = opt record {icrc2 = true;};
  }
