@@ -30,10 +30,10 @@ const ThemeSwitch = (props: Theme) => {
           className="sr-only"
         />
         <div
-          className={`shadow-card flex h-[46px] w-[82px] items-center justify-center rounded-[2rem] bg-dark dark:bg-light`}
+          className={`shadow-card flex tablet:h-[46px] h-[38px] tablet:w-[82px] w-[65px] items-center justify-center rounded-[2rem] bg-dark dark:bg-light`}
         >
           <span
-            className={`flex h-9 w-9 items-center justify-center rounded-[2rem] transition ease-in duration-500 ${
+            className={`flex tablet:h-9 h-7 tablet:w-9 w-7 items-center justify-center rounded-[2rem] transition ease-in duration-500 ${
               !isChecked ? "bg-dirty-light-green text-light" : "text-dark"
             }`}
           >
@@ -60,7 +60,7 @@ const ThemeSwitch = (props: Theme) => {
             </svg>
           </span>
           <span
-            className={`flex h-9 w-9 items-center justify-center rounded-[2rem] transition ease-in duration-500 ${
+            className={`flex tablet:h-9 h-7 tablet:w-9 w-7 items-center justify-center rounded-[2rem] transition ease-in duration-500 ${
               isChecked ? "bg-dirty-light-green text-light" : "text-light"
             }`}
           >
