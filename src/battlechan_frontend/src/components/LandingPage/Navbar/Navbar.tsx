@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useMediaQuery } from "@mui/material";
-import {  ConnectDialog } from "@connect2ic/react";
+import { ConnectDialog } from "@connect2ic/react";
 
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
@@ -15,7 +15,6 @@ type Theme = {
 const Navbar = (props: Theme) => {
   const className = "LandingPage__Navbar";
   const is550px = useMediaQuery("(min-width: 550px)");
-  const is780px = useMediaQuery("(min-width: 780px)");
   const darkColor = document.documentElement.className;
 
   return (
