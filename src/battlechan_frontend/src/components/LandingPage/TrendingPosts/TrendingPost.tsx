@@ -40,11 +40,11 @@ const TrendingPost = () => {
       </section>
 
       <section className={className + "__trendingPosts w-full"}>
-        <h1 className="font-bold tablet:text-5xl text-4xl text-center px-2">
+        <h1 className="font-bold laptop:text-5xl text-4xl text-center px-2">
           This Week Trending Posts
         </h1>
         <br />
-        <p className="tablet:text-2xl text-lg font-normal text-center px-2">
+        <p className="laptop:text-2xl text-lg font-normal text-center px-2">
           Stay Ahead with Trending Posts & Explore the Posts Everyone's Talking
           About
         </p>

@@ -11,12 +11,12 @@ import { useMediaQuery } from "@mui/material";
 
 const WhyBattlechan = () => {
   const darkColor = document.documentElement.className;
-  const is550px = useMediaQuery("(min-width: 550px)");
+  const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "LandingPage__WhyBattelchan";
 
   return (
     <React.Fragment>
-      {!is550px && (
+      {!is1000px && (
         <h1
           className={`laptop:text-5xl text-4xl text-center font-bold ${
             darkColor == "dark" ? "bg-[#121212]" : "light"
@@ -36,7 +36,7 @@ const WhyBattlechan = () => {
         {/* Texts and content */}
 
         <section className="__texts laptop:w-1/2 w-full gap-16 flex-direction-col justify-between">
-          {is550px && (
+          {is1000px && (
             <h1 className="laptop:text-5xl text-4xl font-bold">
               Why Battlechan?
             </h1>
