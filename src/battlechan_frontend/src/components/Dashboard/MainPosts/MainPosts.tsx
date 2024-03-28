@@ -1,272 +1,330 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 import Post from "./Post";
 import Pagination from "./Pagination";
 import Posts from "./Posts";
 import Catalog from "./Catalog";
+import { Link } from "react-router-dom";
+import CreatePostBtn from "../Body/CreatePostBtn";
+import { backend } from "../../../../../declarations/backend";
+
+// const postsData = [
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Alexander Frem",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+//   {
+//     id: "#123056043",
+//     imageUrl: "/src/images/main-post-image.jpg",
+//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
+//     userName: "Saurabh Singh",
+//     timestamp: "Oct 29, 2023 ; 13:30",
+//     duration: "5:00 min",
+//     content:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+//     likes: "250K",
+//     comments: 750,
+//   },
+// ];
+
+
+
+function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
+  const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
+  const date = new Date(milliseconds); // Convert milliseconds to a Date object
+
+  // Get the month, day, year, hour, and minute from the Date object
+  const month = date.toLocaleString('default', { month: 'short' }); // Short month name (e.g., Jan)
+  const day = date.getDate(); // Day of the month (1-31)
+  const year = date.getFullYear(); // Full year (e.g., 2023)
+  const hour = date.getHours(); // Hour (0-23)
+  const minute = date.getMinutes(); // Minute (0-59)
+
+  // Format the timestamp string
+  const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? '0' + minute : minute}`;
+
+  return timestamp;
+}
 
 type Theme = {
   handleThemeSwitch: Function;
   type?: string;
 };
 
-const postsData = [
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Alexander Frem",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-  {
-    id: "#123056043",
-    imageUrl: "/src/images/main-post-image.jpg",
-    userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-    userName: "Saurabh Singh",
-    timestamp: "Oct 29, 2023 ; 13:30",
-    duration: "5:00 min",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-    likes: "250K",
-    comments: 750,
-  },
-];
+type PostInfo = {
+  postId: string;
+  postName: string;
+  postMetaData: string;
+  postDes: string;
+  expireAt: BigInt;
+  createdAt: string;
+};
 
 const MainPosts = (props: Theme) => {
+
+  const [postsData, setPostsData] = useState<PostInfo[]>([]);
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  async function getPosts() {
+    try {
+      const response = await backend.getPostsByBoard();
+      console.log(response);
+      if (response.status === true && response.data) {
+        // console.log(response);
+        const posts = response.data.flat(); // Flatten nested arrays if any
+        posts.forEach(element => {
+          const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+          console.log(timestamp);
+          element.createdAt = timestamp;
+        });
+        // console.log(posts);
+        setPostsData(posts);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Rank");
   const [postsPerPage, setPostsPerPage] = useState(10);
@@ -277,6 +335,7 @@ const MainPosts = (props: Theme) => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = postsData.slice(indexOfFirstPost, indexOfLastPost);
+  // console.log(currentPosts);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -313,25 +372,28 @@ const MainPosts = (props: Theme) => {
 
         <div className="container py-6 mx-auto px-4 tablet:px-0 dark:text-[#fff] overflow-hidden">
           {/* create post button for desktop  */}
-          <div className="hidden tablet:flex justify-center">
-            <button className="mb-24 flex items-center justify-center px-14 py-4 bg-green dark:bg-green text-[#fff] rounded-full font-semibold text-base">
-              <svg
-                className="w-5 h-5 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <span className="ml-1 leading-5">CreatePost</span>
-            </button>
+          <div className="mb-24 hidden tablet:flex justify-center">
+            <Link to="/dashboard/createPost">
+              <CreatePostBtn />
+              {/* <button className=" flex items-center justify-center px-14 py-4 bg-green dark:bg-green text-[#fff] rounded-full font-semibold text-base">
+                <svg
+                  className="w-5 h-5 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+                <span className="ml-1 leading-5">CreatePost</span>
+              </button> */}
+            </Link>
           </div>
 
           {/* most popular heading & create post button  */}
@@ -532,9 +594,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Rank" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Rank" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Rank")}
                     >
                       Rank
@@ -543,9 +604,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "New" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "New" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("New")}
                     >
                       New
@@ -554,9 +614,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Last Reply")}
                     >
                       Last Reply
