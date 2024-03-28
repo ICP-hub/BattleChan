@@ -33,7 +33,7 @@ const TrendingPost = () => {
                   : ""
               }`}
             >
-              <h1 className={`font-bold tablet:text-5xl phone:text-4xl text-3xl`}>{item.number}</h1>
+              <h1 className={`font-bold tablet:text-5xl text-4xl`}>{item.number}</h1>
               <p className={`tablet:text-base phone:text-sm text-xs font-normal text-center`}>{item.title}</p>
             </div>
           ))}

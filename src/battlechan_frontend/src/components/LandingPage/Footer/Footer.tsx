@@ -42,8 +42,13 @@ const Footer = () => {
               Support
               <FaTelegramPlane />
             </a>
-            <a href="#" className="m-4">
-              Team
+            <a href="#" className="m-4 gap-2 flex-row-center">
+              White Papers
+              <HiLink />
+            </a>
+            <a href="#" className="m-4 gap-2 flex-row-center">
+              Deck
+              <HiLink />
             </a>
           </div>
         </section>
