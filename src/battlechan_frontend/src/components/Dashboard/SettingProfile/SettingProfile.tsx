@@ -6,37 +6,27 @@ import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 
 type Theme = {
-  darkColor: string;
-  lightColor: string;
+  handleThemeSwitch: Function;
 };
 
 const SettingProfile = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
-
-  const className = "SettingProfile";
+  const className = "Dashboard__SettingProfile";
 
   return (
-    <div
-      className={
-        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
-      }
-    >
-      <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <NavButtons darkColor={darkColor} lightColor={lightColor} />
-      <div
-        className={
-          className +
-          ` h-full w-full py-10 px-40 text-${lightColor} bg-bottom bg-contain bg-no-repeat`
-        }
-        style={
-          darkColor == "dark"
-            ? {
-                backgroundImage: `url(${bg})`,
-              }
-            : {}
-        }
-      >
+    <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
+      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+
+      <NavButtons />
+      
+      {document.documentElement.className == "dark" && (
+        <img
+          src={bg}
+          alt="Background image"
+          className="w-screen -z-10 h-screen absolute top-0 object-cover"
+        />
+      )}
+
+      <div className={`h-full w-full py-10 px-40 text-dark dark:text-light`}>
         <h1 className="text-3xl font-bold text-center">Customize Profile</h1>
 
         <section className="profileName p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">
@@ -47,7 +37,7 @@ const SettingProfile = (props: Theme) => {
 
           <button
             type="button"
-            className={`bg-${lightColor} text-${darkColor} py-2 px-4 rounded-lg font-semibold`}
+            className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold`}
           >
             Change
           </button>
@@ -61,7 +51,7 @@ const SettingProfile = (props: Theme) => {
 
           <label
             htmlFor="profile"
-            className={`bg-${lightColor} text-${darkColor} py-2 px-4 rounded-lg font-semibold cursor-pointer`}
+            className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold cursor-pointer`}
           >
             Change
           </label>
