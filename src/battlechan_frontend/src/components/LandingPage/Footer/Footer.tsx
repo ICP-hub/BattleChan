@@ -1,7 +1,7 @@
 import React from "react";
 
 import { HiLink } from "react-icons/hi";
-import { BsDiscord } from "react-icons/bs";
+import { FaTelegramPlane } from "react-icons/fa";
 
 import { SiMedium } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
@@ -13,17 +13,15 @@ const Footer = () => {
 
   return (
     <footer
-      className={className + " w-full bg-dirty-light-green text-light flex-direction-col"}
+      className={
+        className + " w-full bg-dirty-light-green text-light flex-direction-col"
+      }
     >
       <div className={className + "__top p-8 flex-direction-row"}>
         {/* Links */}
         <section className="__left w-1/2 flex-direction-row justify-evenly">
           {/* Left */}
           <div className="flex-direction-col items-start">
-            <a href="#" className="m-4 gap-2 flex-row-center">
-              Partnership
-              <HiLink />
-            </a>
             <a href="#" className="m-4">
               Guide
             </a>
@@ -31,9 +29,7 @@ const Footer = () => {
               Internet Computer
               <HiLink />
             </a>
-            <a href="#" className="m-4">
-              Game Analytics
-            </a>
+
             <a href="#" className="m-4 gap-2 flex-row-center">
               Zealy Contest
               <HiLink />
@@ -42,18 +38,12 @@ const Footer = () => {
 
           {/* Right */}
           <div className="flex-direction-col items-start">
-            <a href="#" className="m-4">
-              Brand Toolkit
-            </a>
             <a href="#" className="m-4 gap-2 flex-row-center">
               Support
-              <BsDiscord />
+              <FaTelegramPlane />
             </a>
             <a href="#" className="m-4">
               Team
-            </a>
-            <a href="#" className="m-4">
-              Partners
             </a>
           </div>
         </section>
