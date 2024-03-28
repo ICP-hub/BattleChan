@@ -16,19 +16,26 @@ interface AppRoutesProps {
 }
 
 const AppRoutes = ({ darkColor, lightColor, handleThemeSwitch }) => {
-    // Replace the useSelector line below with the correct selector based on your state
-    //   let isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+    let { isConnected, principal , isIdle  , isInitializing} = useConnect()
+    const [allow, setAllow] = useState<null | boolean>(null);
 
-    //   React.useEffect(() => {
-    //     console.log(`Authentication state is now: ${isAuthenticated}`);
-    //   }, [isAuthenticated]);
-    
-
-    let { isConnected, principal } = useConnect()
-    const [allow, setAllow] = useState(false);
     useEffect(() => {
-        setAllow(true);
-      }, []);
+         if(isInitializing == false ){
+             setAllow(principal ? true : false);
+         }
+      console.log("intitilizing is " ,isInitializing)
+
+      }, [principal , isInitializing  ]);
+
+      console.log("allow is " ,allow)
+      console.log("principal is " ,principal)
+
+
+
+    let x  = "a"
+
+
+      
     
     React.useEffect(() => {
         if (principal) {
@@ -50,13 +57,14 @@ const AppRoutes = ({ darkColor, lightColor, handleThemeSwitch }) => {
             <Route
                 path="/dashboard/*"
                 element={
-                    allow  == true?  (
+                    allow == true ? (
                         <Suspense fallback={<Loader />}>
                             <DashboardRoutes darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
                         </Suspense>
-                    ) : (
+                    ) : allow == false ?(
+
                         <Navigate to="/" />
-                    )
+                    ) : null
                 }
             />
 

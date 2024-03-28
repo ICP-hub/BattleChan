@@ -54,7 +54,6 @@ const  Navbar = (props: Theme) => {
   React.useEffect(() => {
     if (principal) {
         console.log('Principalm eff:', principal);
-        // Perform any other actions that depend on the updated principal value
     }
 }, [principal]); // This effect runs whenever `principal` changes.
 
@@ -67,7 +66,6 @@ const  Navbar = (props: Theme) => {
         " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
-      <h1 onClick={get}>get value </h1>
       <img
         src={darkColor.includes("dark") ? darkLogo : lightLogo}
         alt="BATTLE CHAN"
@@ -118,7 +116,6 @@ const  Navbar = (props: Theme) => {
           <ConnectButton/>
            <MdArrowOutward /> 
         </button>
-          <button className="bg-red" onClick={disconnect}>Disconnect Wallet </button>
 
         <ConnectDialog />
       </section>

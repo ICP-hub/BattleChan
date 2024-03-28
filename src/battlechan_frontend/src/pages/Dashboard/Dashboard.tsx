@@ -20,16 +20,6 @@ function Dashboard(props: Theme) {
   const darkColor = props.darkColor;
   const lightColor = props.lightColor;
 
-  // const { isConnected } = useConnect();
-  // const navigate = useNavigate();
-
-  // React.useEffect(() => {
-  //   if (isConnected) {
-  //     navigate("/dashboard");
-  //   } else {
-  //     navigate("/");
-  //   }
-  // }, [isConnected, navigate]);
 const {
    principal,
   isConnected,
@@ -54,7 +44,6 @@ const {
         lightColor={lightColor}
         handleThemeSwitch={props.handleThemeSwitch}
       />
-      <h1 className="bg-light "> hleo shivam {principal }</h1>
       <Body darkColor={darkColor} lightColor={lightColor} />
       <RecentPosts darkColor={darkColor} lightColor={lightColor} />
     </div>
