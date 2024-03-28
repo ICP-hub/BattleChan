@@ -4,12 +4,14 @@ import Navbar from "../Navbar/Navbar";
 import postImage from "../../../images/trendingPost_coverImg.png";
 import NavButtons from "../NavButtons/NavButtons";
 import Comment from "./Comment";
+import { useParams } from "react-router-dom";
 
 type Theme = {
   handleThemeSwitch: Function;
 };
 
 const PostDetails = (props: Theme) => {
+  const { postId } = useParams();
   return (
     <React.Fragment>
       <div
@@ -22,7 +24,7 @@ const PostDetails = (props: Theme) => {
 
         <div className="container py-11 mx-auto px-4 tablet:px-40 dark:text-[#fff] overflow-hidden">
           <h1 className="font-bold dark:text-[#fff] mb-2 tablet:text-3xl tablet:mb-8">
-            #123456780
+            {postId}
           </h1>
           {/* post image  */}
           <div className="max-w-3xl">

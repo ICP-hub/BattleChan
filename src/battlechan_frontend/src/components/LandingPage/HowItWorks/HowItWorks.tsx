@@ -12,7 +12,7 @@ const HowItWorks = () => {
     <div
       className={className + " h-full w-full xl:py-24 py-20 bg-dark text-light"}
     >
-      <h1 className={className + "__heading font-bold phone:text-5xl text-4xl text-center"}>
+      <h1 className={className + "__heading font-bold laptop:text-5xl text-4xl text-center"}>
         How It Works
       </h1>
 

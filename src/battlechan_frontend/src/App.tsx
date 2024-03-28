@@ -15,7 +15,8 @@ const DashboardRoutes = lazy(() => import("./pages/Routes"));
 
 import Loader from "./components/Loader/Loader";
 
-import { backend } from "../../declarations/backend/index"
+// import { backend } from "../../declarations/backend/index"
+// import * as backend from "../../../.dfx/local/";
 
 type Theme = "dark" | "light";
 
