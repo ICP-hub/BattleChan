@@ -34,18 +34,10 @@ const {
 
 
   return (
-    <div
-      className={
-        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
-      }
-    >
-      <Navbar
-        darkColor={darkColor}
-        lightColor={lightColor}
-        handleThemeSwitch={props.handleThemeSwitch}
-      />
+    <div className={className + " " + `bg-[#ECECEC] dark:bg-dark`}>
+      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <Body darkColor={darkColor} lightColor={lightColor} />
-      <RecentPosts darkColor={darkColor} lightColor={lightColor} />
+      <RecentPosts />
     </div>
   );
 }

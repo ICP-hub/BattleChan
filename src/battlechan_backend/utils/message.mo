@@ -25,5 +25,6 @@ module {
         noReply = "No Reply Exist!";
         noData = "No Data Exist !";
         noPageExist = "No Page Exist!";
+        noBoardExist = "No Board Found";
     };
 };

@@ -63,7 +63,7 @@
   box-sizing: content-box;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 550px) {
   .App {
     &__icp-login-greet {
       h1 {
@@ -71,34 +71,10 @@
       }
     }
   }
-}
 
-@media screen and (max-width: 500px) {
-  .App {
-    &__connectedStatus {
-      font-size: medium;
-    }
-    &__icp-login-greet {
-      img {
-        width: 100px;
-      }
-      h1 {
-        font-size: large;
-      }
-    }
-  }
-
-  .connect-button {
-    font-size: medium;
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-  }
-  .button-styles {
-    height: 50px;
-  }
   .img-styles {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     margin-right: 10%;
   }
 }

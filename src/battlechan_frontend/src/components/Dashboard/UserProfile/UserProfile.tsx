@@ -9,21 +9,23 @@ import ProfileTabs from "./ProfileTabs";
 import PostGrid from "./PostGrid";
 
 type Theme = {
-  darkColor: string;
-  lightColor: string;
+  handleThemeSwitch: Function;
 };
 
 const UserProfile = (props: Theme) => {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
-
+  const className = "UserProfile";
   return (
-    <> 
-      <div className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`}>
-        {/* <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <NavButtons darkColor={darkColor} lightColor={lightColor} /> */}
+    <React.Fragment>
+      <div
+        className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`}
+      >
+        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
-        <div className="container py-12 mx-auto px-4 tablet:px-12">
+        <div className="hidden tablet:block">
+          <NavButtons />
+        </div>
+
+        <div className="container pb-12 mx-auto px-4 pt-8 tablet:px-12">
           <div className="mb-12">
             <UserProfileHeader />
           </div>
@@ -33,7 +35,7 @@ const UserProfile = (props: Theme) => {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 

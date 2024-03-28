@@ -6,6 +6,7 @@ import List "mo:base/List";
 import Trie "mo:base/Trie";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
+import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 // thapa technical
 // code step by step
@@ -301,6 +302,58 @@ module {
             updatedPostTrieMap;
             updatedExpireTime;
         };
+    };
+    public func bubbleSortPost(arr : [var Types.PostInfo], filterOptions :Types.FilterOptions) : [var Types.PostInfo] {
+        var n = arr.size();
+        var temp : Types.PostInfo = {
+            postId = "";
+            postName = "";
+            postDes = "";
+            upvotedBy = [];
+            downvotedBy = [];
+            upvotes = 0;
+            downvotes = 0;
+            postMetaData = "";
+            createdBy = Principal.fromText("2vxsx-fae");
+            comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
+            expireAt = 0;
+            createdAt = "";
+            updatedAt = ?"";
+        };
+        for (i in Iter.range(0, n - 2)) {
+            switch (filterOptions) {
+                case (#upvote) {
+                    for (j in Iter.range(0, n - i - 2)) {
+                        if (arr[j].upvotes < arr[j + 1].upvotes) {
+                            // Swap elements if they are in the wrong order
+                            temp := arr[j];
+                            arr[j] := arr[j + 1];
+                            arr[j + 1] := temp;
+                        };
+                    };
+                };
+                case (#downvote) {
+                    for (j in Iter.range(0, n - i - 2)) {
+                        if (arr[j].downvotes < arr[j + 1].downvotes) {
+                            // Swap elements if they are in the wrong order
+                            temp := arr[j];
+                            arr[j] := arr[j + 1];
+                            arr[j + 1] := temp;
+                        };
+                    };
+                };
+                case (#recent) { for (j in Iter.range(0, n - i - 2)) {
+                        if (arr[j].createdAt < arr[j + 1].createdAt) {
+                            // Swap elements if they are in the wrong order
+                            temp := arr[j];
+                            arr[j] := arr[j + 1];
+                            arr[j + 1] := temp;
+                        };
+                    };};
+            };
+
+        };
+        return arr;
     };
 
 };

@@ -21,9 +21,10 @@ type Theme = {
 
 
 const  Navbar = (props: Theme) => {
-  const darkColor = props.darkColor;
   const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
+  // const is550px = useMediaQuery("(min-width: 550px)");
+  const darkColor = document.documentElement.className;
 
   const {
     principal,

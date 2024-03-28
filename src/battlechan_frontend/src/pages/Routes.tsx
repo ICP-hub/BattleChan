@@ -3,44 +3,43 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
 import UserProfile from "../components/Dashboard/UserProfile/UserProfile";
+import MainPosts from "../components/Dashboard/MainPosts/MainPosts";
+import PostDetails from "../components/Dashboard/PostDetails/PostDetails";
+import CreatePost from "../components/Dashboard/CreatePost/CreatePost";
+import ArchivePosts from "../components/Dashboard/ArchivePosts/ArchivePosts";
 
 type Theme = {
-  darkColor: string;
-  lightColor: string;
   handleThemeSwitch: Function;
 };
 
 function Routing(props: Theme) {
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
-
   return (
-    <div>
+    <React.Fragment>
       <Routes>
         <Route
           path="/"
-          element={
-            <Dashboard
-              darkColor={darkColor}
-              lightColor={lightColor}
-              handleThemeSwitch={props.handleThemeSwitch}
-            />
-          }
+          element={<Dashboard handleThemeSwitch={props.handleThemeSwitch} />}
         />
         <Route
           path="/settingProfile"
           element={
-            <SettingProfile darkColor={darkColor} lightColor={lightColor} />
+            <SettingProfile handleThemeSwitch={props.handleThemeSwitch} />
           }
+        />
+        <Route path="/userProfile" element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route path="/archivePosts" element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />} />
+
+        <Route
+          path="/postDetails"
+          element={<PostDetails handleThemeSwitch={props.handleThemeSwitch} />}
         />
         <Route
-          path="/userProfile"
-          element={
-            <UserProfile darkColor={darkColor} lightColor={lightColor} />
-          }
+          path="/createPost"
+          element={<CreatePost handleThemeSwitch={props.handleThemeSwitch} />}
         />
       </Routes>
-    </div>
+    </React.Fragment>
   );
 }
 
