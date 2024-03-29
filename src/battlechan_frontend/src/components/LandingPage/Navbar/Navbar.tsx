@@ -1,11 +1,12 @@
 import React from "react";
 
 import { ConnectButton, ConnectDialog } from "@connect2ic/react";
-import { MdArrowOutward } from "react-icons/md";
 
+import { MdArrowOutward } from "react-icons/md";
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+
 
 import { useConnect, Connect2ICProvider } from "@connect2ic/react";
 import { connect } from "react-redux";
@@ -16,19 +17,28 @@ type Theme = {
   handleThemeSwitch: any;
 };
 
-const Navbar = (props: Theme) => {
+
+const  Navbar = (props: Theme) => {
+  const lightColor = props.lightColor;
   const className = "LandingPage__Navbar";
   // const is550px = useMediaQuery("(min-width: 550px)");
   const darkColor = document.documentElement.className;
 
-  const { principal, isConnected, connect, disconnect } = useConnect({
+
+  const {
+    principal,
+    isConnected,
+    connect,
+    disconnect,
+  } = useConnect({
     onConnect: async () => {
       // Define an async function inside the onConnect callback
       const fetchData = async () => {
-        console.log("Principal (inside async function):", principal);
+        console.log('Principal (inside async function):', principal);
       };
 
       fetchData(); // Call the async function
+
 
       console.log("Principal (immediately in onConnect):", principal);
     },
@@ -70,11 +80,11 @@ const Navbar = (props: Theme) => {
         }
       >
         <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />
-
+        
         <div
           className={
             className +
-            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
+            `__timeToken text-${lightColor} gap-2 flex-row-center border border-green rounded-[3rem]` +
             "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
           }
         >

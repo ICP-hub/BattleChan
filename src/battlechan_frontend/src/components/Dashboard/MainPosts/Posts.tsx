@@ -22,7 +22,6 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
   return (
     <React.Fragment>
       {currentPosts.map((post, index) => (
-<<<<<<< HEAD
         <div
           className={
             className +
@@ -45,25 +44,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             comments={comments}
             expireAt={post.expireAt}
           />
-=======
-        <div className={`w-full max-w-md tablet:max-w-none tablet:w-1/2 p-2  ${index % 2 !== 0 ? 'tablet:mt-6' : ''}`}>
-          <Link key={post.postId} to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}>
-            <Post
-              key={post.postId}
-              id={post.postId}
-              imageUrl={post.postMetaData}
-              userAvatarUrl="/src/images/main-post-user-avatar.jpg"
-              userName="Khushali"
-              timestamp={post.createdAt}
-              duration="5:00"
-              content={post.postDes}
-              likes="0"
-              comments={comments}
-              expireAt={post.expireAt}
-              type={type}
-            />
           </Link>
->>>>>>> main
         </div>
       ))}
     </React.Fragment>

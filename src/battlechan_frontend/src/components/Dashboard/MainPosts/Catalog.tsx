@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import CatalogSVG from "./CatalogSVG";
 import { useSearchParams } from "react-router-dom";
 
-<<<<<<< HEAD
 const Catalog = () => {
   const [activeItem, setActiveItem] = useState<number>(1);
   const className = "Dashboard__MainPosts__Catalog";
-=======
+
 interface CatalogProps {
   boardsData: string[]
 }
->>>>>>> main
+
 
 const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
   const [searchParams] = useSearchParams();
@@ -46,26 +45,11 @@ const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
       }
     >
       <ul className="flex items-center justify-start">
-<<<<<<< HEAD
-        {items.map((item) => (
-          <li key={item.id} className="mr-4">
-            <button
-              onClick={() => handleClick(item.id)}
-              className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${
-                activeItem === item.id
-                  ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]"
-                  : "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"
-              }`}
-            >
-              <CatalogSVG label={item.label} />
-              <span className="ml-1 leading-5">{item.label}</span>
-=======
         {boardsData.map((boardName) => (
           <li key={boardName} className="mr-4">
             <button onClick={() => handleClick(boardName)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === boardName.toLowerCase() ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]": "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
               <CatalogSVG label={boardName} />
               <span className="ml-1 leading-5">{boardName}</span>
->>>>>>> main
               <svg
                 className="w-[6px] h-[3px] tablet:w-[13px] tablet:h-[7px]"
                 viewBox="0 0 6 3"

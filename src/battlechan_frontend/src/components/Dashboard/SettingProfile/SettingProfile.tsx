@@ -78,7 +78,27 @@ const SettingProfile = (props: Theme) => {
         />
       )}
 
-      <div className={`h-full w-full py-10 px-40 text-dark dark:text-light`}>
+  return (
+    <div
+      className={
+        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
+      }
+    >
+      <Navbar darkColor={darkColor} lightColor={lightColor} />
+      <NavButtons darkColor={darkColor} lightColor={lightColor} />
+      <div
+        className={
+          className +
+          ` h-full w-full py-10 px-40 text-${lightColor} bg-bottom bg-contain bg-no-repeat`
+        }
+        style={
+          darkColor == "dark"
+            ? {
+                backgroundImage: `url(${bg})`,
+              }
+            : {}
+        }
+      >
         <h1 className="text-3xl font-bold text-center">Customize Profile</h1>
 
         <section className="profileName p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">

@@ -4,6 +4,7 @@ import "./App.css";
 
 import "./Connect2ic/Connect2ic.scss";
 
+
 import { Connect2ICProvider } from "@connect2ic/react";
 import { createClient } from "@connect2ic/core";
 import { PlugWallet } from "@connect2ic/core/providers";
@@ -13,6 +14,14 @@ import { InternetIdentity } from "@connect2ic/core/providers";
 
 // import * as backend from "../../../.dfx/local/canisters/backend/service.did"
 import AppRoutes from "./AppRoutes";
+
+import { BrowserRouter as Router } from "react-router-dom";
+
+// import store from "../src/redux/store/store.js";
+import AppRoutes from './AppRoutes'; // Make sure the path is correct
+
+import { backend,canisterId, } from "../../declarations/backend/index";
+// import * as backend from "../../../.dfx/local/canisters/backend/service.did"
 
 type Theme = "dark" | "light";
 
@@ -40,9 +49,11 @@ function App() {
 
   return (
     // <Provider store={store}>
+
     <Router>
       <AppRoutes handleThemeSwitch={handleThemeSwitch} />
     </Router>
+
     // </Provider>
   );
 }
