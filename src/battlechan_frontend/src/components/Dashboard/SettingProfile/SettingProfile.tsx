@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 
@@ -65,7 +64,11 @@ const SettingProfile = (props: Theme) => {
   }, [handleFileChange]);
 
   return (
-    <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
+    <div
+      className={
+        "bg-[#ECECEC] dark:bg-dark text-dark dark:text-light z-0 relative"
+      }
+    >
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
       <NavButtons />
@@ -78,32 +81,16 @@ const SettingProfile = (props: Theme) => {
         />
       )}
 
-  return (
-    <div
-      className={
-        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
-      }
-    >
-      <Navbar darkColor={darkColor} lightColor={lightColor} />
-      <NavButtons darkColor={darkColor} lightColor={lightColor} />
       <div
-        className={
-          className +
-          ` h-full w-full py-10 px-40 text-${lightColor} bg-bottom bg-contain bg-no-repeat`
-        }
-        style={
-          darkColor == "dark"
-            ? {
-                backgroundImage: `url(${bg})`,
-              }
-            : {}
-        }
+        className={className + " " + "big_tablet:px-36 tablet:px-12 px- pb-20"}
       >
-        <h1 className="text-3xl font-bold text-center">Customize Profile</h1>
+        <h1 className="tablet:text-3xl text-2xl font-bold text-center tablet:mt-12 mt-4">
+          Customize Profile
+        </h1>
 
-        <section className="profileName p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">
+        <section className="profileName tablet:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2">
-            <span className="font-semibold py-1">User Name</span>
+            <span className="font-semibold tablet::py-1 py-0">User Name</span>
             {!showInput && <span>{userName}</span>}
             {showInput && (
               <input
@@ -126,15 +113,11 @@ const SettingProfile = (props: Theme) => {
           </button>
         </section>
 
-        <section className="profilePhoto p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">
+        <section className="profilePhoto tablet:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start">
             <span className="font-semibold">Profile Picture</span>
             <span>Image Must Be in Jpeg Format</span>
           </div>
-
-          <p className={`${inputFileName == "" ? "hidden" : "block"}`}>
-            {inputFileName}
-          </p>
 
           <label
             htmlFor="profile"
@@ -154,15 +137,18 @@ const SettingProfile = (props: Theme) => {
           />
         </section>
 
-        <section className="image p-4 m-8 flex flex-row items-start">
+        <section className="image big_tablet:px-10 px-8 flex flex-col items-start">
           <img
             src={fileURL}
             alt="Profile Image"
             className="w-[150px] h-[150px] rounded-lg object-cover"
           />
+          <p className={`${inputFileName == "" ? "hidden" : "block"} py-4`}>
+            {inputFileName}
+          </p>
         </section>
 
-        <section className="image p-4 m-8 flex-col-center">
+        <section className="image p-4 flex-col-center">
           <button className="green-button" type="button">
             Update
           </button>

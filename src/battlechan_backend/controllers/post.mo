@@ -23,11 +23,11 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        if (anonymousCheck(userId) == true) {
-            Debug.trap(reject.anonymous);
-        };
+        // if (anonymousCheck(userId) == true) {
+        //     Debug.trap(reject.anonymous);
+        // };
 
-        if (checkText(postReq.postName, 50) == false) {
+        if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
         };
 
@@ -256,7 +256,8 @@ module {
 
         switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
             case (?value) {
-                achivedPostList := List.push((postId, postInfo), value);
+                let tempList = List.push((postId, postInfo), value);
+                achivedPostList := tempList;
             };
             case (null) {
                 achivedPostList := List.push((postId, postInfo), achivedPostList);
