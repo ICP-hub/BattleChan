@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+// import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 
 import "./Connect2ic/Connect2ic.scss";
@@ -13,7 +13,7 @@ import { InternetIdentity } from "@connect2ic/core/providers";
 // import store from "../src/redux/store/store.js";
 
 // import * as backend from "../../../.dfx/local/canisters/backend/service.did"
-import AppRoutes from "./AppRoutes";
+// import AppRoutes from "./AppRoutes";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
