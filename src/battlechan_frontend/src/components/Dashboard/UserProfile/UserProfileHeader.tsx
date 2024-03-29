@@ -1,7 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { useConnect } from "@connect2ic/react";
+
+const truncateString = (str: string, maxLength: number): string => {
+  if (str.length <= maxLength) {
+    return str;
+  }
+  return str.slice(0, maxLength) + '...';
+};
+
+
+
+
+ 
 const UserProfileHeader = () => {
+
+  const { principal, activeProvider } = useConnect();
+  let loggedInBy = activeProvider?.meta.name;
+  let user = "";
+  if(principal){
+    user = truncateString(principal, 17);
+  }
+
   return (
     <div className="bg-green rounded-2xl w-full p-6 tablet:p-[2.344rem] relative flex items-center gap-4 tablet:gap-12">
       <div className="relative w-[4.5rem] h-[4.5rem] tablet:w-[9.25rem] tablet:h-[9.25rem] laptop:w-[12rem] laptop:h-[12rem] rounded-[10px] bg-[#000000] flex items-center justify-center">
@@ -39,10 +60,10 @@ const UserProfileHeader = () => {
       </div>
       <div className="flex flex-col justify-center">
         <h1 className="font-inter font-bold text-[#FFFFFF] text-sm tablet:text-2xl laptop:text-[2.5rem]">
-          Kristin Watson
+           {user}
         </h1>
         <p className="tablet:mt-2 font-inter text-[#FFFFFF] text-opacity-50 text-xs tablet:text-base laptop:text-xl leading-5">
-          Internet Identity
+          {loggedInBy}
         </p>
       </div>
     </div>

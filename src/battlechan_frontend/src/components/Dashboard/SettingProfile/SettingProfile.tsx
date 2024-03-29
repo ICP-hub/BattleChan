@@ -5,13 +5,9 @@ import NavButtons from "../NavButtons/NavButtons";
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 
+
 type Theme = {
   handleThemeSwitch: Function;
-};
-
-const userData = {
-  name: "Kristin Watson",
-  imageURL: defaultImg,
 };
 
 const SettingProfile = (props: Theme) => {
@@ -64,11 +60,7 @@ const SettingProfile = (props: Theme) => {
   }, [handleFileChange]);
 
   return (
-    <div
-      className={
-        "bg-[#ECECEC] dark:bg-dark text-dark dark:text-light z-0 relative"
-      }
-    >
+    <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
       <NavButtons />
@@ -107,7 +99,6 @@ const SettingProfile = (props: Theme) => {
           <button
             type="button"
             className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold`}
-            onClick={handleNameChange}
           >
             Change
           </button>
@@ -122,19 +113,11 @@ const SettingProfile = (props: Theme) => {
           <label
             htmlFor="profile"
             className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold cursor-pointer`}
-            onClick={(e: any) => handleFileChange(e.target)}
           >
             Change
           </label>
 
-          <input
-            type="file"
-            name="Change"
-            id="profile"
-            className="hidden"
-            accept="image/*"
-            onChange={(e: any) => handleFileChange(e.target)}
-          />
+          <input type="file" name="Change" id="profile" className="hidden" />
         </section>
 
         <section className="image big_tablet:px-10 px-8 flex flex-col items-start">

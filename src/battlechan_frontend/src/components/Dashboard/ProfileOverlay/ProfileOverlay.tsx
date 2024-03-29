@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import UserImg from "../../../images/User.png";
+import { useConnect } from "@connect2ic/react";
 
 import { GrSun } from "react-icons/gr";
 import { BiMoon } from "react-icons/bi";
@@ -16,6 +17,18 @@ type Props = {
   handleThemeSwitch: any;
 };
 
+
+const truncateString = (str: string, maxLength: number): string => {
+  if (str.length <= maxLength) {
+    return str;
+  }
+  return str.slice(0, maxLength) + '...';
+};
+
+
+
+
+  
 const ProfileOverlay = (props: Props) => {
   const className = "ProfileOverlay";
   const display = props.display;
@@ -25,6 +38,13 @@ const ProfileOverlay = (props: Props) => {
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
   };
+  const { principal, activeProvider } = useConnect();
+
+  let loggedInBy = activeProvider?.meta.name;
+  let user = "";
+  if(principal){
+    user = truncateString(principal, 17);
+  }
 
   return (
     <div
@@ -47,7 +67,7 @@ const ProfileOverlay = (props: Props) => {
       >
         <section className="w-full flex-row-center justify-start gap-8 px-8">
           <img src={UserImg} alt="User Profile Image" />
-          <span className="text-lg">Kristin Watson</span>
+          <span className="text-lg">{user} </span>
         </section>
 
         <fieldset>
