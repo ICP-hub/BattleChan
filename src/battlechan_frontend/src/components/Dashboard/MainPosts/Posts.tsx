@@ -15,6 +15,7 @@ interface PostsProps {
   currentPosts: PostData[];
   type?: string;
 }
+
 let comments = 0;
 const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
   const className = "Dashboard__MainPosts__Posts";
@@ -24,26 +25,27 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
       {currentPosts.map((post, index) => (
         <div
           className={
-            className +
-            " " +
-            `p-2 ${
-              index % 2 !== 0 ? "tablet:mt-6" : ""
-            }`
+            className + " " + `p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
           }
         >
-          <Post
+          <Link
             key={post.postId}
-            id={post.postId}
-            imageUrl={post.postMetaData}
-            userAvatarUrl="/src/images/main-post-user-avatar.jpg"
-            userName="Khushali"
-            timestamp={post.createdAt}
-            duration="5:00"
-            content={post.postDes}
-            likes="0"
-            comments={comments}
-            expireAt={post.expireAt}
-          />
+            to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
+          >
+            <Post
+              key={post.postId}
+              id={post.postId}
+              imageUrl={post.postMetaData}
+              userAvatarUrl="/src/images/main-post-user-avatar.jpg"
+              userName="Khushali"
+              timestamp={post.createdAt}
+              duration="5:00"
+              content={post.postDes}
+              likes="0"
+              comments={comments}
+              expireAt={post.expireAt}
+              type={type}
+            />
           </Link>
         </div>
       ))}

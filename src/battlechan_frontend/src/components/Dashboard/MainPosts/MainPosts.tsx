@@ -50,30 +50,64 @@ type PostInfo = {
   createdAt: string;
 };
 
+interface Board {
+  boardName: string;
+  boardSize: string;
+}
+
+interface BackendResponse {
+  status: boolean;
+  data: Board[][];
+  error: string[];
+}
+
 const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
+  const [boardsData, setBoardsData] = useState<string[]>([]);
   const className = "Dashboard__MainPosts";
 
   useEffect(() => {
-    getPosts();
+    if (props.type == "archive") {
+      getPosts("archive");
+    } else {
+      getPosts();
+    }
   }, []);
 
-  async function getPosts() {
+  async function getPosts(postsType?: string) {
     try {
-      const response = await backend.getPostsByBoard();
-      console.log(response);
-      if (response.status === true && response.data) {
-        // console.log(response);
-        const posts = response.data.flat(); // Flatten nested arrays if any
-        posts.forEach((element) => {
-          const timestamp: string = convertNanosecondsToTimestamp(
-            BigInt(element.createdAt)
-          );
-          console.log(timestamp);
-          element.createdAt = timestamp;
-        });
-        // console.log(posts);
-        setPostsData(posts);
+      if (postsType === "archive") {
+        const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
+        console.log("Archive Post Response: ", response);
+        if (response.status === true && response.data) {
+          // console.log(response);
+          const posts = response.data.flat(); // Flatten nested arrays if any
+          posts.forEach((element) => {
+            const timestamp: string = convertNanosecondsToTimestamp(
+              BigInt(element.createdAt)
+            );
+            console.log(timestamp);
+            element.createdAt = timestamp;
+          });
+          // console.log(posts);
+          setPostsData(posts);
+        }
+      } else {
+        const response = await backend.getPostsByBoard();
+        console.log("Main Posts Response: ", response);
+        if (response.status === true && response.data) {
+          // console.log(response);
+          const posts = response.data.flat(); // Flatten nested arrays if any
+          posts.forEach((element) => {
+            const timestamp: string = convertNanosecondsToTimestamp(
+              BigInt(element.createdAt)
+            );
+            console.log(timestamp);
+            element.createdAt = timestamp;
+          });
+          // console.log(posts);
+          setPostsData(posts);
+        }
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -148,7 +182,7 @@ const MainPosts = (props: Theme) => {
 
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-            <Catalog />
+            <Catalog boardsData={boardsData} />
           </div>
 
           {/* catalog and pagination and sort for desktop  */}
