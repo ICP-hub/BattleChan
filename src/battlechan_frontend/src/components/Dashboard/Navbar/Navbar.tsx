@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
+import { useConnect } from "@connect2ic/react";
 
 import { TiThMenu } from "react-icons/ti";
 import { FaRegBell } from "react-icons/fa";
@@ -17,6 +18,15 @@ type Theme = {
   handleThemeSwitch: Function;
 };
 
+
+const truncateString  = (str: string, maxLength: number): string => {
+  if (str.length <= maxLength) {
+    return str;
+  }
+  return str.slice(0, maxLength) + '...';
+};
+// 
+
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
   const darkColor = document.documentElement.className;
@@ -24,6 +34,7 @@ const Navbar = (props: Theme) => {
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is800px = useMediaQuery("(min-width: 800px)");
   const className = "HomePage__Navbar";
+
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -33,6 +44,14 @@ const Navbar = (props: Theme) => {
       body.overflow = "auto";
     }
   }, [showOverlay]);
+
+
+  const { principal, activeProvider } = useConnect();
+  let loggedInBy = activeProvider?.meta.name;
+  let user = "";
+  if(principal){
+    user = truncateString(principal, 17);
+  }
 
   return (
     <div
@@ -104,7 +123,7 @@ const Navbar = (props: Theme) => {
         {is800px && (
           <React.Fragment>
             <div className="__userName_and_coins flex flex-col items-start">
-              <p className="text-nowrap">Kristin Watson</p>
+              <p className="text-nowrap">{user}</p>
               <div className="coinsCount flex-row-center gap-2">
                 <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
                 <span className="text-light-green">550</span>
