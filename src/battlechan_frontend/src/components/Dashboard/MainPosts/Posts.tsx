@@ -16,10 +16,20 @@ interface PostsProps {
 }
 let comments = 0;
 const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
+  const className = "Dashboard__MainPosts__Posts";
+
   return (
-    <>
+    <React.Fragment>
       {currentPosts.map((post, index) => (
-        <div className={`w-full max-w-md tablet:max-w-none tablet:w-1/2 p-2  ${index % 2 !== 0 ? 'tablet:mt-6' : ''}`}>
+        <div
+          className={
+            className +
+            " " +
+            `p-2 ${
+              index % 2 !== 0 ? "tablet:mt-6" : ""
+            }`
+          }
+        >
           <Post
             key={post.postId}
             id={post.postId}
@@ -35,7 +45,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
           />
         </div>
       ))}
-    </>
+    </React.Fragment>
   );
 };
 

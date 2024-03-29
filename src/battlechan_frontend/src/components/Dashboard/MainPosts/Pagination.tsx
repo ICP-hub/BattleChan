@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface PaginationProps {
   totalPosts: number; // Total number of items to paginate through
@@ -18,6 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
   goToPage,
 }) => {
   const totalPages = Math.ceil(totalPosts / postsPerPage);
+  const className = "Dashboard__MainPosts__Pagination";
 
   const getPageNumbers = () => {
     const pageNumbers: number[] = [];
@@ -72,7 +73,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex gap-1">
+    <div className={className + " " + "flex gap-1"}>
       {/* prev button */}
       {currentPage > 1 && (
         <button

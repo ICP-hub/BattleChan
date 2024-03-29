@@ -3,6 +3,7 @@ import CatalogSVG from "./CatalogSVG";
 
 const Catalog = () => {
   const [activeItem, setActiveItem] = useState<number>(1);
+  const className = "Dashboard__MainPosts__Catalog";
 
   const handleClick = (itemId: number) => {
     setActiveItem(itemId);
@@ -19,11 +20,24 @@ const Catalog = () => {
   ];
 
   return (
-    <div className="hidden w-full tablet:inline-flex flex-nowrap mb-20 overflow-x-auto no-scrollbar">
+    <div
+      className={
+        className +
+        " " +
+        "hidden w-full tablet:inline-flex flex-nowrap  overflow-x-auto no-scrollbar"
+      }
+    >
       <ul className="flex items-center justify-start">
         {items.map((item) => (
           <li key={item.id} className="mr-4">
-            <button onClick={() => handleClick(item.id)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === item.id ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]": "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
+            <button
+              onClick={() => handleClick(item.id)}
+              className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${
+                activeItem === item.id
+                  ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]"
+                  : "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"
+              }`}
+            >
               <CatalogSVG label={item.label} />
               <span className="ml-1 leading-5">{item.label}</span>
               <svg
