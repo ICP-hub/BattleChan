@@ -64,7 +64,11 @@ module {
             upvotes = 0;
             downvotes = 0;
             comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
-            createdBy = userId;
+            createdBy = {
+                ownerId = userId;
+                userName = userInfo.userName;
+                userProfile = userInfo.profileImg;
+            };
             expireAt = calcExpireTime(freePostTime);
             createdAt = Int.toText(now());
             updatedAt = null;
@@ -238,7 +242,7 @@ module {
             userId = userInfo.userId;
             userName = userInfo.userName;
             profileImg = userInfo.profileImg;
-            upvotedTo = List.toArray(List.push(postId, List.fromArray(userInfo.upvotedTo)));
+            upvotedTo = userInfo.upvotedTo;
             downvotedTo = userInfo.downvotedTo;
             likedComments = userInfo.likedComments;
             createdComments = userInfo.createdComments;
@@ -316,7 +320,11 @@ module {
             upvotes = 0;
             downvotes = 0;
             postMetaData = "";
-            createdBy = Principal.fromText("2vxsx-fae");
+            createdBy = {
+                ownerId = Principal.fromText("2vxsx-fae");
+                userName = "";
+                userProfile = "";
+            };
             comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
             expireAt = 0;
             createdAt = "";
