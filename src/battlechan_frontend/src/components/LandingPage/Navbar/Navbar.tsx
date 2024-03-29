@@ -8,9 +8,7 @@ import lightLogo from "../../../images/light_logo.png";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 
-
-
-import { useConnect , Connect2ICProvider } from "@connect2ic/react";
+import { useConnect, Connect2ICProvider } from "@connect2ic/react";
 import { connect } from "react-redux";
 
 type Theme = {
@@ -26,6 +24,7 @@ const  Navbar = (props: Theme) => {
   // const is550px = useMediaQuery("(min-width: 550px)");
   const darkColor = document.documentElement.className;
 
+
   const {
     principal,
     isConnected,
@@ -40,30 +39,30 @@ const  Navbar = (props: Theme) => {
 
       fetchData(); // Call the async function
 
-      console.log('Principal (immediately in onConnect):', principal);
+
+      console.log("Principal (immediately in onConnect):", principal);
     },
     onDisconnect: () => {
       disconnect();
-      console.log('Disconnected. Principal:', principal);
+      console.log("Disconnected. Principal:", principal);
     },
   });
 
   function get() {
-    console.log(isConnected, principal)
+    console.log(isConnected, principal);
   }
 
   React.useEffect(() => {
     if (principal) {
-        console.log('Principalm eff:', principal);
+      console.log("Principalm eff:", principal);
     }
-}, [principal]); // This effect runs whenever `principal` changes.
-
+  }, [principal]); // This effect runs whenever `principal` changes.
 
   return (
     <nav
       className={
         className +
-        ` flex-row-center justify-between bg-${darkColor} text-${lightColor}` +
+        ` flex-row-center justify-between bg-light dark:bg-dark text-dark dark:text-light` +
         " laptop:py-8 laptop:px-16 px-8 py-8"
       }
     >
@@ -80,12 +79,8 @@ const  Navbar = (props: Theme) => {
           " laptop:gap-4 gap-2"
         }
       >
-        <ThemeSwitch
-          handleThemeSwitch={props.handleThemeSwitch}
-          darkColor={props.darkColor}
-          lightColor={props.lightColor}
-        />
-
+        <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />
+        
         <div
           className={
             className +
@@ -100,7 +95,7 @@ const  Navbar = (props: Theme) => {
           <button
             className={
               className +
-              `__timeToken__butButton small-button bg-${lightColor} text-${darkColor}`
+              `__timeToken__butButton small-button bg-dark dark:bg-light text-light dark:text-dark`
             }
           >
             Buy
@@ -112,10 +107,8 @@ const  Navbar = (props: Theme) => {
             className + "__connectWalletBtn flex-row-center green-button"
           }
         >
-          
-
-          <ConnectButton/>
-           <MdArrowOutward /> 
+          <ConnectButton />
+          <MdArrowOutward />
         </button>
 
         <ConnectDialog />
