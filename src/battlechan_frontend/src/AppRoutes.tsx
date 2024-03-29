@@ -8,6 +8,9 @@ import { useConnect } from '@connect2ic/react';
 // Lazy load pages
 const Landing = React.lazy(() => import('./pages/Landing/Landing'));
 const DashboardRoutes = React.lazy(() => import('./pages/Routes'));
+const UserSetting = React.lazy(() => import('../src/components/Dashboard/SettingProfile/SettingProfile'))
+const UserProfile = React.lazy(() => import('../src/components/Dashboard/UserProfile/UserProfile'))
+
 
 interface AppRoutesProps {
     darkColor: string;
@@ -57,9 +60,31 @@ const AppRoutes = ({ darkColor, lightColor, handleThemeSwitch }) => {
             <Route
                 path="/dashboard/*"
                 element={
+                   
+                        <Suspense fallback={<Loader />}>
+                            <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
+                        </Suspense>
+                }
+            />
+            <Route
+                path="/dashboard/settingProfile/*"
+                element={
                     allow == true ? (
                         <Suspense fallback={<Loader />}>
-                            <DashboardRoutes darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
+                            <UserSetting handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/UserProfile/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <UserProfile handleThemeSwitch={handleThemeSwitch}/>
                         </Suspense>
                     ) : allow == false ?(
 
