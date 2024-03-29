@@ -16,14 +16,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
-import { backend } from "../../../../../declarations/backend/index"
-
-
-
-type Theme = {
-  darkColor: string;
-  lightColor: string;
-};
+// import { backend } from "../../../../../declarations/backend/index"
 
 interface Board {
   [x: string]: any;
@@ -37,35 +30,29 @@ interface BackendResponse {
   error: string[];
 }
 
-
-const Body = (props: Theme) => {
-
-
+const Body = () => {
   const [boardNames, setBoardNames] = useState<string[]>([]);
   const [boardSizes, setBoardSizes] = useState<string[]>([]);
+  const darkColor = document.documentElement.className;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchBoardNames();
   }, []);
-  const darkColor = props.darkColor;
-  const lightColor = props.lightColor;
   const className = "Home";
 
-
   async function fetchBoardNames() {
-    const response = await backend.getTotalPostInBoard() as BackendResponse;
+    const response = (await backend.getTotalPostInBoard()) as BackendResponse;
     const boards = response.data[0];
 
     if (boards && boards.length > 0) {
       const names = boards.map((board) => board.boardName);
       const sizes = boards.map((board) => board.size.toString());
       console.log("size is ", sizes);
-      console.log("ended")
+      console.log("ended");
 
       setBoardNames(names); // Update the state with all board names.
       setBoardSizes(sizes); // Update the state with all board names.
-
     } else {
       console.log("No boards found.");
     }
@@ -77,25 +64,21 @@ const Body = (props: Theme) => {
 
   // }
 
-
-
-
   return (
     <div
       className={
         className +
-        `flex flex-col justify-between w-full text-${lightColor} bg-bottom bg-contain bg-no-repeat`
+        `flex flex-col justify-between w-full text-dark dark:text-light bg-bottom bg-contain bg-no-repeat`
       }
       style={
         darkColor == "dark"
           ? {
-            backgroundImage: `url(${bg})`,
-          }
+              backgroundImage: `url(${bg})`,
+            }
           : {}
       }
     >
-
-      <NavButtons darkColor={darkColor} lightColor={lightColor} />
+      <NavButtons />
 
       <div
         className={className + "__createPost" + " mt-12 flex justify-center"}
@@ -114,57 +97,26 @@ const Body = (props: Theme) => {
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-            } leading-relaxed`}
+          className={`w-1/2 text-5xl font-bold ${
+            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+          } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`w-1/2 text-${lightColor} font-semibold text-lg text-start px-28`}
+          className={`w-1/2 text-dark dark:text-light font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
       </div>
 
-      <div
-        className={
-          className +
-          "__steps" +
-          `w-full flex-row-center justify-evenly p-10 my-8 mx-16 border border-light-green rounded-xl bg-${darkColor} text-lg`
-        }
-      >
-        <div className="flex flex-col gap-4 items-start">
-          <span
-            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
-          >
-            1
-          </span>
-          <span>Connect your Wallet.</span>
-        </div>
-
-        <div className="flex flex-col gap-4 items-start">
-          <span
-            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
-          >
-            2
-          </span>
-          <span>Make Post : Earn Time</span>
-        </div>
-        <div className="flex flex-col gap-4 items-start">
-          <span
-            className={`py-2 px-4 bg-${lightColor} text-${darkColor} rounded-[50%]`}
-          >
-            3
-          </span>
-          <span>Cast your vote</span>
-        </div>
-      </div>
+      <Steps />
 
       <div
         className={
           className +
           "__postsNumber" +
-          ` py-6 px-10 mx-36 my-24 border border-${lightColor} rounded-md`
+          ` py-6 px-10 mx-36 my-24 border border-dark dark:border-light rounded-md`
         }
       >
         <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
@@ -175,9 +127,12 @@ const Body = (props: Theme) => {
           <div className="data__labels flex-row-center text-lg text-light">
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-                <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
-                }}>
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                  }}
+                >
                   <MdOutlineAddBusiness />
                   {boardNames[0]}
                 </button>
@@ -185,73 +140,87 @@ const Body = (props: Theme) => {
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[1]}`);
-                }}>
-                <GiPublicSpeaker />
-                {boardNames[1]}
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[1]}`);
+                  }}
+                >
+                  <GiPublicSpeaker />
+                  {boardNames[1]}
                 </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[2]}`);
-                }}>
-                <FaRunning />
-                {boardNames[2]}
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[2]}`);
+                  }}
+                >
+                  <FaRunning />
+                  {boardNames[2]}
                 </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[3]}`);
-                }}>
-                <IoGameControllerOutline />
-                {boardNames[3]}
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[3]}`);
+                  }}
+                >
+                  <IoGameControllerOutline />
+                  {boardNames[3]}
                 </button>
               </p>
             </div>
             <div className="w-[9.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[4]}`);
-                }}>
-                <IoHardwareChipOutline />
-                {boardNames[4]}
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[4]}`);
+                  }}
+                >
+                  <IoHardwareChipOutline />
+                  {boardNames[4]}
                 </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[5]}`);
-                }}>
-                <FiBox />
-                {boardNames[5]}
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[5]}`);
+                  }}
+                >
+                  <FiBox />
+                  {boardNames[5]}
                 </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap">
               <p className="flex-row-center gap-2 justify-center">
-              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
-                  navigate(`/dashboard/mainPosts?boardName=${boardNames[6]}`);
-                }}>
-                <BiMoviePlay />
-                {boardNames[6]}
+                <button
+                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardNames[6]}`);
+                  }}
+                >
+                  <BiMoviePlay />
+                  {boardNames[6]}
                 </button>
               </p>
             </div>
           </div>
-
-
-
-
         </div>
 
         <div
-          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-${lightColor}`}
+          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-dark dark:text-light`}
         >
           <div className="data__label py-6 px-4 h-full text-lg font-semibold">
             Total Posts
@@ -259,7 +228,7 @@ const Body = (props: Theme) => {
 
           <div className="data__numbers flex-row-center justify-between">
             <div className="w-[7.5rem] text-center flex-col-center border-r">
-              <span  >{boardSizes[0]}</span>
+              <span>{boardSizes[0]}</span>
               <span>2 hrs ago</span>
             </div>
             <div className="w-[7.5rem] text-center flex-col-center border-r">
