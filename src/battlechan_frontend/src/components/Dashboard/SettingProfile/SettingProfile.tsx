@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
+
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
-import { useActionData } from "react-router-dom";
-import { keyframes } from "@emotion/react";
 
 type Theme = {
   handleThemeSwitch: Function;

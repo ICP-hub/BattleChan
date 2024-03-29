@@ -1,19 +1,18 @@
 import React, { Suspense, lazy, useState, useEffect } from "react";
-
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
+
 import "./Connect2ic/Connect2ic.scss";
 
-import { PlugWallet } from "@connect2ic/core/providers";
-import { InternetIdentity } from "@connect2ic/core/providers";
 import { Connect2ICProvider } from "@connect2ic/react";
 import { createClient } from "@connect2ic/core";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { PlugWallet } from "@connect2ic/core/providers";
+import { InternetIdentity } from "@connect2ic/core/providers";
 
-// Lazy load pages
-const Landing = lazy(() => import("./pages/Landing/Landing"));
-const DashboardRoutes = lazy(() => import("./pages/Routes"));
+// import store from "../src/redux/store/store.js";
 
-import Loader from "./components/Loader/Loader";
+// import * as backend from "../../../.dfx/local/canisters/backend/service.did"
+import AppRoutes from "./AppRoutes";
 
 type Theme = "dark" | "light";
 
@@ -40,33 +39,17 @@ function App() {
   }
 
   return (
+    // <Provider store={store}>
     <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<Loader />}>
-              <Landing handleThemeSwitch={handleThemeSwitch} />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/dashboard/*"
-          element={
-            <Suspense fallback={<Loader />}>
-              <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
-            </Suspense>
-          }
-        />
-      </Routes>
+      <AppRoutes handleThemeSwitch={handleThemeSwitch} />
     </Router>
+    // </Provider>
   );
 }
 
 const client = createClient({
   canisters: {},
-  providers: [new PlugWallet(), new InternetIdentity()],
+  providers: [new InternetIdentity(), new PlugWallet()],
 });
 
 export default () => (

@@ -21,6 +21,7 @@ module {
     public let notFound = {
         noUser = "No User Exist!";
         noPost = "No Post Exist!";
+        noArchivedPost  = "No Archived Post !";
         noComment = "No comment Exist!";
         noReply = "No Reply Exist!";
         noData = "No Data Exist !";

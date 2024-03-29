@@ -64,6 +64,7 @@ const Post: React.FC<PostProps> = ({
     // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
+  console.log(type)
 
   return (
     <div
@@ -102,11 +103,23 @@ const Post: React.FC<PostProps> = ({
             </div>
             {/* Time */}
             <div className="flex items-center gap-2">
+<<<<<<< HEAD
               <div className="text-sm tablet:text-lg text-nowrap">
                 <span
                   className={`${
                     type === "archive" ? "text-red" : "text-light-green"
                   }`}
+=======
+              <div className="tablet:text-xs">
+                <span className={`${type === "archive" || time === "0:00" ? "text-[#FF4343]": "text-[#18AF00]"}`}>{type === "archive" ? "0:00": time}</span> left
+              </div>
+              {/* <div className="hidden tablet:inline-flex text-[#000] dark:text-[#fff]">
+                <svg
+                  className="w-4 h-2"
+                  viewBox="0 0 22 4"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+>>>>>>> main
                 >
                   {type === "archive" ? "0:00 " : `${duration} `}
                 </span>

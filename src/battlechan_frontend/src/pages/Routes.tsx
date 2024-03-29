@@ -31,7 +31,7 @@ function Routing(props: Theme) {
         <Route path="/archivePosts" element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />} />
 
         <Route
-          path="/postDetails"
+          path="/postDetails/:postId"
           element={<PostDetails handleThemeSwitch={props.handleThemeSwitch} />}
         />
         <Route
