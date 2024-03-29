@@ -49,20 +49,8 @@ type PostInfo = {
   createdAt: string;
 };
 
-const postData = [
-  {
-    postId: "#3109292588",
-    postName: "Test2",
-    postMetaData:
-      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-    postDes: "Test2",
-    expireAt: 1711625931614910010n,
-    createdAt: "Mar 28,2024; 17:03",
-  },
-];
-
 const MainPosts = (props: Theme) => {
-  const [postsData, setPostsData] = useState<PostInfo[]>(postData);
+  const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const className = "Dashboard__MainPosts";
 
   useEffect(() => {
@@ -156,7 +144,7 @@ const MainPosts = (props: Theme) => {
               <span className="ml-1 leading-5">Create Post</span>
             </button>
           </div>
-          
+
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
             <Catalog />
