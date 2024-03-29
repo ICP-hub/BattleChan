@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState} from "react";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 
@@ -10,23 +10,32 @@ type Theme = {
 };
 
 const SettingProfile = (props: Theme) => {
-  const className = "Dashboard__SettingProfile";
+  const darkColor = props.darkColor;
+  const lightColor = props.lightColor;
+
+  const className = "SettingProfile";
 
   return (
-    <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
-      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
-
-      <NavButtons />
-      
-      {document.documentElement.className == "dark" && (
-        <img
-          src={bg}
-          alt="Background image"
-          className="w-screen -z-10 h-screen absolute top-0 object-cover"
-        />
-      )}
-
-      <div className={`h-full w-full py-10 px-40 text-dark dark:text-light`}>
+    <div
+      className={
+        className + ` ${darkColor == "dark" ? "bg-dark" : "bg-[#ECECEC]"}`
+      }
+    >
+      <Navbar darkColor={darkColor} lightColor={lightColor} />
+      <NavButtons darkColor={darkColor} lightColor={lightColor} />
+      <div
+        className={
+          className +
+          ` h-full w-full py-10 px-40 text-${lightColor} bg-bottom bg-contain bg-no-repeat`
+        }
+        style={
+          darkColor == "dark"
+            ? {
+                backgroundImage: `url(${bg})`,
+              }
+            : {}
+        }
+      >
         <h1 className="text-3xl font-bold text-center">Customize Profile</h1>
 
         <section className="profileName p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">

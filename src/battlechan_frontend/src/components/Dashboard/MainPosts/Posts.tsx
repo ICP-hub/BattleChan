@@ -21,7 +21,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
     <>
       {currentPosts.map((post, index) => (
         <div className={`w-full max-w-md tablet:max-w-none tablet:w-1/2 p-2  ${index % 2 !== 0 ? 'tablet:mt-6' : ''}`}>
-          <Link key={post.postId} to={`/dashboard/postDetails/${post.postId}`}>
+          <Link key={post.postId} to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}>
             <Post
               key={post.postId}
               id={post.postId}

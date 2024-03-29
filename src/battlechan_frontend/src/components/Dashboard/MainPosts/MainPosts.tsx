@@ -318,8 +318,8 @@ const MainPosts = (props: Theme) => {
 
   async function getPosts() {
     try {
-      const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
-      // const response = await backend.getPostsByBoard();
+      // const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
+      const response = await backend.getPostsByBoard();
       console.log(response);
       if (response.status === true && response.data) {
         // console.log(response);

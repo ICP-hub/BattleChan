@@ -1,10 +1,10 @@
 import React from "react";
-import "./TrendingPost.scss";
+
+import Card from "./Card";
 
 import bg from "../../../images/trending_post_bg.png";
 import Cover_Image from "../../../images/trendingPost_coverImg.png";
 import Profile_Pic from "../../../images/trendingPost_profile.png";
-import Card from "./Card";
 
 const TrendingPost = () => {
   const darkColor = document.documentElement.className;
@@ -51,7 +51,7 @@ const TrendingPost = () => {
 
         {/* Cards block */}
         <div className={className + "__postCards my-20 w-full"}>
-          <div className="w-full  xl:px-20 phone:pl-0 tablet:pl-16 phone:pl-12 pl-6 xl:overflow-hidden overflow-auto phone:gap-12 gap-6 xl:justify-center xl:flex-row-center flex flex-row">
+          <div className="w-full xl:px-20 tablet:px-16 phone:px-12 px-6 xl:overflow-hidden no-scrollbar overflow-auto phone:gap-12 gap-6 xl:justify-center xl:flex-row-center flex flex-row">
             {postList.slice(0, 3).map((post, index) => (
               // Card
               <Card post={post} key={index} index={index} postList={postList} />

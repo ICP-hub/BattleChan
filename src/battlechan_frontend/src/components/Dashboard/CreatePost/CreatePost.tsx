@@ -27,6 +27,75 @@ type Theme = {
   handleThemeSwitch: Function;
 };
 
+const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  console.log("Here");
+  const file = event.target.files?.[0];
+
+  if (!file) return;
+
+  const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
+
+  if (file.size > maxSize) {
+    alert('File size exceeds the limit of 1.7MB');
+    return;
+  }
+
+  if (file.type.startsWith('image')) {
+    console.log("Here1")
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      console.log("Hell")
+      if (e.target && e.target.result) {
+        const img = new Image();
+        img.src = e.target.result.toString();
+
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          if (!ctx) return;
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+
+          const quality = 0.7; // Adjust image quality here
+          const dataURL = canvas.toDataURL('image/jpeg', quality);
+
+          // Convert data URL to Blob
+          const blob = await fetch(dataURL).then((res) => res.blob());
+
+          console.log("blob:", blob);
+          // Convert Blob to ArrayBuffer
+          const arrayBuffer = await blob.arrayBuffer();
+
+          console.log("array:", arrayBuffer);
+          // Convert ArrayBuffer to Int8Array
+          const int8Array = new Int8Array(arrayBuffer);
+          console.log(int8Array);
+
+          // Base64
+          // const uint8Array = new Uint8Array(int8Array);
+
+          // // Convert Uint8Array to base64
+          // let binary = '';
+          // uint8Array.forEach((byte) => {
+          //   binary += String.fromCharCode(byte);
+          // });
+          // let base64 = btoa(binary);
+
+          // console.log(base64);
+        };
+      }
+    };
+
+    reader.readAsDataURL(file);
+  } else {
+    alert('Please upload an image file');
+  }
+};
+
 const CreatePost = (props: Theme) => {
 
   const [communities, setCommunities] = useState<string[]>([]);
@@ -184,6 +253,7 @@ const CreatePost = (props: Theme) => {
                 name="Change"
                 id="profile"
                 className="hidden"
+                onChange={handleFileUpload}
               />
             </section>
           </div>
