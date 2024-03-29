@@ -48,6 +48,7 @@ actor {
 
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
 
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
@@ -75,6 +76,7 @@ actor {
 
   public shared ({ caller = userId }) func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let newBoard : Types.BoardInfo = createBoardInfo(userId, boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, newBoard).0;
@@ -450,6 +452,7 @@ actor {
   };
 
   public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
     if (Array.size(boardPostData) == 0) {
       return { data = null; status = false; error = ?notFound.noData };

@@ -297,9 +297,50 @@ type PostInfo = {
   createdAt: string;
 };
 
+interface Board {
+  boardName: string;
+  boardSize: string;
+}
+
+interface BackendResponse {
+  status: boolean;
+  data: Board[][];
+  error: string[];
+}
+
 const MainPosts = (props: Theme) => {
 
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
+  const [boardsData, setBoardsData] = useState<string[]>([]);
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        // Make a fetch call to your backend API
+        const response = (await backend.getTotalPostInBoard()) as BackendResponse;
+        if (response.status == false) {
+          throw new Error("Failed to fetch communities");
+        }
+        console.log(response)
+
+        const boards = response.data[0];
+        console.log(boards);
+
+        if (boards && boards.length > 0) {
+          const names = boards.map((board) => board.boardName);
+          setBoardsData(names);
+          // console.log(names) output=> ['Cinema', 'Crypto', 'Technology', 'Games', 'Sports', 'Politics', 'Business', 'sdf']
+          
+        } else {
+          console.log("No boards found.");
+        }
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      }
+    };
+
+    fetchData();
+  },[])
 
   useEffect(() => {
     getPosts();
@@ -422,7 +463,7 @@ const MainPosts = (props: Theme) => {
           </div>
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-            <Catalog />
+            <Catalog boardsData={boardsData} />
           </div>
           {/* catalog and pagination and sort for desktop  */}
           <div className="flex justify-between items-center tablet:px-10">
