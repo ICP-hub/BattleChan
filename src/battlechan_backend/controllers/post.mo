@@ -64,7 +64,11 @@ module {
             upvotes = 0;
             downvotes = 0;
             comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
-            createdBy = userId;
+            createdBy = {
+                ownerId = userId;
+                userName = userInfo.userName;
+                userProfile = userInfo.profileImg;
+            };
             expireAt = calcExpireTime(freePostTime);
             createdAt = Int.toText(now());
             updatedAt = null;
@@ -218,10 +222,10 @@ module {
         };
         return Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
     };
-    public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<Types.PostInfo>>) : {
+    public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
         updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo>;
         updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
-        updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<Types.PostInfo>>;
+        updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>;
     } {
 
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
@@ -238,7 +242,7 @@ module {
             userId = userInfo.userId;
             userName = userInfo.userName;
             profileImg = userInfo.profileImg;
-            upvotedTo = List.toArray(List.push(postId, List.fromArray(userInfo.upvotedTo)));
+            upvotedTo = userInfo.upvotedTo;
             downvotedTo = userInfo.downvotedTo;
             likedComments = userInfo.likedComments;
             createdComments = userInfo.createdComments;
@@ -248,25 +252,28 @@ module {
             updatedAt = ?Int.toText(now());
         };
 
-        var achivedPostList : List.List<Types.PostInfo> = List.nil<Types.PostInfo>();
+        var achivedPostList : List.List<(Types.PostId, Types.PostInfo)> = List.nil<(Types.PostId, Types.PostInfo)>();
 
         switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
-            case (?value) { achivedPostList := List.push(postInfo, value) };
+            case (?value) {
+                let tempList = List.push((postId, postInfo), value);
+                achivedPostList := tempList;
+            };
             case (null) {
-                achivedPostList := List.push(postInfo, achivedPostList);
+                achivedPostList := List.push((postId, postInfo), achivedPostList);
             };
         };
 
         let updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo> = Trie.put(userTrieMap, principalKey userId, Principal.equal, updateUserInfo).0;
         let updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo> = Trie.remove(postTrieMap, textKey postId, Text.equal).0;
-        let updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<Types.PostInfo>> = Trie.put(userAchivedPostTrie, principalKey userId, Principal.equal, achivedPostList).0;
+        let updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>> = Trie.put(userAchivedPostTrie, principalKey userId, Principal.equal, achivedPostList).0;
         return {
             updatedUserTrie;
             updatedPostTrie;
             updatedArchivedTrie;
         };
-
     };
+
     public func postVisiblity(postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, increaseTime : Int) : {
         updatedPostTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>;
         updatedExpireTime : Nat;
@@ -303,7 +310,7 @@ module {
             updatedExpireTime;
         };
     };
-    public func bubbleSortPost(arr : [var Types.PostInfo], filterOptions :Types.FilterOptions) : [var Types.PostInfo] {
+    public func bubbleSortPost(arr : [var Types.PostInfo], filterOptions : Types.FilterOptions) : [var Types.PostInfo] {
         var n = arr.size();
         var temp : Types.PostInfo = {
             postId = "";
@@ -314,7 +321,11 @@ module {
             upvotes = 0;
             downvotes = 0;
             postMetaData = "";
-            createdBy = Principal.fromText("2vxsx-fae");
+            createdBy = {
+                ownerId = Principal.fromText("2vxsx-fae");
+                userName = "";
+                userProfile = "";
+            };
             comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
             expireAt = 0;
             createdAt = "";
@@ -342,14 +353,16 @@ module {
                         };
                     };
                 };
-                case (#recent) { for (j in Iter.range(0, n - i - 2)) {
+                case (#recent) {
+                    for (j in Iter.range(0, n - i - 2)) {
                         if (arr[j].createdAt < arr[j + 1].createdAt) {
                             // Swap elements if they are in the wrong order
                             temp := arr[j];
                             arr[j] := arr[j + 1];
                             arr[j + 1] := temp;
                         };
-                    };};
+                    };
+                };
             };
 
         };
