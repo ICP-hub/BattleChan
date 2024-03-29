@@ -23,11 +23,11 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        if (anonymousCheck(userId) == true) {
-            Debug.trap(reject.anonymous);
-        };
+        // if (anonymousCheck(userId) == true) {
+        //     Debug.trap(reject.anonymous);
+        // };
 
-        if (checkText(postReq.postName, 50) == false) {
+        if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
         };
 
