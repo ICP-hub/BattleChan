@@ -16,7 +16,6 @@ import CreatePostBtn from "../Body/CreatePostBtn";
 
 import { backend } from "../../../../../declarations/backend";
 
-
 function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
   const date = new Date(milliseconds); // Convert milliseconds to a Date object
@@ -65,6 +64,35 @@ const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const className = "Dashboard__MainPosts";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Make a fetch call to your backend API
+        const response =
+          (await backend.getTotalPostInBoard()) as BackendResponse;
+        if (response.status == false) {
+          throw new Error("Failed to fetch communities");
+        }
+        // console.log(response)
+
+        const boards = response.data[0];
+        // console.log(boards);
+
+        if (boards && boards.length > 0) {
+          const names = boards.map((board) => board.boardName);
+          setBoardsData(names);
+          // console.log(names) output=> ['Cinema', 'Crypto', 'Technology', 'Games', 'Sports', 'Politics', 'Business', 'sdf']
+        } else {
+          console.log("No boards found.");
+        }
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (props.type == "archive") {
