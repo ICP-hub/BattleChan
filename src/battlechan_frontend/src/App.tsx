@@ -11,7 +11,7 @@ import {  } from "react-redux";
 // import store from "../src/redux/store/store.js";
 import AppRoutes from './AppRoutes'; // Make sure the path is correct
 
-import { backend } from "../../declarations/backend/index";
+import { backend,canisterId, } from "../../declarations/backend/index";
 // import * as backend from "../../../.dfx/local/canisters/backend/service.did"
 import { IoMdRocket } from "react-icons/io";
 
