@@ -48,7 +48,7 @@ actor BattleChan {
 
   let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
 
-  public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
+  public func createUserAccount(userId : Types.UserId, userReq : Types.UserReq) : async Types.Result {
     try {
       // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
@@ -65,7 +65,7 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func updatedUserAccount(userReq : Types.UserReq) : async Types.Result {
+  public shared ({ caller = userId }) func updatedUserAccount(userId : Types.UserId, userReq : Types.UserReq) : async Types.Result {
     try {
       // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = updateUserInfo(userId, userReq, userTrieMap);
@@ -111,7 +111,7 @@ actor BattleChan {
     newNode.user := Array.append<Text>(newNode.user, [userId]);
   };
 
-  public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
+  public shared func createPost(userId : Types.UserId, boardName : Text, postData : Types.PostReq) : async Types.Result {
     try {
       // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
