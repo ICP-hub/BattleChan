@@ -58,7 +58,7 @@ const AppRoutes = ({ darkColor, lightColor, handleThemeSwitch }) => {
             />
 
             <Route
-                path="/dashboard/*"
+                path="/dashboard/"
                 element={
                    
                         <Suspense fallback={<Loader />}>

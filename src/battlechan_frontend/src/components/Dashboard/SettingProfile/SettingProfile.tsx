@@ -5,6 +5,7 @@ import NavButtons from "../NavButtons/NavButtons";
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 
+
 type Theme = {
   handleThemeSwitch: Function;
 };
