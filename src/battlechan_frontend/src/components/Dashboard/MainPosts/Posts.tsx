@@ -34,6 +34,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
               likes="0"
               comments={comments}
               expireAt={post.expireAt}
+              type={type}
             />
           </Link>
         </div>
