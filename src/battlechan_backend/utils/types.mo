@@ -79,7 +79,11 @@ module {
         upvotes : Nat64;
         downvotes : Nat64;
         postMetaData : Text;
-        createdBy : Principal;
+        createdBy : {
+            ownerId : Principal;
+            userName : Text;
+            userProfile : Text;
+        };
         comments : Trie.Trie<CommentId, CommentInfo>;
         createdAt : Text;
         expireAt : Int;
