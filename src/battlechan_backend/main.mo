@@ -493,6 +493,7 @@ actor BattleChan {
   };
 
   public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
     if (Array.size(boardPostData) == 0) {
       return { data = null; status = false; error = ?notFound.noData };

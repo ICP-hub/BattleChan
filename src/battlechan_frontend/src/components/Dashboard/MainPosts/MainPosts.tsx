@@ -264,8 +264,6 @@ import { backend } from "../../../../../declarations/backend";
 //   },
 // ];
 
-
-
 // const postsData = [
 //   {
 //     postId: "#3109292588",
@@ -282,14 +280,16 @@ function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const date = new Date(milliseconds); // Convert milliseconds to a Date object
 
   // Get the month, day, year, hour, and minute from the Date object
-  const month = date.toLocaleString('default', { month: 'short' }); // Short month name (e.g., Jan)
+  const month = date.toLocaleString("default", { month: "short" }); // Short month name (e.g., Jan)
   const day = date.getDate(); // Day of the month (1-31)
   const year = date.getFullYear(); // Full year (e.g., 2023)
   const hour = date.getHours(); // Hour (0-23)
   const minute = date.getMinutes(); // Minute (0-59)
 
   // Format the timestamp string
-  const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? '0' + minute : minute}`;
+  const timestamp = `${month} ${day},${year}; ${hour}:${
+    minute < 10 ? "0" + minute : minute
+  }`;
 
   return timestamp;
 }
@@ -308,29 +308,92 @@ type PostInfo = {
   createdAt: string;
 };
 
-const MainPosts = (props: Theme) => {
+interface Board {
+  boardName: string;
+  boardSize: string;
+}
 
+interface BackendResponse {
+  status: boolean;
+  data: Board[][];
+  error: string[];
+}
+
+const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
+  const [boardsData, setBoardsData] = useState<string[]>([]);
 
   useEffect(() => {
-    getPosts();
+    const fetchData = async () => {
+      try {
+        // Make a fetch call to your backend API
+        const response =
+          (await backend.getTotalPostInBoard()) as BackendResponse;
+        if (response.status == false) {
+          throw new Error("Failed to fetch communities");
+        }
+        // console.log(response)
+
+        const boards = response.data[0];
+        // console.log(boards);
+
+        if (boards && boards.length > 0) {
+          const names = boards.map((board) => board.boardName);
+          setBoardsData(names);
+          // console.log(names) output=> ['Cinema', 'Crypto', 'Technology', 'Games', 'Sports', 'Politics', 'Business', 'sdf']
+        } else {
+          console.log("No boards found.");
+        }
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  async function getPosts() {
+  useEffect(() => {
+    if (props.type == "archive") {
+      getPosts("archive");
+    } else {
+      getPosts();
+    }
+  }, []);
+
+  async function getPosts(postsType?: string) {
     try {
-      // const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
-      const response = await backend.getPostsByBoard();
-      console.log(response);
-      if (response.status === true && response.data) {
-        // console.log(response);
-        const posts = response.data.flat(); // Flatten nested arrays if any
-        posts.forEach(element => {
-          const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
-          console.log(timestamp);
-          element.createdAt = timestamp;
-        });
-        // console.log(posts);
-        setPostsData(posts);
+      if (postsType === "archive") {
+        const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
+        console.log("Archive Post Response: ", response);
+        if (response.status === true && response.data) {
+          // console.log(response);
+          const posts = response.data.flat(); // Flatten nested arrays if any
+          posts.forEach((element) => {
+            const timestamp: string = convertNanosecondsToTimestamp(
+              BigInt(element.createdAt)
+            );
+            console.log(timestamp);
+            element.createdAt = timestamp;
+          });
+          // console.log(posts);
+          setPostsData(posts);
+        }
+      } else {
+        const response = await backend.getPostsByBoard();
+        console.log("Main Posts Response: ", response);
+        if (response.status === true && response.data) {
+          // console.log(response);
+          const posts = response.data.flat(); // Flatten nested arrays if any
+          posts.forEach((element) => {
+            const timestamp: string = convertNanosecondsToTimestamp(
+              BigInt(element.createdAt)
+            );
+            console.log(timestamp);
+            element.createdAt = timestamp;
+          });
+          // console.log(posts);
+          setPostsData(posts);
+        }
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -434,7 +497,7 @@ const MainPosts = (props: Theme) => {
           </div>
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-            <Catalog />
+            <Catalog boardsData={boardsData} />
           </div>
           {/* catalog and pagination and sort for desktop  */}
           <div className="flex justify-between items-center tablet:px-10">
@@ -606,8 +669,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Rank" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Rank" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Rank")}
                     >
                       Rank
@@ -616,8 +680,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "New" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "New" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("New")}
                     >
                       New
@@ -626,8 +691,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Last Reply")}
                     >
                       Last Reply

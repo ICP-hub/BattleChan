@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Link } from "react-router-dom";
+import Steps from "./Steps";
+import DataNumbers from "./DataNumbers";
+import CreatePostBtn from "./CreatePostBtn";
 
 import { FiBox } from "react-icons/fi";
 import { FaRunning } from "react-icons/fa";
@@ -40,7 +43,7 @@ const Body = (props: Theme) => {
 
   const [boardNames, setBoardNames] = useState<string[]>([]);
   const [boardSizes, setBoardSizes] = useState<string[]>([]);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBoardNames();
@@ -165,51 +168,79 @@ const Body = (props: Theme) => {
         }
       >
         <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
-          <div className="data__label py-6 px-2 px-4 h-full text-lg font-semibold">
+          <div className="data__label py-6  px-4 h-full text-lg font-semibold">
             Name of Subject
           </div>
 
           <div className="data__labels flex-row-center text-lg text-light">
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
-                <MdOutlineAddBusiness />
-                {boardNames[0]}
+                <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}>
+                  <MdOutlineAddBusiness />
+                  {boardNames[0]}
+                </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
+              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[1]}`);
+                }}>
                 <GiPublicSpeaker />
                 {boardNames[1]}
+                </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
+              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[2]}`);
+                }}>
                 <FaRunning />
                 {boardNames[2]}
+                </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
+              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[3]}`);
+                }}>
                 <IoGameControllerOutline />
                 {boardNames[3]}
+                </button>
               </p>
             </div>
             <div className="w-[9.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
+              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[4]}`);
+                }}>
                 <IoHardwareChipOutline />
                 {boardNames[4]}
+                </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
+              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[5]}`);
+                }}>
                 <FiBox />
                 {boardNames[5]}
+                </button>
               </p>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap">
               <p className="flex-row-center gap-2 justify-center">
+              <button className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2" onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[6]}`);
+                }}>
                 <BiMoviePlay />
                 {boardNames[6]}
+                </button>
               </p>
             </div>
           </div>
