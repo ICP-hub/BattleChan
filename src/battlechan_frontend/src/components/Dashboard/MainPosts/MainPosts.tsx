@@ -600,4 +600,3 @@ export default MainPosts;
 //     comments: 750,
 //   },
 // ];
-
