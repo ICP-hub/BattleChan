@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import CatalogSVG from "./CatalogSVG";
 import { useSearchParams } from "react-router-dom";
 
-const Catalog = () => {
-  const [activeItem, setActiveItem] = useState<number>(1);
-  const className = "Dashboard__MainPosts__Catalog";
+  
 
 interface CatalogProps {
   boardsData: string[]
@@ -12,6 +10,7 @@ interface CatalogProps {
 
 
 const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
+  const className = "Dashboard__MainPosts__Catalog";
   const [searchParams] = useSearchParams();
   const board = searchParams.get("boardName");
   const [activeItem, setActiveItem] = useState<string | null>("cinema");
