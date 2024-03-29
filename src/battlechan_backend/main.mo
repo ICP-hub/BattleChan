@@ -48,7 +48,7 @@ actor BattleChan {
 
   let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
 
-  public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
+  public func createUserAccount(userId : Types.UserId, userReq : Types.UserReq) : async Types.Result {
     try {
       // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
@@ -65,7 +65,7 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func updatedUserAccount(userReq : Types.UserReq) : async Types.Result {
+  public shared ({ caller = userId }) func updatedUserAccount(userId : Types.UserId, userReq : Types.UserReq) : async Types.Result {
     try {
       // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = updateUserInfo(userId, userReq, userTrieMap);
@@ -111,7 +111,7 @@ actor BattleChan {
     newNode.user := Array.append<Text>(newNode.user, [userId]);
   };
 
-  public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
+  public shared func createPost(userId : Types.UserId, boardName : Text, postData : Types.PostReq) : async Types.Result {
     try {
       // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
@@ -350,7 +350,7 @@ actor BattleChan {
     { data = ?postInfo; status = true; error = null };
   };
 
-  public shared ({ caller = userId }) func getSingleArchivedPost(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
+  public shared query ({ caller = userId }) func getSingleArchivedPost(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
     let archivedPosts : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
       case (?value) { List.toArray(value) };
       case (null) {
@@ -366,26 +366,29 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func getArchivedPost(chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[(Types.PostId, Types.PostInfo)]> {
+  public shared query ({ caller = userId }) func getArchivedPost(chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[(Types.PostId, Types.PostInfo)]> {
     let postArray : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
       case (null) {
-        return { data = null; status = true; error = ?notFound.noPost };
+        return { data = null; status = true; error = ?notFound.noArchivedPost };
       };
       case (?result) { List.toArray(result) };
     };
-    if (postArray.size() <= chunk_size) {
-      return { data = ?postArray; status = true; error = null };
+    if (postArray.size() == 0) {
+      return { data = null; status = true; error = ?notFound.noArchivedPost };
     };
     if (postArray.size() <= chunk_size) {
       return { data = ?postArray; status = true; error = null };
     };
     let pages : [[(Types.PostId, Types.PostInfo)]] = paginate<(Types.PostId, Types.PostInfo)>(postArray, chunk_size);
+
     if (pages.size() < pageNo) {
       return { data = null; status = true; error = ?notFound.noPageExist };
     };
-    return { data = ?pages[pageNo]; status = true; error = ?notFound.noPost }
+    return { data = ?pages[pageNo]; status = true; error = null }
 
-
+  };
+  public query func getUserArchiveTrie() : async Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>> {
+    return userAchivedPostTrie;
   };
 
   public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostInfo]> {
@@ -568,6 +571,7 @@ actor BattleChan {
     userTrieMap := Trie.empty<Types.UserId, Types.UserInfo>();
     boardTrieMap := Trie.empty<Types.BoardName, Types.BoardInfo>();
     postTrieMap := Trie.empty<Types.PostId, Types.PostInfo>();
+    userAchivedPostTrie := Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
   };
 
 };

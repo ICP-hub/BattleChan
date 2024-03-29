@@ -256,7 +256,8 @@ module {
 
         switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
             case (?value) {
-                achivedPostList := List.push((postId, postInfo), value);
+                let tempList = List.push((postId, postInfo), value);
+                achivedPostList := tempList;
             };
             case (null) {
                 achivedPostList := List.push((postId, postInfo), achivedPostList);
