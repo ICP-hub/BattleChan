@@ -266,6 +266,17 @@ import { backend } from "../../../../../declarations/backend";
 
 
 
+// const postsData = [
+//   {
+//     postId: "#3109292588",
+//     postName: "Test2",
+//     postMetaData: "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+//     postDes: "Test2",
+//     expireAt: 1711625931614910010n,
+//     createdAt: "Mar 28,2024; 17:03",
+//   }
+// ]
+
 function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
   const date = new Date(milliseconds); // Convert milliseconds to a Date object
@@ -446,7 +457,7 @@ const MainPosts = (props: Theme) => {
                   />
                 </svg> */}
 
-                <span className="ml-1 leading-5">Business1</span>
+                <span className="ml-1 leading-5">Business</span>
               </button>
               {/* filter button  */}
               <button className="flex items-center justify-center bg-transparent text-[#000] dark:text-[#fff] dark:text-opacity-50 rounded-md px-1 py-1 text-xs mx-1">
