@@ -10,7 +10,7 @@ const NavButtons = () => {
       className={
         className +
         "__navigation" +
-        ` gap-12 py-8 flex-row-center justify-center font-normal text-lg bg-transparent`
+        ` gap-12 py-8 flex-row-center justify-center font-normal tablet:text-lg text-1xl bg-transparent`
       }
     >
       <Link to="/dashboard/mainPosts">
