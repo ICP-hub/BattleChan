@@ -25,7 +25,9 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
       {currentPosts.map((post, index) => (
         <div
           className={
-            className + " " + `p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
+            className +
+            " " +
+            `laptop:w-1/2 w-full p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
           }
         >
           <Link
