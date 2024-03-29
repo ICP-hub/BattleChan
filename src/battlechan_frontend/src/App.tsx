@@ -11,11 +11,14 @@ import {  } from "react-redux";
 // import store from "../src/redux/store/store.js";
 import AppRoutes from './AppRoutes'; // Make sure the path is correct
 
-import { backend } from "../../declarations/backend/index";
+// import { backend } from "../../declarations/backend/index";
+import { backend, canisterId, idlFactory } from "../../declarations/backend/index";
+import { InterfaceFactory } from "@dfinity/candid/lib/cjs/idl";
 // import * as backend from "../../../.dfx/local/canisters/backend/service.did"
 import { IoMdRocket } from "react-icons/io";
 
 type Theme = "dark" | "light";
+
 
 function App() {
   const [theme, setTheme] = useState<Theme>("light");
@@ -56,7 +59,13 @@ function App() {
 }
 
 const client = createClient({
-  canisters: {},
+  canisters: { 
+    // backend: {
+    //   canisterId: canisterId,
+    //   idlFactory: idlFactory as InterfaceFactory
+    // }
+  },
+    
   providers: [new InternetIdentity(), new PlugWallet()],
 
 });
