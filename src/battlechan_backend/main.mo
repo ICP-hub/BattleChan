@@ -52,6 +52,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = createUserInfo(userId, userReq, userTrieMap);
 
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
@@ -67,6 +68,7 @@ actor BattleChan {
   };
   public shared ({ caller = userId }) func updatedUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let userInfo : Types.UserInfo = updateUserInfo(userId, userReq, userTrieMap);
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
       #ok(successMessage.update);
@@ -79,6 +81,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let newBoard : Types.BoardInfo = createBoardInfo(userId, boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, newBoard).0;
@@ -111,6 +114,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
       insertNameNode(postData.postName, postId);
@@ -178,6 +182,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let { updatedUserInfo; updatedPostInfo; updateExpireTime } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
 
       let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
@@ -217,6 +222,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let { updatedPostInfo; updatedUserInfo } = createCommentInfo(userId, postId, comment, userTrieMap, postTrieMap);
 
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
@@ -234,6 +240,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func likeComment(postId : Types.PostId, commentId : Types.CommentId) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let { updatedUserInfo; updatedPostInfo } = updateLikedComments(userId, postId, commentId, userTrieMap, postTrieMap);
 
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
@@ -250,6 +257,7 @@ actor BattleChan {
   };
   public shared ({ caller = userId }) func createCommentReply(commentId : Types.CommentId, reply : Text) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let postId = getPostIdFromCommentId(commentId);
 
       let { updatedPostInfo; updatedUserInfo } = createReply(userId, commentId, reply, userTrieMap, postTrieMap);
@@ -269,6 +277,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func likeCommentReply(commentId : Types.CommentId, replyId : Types.ReplyId) : async Types.Result {
     try {
+      let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
       let postId = getPostIdFromCommentId(commentId);
       let postInfo : Types.PostInfo = updateLikesInReplies(userId, commentId, replyId, postTrieMap, userTrieMap);
 
@@ -284,7 +293,7 @@ actor BattleChan {
   };
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
-
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
         { data = null; status = false; error = ?"Error! No user Exist" };
@@ -368,11 +377,15 @@ actor BattleChan {
     if (postArray.size() <= chunk_size) {
       return { data = ?postArray; status = true; error = null };
     };
+    if (postArray.size() <= chunk_size) {
+      return { data = ?postArray; status = true; error = null };
+    };
     let pages : [[(Types.PostId, Types.PostInfo)]] = paginate<(Types.PostId, Types.PostInfo)>(postArray, chunk_size);
     if (pages.size() < pageNo) {
       return { data = null; status = true; error = ?notFound.noPageExist };
     };
     return { data = ?pages[pageNo]; status = true; error = ?notFound.noPost }
+
 
   };
 
@@ -540,7 +553,7 @@ actor BattleChan {
   };
 
   public query func getPostsByBoard() : async Types.Result_1<[Types.PostInfo]> {
-
+    let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
     // let postDataAll = Trie.toArray<Text, Types.PostInfo, { <Types.PostInfo> }>(postTrieMap, func(k, v) = v);
     let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
 

@@ -120,7 +120,7 @@ const Post: React.FC<PostProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <div className="tablet:text-xs">
-                <span className={`${type === "archive" ? "text-[#FF4343]": "text-[#18AF00]"}`}>{type === "archive" ? "0:00": duration}</span> left
+                <span className={`${type === "archive" ? "text-[#FF4343]": "text-[#18AF00]"}`}>{type === "archive" ? "0:00": time}</span> left
               </div>
               {/* <div className="hidden tablet:inline-flex text-[#000] dark:text-[#fff]">
                 <svg

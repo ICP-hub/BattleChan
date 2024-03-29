@@ -5,8 +5,12 @@ import NavButtons from "../NavButtons/NavButtons";
 
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
-
 import { backend } from "../../../../../declarations/backend";
+import { useCanister, useConnect } from "@connect2ic/react";
+// Custom hook : initialize the backend Canister
+const useBackend = () => {
+  return useCanister("backend");
+};
 
 interface Board {
   boardName: string;
@@ -23,13 +27,84 @@ type Theme = {
   handleThemeSwitch: Function;
 };
 
+const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  console.log("Here");
+  const file = event.target.files?.[0];
+
+  if (!file) return;
+
+  const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
+
+  if (file.size > maxSize) {
+    alert('File size exceeds the limit of 1.7MB');
+    return;
+  }
+
+  if (file.type.startsWith('image')) {
+    console.log("Here1")
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      console.log("Hell")
+      if (e.target && e.target.result) {
+        const img = new Image();
+        img.src = e.target.result.toString();
+
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          if (!ctx) return;
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+
+          const quality = 0.7; // Adjust image quality here
+          const dataURL = canvas.toDataURL('image/jpeg', quality);
+
+          // Convert data URL to Blob
+          const blob = await fetch(dataURL).then((res) => res.blob());
+
+          console.log("blob:", blob);
+          // Convert Blob to ArrayBuffer
+          const arrayBuffer = await blob.arrayBuffer();
+
+          console.log("array:", arrayBuffer);
+          // Convert ArrayBuffer to Int8Array
+          const int8Array = new Int8Array(arrayBuffer);
+          console.log(int8Array);
+
+          // Base64
+          // const uint8Array = new Uint8Array(int8Array);
+
+          // // Convert Uint8Array to base64
+          // let binary = '';
+          // uint8Array.forEach((byte) => {
+          //   binary += String.fromCharCode(byte);
+          // });
+          // let base64 = btoa(binary);
+
+          // console.log(base64);
+        };
+      }
+    };
+
+    reader.readAsDataURL(file);
+  } else {
+    alert('Please upload an image file');
+  }
+};
+
 const CreatePost = (props: Theme) => {
+
   const [communities, setCommunities] = useState<string[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
   const [postName, setPostName] = useState("");
   const [postDes, setPostDes] = useState("");
   const [postMetaData, setPostMetaData] = useState("");
-  
+  // const [backend] = useBackend();
+  // console.log(backend);
   useEffect(() => {
     // Fetch data from backend canister function getTotalPostInBoard
     const fetchData = async () => {
@@ -41,7 +116,7 @@ const CreatePost = (props: Theme) => {
         }
 
         const boards = response.data[0];
-        // console.log(boards);
+        console.log(boards);
 
         if (boards && boards.length > 0) {
           const names = boards.map((board) => board.boardName);
@@ -56,6 +131,28 @@ const CreatePost = (props: Theme) => {
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
+
+  const handleCreatePost = async () => {
+    try {
+      const postData = {
+        postName: "", // Add your postName data here
+        postDes: "", // Add your postDes data here
+        postMetaData: "", // Add your postMetaData data here
+      };
+      const response = await backend.createPost(selectedCommunity, postData);
+      console.log(response);
+      // if (response.status) {
+      //   console.log("Post created successfully");
+      //   // Clear form fields or show success message
+      // } else {
+      //   console.error("Failed to create post:", response.error);
+      //   // Handle error, show error message, etc.
+      // }
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
 
   const className = "HomePage__CreatePost";
 
@@ -131,6 +228,7 @@ const CreatePost = (props: Theme) => {
                 <button
                   type="button"
                   className="small-button bg-dirty-light-green"
+                  onClick={handleCreatePost}
                 >
                   Post
                 </button>
@@ -155,6 +253,7 @@ const CreatePost = (props: Theme) => {
                 name="Change"
                 id="profile"
                 className="hidden"
+                onChange={handleFileUpload}
               />
             </section>
           </div>
