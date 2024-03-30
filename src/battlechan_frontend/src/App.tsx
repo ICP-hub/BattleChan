@@ -24,6 +24,8 @@ import AppRoutes from './AppRoutes'; // Make sure the path is correct
 import { backend, canisterId, idlFactory } from "../../declarations/backend/index";
 import { InterfaceFactory } from "@dfinity/candid/lib/cjs/idl";
 // import * as backend from "../../../.dfx/local/canisters/backend/service.did"
+import ClientSetup from './ClientSetup'; // Import the ClientSetup component
+import { dark, light } from "@mui/material/styles/createPalette";
 
 type Theme = "dark" | "light";
 
@@ -54,26 +56,15 @@ function App() {
     // <Provider store={store}>
 
     <Router>
-      <AppRoutes handleThemeSwitch={handleThemeSwitch} />
+      <AppRoutes darkColor={dark} lightColor={light} handleThemeSwitch={handleThemeSwitch} />
     </Router>
 
     // </Provider>
   );
 }
 
-const client = createClient({
-  canisters: { 
-    // backend: {
-    //   canisterId: canisterId,
-    //   idlFactory: idlFactory as InterfaceFactory
-    // }
-  },
-    
-  providers: [new InternetIdentity(), new PlugWallet()],
-});
-
 export default () => (
-  <Connect2ICProvider client={client}>
+  <ClientSetup>
     <App />
-  </Connect2ICProvider>
+  </ClientSetup>
 );

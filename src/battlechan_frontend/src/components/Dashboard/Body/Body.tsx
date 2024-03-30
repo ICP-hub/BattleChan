@@ -18,7 +18,14 @@ import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 
 //backend
-import { backend } from "../../../../../declarations/backend/index"
+// import { backend } from "../../../../../declarations/backend/index"
+import { useCanister, useConnect } from "@connect2ic/react";
+import { Principal } from "@dfinity/principal";
+
+// Custom hook : initialize the backend Canister
+const useBackend = () => {
+  return useCanister("backend");
+};
 
 interface Board {
   [x: string]: any;
@@ -37,28 +44,55 @@ const Body = () => {
   const [boardSizes, setBoardSizes] = useState<string[]>([]);
   const darkColor = document.documentElement.className;
   const navigate = useNavigate();
-
+  const { principal } = useConnect();
+  const [backend] = useBackend();
+  // console.log(backend);
   useEffect(() => {
     fetchBoardNames();
   }, []);
   const className = "Home";
 
   async function fetchBoardNames() {
-    const response = (await backend.getTotalPostInBoard()) as BackendResponse;
-    const boards = response.data[0];
-
-    if (boards && boards.length > 0) {
-      const names = boards.map((board) => board.boardName);
-      const sizes = boards.map((board) => board.size.toString());
-      console.log("size is ", sizes);
-      console.log("ended");
-
-      setBoardNames(names); // Update the state with all board names.
-      setBoardSizes(sizes); // Update the state with all board names.
-    } else {
-      console.log("No boards found.");
+    const postData = {
+      postName: "", // Add your postName data here
+      postDes: "", // Add your postDes data here
+      postMetaData: "", // Add your postMetaData data here
+    };
+    const data = {
+      userName: "Khushali",
+      profileImg: ""
     }
-    console.log(boardSizes[0]);
+    // console.log(Principal.fromText(principal));
+    // const response = await backend.createUserAccount(data);
+    // console.log(response);
+    // const d = await backend.createComment("#12345678", "Hello");
+    // console.log("data", d);
+    // const d = await backend.createNewBoard("Games", "Games");
+    // console.log("data", d);
+    const d = await backend.getUserInfo();
+    console.log("data", d);
+
+    const board = (await backend.getTotalPostInBoard()) as BackendResponse;
+    console.log(board);
+    
+    const post = await backend.getPostsByBoard();
+    console.log("Main Posts Response: ", post);
+    const response = await backend.createPost("Games", postData);
+    console.log(response);
+    // const boards = response.data[0];
+
+    // if (boards && boards.length > 0) {
+    //   const names = boards.map((board) => board.boardName);
+    //   const sizes = boards.map((board) => board.size.toString());
+    //   console.log("size is ", sizes);
+    //   console.log("ended");
+
+    //   setBoardNames(names); // Update the state with all board names.
+    //   setBoardSizes(sizes); // Update the state with all board names.
+    // } else {
+    //   console.log("No boards found.");
+    // }
+    // console.log(boardSizes[0]);
   }
 
   // async function getPost() {
@@ -75,8 +109,8 @@ const Body = () => {
       style={
         darkColor == "dark"
           ? {
-              backgroundImage: `url(${bg})`,
-            }
+            backgroundImage: `url(${bg})`,
+          }
           : {}
       }
     >
@@ -99,9 +133,8 @@ const Body = () => {
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${
-            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-          } leading-relaxed`}
+          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+            } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
