@@ -5,14 +5,13 @@ import NavButtons from "../NavButtons/NavButtons";
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 
+type Theme = {
+  handleThemeSwitch: Function;
+};
 
 const userData = {
   name: "Kristin Watson",
   imageURL: defaultImg,
-};
-
-type Theme = {
-  handleThemeSwitch: Function;
 };
 
 const SettingProfile = (props: Theme) => {
@@ -78,16 +77,12 @@ const SettingProfile = (props: Theme) => {
         />
       )}
 
-      <div
-        className={className + " " + "big_tablet:px-36 tablet:px-12 px- pb-20"}
-      >
-        <h1 className="tablet:text-3xl text-2xl font-bold text-center tablet:mt-12 mt-4">
-          Customize Profile
-        </h1>
+      <div className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-4 text-dark dark:text-light`}>
+        <h1 className="laptop:text-3xl text-2xl font-bold text-center">Customize Profile</h1>
 
-        <section className="profileName tablet:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
+        <section className="profileName laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2">
-            <span className="font-semibold tablet::py-1 py-0">User Name</span>
+            <span className="font-semibold py-1">User Name</span>
             {!showInput && <span>{userName}</span>}
             {showInput && (
               <input
@@ -104,12 +99,13 @@ const SettingProfile = (props: Theme) => {
           <button
             type="button"
             className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold`}
+            onClick={handleNameChange}
           >
             Change
           </button>
         </section>
 
-        <section className="profilePhoto tablet:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
+        <section className="profilePhoto laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start">
             <span className="font-semibold">Profile Picture</span>
             <span>Image Must Be in Jpeg Format</span>
@@ -118,25 +114,34 @@ const SettingProfile = (props: Theme) => {
           <label
             htmlFor="profile"
             className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold cursor-pointer`}
+            onClick={(e: any) => handleFileChange(e.target)}
           >
             Change
           </label>
 
-          <input type="file" name="Change" id="profile" className="hidden" />
+          <input
+            type="file"
+            name="Change"
+            id="profile"
+            className="hidden"
+            accept="image/*"
+            onChange={(e: any) => handleFileChange(e.target)}
+          />
         </section>
 
-        <section className="image big_tablet:px-10 px-8 flex flex-col items-start">
+        <section className="image p-8 flex flex-col items-start">
           <img
             src={fileURL}
             alt="Profile Image"
-            className="w-[150px] h-[150px] rounded-lg object-cover"
+            className="laptop:w-[150px] w-[120px] laptop:h-[150px] h-[120px] rounded-lg object-cover"
           />
-          <p className={`${inputFileName == "" ? "hidden" : "block"} py-4`}>
+
+          <p className={`${inputFileName == "" ? "hidden" : "block"} py-2`}>
             {inputFileName}
           </p>
         </section>
 
-        <section className="image p-4 flex-col-center">
+        <section className="image p-4 m-8 flex-col-center">
           <button className="green-button" type="button">
             Update
           </button>
