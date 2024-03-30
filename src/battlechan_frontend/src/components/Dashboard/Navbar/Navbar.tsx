@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
 
-import { TiThMenu } from "react-icons/ti";
 import { FaRegBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
@@ -18,23 +16,21 @@ type Theme = {
   handleThemeSwitch: Function;
 };
 
-
-const truncateString  = (str: string, maxLength: number): string => {
+const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
     return str;
   }
-  return str.slice(0, maxLength) + '...';
+  return str.slice(0, maxLength) + "...";
 };
-// 
+//
 
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
   const darkColor = document.documentElement.className;
 
   const is1100px = useMediaQuery("(min-width: 1100px)");
-  const is800px = useMediaQuery("(min-width: 800px)");
+  const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
-
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -45,11 +41,10 @@ const Navbar = (props: Theme) => {
     }
   }, [showOverlay]);
 
-
   const { principal, activeProvider } = useConnect();
   let loggedInBy = activeProvider?.meta.name;
   let user = "";
-  if(principal){
+  if (principal) {
     user = truncateString(principal, 17);
   }
 
@@ -109,18 +104,22 @@ const Navbar = (props: Theme) => {
         </div>
 
         {!is1100px && (
-          <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-lg cursor-pointer" />
+          <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
         )}
 
-        {is800px && (
-          <FaRegBell className="tablet:min-w-[30px] tablet:text-3xl text-lg cursor-pointer" />
+        {is1000px && (
+          <FaRegBell className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
         )}
 
-        {!is800px && (
-          <TiThMenu className="tablet:min-w-[30px] tablet:text-3xl text-lg cursor-pointer" />
+        {!is1000px && (
+          <img
+            src={userimg}
+            onClick={() => setShowOverlay(!showOverlay)}
+            className="tablet:min-w-[40px] min-w-[30px] tablet:max-w-[45px]  max-w-[35px] cursor-pointer"
+          />
         )}
 
-        {is800px && (
+        {is1000px && (
           <React.Fragment>
             <div className="__userName_and_coins flex flex-col items-start">
               <p className="text-nowrap">{user}</p>

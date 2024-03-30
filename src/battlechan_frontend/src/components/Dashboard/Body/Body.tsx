@@ -116,18 +116,7 @@ const Body = () => {
     >
       <NavButtons />
 
-      <div
-        className={
-          className + "__createPost" + " mt-12 flex justify-center items-center"
-        }
-      >
-        <Link to="/createPost">
-          <p className="green-button flex-row-center bg-dirty-light-green">
-            <LuPlusCircle />
-            <span>Create Post</span>
-          </p>
-        </Link>
-      </div>
+      <CreatePostBtn />
 
       <div
         className={
