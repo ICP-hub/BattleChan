@@ -6,6 +6,11 @@ import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 
 
+const userData = {
+  name: "Kristin Watson",
+  imageURL: defaultImg,
+};
+
 type Theme = {
   handleThemeSwitch: Function;
 };

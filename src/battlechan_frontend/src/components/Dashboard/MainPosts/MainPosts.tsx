@@ -110,15 +110,16 @@ const MainPosts = (props: Theme) => {
         if (response.status === true && response.data) {
           // console.log(response);
           const posts = response.data.flat(); // Flatten nested arrays if any
-          posts.forEach((element) => {
-            const timestamp: string = convertNanosecondsToTimestamp(
-              BigInt(element.createdAt)
-            );
-            console.log(timestamp);
-            element.createdAt = timestamp;
-          });
-          // console.log(posts);
-          setPostsData(posts);
+          console.log(posts);
+          // posts.forEach((element) => {
+          //   const timestamp: string = convertNanosecondsToTimestamp(
+          //     BigInt(element.createdAt)
+          //   );
+          //   console.log(timestamp);
+          //   element.createdAt = timestamp;
+          // });
+          // // console.log(posts);
+          // setPostsData(posts);
         }
       } else {
         const response = await backend.getPostsByBoard();

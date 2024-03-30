@@ -6,7 +6,7 @@ import NavButtons from "../NavButtons/NavButtons";
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
 
-// import { backend } from "../../../../../declarations/backend";
+import { backend } from "../../../../../declarations/backend";
 import { useCanister, useConnect } from "@connect2ic/react";
 
 // Custom hook : initialize the backend Canister
@@ -141,8 +141,8 @@ const CreatePost = (props: Theme) => {
         postDes: "", // Add your postDes data here
         postMetaData: "", // Add your postMetaData data here
       };
-      const response = await backend.createPost(selectedCommunity, postData);
-      console.log(response);
+      // const response = await backend.createPost(selectedCommunity, postData);
+      // console.log(response);
       // if (response.status) {
       //   console.log("Post created successfully");
       //   // Clear form fields or show success message
