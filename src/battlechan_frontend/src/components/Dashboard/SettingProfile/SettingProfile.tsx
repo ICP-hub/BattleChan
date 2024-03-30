@@ -77,10 +77,10 @@ const SettingProfile = (props: Theme) => {
         />
       )}
 
-      <div className={`h-full w-full py-10 px-40 text-dark dark:text-light`}>
-        <h1 className="text-3xl font-bold text-center">Customize Profile</h1>
+      <div className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-4 text-dark dark:text-light`}>
+        <h1 className="laptop:text-3xl text-2xl font-bold text-center">Customize Profile</h1>
 
-        <section className="profileName p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">
+        <section className="profileName laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2">
             <span className="font-semibold py-1">User Name</span>
             {!showInput && <span>{userName}</span>}
@@ -105,15 +105,11 @@ const SettingProfile = (props: Theme) => {
           </button>
         </section>
 
-        <section className="profilePhoto p-4 m-8 rounded-lg border border-light-green flex-row-center justify-between">
+        <section className="profilePhoto laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start">
             <span className="font-semibold">Profile Picture</span>
             <span>Image Must Be in Jpeg Format</span>
           </div>
-
-          <p className={`${inputFileName == "" ? "hidden" : "block"}`}>
-            {inputFileName}
-          </p>
 
           <label
             htmlFor="profile"
@@ -133,12 +129,16 @@ const SettingProfile = (props: Theme) => {
           />
         </section>
 
-        <section className="image p-4 m-8 flex flex-row items-start">
+        <section className="image p-8 flex flex-col items-start">
           <img
             src={fileURL}
             alt="Profile Image"
-            className="w-[150px] h-[150px] rounded-lg object-cover"
+            className="laptop:w-[150px] w-[120px] laptop:h-[150px] h-[120px] rounded-lg object-cover"
           />
+
+          <p className={`${inputFileName == "" ? "hidden" : "block"} py-2`}>
+            {inputFileName}
+          </p>
         </section>
 
         <section className="image p-4 m-8 flex-col-center">
