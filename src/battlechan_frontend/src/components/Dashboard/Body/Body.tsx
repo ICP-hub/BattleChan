@@ -16,7 +16,9 @@ import { IoGameControllerOutline } from "react-icons/io5";
 
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
-// import { backend } from "../../../../../declarations/backend/index"
+
+//backend
+import { backend } from "../../../../../declarations/backend/index"
 
 interface Board {
   [x: string]: any;

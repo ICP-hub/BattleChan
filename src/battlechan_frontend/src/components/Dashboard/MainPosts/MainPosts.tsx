@@ -363,7 +363,7 @@ const MainPosts = (props: Theme) => {
             )}
           </div>
           {/* posts  */}
-          <div className="tablet:px-10 flex flex-col flex-wrap tablet:flex-row  items-center tablet:justify-start justify-center">
+          <div className="xl:px-10 mt-8 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
             <Posts currentPosts={currentPosts} type={props.type} />
           </div>
         </div>
