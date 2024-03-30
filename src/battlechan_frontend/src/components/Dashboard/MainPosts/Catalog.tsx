@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import CatalogSVG from "./CatalogSVG";
 import { useSearchParams } from "react-router-dom";
 
+  
+
 interface CatalogProps {
   boardsData: string[]
 }
 
+
 const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
+  const className = "Dashboard__MainPosts__Catalog";
   const [searchParams] = useSearchParams();
   const board = searchParams.get("boardName");
   const [activeItem, setActiveItem] = useState<string | null>("cinema");
@@ -32,7 +36,13 @@ const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
   // ];
 
   return (
-    <div className="hidden w-full tablet:inline-flex flex-nowrap mb-20 overflow-x-auto no-scrollbar">
+    <div
+      className={
+        className +
+        " " +
+        "hidden w-full tablet:inline-flex flex-nowrap  overflow-x-auto no-scrollbar"
+      }
+    >
       <ul className="flex items-center justify-start">
         {boardsData.map((boardName) => (
           <li key={boardName} className="mr-4">

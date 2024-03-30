@@ -15,13 +15,25 @@ interface PostsProps {
   currentPosts: PostData[];
   type?: string;
 }
+
 let comments = 0;
 const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
+  const className = "Dashboard__MainPosts__Posts";
+
   return (
-    <>
+    <React.Fragment>
       {currentPosts.map((post, index) => (
-        <div className={`w-full max-w-md tablet:max-w-none tablet:w-1/2 p-2  ${index % 2 !== 0 ? 'tablet:mt-6' : ''}`}>
-          <Link key={post.postId} to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}>
+        <div
+          className={
+            className +
+            " " +
+            `laptop:w-1/2 w-full p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
+          }
+        >
+          <Link
+            key={post.postId}
+            to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
+          >
             <Post
               key={post.postId}
               id={post.postId}
@@ -39,7 +51,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
           </Link>
         </div>
       ))}
-    </>
+    </React.Fragment>
   );
 };
 
