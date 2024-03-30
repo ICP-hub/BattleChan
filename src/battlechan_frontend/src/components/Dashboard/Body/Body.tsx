@@ -120,20 +120,18 @@ const Body = () => {
 
       <div
         className={
-          className +
-          "__tagLines" +
-          " w-full flex flex-col big_tablet:flex-row my-12 items-center justify-center container px-2 gap-2 mx-auto"
+          className + "__tagLines" + " px-20 w-full flex flex-row my-12"
         }
       >
         <h1
-          className={`text-4xl tablet:text-5xl text-center font-bold ${
+          className={`w-1/2 text-5xl font-bold ${
             darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
           } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`text-dark dark:text-light font-normal tablet:font-semibold text-lg text-center tablet:text-start`}
+          className={`w-1/2 text-dark dark:text-light font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
@@ -444,7 +442,9 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0] || "business"}`
+                        `/dashboard/mainPosts?boardName=${
+                          boardNames[0] || "business"
+                        }`
                       );
                     }}
                   >
@@ -543,7 +543,7 @@ const Body = () => {
                   </button>
                 </div>
               </th>
-              
+
               <th scope="col" className=" rounded-e-xl">
                 <div className="flex justify-center">
                   <button
@@ -563,10 +563,7 @@ const Body = () => {
           </thead>
           <tbody className="tablet:text-base">
             <tr className="">
-              <th
-                scope="row"
-                className="px-6 font-medium whitespace-nowrap"
-              >
+              <th scope="row" className="px-6 font-medium whitespace-nowrap">
                 Total Posts
               </th>
               <td className="">
