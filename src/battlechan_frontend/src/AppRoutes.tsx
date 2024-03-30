@@ -13,12 +13,11 @@ const UserProfile = React.lazy(() => import('../src/components/Dashboard/UserPro
 
 
 interface AppRoutesProps {
-    darkColor: string;
-    lightColor: string;
+    
     handleThemeSwitch: () => void; // Adjust based on the actual implementation
 }
 
-const AppRoutes = ({ darkColor, lightColor, handleThemeSwitch }) => {
+const AppRoutes:React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
     let { isConnected, principal , isIdle  , isInitializing} = useConnect()
     const [allow, setAllow] = useState<null | boolean>(null);
 
@@ -52,7 +51,7 @@ const AppRoutes = ({ darkColor, lightColor, handleThemeSwitch }) => {
                 path="/"
                 element={
                     <Suspense fallback={<Loader />}>
-                        <Landing darkColor={darkColor} lightColor={lightColor} handleThemeSwitch={handleThemeSwitch} />
+                        <Landing handleThemeSwitch={handleThemeSwitch} />
                     </Suspense>
                 }
             />

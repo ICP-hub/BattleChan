@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { FaRegBell } from "react-icons/fa";
 import UserImg from "../../../images/User.png";
 import { useConnect } from "@connect2ic/react";
 
@@ -10,6 +11,7 @@ import { RxLapTimer } from "react-icons/rx";
 import { TbSettings } from "react-icons/tb";
 import { BsPersonCircle } from "react-icons/bs";
 import { SiInternetcomputer } from "react-icons/si";
+import { useMediaQuery } from "@mui/material";
 
 type Props = {
   display: boolean;
@@ -17,23 +19,19 @@ type Props = {
   handleThemeSwitch: any;
 };
 
-
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
     return str;
   }
-  return str.slice(0, maxLength) + '...';
+  return str.slice(0, maxLength) + "...";
 };
 
-
-
-
-  
 const ProfileOverlay = (props: Props) => {
   const className = "ProfileOverlay";
   const display = props.display;
   const setProfilePopUp = props.setProfilePopUp;
   const darkColor = document.documentElement.className;
+  const is1000px = useMediaQuery("(min-width: 1000px)");
 
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
@@ -42,7 +40,7 @@ const ProfileOverlay = (props: Props) => {
 
   let loggedInBy = activeProvider?.meta.name;
   let user = "";
-  if(principal){
+  if (principal) {
     user = truncateString(principal, 17);
   }
 
@@ -61,21 +59,25 @@ const ProfileOverlay = (props: Props) => {
         className={
           className +
           "__container" +
-          " phone:w-[400px] w-[70vw] p-4 flex flex-col justify-between phone:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
+          " tablet:w-[400px] phone:w-[60vw] w-[70vw] p-4 flex flex-col justify-between tablet:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
         }
         onClick={(e) => e.stopPropagation()}
       >
-        <section className="w-full flex-row-center justify-start phone:gap-8 gap-4 phone:px-8 px-4">
-          <img src={UserImg} alt="User Profile Image" className="phone:w-[80px] w-[50px]" />
+        <section className="w-full flex-row-center justify-start tablet:gap-8 gap-4 tablet:px-8 px-4">
+          <img
+            src={UserImg}
+            alt="User Profile Image"
+            className="tablet:w-[80px] w-[50px]"
+          />
           <span className="text-lg">{user} </span>
         </section>
 
         <fieldset>
-          <legend className="phone:p-4 p-2 text-lg">Personal</legend>
+          <legend className="tablet:p-4 p-2 text-lg">Personal</legend>
 
           <hr />
 
-          <section className="flex flex-col bg-light phone:text-lg text-sm text-dark gap-4 p-3 my-2">
+          <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 p-3 my-2">
             <div className="ICP_Balance flex-row-center justify-between">
               <p className="flex-row-center gap-2">
                 <SiInternetcomputer />
@@ -96,26 +98,35 @@ const ProfileOverlay = (props: Props) => {
           </section>
 
           <Link to="/dashboard/userProfile">
-            <button className="flex-row-center gap-2 phone:px-4 px-2 py-2 phone:text-lg text-sm">
+            <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
               <BsPersonCircle />
               My Profile
             </button>
           </Link>
 
           <Link to="/dashboard/settingProfile">
-            <button className="flex-row-center gap-2 phone:px-4 px-2 py-2 phone:text-lg text-sm">
+            <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
               <TbSettings />
               Settings
             </button>
           </Link>
+
+          {!is1000px && (
+            <Link to="/dashboard">
+              <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
+                <FaRegBell />
+                Notifications
+              </button>
+            </Link>
+          )}
         </fieldset>
 
         <fieldset>
-          <legend className="phone:p-4 p-2 text-lg">View Mode</legend>
+          <legend className="tablet:p-4 p-2 text-lg">View Mode</legend>
 
           <hr />
 
-          <div className="flex-row-center justify-between p-4 phone:text-lg text-sm">
+          <div className="flex-row-center justify-between p-4 tablet:text-lg text-sm">
             <p className="flex-row-center gap-2">
               {darkColor == "dark" ? <BiMoon /> : <GrSun />}
               <span>{darkColor == "dark" ? "Dark Mode" : "Light Mode"}</span>
@@ -135,7 +146,7 @@ const ProfileOverlay = (props: Props) => {
 
         <button
           type="button"
-          className="phone:mt-8 mt-2 white-button bg-dark-green text-light"
+          className="tablet:mt-8 mt-2 white-button bg-dark-green text-light"
         >
           Logout
         </button>
