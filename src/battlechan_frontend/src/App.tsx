@@ -56,7 +56,7 @@ function App() {
     // <Provider store={store}>
 
     <Router>
-      <AppRoutes darkColor={dark} lightColor={light} handleThemeSwitch={handleThemeSwitch} />
+      <AppRoutes  handleThemeSwitch={handleThemeSwitch} />
     </Router>
 
     // </Provider>

@@ -120,7 +120,7 @@ const Body = () => {
 
       <div
         className={
-          className + "__tagLines" + " px-20 w-full flex flex-row my-12"
+          className + "__tagLines" + " w-full flex flex-col tablet:flex-row my-12 items-center justify-center"
         }
       >
         <h1
@@ -131,7 +131,7 @@ const Body = () => {
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`w-1/2 text-dark dark:text-light font-semibold text-lg text-start px-28`}
+          className={`text-dark dark:text-light font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
