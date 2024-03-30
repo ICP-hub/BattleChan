@@ -60,8 +60,8 @@ const Body = () => {
     };
     const data = {
       userName: "Khushali",
-      profileImg: ""
-    }
+      profileImg: "",
+    };
     // console.log(Principal.fromText(principal));
     // const response = await backend.createUserAccount(data);
     // console.log(response);
@@ -74,7 +74,7 @@ const Body = () => {
 
     const board = (await backend.getTotalPostInBoard()) as BackendResponse;
     console.log(board);
-    
+
     const post = await backend.getPostsByBoard();
     console.log("Main Posts Response: ", post);
     const response = await backend.createPost("Games", postData);
@@ -109,23 +109,14 @@ const Body = () => {
       style={
         darkColor == "dark"
           ? {
-            backgroundImage: `url(${bg})`,
-          }
+              backgroundImage: `url(${bg})`,
+            }
           : {}
       }
     >
       <NavButtons />
 
-      <div
-        className={className + "__createPost" + " mt-12 flex justify-center"}
-      >
-        <Link to="/createPost">
-          <p className="green-button flex-row-center bg-dirty-light-green">
-            <LuPlusCircle />
-            <span>Create Post</span>
-          </p>
-        </Link>
-      </div>
+      <CreatePostBtn />
 
       <div
         className={
@@ -133,8 +124,9 @@ const Body = () => {
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-            } leading-relaxed`}
+          className={`w-1/2 text-5xl font-bold ${
+            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+          } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
