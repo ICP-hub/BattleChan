@@ -129,17 +129,17 @@ const Body = () => {
 
       <div
         className={
-          className + "__tagLines" + " px-20 w-full flex flex-row my-12"
+          className + "__tagLines" + " w-full flex flex-col tablet:flex-row my-12 items-center justify-center"
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+          className={`text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
             } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`w-1/2 text-dark dark:text-light font-semibold text-lg text-start px-28`}
+          className={`text-dark dark:text-light font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
