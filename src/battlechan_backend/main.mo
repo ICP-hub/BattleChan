@@ -21,8 +21,7 @@ import { createCommentInfo; updateLikedComments } "controllers/comment";
 import {
   createPostInfo;
   updateVoteStatus;
-  archivePost;
-  postVisiblity;
+  // postVisiblity;
   bubbleSortPost;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
@@ -37,7 +36,6 @@ actor BattleChan {
   private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
-  private stable var postIdTimerIdTrie = Trie.empty<Types.PostId, Nat>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   private stable let freePostTime = 5;
@@ -117,20 +115,7 @@ actor BattleChan {
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
       insertNameNode(postData.postName, postId);
-      let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, postId, freePostTime, userId, postData, userTrieMap, boardTrieMap);
-
-      let timerId = Timer.setTimer<system>(
-        #seconds(freePostTime * 60 - abs(now() / 1_000_000_000) % freePostTime * 60),
-        func() : async () {
-          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
-          userTrieMap := updatedUserTrie;
-          postTrieMap := updatedPostTrie;
-          userAchivedPostTrie := updatedArchivedTrie;
-        },
-      );
-
-      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, timerId).0;
+      let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId,  freePostTime,postId, userId, postData, userTrieMap, boardTrieMap);
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, updatedBoardInfo).0;
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, newPost).0;
@@ -144,80 +129,37 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
-    try {
-      let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
-        case (null) { Debug.trap("noPostFound") };
-        case (?v) { v };
-      };
+  // public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
+  //   try {
 
-      let { updatedPostTrieMap; updatedExpireTime } = postVisiblity(postId, postTrieMap, time);
-      postTrieMap := updatedPostTrieMap;
+  //     let { updatedPostTrieMap; updatedExpireTime } = postVisiblity(postId, postTrieMap, time);
+  //     postTrieMap := updatedPostTrieMap;
 
-      Timer.cancelTimer(timeId);
+  //     #ok("successfully added Time");
+  //   } catch (e) {
+  //     let code = Error.code(e);
+  //     let message = Error.message(e);
+  //     #err(code, message);
+  //   };
+  // };
 
-      let updatedTimerId = Timer.setTimer<system>(
+  // public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
+  //   try {
+  //     // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+  //     let { updatedUserInfo; updatedPostInfo; updateExpireTime } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
 
-        #seconds(updatedExpireTime * 60 - abs(now() / 1_000_000_000) % updatedExpireTime * 60),
-        func() : async () {
-          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-          userTrieMap := updatedUserTrie;
-          postTrieMap := updatedPostTrie;
-          userAchivedPostTrie := updatedArchivedTrie;
-          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
+  //     userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+  //     postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
 
-        },
-      );
+  //     #ok(successMessage.update);
+  //   } catch (e) {
 
-      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, updatedTimerId).0;
+  //     let code = Error.code(e);
+  //     let message = Error.message(e);
 
-      #ok("successfully added Time");
-    } catch (e) {
-      let code = Error.code(e);
-      let message = Error.message(e);
-      #err(code, message);
-    };
-  };
-
-  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
-    try {
-      // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
-      let { updatedUserInfo; updatedPostInfo; updateExpireTime } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
-
-      let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
-        case (null) { Debug.trap("noPostFound") };
-        case (?v) { v };
-      };
-
-      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
-      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-
-      Timer.cancelTimer(timeId);
-
-      let updatedTimerId = Timer.setTimer<system>(
-
-        #seconds(updateExpireTime * 60 - abs(now() / 1_000_000_000) % updateExpireTime * 60),
-        func() : async () {
-          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-
-          userTrieMap := updatedUserTrie;
-          postTrieMap := updatedPostTrie;
-          userAchivedPostTrie := updatedArchivedTrie;
-          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
-
-        },
-      );
-      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, updatedTimerId).0;
-
-      #ok(successMessage.update);
-    } catch (e) {
-
-      let code = Error.code(e);
-      let message = Error.message(e);
-
-      #err(code, message);
-    };
-  };
+  //     #err(code, message);
+  //   };
+  // };
 
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
     try {

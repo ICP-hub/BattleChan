@@ -17,11 +17,12 @@ module {
         noPageExist = "No Page Exist!";
         noAccess = "no Access";
         notValid = "not Valid Text";
+        downvoteNotAllowed = "cannot downVote less than 1 minute left to expire";
     };
     public let notFound = {
         noUser = "No User Exist!";
         noPost = "No Post Exist!";
-        noArchivedPost  = "No Archived Post !";
+        noArchivedPost = "No Archived Post !";
         noComment = "No comment Exist!";
         noReply = "No Reply Exist!";
         noData = "No Data Exist !";
