@@ -61,21 +61,21 @@ const ProfileOverlay = (props: Props) => {
         className={
           className +
           "__container" +
-          "h-[80vh] w-[400px] p-4 flex flex-col gap-4 bg-dirty-light-green text-light rounded-lg"
+          " phone:w-[400px] w-[70vw] p-4 flex flex-col justify-between phone:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
         }
         onClick={(e) => e.stopPropagation()}
       >
-        <section className="w-full flex-row-center justify-start gap-8 px-8">
-          <img src={UserImg} alt="User Profile Image" />
+        <section className="w-full flex-row-center justify-start phone:gap-8 gap-4 phone:px-8 px-4">
+          <img src={UserImg} alt="User Profile Image" className="phone:w-[80px] w-[50px]" />
           <span className="text-lg">{user} </span>
         </section>
 
         <fieldset>
-          <legend className="p-4 text-lg">Personal</legend>
+          <legend className="phone:p-4 p-2 text-lg">Personal</legend>
 
           <hr />
 
-          <section className="flex flex-col bg-light text-dark gap-4 p-3 my-2">
+          <section className="flex flex-col bg-light phone:text-lg text-sm text-dark gap-4 p-3 my-2">
             <div className="ICP_Balance flex-row-center justify-between">
               <p className="flex-row-center gap-2">
                 <SiInternetcomputer />
@@ -96,14 +96,14 @@ const ProfileOverlay = (props: Props) => {
           </section>
 
           <Link to="/dashboard/userProfile">
-            <button className="flex-row-center gap-2 px-4 py-2">
+            <button className="flex-row-center gap-2 phone:px-4 px-2 py-2 phone:text-lg text-sm">
               <BsPersonCircle />
               My Profile
             </button>
           </Link>
 
           <Link to="/dashboard/settingProfile">
-            <button className="flex-row-center gap-2 px-4 py-2">
+            <button className="flex-row-center gap-2 phone:px-4 px-2 py-2 phone:text-lg text-sm">
               <TbSettings />
               Settings
             </button>
@@ -111,11 +111,11 @@ const ProfileOverlay = (props: Props) => {
         </fieldset>
 
         <fieldset>
-          <legend className="p-4 text-lg">View Mode</legend>
+          <legend className="phone:p-4 p-2 text-lg">View Mode</legend>
 
           <hr />
 
-          <div className="flex-row-center justify-between p-4">
+          <div className="flex-row-center justify-between p-4 phone:text-lg text-sm">
             <p className="flex-row-center gap-2">
               {darkColor == "dark" ? <BiMoon /> : <GrSun />}
               <span>{darkColor == "dark" ? "Dark Mode" : "Light Mode"}</span>
@@ -135,7 +135,7 @@ const ProfileOverlay = (props: Props) => {
 
         <button
           type="button"
-          className="mt-8 white-button bg-dark-green text-light"
+          className="phone:mt-8 mt-2 white-button bg-dark-green text-light"
         >
           Logout
         </button>
