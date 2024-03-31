@@ -1,9 +1,9 @@
 // AppRoutes.tsx
-import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Loader from './components/Loader/Loader';
-import { useConnect } from '@connect2ic/react';
+import React, { Suspense, lazy, useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Loader from "./components/Loader/Loader";
+import { useConnect } from "@connect2ic/react";
 
 // Lazy load pages
 const Landing = React.lazy(() => import('./pages/Landing/Landing'));
@@ -16,48 +16,41 @@ const Analytics = React.lazy(() => import('../src/components/Dashboard/Analytics
 
 
 interface AppRoutesProps {
-    
-    handleThemeSwitch: () => void; // Adjust based on the actual implementation
+  handleThemeSwitch: () => void; // Adjust based on the actual implementation
 }
 
-const AppRoutes:React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
-    let { isConnected, principal , isIdle  , isInitializing} = useConnect()
-    const [allow, setAllow] = useState<null | boolean>(null);
+const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
+  let { isConnected, principal, isIdle, isInitializing } = useConnect();
+  const [allow, setAllow] = useState<null | boolean>(null);
 
-    useEffect(() => {
-         if(isInitializing == false ){
-             setAllow(principal ? true : false);
-         }
-      console.log("intitilizing is " ,isInitializing)
+  useEffect(() => {
+    if (isInitializing == false) {
+      setAllow(principal ? true : false);
+    }
+    console.log("intitilizing is ", isInitializing);
+  }, [principal, isInitializing]);
 
-      }, [principal , isInitializing  ]);
+  console.log("allow is ", allow);
+  console.log("principal is ", principal);
 
-      console.log("allow is " ,allow)
-      console.log("principal is " ,principal)
+  let x = "a";
 
-
-
-    let x  = "a"
-
-
-      
-    
-    React.useEffect(() => {
-        if (principal) {
-            console.log('Principalm eff of aepr :', principal);
-            // Perform any other actions that depend on the updated principal value
+  React.useEffect(() => {
+    if (principal) {
+      console.log("Principalm eff of aepr :", principal);
+      // Perform any other actions that depend on the updated principal value
+    }
+  }, [principal]);
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Landing handleThemeSwitch={handleThemeSwitch} />
+          </Suspense>
         }
-    }, [principal]); 
-    return (
-        <Routes>
-            <Route
-                path="/"
-                element={
-                    <Suspense fallback={<Loader />}>
-                        <Landing handleThemeSwitch={handleThemeSwitch} />
-                    </Suspense>
-                }
-            />
+      />
 
             <Route
                 path="/dashboard/"
