@@ -6,14 +6,14 @@ import Loader from "./components/Loader/Loader";
 import { useConnect } from "@connect2ic/react";
 
 // Lazy load pages
-const Landing = React.lazy(() => import("./pages/Landing/Landing"));
-const DashboardRoutes = React.lazy(() => import("./pages/Routes"));
-const UserSetting = React.lazy(
-  () => import("../src/components/Dashboard/SettingProfile/SettingProfile")
-);
-const UserProfile = React.lazy(
-  () => import("../src/components/Dashboard/UserProfile/UserProfile")
-);
+const Landing = React.lazy(() => import('./pages/Landing/Landing'));
+const DashboardRoutes = React.lazy(() => import('./pages/Routes'));
+const UserSetting = React.lazy(() => import('../src/components/Dashboard/SettingProfile/SettingProfile'))
+const UserProfile = React.lazy(() => import('../src/components/Dashboard/UserProfile/UserProfile'))
+const MainPosts = React.lazy(() => import('../src/components/Dashboard/MainPosts/MainPosts'))
+const ArchivePosts = React.lazy(() => import('../src/components/Dashboard/ArchivePosts/ArchivePosts'))
+const Analytics = React.lazy(() => import('../src/components/Dashboard/Analytics/Analytics'))
+
 
 interface AppRoutesProps {
   handleThemeSwitch: () => void; // Adjust based on the actual implementation
@@ -52,40 +52,84 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
         }
       />
 
-      <Route
-        path="/dashboard/"
-        element={
-          <Suspense fallback={<Loader />}>
-            <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
-          </Suspense>
-        }
-      />
-      <Route
-        path="/dashboard/settingProfile/*"
-        element={
-          allow == true ? (
-            <Suspense fallback={<Loader />}>
-              <UserSetting handleThemeSwitch={handleThemeSwitch} />
-            </Suspense>
-          ) : allow == false ? (
-            <Navigate to="/" />
-          ) : null
-        }
-      />
-      <Route
-        path="/dashboard/UserProfile/*"
-        element={
-          allow == true ? (
-            <Suspense fallback={<Loader />}>
-              <UserProfile handleThemeSwitch={handleThemeSwitch} />
-            </Suspense>
-          ) : allow == false ? (
-            <Navigate to="/" />
-          ) : null
-        }
-      />
-    </Routes>
-  );
+            <Route
+                path="/dashboard/"
+                element={
+                   
+                        <Suspense fallback={<Loader />}>
+                            <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
+                        </Suspense>
+                }
+            />
+            <Route
+                path="/dashboard/settingProfile/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <UserSetting handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/UserProfile/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <UserProfile handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/mainPosts/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <MainPosts handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/archivePosts/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <ArchivePosts handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/analytics/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <Analytics handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+
+        </Routes>
+
+    );
 };
 
 export default AppRoutes;

@@ -7,6 +7,7 @@ import MainPosts from "../components/Dashboard/MainPosts/MainPosts";
 import PostDetails from "../components/Dashboard/PostDetails/PostDetails";
 import CreatePost from "../components/Dashboard/CreatePost/CreatePost";
 import ArchivePosts from "../components/Dashboard/ArchivePosts/ArchivePosts";
+import Analytics from "../components/Dashboard/Analytics/Analytics";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -29,6 +30,7 @@ function Routing(props: Theme) {
         <Route path="/userProfile" element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />} />
         <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch} />} />
         <Route path="/archivePosts" element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route path="/analytics" element={<Analytics handleThemeSwitch={props.handleThemeSwitch} />} />
 
         <Route
           path="/postDetails/:postId"
