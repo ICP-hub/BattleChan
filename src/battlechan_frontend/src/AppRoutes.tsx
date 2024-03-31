@@ -11,40 +11,32 @@ const DashboardRoutes = React.lazy(() => import('./pages/Routes'));
 const UserSetting = React.lazy(() => import('../src/components/Dashboard/SettingProfile/SettingProfile'))
 const UserProfile = React.lazy(() => import('../src/components/Dashboard/UserProfile/UserProfile'))
 
-
 interface AppRoutesProps {
-    
+
     handleThemeSwitch: () => void; // Adjust based on the actual implementation
 }
 
-const AppRoutes:React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
-    let { isConnected, principal , isIdle  , isInitializing} = useConnect()
+const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
+    let { isConnected, principal, isIdle, isInitializing } = useConnect()
     const [allow, setAllow] = useState<null | boolean>(null);
 
     useEffect(() => {
-         if(isInitializing == false ){
-             setAllow(principal ? true : false);
-         }
-      console.log("intitilizing is " ,isInitializing)
+        if (isInitializing == false) {
+            setAllow(principal ? true : false);
+        }
+        console.log("intitilizing is ", isInitializing)
 
-      }, [principal , isInitializing  ]);
+    }, [principal, isInitializing]);
 
-      console.log("allow is " ,allow)
-      console.log("principal is " ,principal)
+    console.log("allow is ", allow)
+    console.log("principal is ", principal)
 
-
-
-    let x  = "a"
-
-
-      
-    
     React.useEffect(() => {
         if (principal) {
             console.log('Principalm eff of aepr :', principal);
             // Perform any other actions that depend on the updated principal value
         }
-    }, [principal]); 
+    }, [principal]);
     return (
         <Routes>
             <Route
@@ -57,12 +49,11 @@ const AppRoutes:React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
             />
 
             <Route
-                path="/dashboard/"
+                path="/dashboard/*"
                 element={
-                   
-                        <Suspense fallback={<Loader />}>
-                            <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
+                    <Suspense fallback={<Loader />}>
+                        <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
                 }
             />
             <Route
@@ -70,9 +61,9 @@ const AppRoutes:React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                 element={
                     allow == true ? (
                         <Suspense fallback={<Loader />}>
-                            <UserSetting handleThemeSwitch={handleThemeSwitch}/>
+                            <UserSetting handleThemeSwitch={handleThemeSwitch} />
                         </Suspense>
-                    ) : allow == false ?(
+                    ) : allow == false ? (
 
                         <Navigate to="/" />
                     ) : null
@@ -83,9 +74,9 @@ const AppRoutes:React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                 element={
                     allow == true ? (
                         <Suspense fallback={<Loader />}>
-                            <UserProfile handleThemeSwitch={handleThemeSwitch}/>
+                            <UserProfile handleThemeSwitch={handleThemeSwitch} />
                         </Suspense>
-                    ) : allow == false ?(
+                    ) : allow == false ? (
 
                         <Navigate to="/" />
                     ) : null

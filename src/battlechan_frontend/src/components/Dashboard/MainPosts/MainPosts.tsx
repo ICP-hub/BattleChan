@@ -15,6 +15,13 @@ import NavButtons from "../NavButtons/NavButtons";
 import CreatePostBtn from "../Body/CreatePostBtn";
 
 import { backend } from "../../../../../declarations/backend";
+import { useCanister, useConnect } from "@connect2ic/react";
+import PostApiHanlder from "../../../API_Handlers/post";
+
+// Custom hook : initialize the backend Canister
+const useBackend = () => {
+  return useCanister("backend");
+};
 
 function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
@@ -28,9 +35,8 @@ function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const minute = date.getMinutes(); // Minute (0-59)
 
   // Format the timestamp string
-  const timestamp = `${month} ${day},${year}; ${hour}:${
-    minute < 10 ? "0" + minute : minute
-  }`;
+  const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? "0" + minute : minute
+    }`;
 
   return timestamp;
 }
@@ -47,6 +53,10 @@ type PostInfo = {
   postDes: string;
   expireAt: BigInt;
   createdAt: string;
+  createdBy: {
+    userName: string;
+    userProfile: string;
+  }
 };
 
 interface Board {
@@ -60,25 +70,28 @@ interface BackendResponse {
   error: string[];
 }
 
+interface PostResponse {
+  status: boolean;
+  data: PostInfo[][];
+  error: string[];
+}
+
 const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const className = "Dashboard__MainPosts";
+  const [backend] = useBackend();
+  const { createPost, getBoards, getMainPosts, getArchivePosts } = PostApiHanlder();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Make a fetch call to your backend API
-        const response =
-          (await backend.getTotalPostInBoard()) as BackendResponse;
+        const response = (await getBoards()) as BackendResponse;
         if (response.status == false) {
           throw new Error("Failed to fetch communities");
         }
-        // console.log(response)
-
         const boards = response.data[0];
-        // console.log(boards);
-
         if (boards && boards.length > 0) {
           const names = boards.map((board) => board.boardName);
           setBoardsData(names);
@@ -105,29 +118,37 @@ const MainPosts = (props: Theme) => {
   async function getPosts(postsType?: string) {
     try {
       if (postsType === "archive") {
-        const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
+        const response = (await getArchivePosts()) as PostResponse;
         console.log("Archive Post Response: ", response);
         if (response.status === true && response.data) {
-          // console.log(response);
-          const posts = response.data.flat(); // Flatten nested arrays if any
-          console.log(posts);
-          // posts.forEach((element) => {
-          //   const timestamp: string = convertNanosecondsToTimestamp(
-          //     BigInt(element.createdAt)
-          //   );
-          //   console.log(timestamp);
-          //   element.createdAt = timestamp;
-          // });
-          // // console.log(posts);
-          // setPostsData(posts);
+          const posts = response.data
+            .flatMap((nestedArray) => nestedArray)
+            .flatMap((element) => {
+              if (Array.isArray(element) && element.length === 2 && typeof element[1] === 'object') {
+                return [element[1]]; // Include only the object part
+              }
+              return [];
+            });
+          // console.log(posts);
+          posts.forEach((element) => {
+            const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+            console.log(timestamp);
+            element.createdAt = timestamp;
+          });
+          setPostsData(posts);
         }
+
+
       } else {
-        const response = await backend.getPostsByBoard();
+        const response = (await getMainPosts()) as PostResponse;
         console.log("Main Posts Response: ", response);
         if (response.status === true && response.data) {
           // console.log(response);
           const posts = response.data.flat(); // Flatten nested arrays if any
+          console.log(posts);
           posts.forEach((element) => {
+            console.log("element", element);
+            console.log(element.createdAt);
             const timestamp: string = convertNanosecondsToTimestamp(
               BigInt(element.createdAt)
             );
@@ -329,9 +350,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Rank" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Rank" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Rank")}
                     >
                       Rank
@@ -340,9 +360,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "New" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "New" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("New")}
                     >
                       New
@@ -351,9 +370,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Last Reply")}
                     >
                       Last Reply

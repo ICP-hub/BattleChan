@@ -77,8 +77,8 @@ const Body = () => {
 
     const post = await backend.getPostsByBoard();
     console.log("Main Posts Response: ", post);
-    const response = await backend.createPost("Games", postData);
-    console.log(response);
+    // const response = await backend.createPost("Games", postData);
+    // console.log(response);
     // const boards = response.data[0];
 
     // if (boards && boards.length > 0) {

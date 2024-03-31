@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import KnowMore from "./KnowMore";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
+import { useNavigate } from "react-router-dom";
 
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
 
 import { backend } from "../../../../../declarations/backend";
 import { useCanister, useConnect } from "@connect2ic/react";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
@@ -23,6 +25,9 @@ interface BackendResponse {
   status: boolean;
   data: Board[][]; // Assuming 'data' is an array of arrays of Board objects.
   error: string[];
+}
+interface postResponse {
+  ok: string;
 }
 
 type Theme = {
@@ -99,20 +104,27 @@ const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 const CreatePost = (props: Theme) => {
-
+  const navigate = useNavigate();
+  const { createPost, getBoards, addBoard } = PostApiHanlder();
   const [communities, setCommunities] = useState<string[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
+  const selectedCommunityRef = React.useRef(selectedCommunity); // Ref to store latest selected community
   const [postName, setPostName] = useState("");
+  const postNameRef = React.useRef(postName);
   const [postDes, setPostDes] = useState("");
+  const postDesRef = React.useRef(postDes); // Ref to store latest selected community
   const [postMetaData, setPostMetaData] = useState("");
-  // const [backend] = useBackend();
+  const [backend] = useBackend();
   // console.log(backend);
   useEffect(() => {
+    let createPostBtn = document.getElementById("createPostBtn")
     // Fetch data from backend canister function getTotalPostInBoard
     const fetchData = async () => {
       try {
         // Make a fetch call to your backend API
-        const response = (await backend.getTotalPostInBoard()) as BackendResponse;
+        // const board = await addBoard("Games");
+        // console.log(board);
+        const response = (await getBoards()) as BackendResponse;
         if (response.status == false) {
           throw new Error("Failed to fetch communities");
         }
@@ -131,30 +143,32 @@ const CreatePost = (props: Theme) => {
       }
     };
 
+    createPostBtn?.addEventListener("click", async () => {
+      handleCreatePost();
+    })
+
     fetchData(); // Call fetchData function when component mounts
   }, []);
 
+  // Update ref when selectedCommunity changes
+  useEffect(() => {
+    selectedCommunityRef.current = selectedCommunity;
+    postDesRef.current = postDes;
+    postNameRef.current = postName;
+  }, [selectedCommunity, postDes, postName]);
+
   const handleCreatePost = async () => {
-    try {
-      const postData = {
-        postName: "", // Add your postName data here
-        postDes: "", // Add your postDes data here
-        postMetaData: "", // Add your postMetaData data here
-      };
-      // const response = await backend.createPost(selectedCommunity, postData);
-      // console.log(response);
-      // if (response.status) {
-      //   console.log("Post created successfully");
-      //   // Clear form fields or show success message
-      // } else {
-      //   console.error("Failed to create post:", response.error);
-      //   // Handle error, show error message, etc.
-      // }
-    } catch (error) {
-      console.error("Error creating post:", error);
+    const postData = {
+      postName: postNameRef.current,
+      postDes: postDesRef.current,
+      postMetaData: "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+    };
+    const response = (await createPost(selectedCommunityRef.current, postData)) as postResponse;
+    console.log(response);
+    if(response && response?.ok){
+      navigate('/dashboard/mainPosts');
     }
   };
-
 
   const className = "HomePage__CreatePost";
 
@@ -190,6 +204,7 @@ const CreatePost = (props: Theme) => {
                 name="title"
                 placeholder="Enter the title/topic of your post"
                 className="w-full italic bg-light dark:bg-dark border border-light-green rounded-md p-3"
+                onChange={(e) => setPostName(e.target.value)}
               />
 
               <label className="font-semibold py-4" htmlFor="description">
@@ -201,6 +216,7 @@ const CreatePost = (props: Theme) => {
                 rows={5}
                 className="w-full p-3 italic bg-light dark:bg-dark border border-light-green rounded-md"
                 placeholder="Describe about your post in a nutshell"
+                onChange={(e) => setPostDes(e.target.value)}
               ></textarea>
 
               <label className="font-semibold py-4" htmlFor="community">
@@ -230,7 +246,7 @@ const CreatePost = (props: Theme) => {
                 <button
                   type="button"
                   className="small-button bg-dirty-light-green"
-                  onClick={handleCreatePost}
+                  id="createPostBtn"
                 >
                   Post
                 </button>

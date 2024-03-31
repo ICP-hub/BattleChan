@@ -9,6 +9,10 @@ interface PostData {
   postDes: string;
   expireAt: BigInt;
   createdAt: string;
+  createdBy: {
+    userName: string;
+    userProfile: string;
+  }
 }
 
 interface PostsProps {
@@ -39,13 +43,14 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
               id={post.postId}
               imageUrl={post.postMetaData}
               userAvatarUrl="/src/images/main-post-user-avatar.jpg"
-              userName="Khushali"
               timestamp={post.createdAt}
               duration="5:00"
               content={post.postDes}
               likes="0"
               comments={comments}
               expireAt={post.expireAt}
+              userName={post.createdBy.userName}
+              userProfile={post.createdBy.userProfile}
               type={type}
             />
           </Link>
