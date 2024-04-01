@@ -20,45 +20,43 @@ interface AppRoutesProps {
 }
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
-  let { isConnected, principal, isIdle, isInitializing } = useConnect();
-  const [allow, setAllow] = useState<null | boolean>(null);
+    let { isConnected, principal, isIdle, isInitializing } = useConnect()
+    const [allow, setAllow] = useState<null | boolean>(null);
 
-  useEffect(() => {
-    if (isInitializing == false) {
-      setAllow(principal ? true : false);
-    }
-    console.log("intitilizing is ", isInitializing);
-  }, [principal, isInitializing]);
-
-  console.log("allow is ", allow);
-  console.log("principal is ", principal);
-
-  let x = "a";
-
-  React.useEffect(() => {
-    if (principal) {
-      console.log("Principalm eff of aepr :", principal);
-      // Perform any other actions that depend on the updated principal value
-    }
-  }, [principal]);
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Suspense fallback={<Loader />}>
-            <Landing handleThemeSwitch={handleThemeSwitch} />
-          </Suspense>
+    useEffect(() => {
+        if (isInitializing == false) {
+            setAllow(principal ? true : false);
         }
-      />
+        console.log("intitilizing is ", isInitializing)
+
+    }, [principal, isInitializing]);
+
+    console.log("allow is ", allow)
+    console.log("principal is ", principal)
+
+    React.useEffect(() => {
+        if (principal) {
+            console.log('Principalm eff of aepr :', principal);
+            // Perform any other actions that depend on the updated principal value
+        }
+    }, [principal]);
+    return (
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <Suspense fallback={<Loader />}>
+                        <Landing handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
+                }
+            />
 
             <Route
-                path="/dashboard/"
+                path="/dashboard/*"
                 element={
-                   
-                        <Suspense fallback={<Loader />}>
-                            <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
+                    <Suspense fallback={<Loader />}>
+                        <DashboardRoutes handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
                 }
             />
             <Route
@@ -66,9 +64,9 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                 element={
                     allow == true ? (
                         <Suspense fallback={<Loader />}>
-                            <UserSetting handleThemeSwitch={handleThemeSwitch}/>
+                            <UserSetting handleThemeSwitch={handleThemeSwitch} />
                         </Suspense>
-                    ) : allow == false ?(
+                    ) : allow == false ? (
 
                         <Navigate to="/" />
                     ) : null
@@ -79,9 +77,48 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                 element={
                     allow == true ? (
                         <Suspense fallback={<Loader />}>
-                            <UserProfile handleThemeSwitch={handleThemeSwitch}/>
+                            <UserProfile handleThemeSwitch={handleThemeSwitch} />
+                        </Suspense>
+                    ) : allow == false ? (
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/mainPosts/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <MainPosts handleThemeSwitch={handleThemeSwitch}/>
                         </Suspense>
                     ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/archivePosts/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <ArchivePosts handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ?(
+
+                        <Navigate to="/" />
+                    ) : null
+                }
+            />
+            <Route
+                path="/dashboard/analytics/*"
+                element={
+                    allow == true ? (
+                        <Suspense fallback={<Loader />}>
+                            <Analytics handleThemeSwitch={handleThemeSwitch}/>
+                        </Suspense>
+                    ) : allow == false ? (
 
                         <Navigate to="/" />
                     ) : null

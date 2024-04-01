@@ -10,6 +10,7 @@ interface PostProps {
   imageUrl: string;
   userAvatarUrl: string;
   userName: string;
+  userProfile: string;
   timestamp: string;
   duration: string;
   content: string;
@@ -30,6 +31,7 @@ const Post: React.FC<PostProps> = ({
   likes,
   comments,
   expireAt,
+  userProfile,
   type,
 }) => {
   const [time, setTime] = useState("0:00");
@@ -104,14 +106,14 @@ const Post: React.FC<PostProps> = ({
                           type === "archive" ? "text-red" : "text-light-green"
                         }`}
                       >
-                        {type === "archive" ? "0:00 " : `${duration} `}
+                        {type === "archive" ? "0:00 " : `${time} `}
                       </span>
                       left
                     </div>
                   </div>
                 </div>
 
-                <div className="tablet:text-sm text-xs text-light dark:text-light text-opacity-50">
+                <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
                   {timestamp} ; {id}
                 </div>
               </div>
