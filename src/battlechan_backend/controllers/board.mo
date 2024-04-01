@@ -11,9 +11,9 @@ module {
         if (checkText(boardName, 50) == false or checkText(boardDes, 300) == false) {
             trap(reject.outBound);
         };
-        if (anonymousCheck(userId) == true) {
-            trap(reject.anonymous);
-        };
+        // if (anonymousCheck(userId) == true) {
+        //     trap(reject.anonymous);
+        // };
         let newBoard : Types.BoardInfo = {
             boardName;
             boardDes;

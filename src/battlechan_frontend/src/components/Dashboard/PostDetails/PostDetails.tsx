@@ -15,7 +15,7 @@ import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { useMediaQuery } from "@mui/material";
-
+import PostApiHanlder from "../../../API_Handlers/post";
 //backend
 import { backend } from "../../../../../declarations/backend";
 
@@ -29,7 +29,6 @@ function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const year = date.getFullYear(); // Full year (e.g., 2023)
   const hour = date.getHours(); // Hour (0-23)
   const minute = date.getMinutes(); // Minute (0-59)
-
   // Format the timestamp string
   const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? '0' + minute : minute}`;
 
@@ -62,6 +61,12 @@ type PostInfo = {
   upvotes: BigInt;
 };
 
+interface BackendResponse {
+  status: boolean;
+  data: []; // Assuming 'data' is an array of arrays of Board objects.
+  error: string[];
+}
+
 const PostDetails = (props: Theme) => {
   // let postId = "123";
   const postId: string = useParams().postId ?? "";
@@ -73,6 +78,8 @@ const PostDetails = (props: Theme) => {
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
   const is700px = useMediaQuery("(min-width: 700px)");
+  const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
+
   const handleVote = (vote: boolean) => {
     setVote(vote);
   };
@@ -96,13 +103,13 @@ const PostDetails = (props: Theme) => {
 
   async function getPostDetail(postId: string) {
     try {
-      // const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
-      const response = await backend.getPostInfo(postId);
+      const response = (await getSingleArchivePost(postId)) as BackendResponse;
+      // const response = (await getSingleMainPost(postId)) as BackendResponse;
       console.log(response);
       if (response.status === true && response.data) {
         console.log(response);
         const posts = response.data.flat(); // Flatten nested arrays if any
-        posts.forEach(element => {
+        posts.forEach((element: any) => {
           const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
           console.log(timestamp);
           element.createdAt = timestamp;
@@ -230,14 +237,14 @@ const PostDetails = (props: Theme) => {
 
           {/* comment for mobile  */}
           {/* {!showComments && ( */}
-            {/* // <div className="tablet:hidden my-8"> */}
-            {/* //   <button */}
-            {/* //     onClick={() => setShowComments(true)} */}
-            {/* //     className="small-button bg-light text-dark cursor-pointer font-semibold" */}
-            {/* //   > */}
-            {/* //     See Comments */}
-            {/* //   </button> */}
-            {/* // </div> */}
+          {/* // <div className="tablet:hidden my-8"> */}
+          {/* //   <button */}
+          {/* //     onClick={() => setShowComments(true)} */}
+          {/* //     className="small-button bg-light text-dark cursor-pointer font-semibold" */}
+          {/* //   > */}
+          {/* //     See Comments */}
+          {/* //   </button> */}
+          {/* // </div> */}
           {/* // )} */}
 
           {/* comment for desktop  */}

@@ -4,34 +4,56 @@ import NavButtons from "../NavButtons/NavButtons";
 
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
+import { useCanister, useConnect } from "@connect2ic/react";
+import { dark } from "@mui/material/styles/createPalette";
+import UserApiHanlder from "../../../API_Handlers/user";
+// Custom hook : initialize the backend Canister
+const useBackend = () => {
+  return useCanister("backend");
+};
 
 type Theme = {
   handleThemeSwitch: Function;
 };
+
+interface BackendResponse {
+  status: boolean;
+  data: []; // Assuming 'data' is an array of arrays of Board objects.
+  error: string[];
+}
 
 const userData = {
   name: "Kristin Watson",
   imageURL: defaultImg,
 };
 
+interface UserData {
+  userName: string;
+}
+
 const SettingProfile = (props: Theme) => {
+  const [backend] = useBackend();
+  const { registerUser, isUserRegistered, updateUser } = UserApiHanlder();
   const [showInput, setShowInput] = React.useState(false);
+  const [isRegistered, setIsRegistered] = React.useState(false);
 
   const [inputFileName, setInputFileName] = React.useState("");
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
 
-  const [inputUserName, setInputUserName] = React.useState(userData.name);
+  const [inputUserName, setInputUserName] = React.useState("");
   const [userName, setUserName] = React.useState(userData.name);
+  const isRegisteredRef = React.useRef(isRegistered);
 
   const className = "Dashboard__SettingProfile";
 
   function handleNameChange() {
-    if (userName != inputUserName) {
+    if (userName !== inputUserName) {
       setShowInput(false);
       setUserName(inputUserName);
     } else {
       setShowInput(true);
     }
+    console.log("Input username:", inputUserName); // Add this line
   }
 
   function handleBlur() {
@@ -47,21 +69,73 @@ const SettingProfile = (props: Theme) => {
   useEffect(() => {
     const fileInput = document.getElementById("profile");
 
+    const handleFileInputChange = (event: any) => {
+      const files = event.target.files;
+
+      if (files.length > 0) {
+        const file = files[0];
+        const fileName = file.name;
+        setInputFileName(fileName);
+      } else {
+        setInputFileName("No file Selected");
+      }
+    };
+
     if (fileInput) {
-      fileInput.addEventListener("change", function (event: any) {
-        const files = event.target.files;
+      fileInput.addEventListener("change", handleFileInputChange);
+    }
 
-        if (files.length > 0) {
-          const file = files[0];
+  }, [handleFileChange]);
 
-          const fileName = file.name;
-          setInputFileName(fileName);
+  useEffect(() => {
+    const registerBtn = document.getElementById("registerBtn");
+
+    if (registerBtn) {
+      registerBtn.addEventListener("click", async () => {
+        console.log("isregistered data", isRegisteredRef.current);
+        if (isRegisteredRef.current === true) {
+          console.log("REGISTERED");
+          console.log("REGISTERED", inputUserName);
+          const data = await updateUser(inputUserName, "");
+          console.log(data);
         } else {
-          setInputFileName("No file Selected");
+          try {
+            console.log("registerUSER HIT");
+            console.log("REGISTERED", inputUserName);
+            const data = await registerUser(inputUserName, "");
+            console.log(data);
+          } catch (error) {
+            console.error("Error registering user:", error);
+          }
         }
       });
     }
-  }, [handleFileChange]);
+  }, [inputUserName]);
+
+  React.useEffect(() => {
+    isRegisteredRef.current = isRegistered;
+  }, [isRegistered]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await isUserRegistered()) as BackendResponse;
+      if (response && response.status !== false) {
+        const userDataArray: UserData[] = response.data;
+        setInputUserName(userDataArray[0]?.userName)
+        setIsRegistered(true);
+        // console.log("SETTED TRUe", isRegistered);
+      } else {
+        // console.log("SET FALSE")
+        setIsRegistered(false);
+      }
+      // console.log("isRegisteredData", response);
+      // console.log("isRegistered", isRegistered);
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [isRegistered]);
+
 
   return (
     <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
@@ -83,14 +157,15 @@ const SettingProfile = (props: Theme) => {
         <section className="profileName laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2">
             <span className="font-semibold py-1">User Name</span>
-            {!showInput && <span>{userName}</span>}
+            {!showInput && <span>{inputUserName}</span>}
             {showInput && (
               <input
                 type="text"
                 name="user name"
                 placeholder="type your name"
+                value={inputUserName}
+                onChange={(e) => setInputUserName(e.target.value)}
                 onBlur={handleBlur}
-                onInput={(e: any) => setInputUserName(e.target.value)}
                 className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green  rounded-lg"
               />
             )}
@@ -142,7 +217,9 @@ const SettingProfile = (props: Theme) => {
         </section>
 
         <section className="image p-4 m-8 flex-col-center">
-          <button className="green-button" type="button">
+          <button className="green-button" type="button" id="registerBtn" onClick={() => {
+            console.log("Input username from btn:", inputUserName); // Add this line
+          }}>
             Update
           </button>
         </section>

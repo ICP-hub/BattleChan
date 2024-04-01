@@ -12,6 +12,7 @@ import { TbSettings } from "react-icons/tb";
 import { BsPersonCircle } from "react-icons/bs";
 import { SiInternetcomputer } from "react-icons/si";
 import { useMediaQuery } from "@mui/material";
+import toast from "react-hot-toast"
 
 type Props = {
   display: boolean;
@@ -27,6 +28,8 @@ const truncateString = (str: string, maxLength: number): string => {
 };
 
 const ProfileOverlay = (props: Props) => {
+  const { isConnected, disconnect } = useConnect()
+
   const className = "ProfileOverlay";
   const display = props.display;
   const setProfilePopUp = props.setProfilePopUp;
@@ -44,13 +47,17 @@ const ProfileOverlay = (props: Props) => {
     user = truncateString(principal, 17);
   }
 
+  const logoutHandler = () => {
+    disconnect()
+    toast.success("Logout successfully.")
+  }
+
   return (
     <div
       className={
         className +
         " " +
-        `${
-          display ? "block" : "hidden"
+        `${display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
@@ -144,12 +151,17 @@ const ProfileOverlay = (props: Props) => {
           </div>
         </fieldset>
 
-        <button
-          type="button"
-          className="tablet:mt-8 mt-2 white-button bg-dark-green text-light"
-        >
-          Logout
-        </button>
+        {isConnected && (
+          <button
+            type="button"
+            className="tablet:mt-8 mt-2 white-button bg-dark-green text-light"
+            onClick={logoutHandler}
+          >
+            Logout
+          </button>
+        )}
+
+
       </div>
     </div>
   );
