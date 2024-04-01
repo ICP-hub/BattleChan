@@ -17,7 +17,7 @@ import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { useMediaQuery } from "@mui/material";
 
 //backend
-// import { backend } from "../../../../../declarations/backend";
+import { backend } from "../../../../../declarations/backend";
 
 function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds

@@ -190,8 +190,6 @@ module {
 
     public func updatePostExpireTime(time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
 
-
-
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?v) { v };
             case (null) { Debug.trap(reject.noPost) };
@@ -216,21 +214,24 @@ module {
         return Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
     };
 
-    public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
+    public func postArchive(postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
         updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo>;
         updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
         updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>;
     } {
 
-        let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
-            case (?value) { value };
-            case (null) { Debug.trap(reject.noAccount) };
-        };
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
-
+        let userId = postInfo.createdBy.ownerId;
+        let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+            case (?value) { value };
+            case (null) { Debug.trap(reject.noAccount) };
+        };
+        if (now() < postInfo.expireAt) {
+            Debug.trap(reject.expireNotAllowed);
+        };
         let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x != postId);
         let updateUserInfo : Types.UserInfo = {
             userId = userInfo.userId;

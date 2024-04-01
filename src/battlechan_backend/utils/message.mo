@@ -18,6 +18,7 @@ module {
         noAccess = "no Access";
         notValid = "not Valid Text";
         downvoteNotAllowed = "cannot downVote less than 1 minute left to expire";
+        expireNotAllowed = "cannot expire post! ";
     };
     public let notFound = {
         noUser = "No User Exist!";
