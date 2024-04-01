@@ -54,8 +54,12 @@ const SettingProfile = (props: Theme) => {
   }
 
   function handleSaveBtn() {
-    setShowInput(false);
-    setUserName(inputUserName);
+    if (inputUserName == "") {
+      alert("UserName Can not be empty");
+    } else {
+      setShowInput(false);
+      setUserName(inputUserName);
+    }
   }
 
   function handleBlur() {
