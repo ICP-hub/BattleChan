@@ -9,6 +9,7 @@ import userimg from "../../../images/User.png";
 import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
+import { Link } from "react-router-dom";
 
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 
@@ -55,14 +56,16 @@ const Navbar = (props: Theme) => {
         ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light tablet:py-6 py-4 xl:px-16 laptop:px-12 tablet:px-10 p-4 gap-2 border-b border-grey`
       }
     >
-      <img
-        src={darkColor == "dark" ? dark_logo : light_logo}
-        className={
-          className +
-          "__logo tablet:w-28 w-20 object-contain pointer-events-none"
-        }
-        alt="BATTLE CHAN"
-      />
+      <Link to="/dashboard">
+        <img
+          src={darkColor == "dark" ? dark_logo : light_logo}
+          className={
+            className +
+            "__logo tablet:w-28 w-20 object-contain pointer-events-none"
+          }
+          alt="BATTLE CHAN"
+        />
+      </Link>
 
       <section
         className={

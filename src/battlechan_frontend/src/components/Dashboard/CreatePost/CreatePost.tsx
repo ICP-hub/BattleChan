@@ -7,14 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
 
-import { backend } from "../../../../../declarations/backend";
-import { useCanister, useConnect } from "@connect2ic/react";
 import PostApiHanlder from "../../../API_Handlers/post";
-
-// Custom hook : initialize the backend Canister
-const useBackend = () => {
-  return useCanister("backend");
-};
 
 interface Board {
   boardName: string;
@@ -114,8 +107,7 @@ const CreatePost = (props: Theme) => {
   const [postDes, setPostDes] = useState("");
   const postDesRef = React.useRef(postDes); // Ref to store latest selected community
   const [postMetaData, setPostMetaData] = useState("");
-  const [backend] = useBackend();
-  // console.log(backend);
+
   useEffect(() => {
     let createPostBtn = document.getElementById("createPostBtn")
     // Fetch data from backend canister function getTotalPostInBoard

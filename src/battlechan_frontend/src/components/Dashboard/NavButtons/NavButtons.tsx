@@ -35,7 +35,7 @@ const NavButtons = () => {
         </button>
       </Link>
       
-      <Link to="/dashboard/">
+      <Link to="/dashboard/analytics">
         <button
           className={`${
             active === "Dashboard" ? `text-dark dark:text-light` : "text-grey"

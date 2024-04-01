@@ -40,7 +40,7 @@ const SettingProfile = (props: Theme) => {
   const [inputFileName, setInputFileName] = React.useState("");
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
 
-  const [inputUserName, setInputUserName] = React.useState(userData.name);
+  const [inputUserName, setInputUserName] = React.useState("");
   const [userName, setUserName] = React.useState(userData.name);
   const isRegisteredRef = React.useRef(isRegistered);
 

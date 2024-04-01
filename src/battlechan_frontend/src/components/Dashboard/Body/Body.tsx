@@ -120,7 +120,7 @@ const Body = () => {
 
       <div
         className={
-          className + "__tagLines" + " w-full flex flex-col tablet:flex-row my-12 items-center justify-center"
+          className + "__tagLines" + " px-20 w-full flex flex-row my-12"
         }
       >
         <h1
@@ -131,7 +131,7 @@ const Body = () => {
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`text-dark dark:text-light font-semibold text-lg text-start px-28`}
+          className={`w-1/2 text-dark dark:text-light font-semibold text-lg text-start px-28`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
@@ -143,27 +143,94 @@ const Body = () => {
         className={
           className +
           "__postsNumber" +
-          ` py-6 px-10 mx-36 my-24 border border-dark dark:border-light rounded-md`
+          ` tablet:hidden tablet:px-30 flex flex-col tablet:block gap-2 p-4 tablet:py-6 tablet:px-10 mx-4 tablet:mx-auto my-24 border border-dark dark:border-light rounded-md`
         }
       >
-        <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
-          <div className="data__label py-6  px-4 h-full text-lg font-semibold">
+        <div className="data__headings tablet:px-4 flex-row-center tablet:flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green gap-2">
+          <div className="data__label py-4 tablet:py-4 pl-6 tablet:px-0 h-full tablet:text-lg font-semibold">
             Name of Subject
           </div>
+          <div className="data__label big_tablet:hidden py-4 tablet:py-6 pr-6 tablet:px-4 h-full tablet:text-lg font-semibold">
+            Total Posts
+          </div>
 
-          <div className="data__labels flex-row-center text-lg text-light">
-            <div className="w-[7.5rem] py-6 flex-nowrap border-r">
-              <p className="flex-row-center gap-2 justify-center">
-                <button
-                  className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
-                  onClick={() => {
-                    navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
-                  }}
-                >
-                  <MdOutlineAddBusiness />
-                  {boardNames[0]}
-                </button>
-              </p>
+          {/* <div className="data__labels hidden big_tablet:flex flex-nowrap items-center justify-center text-light">
+            <div className="flex justify-center flex-wrap max-w-30 border-r">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
+            </div>
+            <div className="flex justify-center flex-wrap max-w-30 border-r">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
+            </div>
+            <div className="flex justify-center flex-wrap max-w-30 border-r">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
+            </div>
+            <div className="flex justify-center flex-wrap max-w-30 border-r">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
+            </div>
+            <div className="flex justify-center flex-wrap max-w-30 border-r">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
+            </div>
+            <div className="flex justify-center flex-wrap max-w-30 border-r">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
+            </div>
+            <div className="flex justify-center flex-wrap max-w-30">
+              <button
+                className="inline-flex flex-wrap items-center justify-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2"
+                onClick={() => {
+                  navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+                }}
+              >
+                <MdOutlineAddBusiness />
+                {"Business"}
+              </button>
             </div>
             <div className="w-[7.5rem] py-6 flex-nowrap border-r">
               <p className="flex-row-center gap-2 justify-center">
@@ -242,23 +309,82 @@ const Body = () => {
                   {boardNames[6]}
                 </button>
               </p>
-            </div>
-          </div>
+            </div> 
+          </div> */}
         </div>
 
-        <div
-          className={`data__values px-4 flex-row-center flex-nowrap justify-between bg-transparent text-dark dark:text-light`}
+        {/* <div
+          className={`data__values p-4 hidden big_tablet:flex-row-center flex-nowrap justify-between bg-transparent text-dark dark:text-light`}
         >
-          <div className="data__label py-6 px-4 h-full text-lg font-semibold">
+          <div className="data__label p-4 px-0 h-full text-lg font-semibold">
             Total Posts
           </div>
 
+          <div className="flex justify-between items-center">
+            <div className="data__numbers flex justify-center flex-wrap border-r px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+            <div className="data__numbers flex justify-center flex-wrap border-r px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+            <div className="data__numbers flex justify-center flex-wrap border-r px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+            <div className="data__numbers flex justify-center flex-wrap border-r px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+            <div className="data__numbers flex justify-center flex-wrap border-r px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+            <div className="data__numbers flex justify-center flex-wrap border-r px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+            <div className="data__numbers flex justify-center flex-wrap px-4 ">
+              <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                <span className="">{"12"}</span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  2 hrs ago
+                </span>
+              </div>
+            </div>
+          </div>
           <div className="data__numbers flex-row-center justify-between">
-            <div className="w-[7.5rem] text-center flex-col-center border-r">
+            <div className=" text-center flex-col-center border-r">
               <span>{boardSizes[0]}</span>
               <span>2 hrs ago</span>
             </div>
-            <div className="w-[7.5rem] text-center flex-col-center border-r">
+          </div>
+          <div className="w-[7.5rem] text-center flex-col-center border-r">
               <span>{boardSizes[1]} </span>
               <span>2 hrs ago</span>
             </div>
@@ -282,9 +408,234 @@ const Body = () => {
               <span>{boardSizes[6]}</span>
               <span>2 hrs ago</span>
             </div>
+        </div> */}
+
+        <div className="flex big_tablet:hidden items-center justify-between mt-2">
+          <div className="pl-6">
+            <button
+              className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg"
+              onClick={() => {
+                navigate(`/dashboard/mainPosts?boardName=${boardNames[0]}`);
+              }}
+            >
+              <MdOutlineAddBusiness />
+              {"Business"}
+            </button>
+          </div>
+          <div className="flex text-center gap-2 items-center justify-center pr-6">
+            <span>{"12"}</span>
+            <span>2 hrs ago</span>
           </div>
         </div>
       </div>
+
+      <div className="relative hidden tablet:block overflow-x-auto my-24 px-9 py-6 border border-dark dark:border-light rounded-md mx-20 no-scrollbar">
+        <table className="w-full text-left">
+          <thead className="text-xs tablet:text-base">
+            <tr className="bg-dirty-light-green">
+              <th scope="col" className="px-6 py-3 rounded-s-xl">
+                Name of the Subject
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${
+                          boardNames[0] || "business"
+                        }`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="">
+                <div className="flex justify-center border-r">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+
+              <th scope="col" className=" rounded-e-xl">
+                <div className="flex justify-center">
+                  <button
+                    className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                    onClick={() => {
+                      navigate(
+                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                      );
+                    }}
+                  >
+                    <MdOutlineAddBusiness />
+                    {"Business"}
+                  </button>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody className="tablet:text-base">
+            <tr className="">
+              <th scope="row" className="px-6 font-medium whitespace-nowrap">
+                Total Posts
+              </th>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+              <td className="">
+                <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
+                  <span className="">{"12"}</span>
+                  <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                    2 hrs ago
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div></div>
     </div>
   );
 };

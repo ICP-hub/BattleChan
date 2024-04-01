@@ -70,6 +70,7 @@ const PostApiHanlder = () => {
         try {
             setIsLoading(true);
             const res = await backend.getPostsByBoard();
+            // const res = await backend.postFilter({ upvote: true }, 10, 1);
             console.log(res);
             return res;
         } catch (err) {
@@ -105,9 +106,22 @@ const PostApiHanlder = () => {
         }
     };
 
+    const getSingleArchivePost = async (postId: string) => {
+        try {
+            setIsLoading(true);
+            const res = await backend.getSingleArchivedPost(postId);
+            console.log(res);
+            return res;
+        } catch (err) {
+            console.error("Error creating contact : ", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
 
     // Returns
-    return { createPost, getBoards, getMainPosts, getArchivePosts, addBoard, getSingleMainPost, isLoading };
+    return { createPost, getBoards, getMainPosts, getArchivePosts, addBoard, getSingleMainPost, getSingleArchivePost, isLoading };
 };
 
 export default PostApiHanlder;

@@ -78,7 +78,7 @@ const PostDetails = (props: Theme) => {
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
   const is700px = useMediaQuery("(min-width: 700px)");
-  const { getSingleMainPost } = PostApiHanlder();
+  const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
 
   const handleVote = (vote: boolean) => {
     setVote(vote);
@@ -103,8 +103,8 @@ const PostDetails = (props: Theme) => {
 
   async function getPostDetail(postId: string) {
     try {
-      // const response = await backend.getArchivedPost(BigInt(10), BigInt(1));
-      const response = (await getSingleMainPost(postId)) as BackendResponse;
+      const response = (await getSingleArchivePost(postId)) as BackendResponse;
+      // const response = (await getSingleMainPost(postId)) as BackendResponse;
       console.log(response);
       if (response.status === true && response.data) {
         console.log(response);

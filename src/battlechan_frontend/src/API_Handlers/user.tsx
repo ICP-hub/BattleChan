@@ -27,6 +27,7 @@ const UserApiHanlder = () => {
                 userName: userName,
                 profileImg: profileImg,
             };
+            console.log(data);
             const res = await backend.createUserAccount(data);
             console.log(res);
             setSuccessfulSubmit(true);

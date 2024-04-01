@@ -113,7 +113,7 @@ const MainPosts = (props: Theme) => {
     } else {
       getPosts();
     }
-  }, []);
+  }, [props.type]);
 
   async function getPosts(postsType?: string) {
     try {
