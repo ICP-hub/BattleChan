@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { useConnect } from "@connect2ic/react";
+import UserApiHanlder from "../../../API_Handlers/user";
 
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
@@ -10,18 +11,52 @@ const truncateString = (str: string, maxLength: number): string => {
   return str.slice(0, maxLength) + '...';
 };
 
+interface BackendResponse {
+  status: boolean;
+  data: [];
+  error: string[];
+}
 
+interface UserData {
+  userName: string;
+}
 
-
- 
 const UserProfileHeader = () => {
 
   const { principal, activeProvider } = useConnect();
   let loggedInBy = activeProvider?.meta.name;
-  let user = "";
-  if(principal){
-    user = truncateString(principal, 17);
-  }
+ 
+  const [isRegistered, setIsRegistered] = React.useState(false);
+  const [userName, setUserName] = React.useState("");
+  const isRegisteredRef = React.useRef(isRegistered);
+  const { isUserRegistered } = UserApiHanlder();
+
+  useEffect(() => {
+    isRegisteredRef.current = isRegistered;
+  }, [isRegistered]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await isUserRegistered()) as BackendResponse;
+      if (response && response.status !== false) {
+        const userDataArray: UserData[] = response.data;
+        setUserName(userDataArray[0]?.userName)
+        setIsRegistered(true);
+        // console.log("SETTED TRUe", isRegistered);
+      } else {
+        if (principal) {
+          setUserName(truncateString(principal, 17));
+        }
+        // console.log("SET FALSE")
+        setIsRegistered(false);
+      }
+      // console.log("isRegisteredData", response);
+      // console.log("isRegistered", isRegistered);
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [isRegistered]);
 
   return (
     <div className="bg-green rounded-2xl w-full p-6 tablet:p-[2.344rem] relative flex items-center gap-4 tablet:gap-12">
@@ -60,7 +95,7 @@ const UserProfileHeader = () => {
       </div>
       <div className="flex flex-col justify-center">
         <h1 className="font-inter font-bold text-[#FFFFFF] text-sm tablet:text-2xl laptop:text-[2.5rem]">
-           {user}
+          {userName}
         </h1>
         <p className="tablet:mt-2 font-inter text-[#FFFFFF] text-opacity-50 text-xs tablet:text-base laptop:text-xl leading-5">
           {loggedInBy}

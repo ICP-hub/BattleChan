@@ -96,13 +96,13 @@ const SettingProfile = (props: Theme) => {
         if (isRegisteredRef.current === true) {
           console.log("REGISTERED");
           console.log("REGISTERED", inputUserName);
-          const data = await updateUser(inputUserName, "");
+          const data = await updateUser(inputUserName, "shdgj");
           console.log(data);
         } else {
           try {
             console.log("registerUSER HIT");
             console.log("REGISTERED", inputUserName);
-            const data = await registerUser(inputUserName, "");
+            const data = await registerUser(inputUserName, "sdasd");
             console.log(data);
           } catch (error) {
             console.error("Error registering user:", error);
