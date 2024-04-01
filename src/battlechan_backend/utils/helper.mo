@@ -62,14 +62,17 @@ module {
         };
         true;
     };
-    public func calcExpireTime(time : Int) : Int {
-        now() + time * 60 * 1000000000;
+    func secToNanoSec(min : Int) : Int {
+        let seconds = min * 60;
+        seconds * 1_000_000_000;
+    };
+    public func increaseTime(min : Int) : Int {
+        let increasedTime = secToNanoSec(min) + now();
+        return increasedTime;
+    };
+    public func decreaseTime(min : Int) : Int {
+        let decreasedTime = now() - secToNanoSec(min);
+        return decreasedTime;
     };
 
-    public func decreaseExpireTime(time : Int, expireTime : Int) : Int {
-        expireTime - (time * 60 * 1000000000);
-    };
-    public func increaseExpireTime(time : Int, expireTime : Int) : Int {
-        expireTime + (time * 60 * 1000000000);
-    };
 };
