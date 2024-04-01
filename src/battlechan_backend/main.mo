@@ -59,7 +59,7 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func updatedUserAccount(userReq : Types.UserReq) : async Types.Result {
+  public shared ({ caller = userId }) func updatedUserAccount(userId : Types.UserId, userReq : Types.UserReq) : async Types.Result {
     try {
       let userInfo : Types.UserInfo = updateUserInfo(userId, userReq, userTrieMap);
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, userInfo).0;
@@ -339,7 +339,7 @@ actor BattleChan {
   };
 
   public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostInfo]> {
-
+    
     let boardId = toBoardId(boardName);
     let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
 
@@ -360,6 +360,7 @@ actor BattleChan {
         };
       };
     };
+
     let postArray = List.toArray(postList);
     if (postArray.size() <= chunk_size) {
       return { data = ?postArray; status = false; error = null };
