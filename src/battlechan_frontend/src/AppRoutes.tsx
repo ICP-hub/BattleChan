@@ -89,27 +89,17 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
             <Route
                 path="/dashboard/mainPosts/*"
                 element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <MainPosts handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
-                    ) : allow == false ? (
-
-                        <Navigate to="/" />
-                    ) : null
+                    <Suspense fallback={<Loader />}>
+                        <MainPosts handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
                 }
             />
             <Route
                 path="/dashboard/archivePosts/*"
                 element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <ArchivePosts handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
-                    ) : allow == false ? (
-
-                        <Navigate to="/" />
-                    ) : null
+                    <Suspense fallback={<Loader />}>
+                        <ArchivePosts handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
                 }
             />
             <Route
@@ -125,46 +115,6 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                     ) : null
                 }
             />
-            <Route
-                path="/dashboard/mainPosts/*"
-                element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <MainPosts handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
-                    ) : allow == false ? (
-
-                        <Navigate to="/" />
-                    ) : null
-                }
-            />
-            <Route
-                path="/dashboard/archivePosts/*"
-                element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <ArchivePosts handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
-                    ) : allow == false ? (
-
-                        <Navigate to="/" />
-                    ) : null
-                }
-            />
-            <Route
-                path="/dashboard/analytics/*"
-                element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <Analytics handleThemeSwitch={handleThemeSwitch} />
-                        </Suspense>
-                    ) : allow == false ? (
-
-                        <Navigate to="/" />
-                    ) : null
-                }
-            />
-
         </Routes>
 
     );

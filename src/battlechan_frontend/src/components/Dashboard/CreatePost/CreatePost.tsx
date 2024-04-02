@@ -76,16 +76,16 @@ const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
           console.log(int8Array);
 
           // Base64
-          // const uint8Array = new Uint8Array(int8Array);
+          const uint8Array = new Uint8Array(int8Array);
 
-          // // Convert Uint8Array to base64
-          // let binary = '';
-          // uint8Array.forEach((byte) => {
-          //   binary += String.fromCharCode(byte);
-          // });
-          // let base64 = btoa(binary);
+          // Convert Uint8Array to base64
+          let binary = '';
+          uint8Array.forEach((byte) => {
+            binary += String.fromCharCode(byte);
+          });
+          let base64 = btoa(binary);
 
-          // console.log(base64);
+          console.log(base64);
         };
       }
     };
@@ -99,7 +99,7 @@ const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 const CreatePost = (props: Theme) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { createPost, getBoards, addBoard } = PostApiHanlder();
+  const { createPost, getBoards } = PostApiHanlder();
   const [communities, setCommunities] = useState<string[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
   const selectedCommunityRef = React.useRef(selectedCommunity); // Ref to store latest selected community
@@ -109,17 +109,15 @@ const CreatePost = (props: Theme) => {
   const postDesRef = React.useRef(postDes); // Ref to store latest selected community
   const [postMetaData, setPostMetaData] = useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     let createPostBtn = document.getElementById("createPostBtn")
     // Fetch data from backend canister function getTotalPostInBoard
     createPostBtn?.addEventListener("click", async () => {
       handleCreatePost();
     })
 
-    setInterval(()=> {
-      fetchData(); // Call fetchData function when component mounts
-    }, 1000)
-  }, [location]);
+    fetchData(); // Call fetchData function when component mounts
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -160,6 +158,7 @@ const CreatePost = (props: Theme) => {
     };
     const response = (await createPost(selectedCommunityRef.current, postData)) as postResponse;
     console.log(response);
+
     if (response && response?.ok) {
       navigate('/dashboard/mainPosts');
       // window.location.href = "/dashboard/mainPosts";
@@ -243,6 +242,7 @@ const CreatePost = (props: Theme) => {
                   type="button"
                   className="small-button bg-dirty-light-green"
                   id="createPostBtn"
+                  // onClick={handleCreatePost}
                 >
                   Post
                 </button>

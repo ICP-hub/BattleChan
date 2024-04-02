@@ -5,12 +5,9 @@ import Nat32 "mo:base/Nat32";
 import Trie "mo:base/Trie";
 import List "mo:base/List";
 import Array "mo:base/Array";
-import Timer "mo:base/Timer";
 import Debug "mo:base/Debug";
 import Nat "mo:base/Nat";
 import Char "mo:base/Char";
-import { abs } "mo:base/Int";
-import { now } "mo:base/Time";
 import TrieMap "mo:base/TrieMap";
 
 import Types "utils/types";
@@ -20,9 +17,8 @@ import { createUserInfo; updateUserInfo } "controllers/user";
 import { createCommentInfo; updateLikedComments } "controllers/comment";
 import {
   createPostInfo;
+  postArchive;
   updateVoteStatus;
-  archivePost;
-  postVisiblity;
   bubbleSortPost;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
@@ -37,7 +33,6 @@ actor BattleChan {
   private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
-  private stable var postIdTimerIdTrie = Trie.empty<Types.PostId, Nat>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   private stable let freePostTime = 5;
@@ -78,7 +73,7 @@ actor BattleChan {
 
   public shared ({ caller = userId }) func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
     try {
-      let newBoard : Types.BoardInfo = createBoardInfo(userId, boardName, boardDes);
+      let newBoard : Types.BoardInfo = createBoardInfo(boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, newBoard).0;
       #ok(successMessage.insert);
@@ -108,25 +103,12 @@ actor BattleChan {
     newNode.user := Array.append<Text>(newNode.user, [userId]);
   };
 
-  public shared ({ caller = userId })  func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
+  public shared ({ caller = userId }) func createPost(boardName : Text, postData : Types.PostReq) : async Types.Result {
     try {
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
       insertNameNode(postData.postName, postId);
-      let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, postId, freePostTime, userId, postData, userTrieMap, boardTrieMap);
-
-      let timerId = Timer.setTimer<system>(
-        #seconds(freePostTime * 60 - abs(now() / 1_000_000_000) % freePostTime * 60),
-        func() : async () {
-          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
-          userTrieMap := updatedUserTrie;
-          postTrieMap := updatedPostTrie;
-          userAchivedPostTrie := updatedArchivedTrie;
-        },
-      );
-
-      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, timerId).0;
+      let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, freePostTime, postId, userId, postData, userTrieMap, boardTrieMap);
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, updatedBoardInfo).0;
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, newPost).0;
@@ -140,69 +122,27 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
-    try {
-      let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
-        case (null) { Debug.trap("noPostFound") };
-        case (?v) { v };
-      };
+  // public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
+  //   try {
 
-      let { updatedPostTrieMap; updatedExpireTime } = postVisiblity(postId, postTrieMap, time);
-      postTrieMap := updatedPostTrieMap;
+  //     let { updatedPostTrieMap; updatedExpireTime } = postVisiblity(postId, postTrieMap, time);
+  //     postTrieMap := updatedPostTrieMap;
 
-      Timer.cancelTimer(timeId);
-
-      let updatedTimerId = Timer.setTimer<system>(
-
-        #seconds(updatedExpireTime * 60 - abs(now() / 1_000_000_000) % updatedExpireTime * 60),
-        func() : async () {
-          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-          userTrieMap := updatedUserTrie;
-          postTrieMap := updatedPostTrie;
-          userAchivedPostTrie := updatedArchivedTrie;
-          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
-
-        },
-      );
-
-      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, updatedTimerId).0;
-
-      #ok("successfully added Time");
-    } catch (e) {
-      let code = Error.code(e);
-      let message = Error.message(e);
-      #err(code, message);
-    };
-  };
+  //     #ok("successfully added Time");
+  //   } catch (e) {
+  //     let code = Error.code(e);
+  //     let message = Error.message(e);
+  //     #err(code, message);
+  //   };
+  // };
 
   public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
     try {
-      let { updatedUserInfo; updatedPostInfo; updateExpireTime } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
-
-      let timeId = switch (Trie.get(postIdTimerIdTrie, textKey postId, Text.equal)) {
-        case (null) { Debug.trap("noPostFound") };
-        case (?v) { v };
-      };
+      // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+      let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
 
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-
-      Timer.cancelTimer(timeId);
-
-      let updatedTimerId = Timer.setTimer<system>(
-
-        #seconds(updateExpireTime * 60 - abs(now() / 1_000_000_000) % updateExpireTime * 60),
-        func() : async () {
-          let { updatedPostTrie; updatedUserTrie; updatedArchivedTrie } = archivePost(userId, postId, userTrieMap, postTrieMap, userAchivedPostTrie);
-
-          userTrieMap := updatedUserTrie;
-          postTrieMap := updatedPostTrie;
-          userAchivedPostTrie := updatedArchivedTrie;
-          postIdTimerIdTrie := Trie.remove(postIdTimerIdTrie, textKey postId, Text.equal).0;
-
-        },
-      );
-      postIdTimerIdTrie := Trie.put(postIdTimerIdTrie, textKey postId, Text.equal, updatedTimerId).0;
 
       #ok(successMessage.update);
     } catch (e) {
@@ -214,6 +154,23 @@ actor BattleChan {
     };
   };
 
+  public func archivePost(postId : Types.PostId) : async Types.Result {
+    try {
+      let { updatedUserTrie; updatedPostTrie; updatedArchivedTrie } = postArchive(postId, userTrieMap, postTrieMap, userAchivedPostTrie);
+      userTrieMap := updatedUserTrie;
+      postTrieMap := updatedPostTrie;
+      userAchivedPostTrie := updatedArchivedTrie;
+      #ok(successMessage.update);
+
+    } catch (e) {
+
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+
+    };
+
+  };
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
     try {
       let { updatedPostInfo; updatedUserInfo } = createCommentInfo(userId, postId, comment, userTrieMap, postTrieMap);
@@ -403,6 +360,7 @@ actor BattleChan {
         };
       };
     };
+
     let postArray = List.toArray(postList);
     if (postArray.size() <= chunk_size) {
       return { data = ?postArray; status = false; error = null };
@@ -447,10 +405,20 @@ actor BattleChan {
       };
     };
     let allData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+
+    if (allData.size() == 0) {
+      return { data = null; status = true; error = ?notFound.noArchivedPost };
+    };
+    if (allData.size() <= chunk_size) {
+      return { data = ?allData; status = true; error = null };
+    };
+
     let paginatedData = paginate<Types.CommentInfo>(allData, chunk_size);
+
     if (paginatedData.size() < pageNo) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
+
     let page = paginatedData[pageNo];
     return { data = ?page; status = true; error = null };
   };
@@ -476,6 +444,9 @@ actor BattleChan {
     let allData = Trie.toArray<Types.ReplyId, Types.ReplyInfo, Types.ReplyInfo>(commentInfo.replies, func(k, v) = v);
     if (allData.size() == 0) {
       return { data = null; status = false; error = ?notFound.noData };
+    };
+    if (allData.size() <= chunk_size) {
+      return { data = ?allData; status = true; error = null };
     };
     let page = paginate<Types.ReplyInfo>(allData, chunk_size);
     if (page.size() < pageNo) {

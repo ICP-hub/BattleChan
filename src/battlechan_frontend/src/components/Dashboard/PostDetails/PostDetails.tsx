@@ -16,6 +16,7 @@ import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { useMediaQuery } from "@mui/material";
 import PostApiHanlder from "../../../API_Handlers/post";
+import CommentsApiHanlder from "../../../API_Handlers/comments";
 //backend
 // import { backend } from "../../../../../declarations/backend";
 
@@ -61,9 +62,16 @@ type PostInfo = {
   upvotes: BigInt;
 };
 
+type CommentInfo = {
+  comment: string;
+  commentId: string;
+  createdAt: string;
+  likedBy: [];
+};
+
 interface BackendResponse {
   status: boolean;
-  data: []; // Assuming 'data' is an array of arrays of Board objects.
+  data: [][];
   error: string[];
 }
 
@@ -77,8 +85,10 @@ const PostDetails = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo>();
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
+  const [commentsData, setcommentsData] = React.useState<CommentInfo[]>([]);
   const is700px = useMediaQuery("(min-width: 700px)");
   const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
+  const { getAllComments } = CommentsApiHanlder();
 
   const handleVote = (vote: boolean) => {
     setVote(vote);
@@ -103,8 +113,8 @@ const PostDetails = (props: Theme) => {
 
   async function getPostDetail(postId: string) {
     try {
-      const response = (await getSingleArchivePost(postId)) as BackendResponse;
-      // const response = (await getSingleMainPost(postId)) as BackendResponse;
+      // const response = (await getSingleArchivePost(postId)) as BackendResponse;
+      const response = (await getSingleMainPost(postId)) as BackendResponse;
       console.log(response);
       if (response.status === true && response.data) {
         console.log(response);
@@ -135,6 +145,20 @@ const PostDetails = (props: Theme) => {
       console.error("Error fetching posts:", error);
     }
   }
+
+  const getComments = async () => {
+    const response = (await getAllComments(postId)) as BackendResponse;
+    if (response && response.status == true) {
+      const comments = response.data[0];
+      if (comments && comments.length > 0) {
+        setcommentsData(comments);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getComments();
+  }, [])
 
   return (
     <React.Fragment>
@@ -236,25 +260,25 @@ const PostDetails = (props: Theme) => {
 
 
           {/* comment for mobile  */}
-          {/* {!showComments && ( */}
-          {/* // <div className="tablet:hidden my-8"> */}
-          {/* //   <button */}
-          {/* //     onClick={() => setShowComments(true)} */}
-          {/* //     className="small-button bg-light text-dark cursor-pointer font-semibold" */}
-          {/* //   > */}
-          {/* //     See Comments */}
-          {/* //   </button> */}
-          {/* // </div> */}
-          {/* // )} */}
+          {!showComments && (
+            <div className="tablet:hidden my-8">
+              <button
+                onClick={() => setShowComments(true)}
+                className="small-button bg-light text-dark cursor-pointer font-semibold"
+              >
+                See Comments
+              </button>
+            </div>
+          )}
 
-          {/* comment for desktop  */}
+          {/* Comment for desktop   */}
           {
-            // <div className={`mt-8 ${showComments ? "block" : "hidden"}`}>
-            //   <h1 className="font-bold tablet:text-lg">Comments</h1>
-            //   <div className="mt-8">
-            //     <Comment />
-            //   </div>
-            // </div>
+            <div className={`mt-8 ${showComments ? "block" : "hidden"}`}>
+              <h1 className="font-bold tablet:text-lg">Comments</h1>
+              <div className="mt-8">
+                <Comment currentComment={commentsData} />
+              </div>
+            </div>
           }
         </div>
       </div>

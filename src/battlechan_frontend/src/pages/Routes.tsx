@@ -28,7 +28,7 @@ function Routing(props: Theme) {
           }
         />
         <Route path="/userProfile" element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />} />
-        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch}  />} />
         <Route path="/archivePosts" element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />} />
         <Route path="/analytics" element={<Analytics handleThemeSwitch={props.handleThemeSwitch} />} />
 

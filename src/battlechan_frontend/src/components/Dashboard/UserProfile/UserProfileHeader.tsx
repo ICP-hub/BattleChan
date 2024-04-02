@@ -25,7 +25,7 @@ const UserProfileHeader = () => {
 
   const { principal, activeProvider } = useConnect();
   let loggedInBy = activeProvider?.meta.name;
- 
+
   const [isRegistered, setIsRegistered] = React.useState(false);
   const [userName, setUserName] = React.useState("");
   const isRegisteredRef = React.useRef(isRegistered);
@@ -34,29 +34,28 @@ const UserProfileHeader = () => {
   useEffect(() => {
     isRegisteredRef.current = isRegistered;
   }, [isRegistered]);
-
+  
   useEffect(() => {
-    const fetchData = async () => {
-      const response = (await isUserRegistered()) as BackendResponse;
-      if (response && response.status !== false) {
-        const userDataArray: UserData[] = response.data;
-        setUserName(userDataArray[0]?.userName)
-        setIsRegistered(true);
-        // console.log("SETTED TRUe", isRegistered);
-      } else {
-        if (principal) {
-          setUserName(truncateString(principal, 17));
-        }
-        // console.log("SET FALSE")
-        setIsRegistered(false);
-      }
-      // console.log("isRegisteredData", response);
-      // console.log("isRegistered", isRegistered);
-    };
-
-    // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
-  }, [isRegistered]);
+  }, []);
+
+  const fetchData = async () => {
+    const response = (await isUserRegistered()) as BackendResponse;
+    if (response && response.status !== false) {
+      const userDataArray: UserData[] = response.data;
+      setUserName(userDataArray[0]?.userName)
+      setIsRegistered(true);
+      // console.log("SETTED TRUe", isRegistered);
+    } else {
+      if (principal) {
+        setUserName(truncateString(principal, 17));
+      }
+      // console.log("SET FALSE")
+      setIsRegistered(false);
+    }
+    // console.log("isRegisteredData", response);
+    // console.log("isRegistered", isRegistered);
+  };
 
   return (
     <div className="bg-green rounded-2xl w-full p-6 tablet:p-[2.344rem] relative flex items-center gap-4 tablet:gap-12">
