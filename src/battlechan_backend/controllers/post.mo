@@ -103,13 +103,14 @@ module {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
-
-        if (checkVote<Types.PostId>(userInfo.upvotedTo, postId) == true) {
-            Debug.trap(reject.alreadyVoted);
+        switch (Array.find<Types.PostId>(userInfo.upvotedTo, func x = x == postId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
         };
 
-        if (checkVote<Types.PostId>(userInfo.downvotedTo, postId) == true) {
-            Debug.trap(reject.alreadyVoted);
+        switch (Array.find<Types.PostId>(userInfo.downvotedTo, func x = x == postId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
         };
 
         switch (voteStatus) {
@@ -269,16 +270,27 @@ module {
         };
     };
 
-    public func withdraw(postId : Types.PostId, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>) {
+    public func withdraw(postId : Types.PostId, amount : Nat, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>) {
+
         let postInfo : Types.PostInfo = switch (Trie.get(postTrie, textKey postId, Text.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
+        if (postInfo.createdBy.ownerId != userId) {
+            Debug.trap(reject.noAccess);
+        };
+
+        let tokenLeft = (postInfo.expireAt - 5 * 60_000_000_000) - now();
+
+        if (tokenLeft < 60_000_000_000) {
+            Debug.trap(reject.oneMinLeft);
+        };
+
         var rewardSeakersList : List.List<(Types.UserId, Nat)> = List.nil<(Types.UserId, Nat)>();
         let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
         for (comment in commentData.vals()) {
             if (comment.likedBy.size() > 5) {
-                rewardSeakersList := List.push((comment.createdBy, comment.likedBy.size()), rewardSeakersList);
+                rewardSeakersList := List.push((comment.createdBy.ownerId, comment.likedBy.size()), rewardSeakersList);
             };
         };
         let data = List.toArray(rewardSeakersList);

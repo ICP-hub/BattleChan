@@ -61,7 +61,7 @@ module {
             postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
-            upvotes = postInfo.upvotes + 1;
+            upvotes = postInfo.upvotes;
             downvotes = postInfo.downvotes;
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;

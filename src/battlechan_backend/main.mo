@@ -155,7 +155,7 @@ actor BattleChan {
       #err(code, message);
     };
   };
-  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId) : async Types.Result {
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
     try {
 
       #ok(successMessage.update);

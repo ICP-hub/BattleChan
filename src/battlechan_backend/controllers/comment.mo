@@ -36,7 +36,11 @@ module {
         let newComment : Types.CommentInfo = {
             commentId;
             comment;
-            createdBy = userId;
+            createdBy = {
+                ownerId = userInfo.userId;
+                userName = userInfo.userName;
+                userProfile = userInfo.profileImg;
+            };
             likedBy = [];
             replies = Trie.empty<Types.ReplyId, Types.ReplyInfo>();
             createdAt = Int.toText(now());
@@ -61,7 +65,7 @@ module {
             postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
-            upvotes = postInfo.upvotes + 1;
+            upvotes = postInfo.upvotes;
             downvotes = postInfo.downvotes;
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
@@ -109,7 +113,7 @@ module {
         let updatedCommentInfo : Types.CommentInfo = {
             commentId = commentInfo.commentId;
             comment = commentInfo.comment;
-            createdBy  = commentInfo.createdBy;
+            createdBy = commentInfo.createdBy;
             likedBy = List.toArray(List.push(userId, List.fromArray(commentInfo.likedBy)));
             replies = commentInfo.replies;
             createdAt = commentInfo.createdAt;

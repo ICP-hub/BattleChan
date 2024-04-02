@@ -57,7 +57,11 @@ module {
     public type CommentInfo = {
         commentId : Text;
         comment : Text;
-        createdBy : Principal;
+        createdBy : {
+            ownerId : Principal;
+            userName : Text;
+            userProfile : Text;
+        };
         likedBy : [UserId];
         replies : Trie.Trie<ReplyId, ReplyInfo>;
         createdAt : Text;
