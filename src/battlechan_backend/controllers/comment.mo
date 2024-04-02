@@ -36,6 +36,7 @@ module {
         let newComment : Types.CommentInfo = {
             commentId;
             comment;
+            createdBy = userId;
             likedBy = [];
             replies = Trie.empty<Types.ReplyId, Types.ReplyInfo>();
             createdAt = Int.toText(now());
@@ -75,7 +76,7 @@ module {
             updatedUserInfo;
         };
     };
-    
+
     public func updateLikedComments(userId : Types.UserId, postId : Types.PostId, commentId : Types.CommentId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
         updatedPostInfo : Types.PostInfo;
         updatedUserInfo : Types.UserInfo;
@@ -108,6 +109,7 @@ module {
         let updatedCommentInfo : Types.CommentInfo = {
             commentId = commentInfo.commentId;
             comment = commentInfo.comment;
+            createdBy  = commentInfo.createdBy;
             likedBy = List.toArray(List.push(userId, List.fromArray(commentInfo.likedBy)));
             replies = commentInfo.replies;
             createdAt = commentInfo.createdAt;

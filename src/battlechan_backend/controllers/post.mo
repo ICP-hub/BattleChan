@@ -268,60 +268,25 @@ module {
             updatedArchivedTrie;
         };
     };
-    // public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
-    //     updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo>;
-    //     updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
-    //     updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>;
-    // } {
 
-    //     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
-    //         case (?value) { value };
-    //         case (null) { Debug.trap(reject.noAccount) };
-    //     };
-    //     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
-    //         case (?value) { value };
-    //         case (null) { Debug.trap(reject.noPost) };
-    //     };
+    public func withdraw(postId : Types.PostId, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>) {
+        let postInfo : Types.PostInfo = switch (Trie.get(postTrie, textKey postId, Text.equal)) {
+            case (?value) { value };
+            case (null) { Debug.trap(reject.noPost) };
+        };
+        var rewardSeakersList : List.List<(Types.UserId, Nat)> = List.nil<(Types.UserId, Nat)>();
+        let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+        for (comment in commentData.vals()) {
+            if (comment.likedBy.size() > 5) {
+                rewardSeakersList := List.push((comment.createdBy, comment.likedBy.size()), rewardSeakersList);
+            };
+        };
+        let data = List.toArray(rewardSeakersList);
 
-    //     let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x == postId);
-    //     let updateUserInfo : Types.UserInfo = {
-    //         userId = userInfo.userId;
-    //         userName = userInfo.userName;
-    //         profileImg = userInfo.profileImg;
-    //         upvotedTo = userInfo.upvotedTo;
-    //         downvotedTo = userInfo.downvotedTo;
-    //         likedComments = userInfo.likedComments;
-    //         createdComments = userInfo.createdComments;
-    //         replyIds = userInfo.replyIds;
-    //         postIds = updatedPostIds;
-    //         createdAt = userInfo.createdAt;
-    //         updatedAt = ?Int.toText(now());
-    //     };
-
-    //     var achivedPostList : List.List<(Types.PostId, Types.PostInfo)> = List.nil<(Types.PostId, Types.PostInfo)>();
-
-    //     switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
-    //         case (?value) {
-    //             let tempList = List.push((postId, postInfo), value);
-    //             achivedPostList := tempList;
-    //         };
-    //         case (null) {
-    //             achivedPostList := List.push((postId, postInfo), achivedPostList);
-    //         };
-    //     };
-
-    //     let updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo> = Trie.put(userTrieMap, principalKey userId, Principal.equal, updateUserInfo).0;
-    //     let updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo> = Trie.remove(postTrieMap, textKey postId, Text.equal).0;
-    //     let updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>> = Trie.put(userAchivedPostTrie, principalKey userId, Principal.equal, achivedPostList).0;
-    //     return {
-    //         updatedUserTrie;
-    //         updatedPostTrie;
-    //         updatedArchivedTrie;
-    //     };
-
-    public func bubbleSortPost(arr : [var Types.PostInfo], filterOptions : Types.FilterOptions) : [var Types.PostInfo] {
+    };
+    public func bubbleSortPost(arr : [var Types.PostRes], filterOptions : Types.FilterOptions) : [var Types.PostRes] {
         var n = arr.size();
-        var temp : Types.PostInfo = {
+        var temp : Types.PostRes = {
             postId = "";
             postName = "";
             postDes = "";
@@ -335,7 +300,6 @@ module {
                 userName = "";
                 userProfile = "";
             };
-            comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
             expireAt = 0;
             createdAt = "";
             updatedAt = ?"";

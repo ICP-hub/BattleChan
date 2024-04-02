@@ -57,6 +57,7 @@ module {
     public type CommentInfo = {
         commentId : Text;
         comment : Text;
+        createdBy : Principal;
         likedBy : [UserId];
         replies : Trie.Trie<ReplyId, ReplyInfo>;
         createdAt : Text;
@@ -98,9 +99,13 @@ module {
         upvotes : Nat64;
         downvotes : Nat64;
         postMetaData : Text;
-        createdBy : Principal;
-        comments : [(CommentId, CommentInfo)];
+        createdBy : {
+            ownerId : Principal;
+            userName : Text;
+            userProfile : Text;
+        };
         createdAt : Text;
+        expireAt : Int;
         updatedAt : ?Text;
     };
     public type FilterOptions = {
