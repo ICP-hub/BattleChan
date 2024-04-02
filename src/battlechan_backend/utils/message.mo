@@ -14,9 +14,9 @@ module {
         noComment = "No Comment found !";
         noReply = "No Reply found !";
         alreadyVoted = "already Voted!";
-        noPageExist = "No Page Exist!";
         noAccess = "no Access";
         notValid = "not Valid Text";
+        oneMinLeft = " cannot withdraw only one minute left";
         downvoteNotAllowed = "cannot downVote less than 1 minute left to expire";
         expireNotAllowed = "cannot expire post! ";
     };
