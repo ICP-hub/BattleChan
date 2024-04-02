@@ -28,7 +28,7 @@
   }
 
   .small-button {
-    @apply font-semibold tablet:text-lg text-sm rounded-[2rem] tablet:py-2 tablet:px-6 py-1.5 px-3;
+    @apply font-semibold tablet:text-lg text-sm rounded-[2rem] tablet:py-2 tablet:px-6 small_phone:py-1.5 py-1 small_phone:px-3 px-2;
   }
 }
 

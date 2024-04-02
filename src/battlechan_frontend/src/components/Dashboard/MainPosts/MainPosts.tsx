@@ -35,8 +35,9 @@ function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
   const minute = date.getMinutes(); // Minute (0-59)
 
   // Format the timestamp string
-  const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? "0" + minute : minute
-    }`;
+  const timestamp = `${month} ${day},${year}; ${hour}:${
+    minute < 10 ? "0" + minute : minute
+  }`;
 
   return timestamp;
 }
@@ -56,7 +57,7 @@ type PostInfo = {
   createdBy: {
     userName: string;
     userProfile: string;
-  }
+  };
 };
 
 interface Board {
@@ -76,20 +77,31 @@ interface PostResponse {
   error: string[];
 }
 
+const post = [
+  {
+    postId: "#3109292588",
+    postName: "Test2",
+    postMetaData:
+      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+    postDes: "Test2",
+    expireAt: 1711625931614910010n,
+    createdAt: "Mar 28,2024; 17:03",
+  },
+];
+
 const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const [boardsData, setBoardsData] = useState<string[]>([]);
+
   const className = "Dashboard__MainPosts";
   const [backend] = useBackend();
-  const { createPost, getBoards, getMainPosts, getArchivePosts } = PostApiHanlder();
-  
+  const { createPost, getBoards, getMainPosts, getArchivePosts } =
+    PostApiHanlder();
+
   useEffect(() => {
-    console.log("HERE");
     const fetchData = async () => {
       try {
-        console.log("IN FUNC");
         // Make a fetch call to your backend API
-        console.log(await getBoards());
         const response = (await getBoards()) as BackendResponse;
         if (response.status == false) {
           throw new Error("Failed to fetch communities");
@@ -127,21 +139,25 @@ const MainPosts = (props: Theme) => {
           const posts = response.data
             .flatMap((nestedArray) => nestedArray)
             .flatMap((element) => {
-              if (Array.isArray(element) && element.length === 2 && typeof element[1] === 'object') {
+              if (
+                Array.isArray(element) &&
+                element.length === 2 &&
+                typeof element[1] === "object"
+              ) {
                 return [element[1]]; // Include only the object part
               }
               return [];
             });
           // console.log(posts);
           posts.forEach((element) => {
-            const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+            const timestamp: string = convertNanosecondsToTimestamp(
+              BigInt(element.createdAt)
+            );
             console.log(timestamp);
             element.createdAt = timestamp;
           });
           setPostsData(posts);
         }
-
-
       } else {
         const response = (await getMainPosts()) as PostResponse;
         console.log("Main Posts Response: ", response);
@@ -353,8 +369,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Rank" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Rank" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Rank")}
                     >
                       Rank
@@ -363,8 +380,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "New" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "New" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("New")}
                     >
                       New
@@ -373,8 +391,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Last Reply")}
                     >
                       Last Reply

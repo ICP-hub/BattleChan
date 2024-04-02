@@ -28,7 +28,7 @@ const WhyBattlechan = () => {
       <div
         className={
           className +
-          ` w-full xl:py-40 laptop:py-32 phone:py-24 py-16 xl:px-36 laptop:px-12 tablet:px-32 phone:px-20 px-12 gap-4 laptop:flex-direction-row flex-col-center flex-col-reverse ${
+          ` w-full xl:py-40 laptop:py-32 phone:py-24 small_phone:py-16 py-12 xl:px-36 laptop:px-12 tablet:px-32 phone:px-20 small_phone:px-12 px-8 gap-4 laptop:flex-direction-row flex-col-center flex-col-reverse ${
             darkColor == "dark" ? "bg-[#121212]" : "light"
           } text-dark dark:text-light`
         }
@@ -83,7 +83,7 @@ const WhyBattlechan = () => {
 
         {/* Images */}
         <section
-          className="__images laptop:w-1/2 w-full bg-no-repeat bg-center bg-contain flex-row-center justify-center"
+          className="__images laptop:w-1/2 phone:px-0 px-[20vw] w-full bg-no-repeat bg-center bg-contain flex-row-center justify-center"
           style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
         >
           <img

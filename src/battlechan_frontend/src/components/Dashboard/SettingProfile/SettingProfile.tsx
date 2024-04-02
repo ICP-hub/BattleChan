@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 import { useCanister, useConnect } from "@connect2ic/react";
-import { dark } from "@mui/material/styles/createPalette";
 import UserApiHanlder from "../../../API_Handlers/user";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
   return useCanister("backend");
@@ -32,43 +32,42 @@ interface UserData {
   userName: string;
 }
 
-type Data = {
-  ok: string;
-};
-
 const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
   const { registerUser, isUserRegistered, updateUser } = UserApiHanlder();
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
-  const [inputFileName, setInputFileName] = React.useState("");
-  const [fileURL, setFileURL] = React.useState(userData.imageURL);
-
-  const [inputUserName, setInputUserName] = React.useState("");
-  const [userName, setUserName] = React.useState(userData.name);
   const isRegisteredRef = React.useRef(isRegistered);
+
+  //this is to show the image on the screen or set it in server
+  const [fileURL, setFileURL] = React.useState(userData.imageURL);
+  //this is to maintain the file changes by the user
+  const [inputFileName, setInputFileName] = React.useState("");
+
+  //this is to show the name on the screen or set it in server
+  const [userName, setUserName] = React.useState(userData.name);
+  //this is to maintain the name typed by the user
+  const [inputUserName, setInputUserName] = React.useState("");
+
+  React.useRef(isRegistered);
   const userNameRef = React.useRef(userName);
 
   const className = "Dashboard__SettingProfile";
 
   function handleNameChange() {
     setShowInput(true);
-    console.log("Input username:", inputUserName); // Add this line
   }
 
   function handleSaveBtn() {
-    if (inputUserName == "") {
+    if (inputUserName === "") {
       alert("UserName Can not be empty");
     } else {
-      setShowInput(false);
       setUserName(inputUserName);
+      setShowInput(false);
+      setInputUserName("");
     }
-  }
-
-  function handleBlur() {
-    setUserName(inputUserName);
-    setShowInput(false);
+    console.log("Input username:", inputUserName); // Add this line
   }
 
   function handleFileChange(inputfile: any) {
@@ -76,7 +75,7 @@ const SettingProfile = (props: Theme) => {
     setFileURL(imageUrl);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fileInput = document.getElementById("profile");
 
     const handleFileInputChange = (event: any) => {
@@ -106,7 +105,9 @@ const SettingProfile = (props: Theme) => {
           if (data && (data as Data)?.ok) {
             toast.success((data as Data).ok);
           } else {
-            toast.error("Error Updating Profile: please verify and enter correct fields!")
+            toast.error(
+              "Error Updating Profile: please verify and enter correct fields!"
+            );
           }
         } else {
           try {
@@ -114,7 +115,9 @@ const SettingProfile = (props: Theme) => {
             if (data && (data as Data)?.ok) {
               toast.success((data as Data).ok);
             } else {
-              toast.error("Error Updating Profile: please verify and enter correct fields!")
+              toast.error(
+                "Error Updating Profile: please verify and enter correct fields!"
+              );
             }
           } catch (error) {
             console.error("Error registering user:", error);
@@ -149,7 +152,6 @@ const SettingProfile = (props: Theme) => {
     fetchData();
   }, [isRegistered, userName]);
 
-
   return (
     <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
@@ -174,15 +176,14 @@ const SettingProfile = (props: Theme) => {
         <section className="profileName laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2">
             <span className="font-semibold py-1">User Name</span>
-            {!showInput && <span>{inputUserName}</span>}
+            {!showInput && <span>{userName}</span>}
             {showInput && (
               <input
                 type="text"
                 name="user name"
                 placeholder="type your name"
-                value={inputUserName}
                 onChange={(e) => setInputUserName(e.target.value)}
-                onBlur={handleBlur}
+                onBlur={handleSaveBtn}
                 className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green  rounded-lg"
               />
             )}
@@ -254,7 +255,12 @@ const SettingProfile = (props: Theme) => {
             type="button"
             id="registerBtn"
             onClick={() => {
-              console.log("Input username from btn:", inputUserName); // Add this line
+              console.log(
+                "Input username from btn:",
+                userName,
+                "Input image:",
+                fileURL
+              ); // Add this line
             }}
           >
             Update

@@ -22,7 +22,7 @@ const Navbar = (props: Theme) => {
       className={
         className +
         ` flex-row-center justify-between text-dark dark:text-light bg-light dark:bg-dark` +
-        " laptop:py-8 laptop:px-16 tablet:px-8 tablet:py-8 p-4"
+        " laptop:py-8 laptop:px-16 tablet:px-8 tablet:py-8 small_phone:p-4 py-4 px-2"
       }
     >
       <img
@@ -38,7 +38,7 @@ const Navbar = (props: Theme) => {
         className={
           className +
           "__rightSection flex-row-center font-bold" +
-          " laptop:gap-4 gap-2"
+          " laptop:gap-4 small_phone:gap-2 gap-1"
         }
       >
         {is550px && <ThemeSwitch handleThemeSwitch={props.handleThemeSwitch} />}
@@ -46,8 +46,8 @@ const Navbar = (props: Theme) => {
         <div
           className={
             className +
-            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
-            "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
+            `__timeToken text-dark dark:text-light small_phone:gap-2 gap-1 flex-row-center border border-green rounded-[3rem]` +
+            "  tablet:p-1.5 p-1 tablet:pl-6 small_phone:pl-3 pl-2.5 tablet:text-base text-sm text-nowrap"
           }
         >
           1 Time Token:
@@ -66,7 +66,7 @@ const Navbar = (props: Theme) => {
 
         <button
           className={
-            className + "__connectWalletBtn flex-row-center green-button"
+            className + "__connectWalletBtn flex-row-center green-button small_phone:px-4 px-2 small_phone:py-2.5 py-2"
           }
         >
           <NavConnectButton />
