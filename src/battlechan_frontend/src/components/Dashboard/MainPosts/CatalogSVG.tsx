@@ -41,17 +41,17 @@ const CatalogSVG: React.FC<CatalogSVGProps> = ({ label }) => {
             <path
               d="M5.26164 5.21305L13.9129 0.287677L22.5642 5.21305L13.9129 10.1384L5.26164 5.21305Z"
               stroke="currentColor"
-              stroke-width="0.5"
+              strokeWidth="0.5"
             />
             <path
               d="M22.5936 6.48732L22.5334 16.4422L13.9423 21.4718L14.0024 11.5169L22.5936 6.48732Z"
               stroke="currentColor"
-              stroke-width="0.5"
+              strokeWidth="0.5"
             />
             <path
               d="M4.76728 6.48732L4.82742 16.4422L13.4186 21.4718L13.3584 11.5169L4.76728 6.48732Z"
               stroke="currentColor"
-              stroke-width="0.5"
+              strokeWidth="0.5"
             />
           </svg>
         );

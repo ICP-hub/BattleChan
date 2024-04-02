@@ -257,29 +257,29 @@ const MainPosts = (props: Theme) => {
                     d="M5.55556 2.11133L10 2.11133M1.11111 9.88911L2.77778 9.88911M1.11111 2.11133L3.33333 2.11133M5 9.88911L10 9.88911M8.33333 6.00022L10 6.00022M1.11111 6.00022L6.11111 6.00022"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                   <path
                     d="M3.33332 2.11111C3.33332 2.72476 3.83078 3.22222 4.44443 3.22222C5.05808 3.22222 5.55554 2.72476 5.55554 2.11111C5.55554 1.49746 5.05808 1 4.44443 1C3.83078 1 3.33332 1.49746 3.33332 2.11111Z"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                   <path
                     d="M6.11115 5.99978C6.11115 6.61343 6.60861 7.11089 7.22226 7.11089C7.83591 7.11089 8.33337 6.61343 8.33337 5.99978C8.33337 5.38613 7.83591 4.88867 7.22226 4.88867C6.60861 4.88867 6.11115 5.38613 6.11115 5.99978Z"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                   <path
                     d="M2.77778 9.88894C2.77778 10.5026 3.27524 11.0001 3.88889 11.0001C4.50254 11.0001 5 10.5026 5 9.88894C5 9.27529 4.50254 8.77783 3.88889 8.77783C3.27524 8.77783 2.77778 9.27529 2.77778 9.88894Z"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                 </svg>
               </button>

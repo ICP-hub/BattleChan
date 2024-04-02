@@ -10,11 +10,25 @@ const truncateString = (str: string, maxLength: number): string => {
   return str.slice(0, maxLength) + '...';
 };
 
+interface UserInfo {
+  createdAt: string;
+  createdComments: any[]; // Define appropriate type for these arrays
+  downvotedTo: any[];
+  likedComments: any[];
+  postIds: string[];
+  profileImg: string;
+  replyIds: any[];
+  updatedAt: string[];
+  upvotedTo: any[];
+  userId: string;
+  userName: string;
+}
 
-
-
+interface UserProfileHeaderProps {
+  userInfo: UserInfo[];
+}
  
-const UserProfileHeader = () => {
+const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
 
   const { principal, activeProvider } = useConnect();
   let loggedInBy = activeProvider?.meta.name;
@@ -51,8 +65,8 @@ const UserProfileHeader = () => {
               <path
                 d="M1 12H11M2.04125 7.22548C1.77464 7.48655 1.62493 7.84042 1.625 8.20935V10.1667H3.63937C4.01687 10.1667 4.37875 10.02 4.64563 9.75849L10.5831 3.94998C10.8498 3.68896 10.9996 3.33508 10.9996 2.96611C10.9996 2.59715 10.8498 2.24327 10.5831 1.98224L9.99688 1.40781C9.86466 1.27847 9.70768 1.17588 9.53489 1.10591C9.3621 1.03593 9.17689 0.999943 8.98987 1C8.80285 1.00006 8.61767 1.03616 8.44492 1.10624C8.27218 1.17632 8.11525 1.279 7.98313 1.40842L2.04125 7.22548Z"
                 stroke="white"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </div>
@@ -60,7 +74,7 @@ const UserProfileHeader = () => {
       </div>
       <div className="flex flex-col justify-center">
         <h1 className="font-inter font-bold text-[#FFFFFF] text-sm tablet:text-2xl laptop:text-[2.5rem]">
-           {user}
+           {userInfo.length > 0 && userInfo[0]?.userName}
         </h1>
         <p className="tablet:mt-2 font-inter text-[#FFFFFF] text-opacity-50 text-xs tablet:text-base laptop:text-xl leading-5">
           {loggedInBy}
