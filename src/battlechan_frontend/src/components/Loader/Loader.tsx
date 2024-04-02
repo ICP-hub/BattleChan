@@ -2,9 +2,8 @@ import React from 'react'
 
 function Loader() {
   return (
-    <div>
-        Loading pages...
-      
+    <div className="flex justify-center items-center h-screen">
+      <span className="loader"></span>
     </div>
   )
 }

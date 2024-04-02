@@ -7,7 +7,7 @@ const CreatePostBtn = () => {
   const className = "CreatePostButton";
   return (
     <div className={className + " " + "mt-12 flex justify-center"}>
-      <Link to="/dashboard/createPost">
+      <Link to="/dashboard/createPost" replace={true}>
         <p className="green-button flex-row-center bg-dirty-light-green">
           <LuPlusCircle />
           <span>Create Post</span>

@@ -7,7 +7,7 @@ import defaultImg from "../../../images/User.png";
 import { useCanister, useConnect } from "@connect2ic/react";
 import { dark } from "@mui/material/styles/createPalette";
 import UserApiHanlder from "../../../API_Handlers/user";
-
+import { toast } from "react-hot-toast";
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
   return useCanister("backend");
@@ -32,19 +32,23 @@ interface UserData {
   userName: string;
 }
 
+type Data = {
+  ok: string;
+};
+
 const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
   const { registerUser, isUserRegistered, updateUser } = UserApiHanlder();
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
-  const isRegisteredRef = React.useRef(isRegistered);
-
   const [inputFileName, setInputFileName] = React.useState("");
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
 
   const [inputUserName, setInputUserName] = React.useState("");
   const [userName, setUserName] = React.useState(userData.name);
+  const isRegisteredRef = React.useRef(isRegistered);
+  const userNameRef = React.useRef(userName);
 
   const className = "Dashboard__SettingProfile";
 
@@ -72,7 +76,7 @@ const SettingProfile = (props: Theme) => {
     setFileURL(imageUrl);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fileInput = document.getElementById("profile");
 
     const handleFileInputChange = (event: any) => {
@@ -92,36 +96,40 @@ const SettingProfile = (props: Theme) => {
     }
   }, [handleFileChange]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const registerBtn = document.getElementById("registerBtn");
 
     if (registerBtn) {
       registerBtn.addEventListener("click", async () => {
-        console.log("isregistered data", isRegisteredRef.current);
         if (isRegisteredRef.current === true) {
-          console.log("REGISTERED");
-          console.log("REGISTERED", inputUserName);
-          const data = await updateUser(inputUserName, "");
-          console.log(data);
+          const data = await updateUser(userNameRef.current, "");
+          if (data && (data as Data)?.ok) {
+            toast.success((data as Data).ok);
+          } else {
+            toast.error("Error Updating Profile: please verify and enter correct fields!")
+          }
         } else {
           try {
-            console.log("registerUSER HIT");
-            console.log("REGISTERED", inputUserName);
-            const data = await registerUser(inputUserName, "");
-            console.log(data);
+            const data = await registerUser(userNameRef.current, "");
+            if (data && (data as Data)?.ok) {
+              toast.success((data as Data).ok);
+            } else {
+              toast.error("Error Updating Profile: please verify and enter correct fields!")
+            }
           } catch (error) {
             console.error("Error registering user:", error);
           }
         }
       });
     }
-  }, [inputUserName]);
+  }, [userNameRef]);
 
   React.useEffect(() => {
     isRegisteredRef.current = isRegistered;
-  }, [isRegistered]);
+    userNameRef.current = userName;
+  }, [isRegistered, userName]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       const response = (await isUserRegistered()) as BackendResponse;
       if (response && response.status !== false) {
@@ -139,7 +147,8 @@ const SettingProfile = (props: Theme) => {
 
     // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
-  }, [isRegistered]);
+  }, [isRegistered, userName]);
+
 
   return (
     <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>

@@ -21,6 +21,7 @@ import NavButtons from "../NavButtons/NavButtons";
 // import { backend } from "../../../../../declarations/backend/index"
 import { useCanister, useConnect } from "@connect2ic/react";
 import { Principal } from "@dfinity/principal";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
@@ -40,65 +41,45 @@ interface BackendResponse {
 }
 
 const Body = () => {
+  const { getBoards, getMainPosts, getArchivePosts } = PostApiHanlder();
   const [boardNames, setBoardNames] = useState<string[]>([]);
-  const [boardSizes, setBoardSizes] = useState<string[]>([]);
+  const [boardSizes, setBoardSizes] = useState<Number[]>([]);
   const darkColor = document.documentElement.className;
   const navigate = useNavigate();
   const { principal } = useConnect();
   const [backend] = useBackend();
   // console.log(backend);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
+    async function fetchBoardNames() {
+      const response = (await getBoards()) as BackendResponse;
+      if (response.status == false) {
+        throw new Error("Failed to fetch communities");
+      }
+
+      const boards = response.data[0];
+
+      if (boards && boards.length > 0) {
+        const names = boards.map((board) => board.boardName);
+        const sizes = boards.map((board) => Number(board.size));
+        console.log("names is ", names);
+        console.log("size is ", sizes);
+
+        setBoardNames(names); // Update the state with all board names.
+        setBoardSizes(sizes); // Update the state with all board names.
+      } else {
+        console.log("No boards found.");
+      }
+      // console.log(boardSizes[0]);
+    }
+
     fetchBoardNames();
+    console.log("boards",boardNames);
   }, []);
   const className = "Home";
 
-  async function fetchBoardNames() {
-    const postData = {
-      postName: "", // Add your postName data here
-      postDes: "", // Add your postDes data here
-      postMetaData: "", // Add your postMetaData data here
-    };
-    const data = {
-      userName: "Khushali",
-      profileImg: "",
-    };
-    // console.log(Principal.fromText(principal));
-    // const response = await backend.createUserAccount(data);
-    // console.log(response);
-    // const d = await backend.createComment("#12345678", "Hello");
-    // console.log("data", d);
-    // const d = await backend.createNewBoard("Games", "Games");
-    // console.log("data", d);
-    const d = await backend.getUserInfo();
-    console.log("data", d);
 
-    const board = (await backend.getTotalPostInBoard()) as BackendResponse;
-    console.log(board);
-
-    const post = await backend.getPostsByBoard();
-    console.log("Main Posts Response: ", post);
-    // const response = await backend.createPost("Games", postData);
-    // console.log(response);
-    // const boards = response.data[0];
-
-    // if (boards && boards.length > 0) {
-    //   const names = boards.map((board) => board.boardName);
-    //   const sizes = boards.map((board) => board.size.toString());
-    //   console.log("size is ", sizes);
-    //   console.log("ended");
-
-    //   setBoardNames(names); // Update the state with all board names.
-    //   setBoardSizes(sizes); // Update the state with all board names.
-    // } else {
-    //   console.log("No boards found.");
-    // }
-    // console.log(boardSizes[0]);
-  }
-
-  // async function getPost() {
-  //   const posts = await backend.getUserInfo() as BackendResponse;
-
-  // }
 
   return (
     <div
@@ -109,8 +90,8 @@ const Body = () => {
       style={
         darkColor == "dark"
           ? {
-              backgroundImage: `url(${bg})`,
-            }
+            backgroundImage: `url(${bg})`,
+          }
           : {}
       }
     >
@@ -124,9 +105,8 @@ const Body = () => {
         }
       >
         <h1
-          className={`w-1/2 text-5xl font-bold ${
-            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-          } leading-relaxed`}
+          className={`w-1/2 text-5xl font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+            } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
@@ -410,7 +390,7 @@ const Body = () => {
             </div>
         </div> */}
 
-        <div className="flex big_tablet:hidden items-center justify-between mt-2">
+        {/* <div className="flex big_tablet:hidden items-center justify-between mt-2">
           <div className="pl-6">
             <button
               className="inline-flex flex-nowrap items-center gap-2 cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg"
@@ -419,14 +399,14 @@ const Body = () => {
               }}
             >
               <MdOutlineAddBusiness />
-              {"Business"}
+              {boardNames[0]}
             </button>
           </div>
           <div className="flex text-center gap-2 items-center justify-center pr-6">
-            <span>{"12"}</span>
+            <span>{boardSizes[0]}</span>
             <span>2 hrs ago</span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="relative hidden tablet:block overflow-x-auto my-24 px-9 py-6 border border-dark dark:border-light rounded-md mx-20 no-scrollbar">
@@ -442,14 +422,13 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${
-                          boardNames[0] || "business"
+                        `/dashboard/mainPosts?boardName=${boardNames[0] || "business"
                         }`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[0]}
                   </button>
                 </div>
               </th>
@@ -459,12 +438,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[1]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[1]}
                   </button>
                 </div>
               </th>
@@ -474,12 +453,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[2]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[2]}
                   </button>
                 </div>
               </th>
@@ -489,12 +468,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[3]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[3]}
                   </button>
                 </div>
               </th>
@@ -504,12 +483,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[4]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[4]}
                   </button>
                 </div>
               </th>
@@ -519,12 +498,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[5]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[5]}
                   </button>
                 </div>
               </th>
@@ -534,12 +513,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[6]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[6]}
                   </button>
                 </div>
               </th>
@@ -550,12 +529,12 @@ const Body = () => {
                     className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                     onClick={() => {
                       navigate(
-                        `/dashboard/mainPosts?boardName=${boardNames[0]}`
+                        `/dashboard/mainPosts?boardName=${boardNames[7]}`
                       );
                     }}
                   >
                     <MdOutlineAddBusiness />
-                    {"Business"}
+                    {boardNames[7]}
                   </button>
                 </div>
               </th>
@@ -568,7 +547,7 @@ const Body = () => {
               </th>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[0] !== undefined ? boardSizes[0].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -576,7 +555,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[1] !== undefined ? boardSizes[1].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -584,7 +563,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[2] !== undefined ? boardSizes[2].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -592,7 +571,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[3] !== undefined ? boardSizes[3].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -600,7 +579,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[4] !== undefined ? boardSizes[4].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -608,7 +587,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[5] !== undefined ? boardSizes[5].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -616,7 +595,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[6] !== undefined ? boardSizes[6].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>
@@ -624,7 +603,7 @@ const Body = () => {
               </td>
               <td className="">
                 <div className=" text-center flex flex-col flex-wrap items-center justify-center gap-2 p-2">
-                  <span className="">{"12"}</span>
+                  <span className="">{boardSizes[7] !== undefined ? boardSizes[7].toString() : ''}</span>
                   <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                     2 hrs ago
                   </span>

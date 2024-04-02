@@ -1,6 +1,5 @@
 import React from "react";
 import Post from "./Post";
-import { Link } from "react-router-dom";
 
 interface PostData {
   postId: string;
@@ -34,10 +33,6 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             `laptop:w-1/2 w-full p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
           }
         >
-          <Link
-            key={post.postId}
-            to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
-          >
             <Post
               key={post.postId}
               id={post.postId}
@@ -53,7 +48,6 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
               userProfile={post.createdBy.userProfile}
               type={type}
             />
-          </Link>
         </div>
       ))}
     </React.Fragment>
