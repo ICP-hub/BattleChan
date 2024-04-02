@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { useConnect } from "@connect2ic/react";
+import UserApiHanlder from "../../../API_Handlers/user";
 
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
@@ -32,10 +33,37 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
 
   const { principal, activeProvider } = useConnect();
   let loggedInBy = activeProvider?.meta.name;
-  let user = "";
-  if(principal){
-    user = truncateString(principal, 17);
-  }
+
+  const [isRegistered, setIsRegistered] = React.useState(false);
+  const [userName, setUserName] = React.useState("");
+  const isRegisteredRef = React.useRef(isRegistered);
+  const { isUserRegistered } = UserApiHanlder();
+
+  useEffect(() => {
+    isRegisteredRef.current = isRegistered;
+  }, [isRegistered]);
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const response = (await isUserRegistered()) as BackendResponse;
+    if (response && response.status !== false) {
+      const userDataArray: UserData[] = response.data;
+      setUserName(userDataArray[0]?.userName)
+      setIsRegistered(true);
+      // console.log("SETTED TRUe", isRegistered);
+    } else {
+      if (principal) {
+        setUserName(truncateString(principal, 17));
+      }
+      // console.log("SET FALSE")
+      setIsRegistered(false);
+    }
+    // console.log("isRegisteredData", response);
+    // console.log("isRegistered", isRegistered);
+  };
 
   return (
     <div className="bg-green rounded-2xl w-full p-6 tablet:p-[2.344rem] relative flex items-center gap-4 tablet:gap-12">

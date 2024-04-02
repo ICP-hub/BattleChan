@@ -7,9 +7,9 @@ const useBackend = () => {
 };
 
 interface BackendResponse {
-  status: boolean;
-  data: []; // Assuming 'data' is an array of arrays of Board objects.
-  error: string[];
+    status: boolean;
+    data: [];
+    error: string[];
 }
 
 interface BackendResponseUserInfo {
@@ -33,93 +33,81 @@ interface UserInfo {
 }
 
 const UserApiHanlder = () => {
-  // Init backend
-  const [backend] = useBackend();
-  const [isLoading, setIsLoading] = useState(false);
-  const [successfulSubmit, setSuccessfulSubmit] = useState(false);
-  // Create Contact
-  const registerUser = async (userName: string, profileImg: string) => {
-    try {
-      setIsLoading(true);
-      console.log(backend);
-      // console.log(name, email, contact_number, message);
-      const data = {
-        userName: userName,
-        profileImg: profileImg,
-      };
-      console.log(data);
-      const res = await backend.createUserAccount(data);
-      console.log(res);
-      setSuccessfulSubmit(true);
-      return res;
-    } catch (err) {
-      console.error("Error creating contact : ", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Init backend
+    const [backend] = useBackend();
 
-  const updateUser = async (userName: string, profileImg: string) => {
-    try {
-      setIsLoading(true);
-      // console.log(name, email, contact_number, message);
-      const data = {
-        userName: userName,
-        profileImg: profileImg,
-      };
-      console.log(data);
-      const res = await backend.updatedUserAccount(data);
-      console.log("res", res);
-      setSuccessfulSubmit(true);
-      const response = (await backend.getUserInfo()) as BackendResponse;
+    // Register User
+    const registerUser = async (userName: string, profileImg: string) => {
+        try {
+            // console.log(backend);
+            const data = {
+                userName: userName,
+                profileImg: profileImg,
+            };
+            // console.log(data);
+            const res = await backend.createUserAccount(data);
+            // console.log(res);
+            return res;
+        } catch (err) {
+            console.error("Error registering user: ", err);
+        }
+    };
 
-      return response;
-    } catch (err) {
-      console.error("Error creating contact : ", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Update User Profile
+    const updateUser = async (userName: string, profileImg: string) => {
+        try {
+            const data = {
+                userName: userName,
+                profileImg: "sdvasbd",
+            };
+            console.log(data);
+            const res = await backend.updatedUserAccount(data);
+            console.log("res",res);
+            // const response = (await backend.getUserInfo()) as BackendResponse;
+            return res;
+        } catch (err) {
+            console.error("Error updating user info : ", err);
+        }
+    };
 
-  const isUserRegistered = async () => {
-    try {
-      setIsLoading(true);
-      const response = (await backend.getUserInfo()) as BackendResponse;
-      console.log("data", response);
-      setSuccessfulSubmit(true);
-      return response;
-    } catch (err) {
-      console.error("Error creating contact : ", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Verify is user registered or not 
+    const isUserRegistered = async () => {
+        try {
+            const response = (await backend.getUserInfo()) as BackendResponse;
+            console.log("data", response);
+            return response;
+        } catch (err) {
+            console.error("Error creating contact : ", err);
+        }
+    };
 
-  const getUserInfo = async () => {
-    try {
-      setIsLoading(true);
-      const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
-      console.log(response.data)
-      return response.data;
-    } catch (err) {
-      console.error("Error getting user info: ", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const getUserInfo = async () => {
+      try {
+        setIsLoading(true);
+        const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
+        console.log(response.data)
+        return response.data;
+      } catch (err) {
+        console.error("Error getting user info: ", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    const getPostInfo = async (postId: string) => {
+      try {
+        setIsLoading(true);
+        const response = (await backend.getPostInfo(postId)) as BackendResponse;
+        console.log("post response: ", response.data)
+        return response.data;
+      } catch (err) {
+        console.error("Error getting user info: ", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const getPostInfo = async (postId: string) => {
-    try {
-      setIsLoading(true);
-      const response = (await backend.getPostInfo(postId)) as BackendResponse;
-      console.log("post response: ", response.data)
-      return response.data;
-    } catch (err) {
-      console.error("Error getting user info: ", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
 
   // Returns
   return {
