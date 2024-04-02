@@ -83,27 +83,21 @@ const UserApiHanlder = () => {
 
     const getUserInfo = async () => {
       try {
-        setIsLoading(true);
         const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
         console.log(response.data)
         return response.data;
       } catch (err) {
         console.error("Error getting user info: ", err);
-      } finally {
-        setIsLoading(false);
       }
     };
   
     const getPostInfo = async (postId: string) => {
       try {
-        setIsLoading(true);
         const response = (await backend.getPostInfo(postId)) as BackendResponse;
         console.log("post response: ", response.data)
         return response.data;
       } catch (err) {
         console.error("Error getting user info: ", err);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -114,8 +108,6 @@ const UserApiHanlder = () => {
     registerUser,
     isUserRegistered,
     updateUser,
-    isLoading,
-    successfulSubmit,
     getUserInfo,
     getPostInfo,
   };
