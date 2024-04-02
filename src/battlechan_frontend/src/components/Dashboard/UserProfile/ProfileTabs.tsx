@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PostTab from "./PostTab";
 import CommentTab from "./CommentTab";
 import UpvoteTab from "./UpvoteTab";
+import { useNavigate } from "react-router-dom";
 
 interface TabProps {
   id: string;
@@ -10,6 +11,7 @@ interface TabProps {
 
 const ProfileTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("post");
+  const navigate = useNavigate();
 
   const tabs: TabProps[] = [
     { id: "post", label: "Post" },
@@ -22,6 +24,10 @@ const ProfileTabs: React.FC = () => {
     setActiveTab(id);
   };
 
+  const handleCreatePost = () => {
+    navigate('/dashboard/createPost', { replace: true })
+  }
+
   return (
     <div className="container mt-2 mb-24 tablet:my-6 mx-auto px-4 tablet:px-12">
       {/* tab navigation */}
@@ -32,17 +38,15 @@ const ProfileTabs: React.FC = () => {
           role="list"
         >
           {tabs.map((tab) => (
-            <li key={tab.id} className={`text-center rounded-full text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 ${
-                activeTab === tab.id
-                  ? "text-[#fff] bg-green "
-                  : ""
+            <li key={tab.id} className={`text-center rounded-full text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 ${activeTab === tab.id
+              ? "text-[#fff] bg-green "
+              : ""
               } ${tab.id === "shared" ? "hidden tablet:inline-block" : ""} `}>
               <a
-                className={`px-4 font-semibold text-[10px] tablet:text-base z-30 flex items-center justify-center py-2 transition-all ease-in-out border-0 cursor-pointer bg-inherit ${
-                  activeTab === tab.id
-                    ? "text-[#fff] text-opacity-100 font-semibold"
-                    : ""
-                }`}
+                className={`px-4 font-semibold text-[10px] tablet:text-base z-30 flex items-center justify-center py-2 transition-all ease-in-out border-0 cursor-pointer bg-inherit ${activeTab === tab.id
+                  ? "text-[#fff] text-opacity-100 font-semibold"
+                  : ""
+                  }`}
                 data-tab-target=""
                 role="tab"
                 aria-selected={activeTab === tab.id ? "true" : "false"}
@@ -54,7 +58,7 @@ const ProfileTabs: React.FC = () => {
             </li>
           ))}
         </ul>
-        <button className="hidden tablet:flex items-center justify-center px-8 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-full font-semibold">
+        <button className="hidden tablet:flex items-center justify-center px-8 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-full font-semibold" onClick={handleCreatePost}>
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white"
             aria-hidden="true"
@@ -80,9 +84,8 @@ const ProfileTabs: React.FC = () => {
         {tabs.map((tab) => (
           <div
             key={tab.id}
-            className={`${
-              activeTab === tab.id ? "block opacity-100" : "hidden opacity-0"
-            }`}
+            className={`${activeTab === tab.id ? "block opacity-100" : "hidden opacity-0"
+              }`}
             id={tab.id}
             role="tabpanel"
           >

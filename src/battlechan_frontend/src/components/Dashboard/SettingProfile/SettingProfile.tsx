@@ -7,6 +7,7 @@ import defaultImg from "../../../images/User.png";
 import { useCanister, useConnect } from "@connect2ic/react";
 import { dark } from "@mui/material/styles/createPalette";
 import UserApiHanlder from "../../../API_Handlers/user";
+import { toast } from "react-hot-toast";
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
   return useCanister("backend");
@@ -31,29 +32,38 @@ interface UserData {
   userName: string;
 }
 
+type Data = {
+  ok: string;
+};
+
 const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
   const { registerUser, isUserRegistered, updateUser } = UserApiHanlder();
+
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
-
   const [inputFileName, setInputFileName] = React.useState("");
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
 
   const [inputUserName, setInputUserName] = React.useState("");
   const [userName, setUserName] = React.useState(userData.name);
   const isRegisteredRef = React.useRef(isRegistered);
+  const userNameRef = React.useRef(userName);
 
   const className = "Dashboard__SettingProfile";
 
   function handleNameChange() {
-    if (userName !== inputUserName) {
+    setShowInput(true);
+    console.log("Input username:", inputUserName); // Add this line
+  }
+
+  function handleSaveBtn() {
+    if (inputUserName == "") {
+      alert("UserName Can not be empty");
+    } else {
       setShowInput(false);
       setUserName(inputUserName);
-    } else {
-      setShowInput(true);
     }
-    console.log("Input username:", inputUserName); // Add this line
   }
 
   function handleBlur() {
@@ -66,7 +76,7 @@ const SettingProfile = (props: Theme) => {
     setFileURL(imageUrl);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fileInput = document.getElementById("profile");
 
     const handleFileInputChange = (event: any) => {
@@ -84,44 +94,47 @@ const SettingProfile = (props: Theme) => {
     if (fileInput) {
       fileInput.addEventListener("change", handleFileInputChange);
     }
-
   }, [handleFileChange]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const registerBtn = document.getElementById("registerBtn");
 
     if (registerBtn) {
       registerBtn.addEventListener("click", async () => {
-        console.log("isregistered data", isRegisteredRef.current);
         if (isRegisteredRef.current === true) {
-          console.log("REGISTERED");
-          console.log("REGISTERED", inputUserName);
-          const data = await updateUser(inputUserName, "");
-          console.log(data);
+          const data = await updateUser(userNameRef.current, "");
+          if (data && (data as Data)?.ok) {
+            toast.success((data as Data).ok);
+          } else {
+            toast.error("Error Updating Profile: please verify and enter correct fields!")
+          }
         } else {
           try {
-            console.log("registerUSER HIT");
-            console.log("REGISTERED", inputUserName);
-            const data = await registerUser(inputUserName, "");
-            console.log(data);
+            const data = await registerUser(userNameRef.current, "");
+            if (data && (data as Data)?.ok) {
+              toast.success((data as Data).ok);
+            } else {
+              toast.error("Error Updating Profile: please verify and enter correct fields!")
+            }
           } catch (error) {
             console.error("Error registering user:", error);
           }
         }
       });
     }
-  }, [inputUserName]);
+  }, [userNameRef]);
 
   React.useEffect(() => {
     isRegisteredRef.current = isRegistered;
-  }, [isRegistered]);
+    userNameRef.current = userName;
+  }, [isRegistered, userName]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       const response = (await isUserRegistered()) as BackendResponse;
       if (response && response.status !== false) {
         const userDataArray: UserData[] = response.data;
-        setInputUserName(userDataArray[0]?.userName)
+        setInputUserName(userDataArray[0]?.userName);
         setIsRegistered(true);
         // console.log("SETTED TRUe", isRegistered);
       } else {
@@ -134,7 +147,7 @@ const SettingProfile = (props: Theme) => {
 
     // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
-  }, [isRegistered]);
+  }, [isRegistered, userName]);
 
 
   return (
@@ -151,8 +164,12 @@ const SettingProfile = (props: Theme) => {
         />
       )}
 
-      <div className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-4 text-dark dark:text-light`}>
-        <h1 className="laptop:text-3xl text-2xl font-bold text-center">Customize Profile</h1>
+      <div
+        className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-4 text-dark dark:text-light`}
+      >
+        <h1 className="laptop:text-3xl text-2xl font-bold text-center">
+          Customize Profile
+        </h1>
 
         <section className="profileName laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2">
@@ -170,14 +187,29 @@ const SettingProfile = (props: Theme) => {
               />
             )}
           </div>
+          <div className="flex-row-center gap-2">
+            {showInput && (
+              <button
+                type="button"
+                className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold`}
+                onClick={handleSaveBtn}
+              >
+                Save
+              </button>
+            )}
 
-          <button
-            type="button"
-            className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold`}
-            onClick={handleNameChange}
-          >
-            Change
-          </button>
+            <button
+              type="button"
+              className={`${
+                showInput
+                  ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
+                  : " bg-dark dark:bg-light"
+              } text-light dark:text-dark py-2 px-4 rounded-lg font-semibold`}
+              onClick={handleNameChange}
+            >
+              Change
+            </button>
+          </div>
         </section>
 
         <section className="profilePhoto laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
@@ -217,9 +249,14 @@ const SettingProfile = (props: Theme) => {
         </section>
 
         <section className="image p-4 m-8 flex-col-center">
-          <button className="green-button" type="button" id="registerBtn" onClick={() => {
-            console.log("Input username from btn:", inputUserName); // Add this line
-          }}>
+          <button
+            className="green-button"
+            type="button"
+            id="registerBtn"
+            onClick={() => {
+              console.log("Input username from btn:", inputUserName); // Add this line
+            }}
+          >
             Update
           </button>
         </section>
