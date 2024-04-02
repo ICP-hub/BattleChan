@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import KnowMore from "./KnowMore";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
@@ -76,16 +76,16 @@ const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
           console.log(int8Array);
 
           // Base64
-          // const uint8Array = new Uint8Array(int8Array);
+          const uint8Array = new Uint8Array(int8Array);
 
-          // // Convert Uint8Array to base64
-          // let binary = '';
-          // uint8Array.forEach((byte) => {
-          //   binary += String.fromCharCode(byte);
-          // });
-          // let base64 = btoa(binary);
+          // Convert Uint8Array to base64
+          let binary = '';
+          uint8Array.forEach((byte) => {
+            binary += String.fromCharCode(byte);
+          });
+          let base64 = btoa(binary);
 
-          // console.log(base64);
+          console.log(base64);
         };
       }
     };
@@ -98,7 +98,8 @@ const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 const CreatePost = (props: Theme) => {
   const navigate = useNavigate();
-  const { createPost, getBoards, addBoard } = PostApiHanlder();
+  const location = useLocation();
+  const { createPost, getBoards } = PostApiHanlder();
   const [communities, setCommunities] = useState<string[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
   const selectedCommunityRef = React.useRef(selectedCommunity); // Ref to store latest selected community
@@ -108,39 +109,39 @@ const CreatePost = (props: Theme) => {
   const postDesRef = React.useRef(postDes); // Ref to store latest selected community
   const [postMetaData, setPostMetaData] = useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     let createPostBtn = document.getElementById("createPostBtn")
     // Fetch data from backend canister function getTotalPostInBoard
-    const fetchData = async () => {
-      try {
-        // Make a fetch call to your backend API
-        // const board = await addBoard("Games");
-        // console.log(board);
-        const response = (await getBoards()) as BackendResponse;
-        if (response.status == false) {
-          throw new Error("Failed to fetch communities");
-        }
-
-        const boards = response.data[0];
-        console.log(boards);
-
-        if (boards && boards.length > 0) {
-          const names = boards.map((board) => board.boardName);
-          setCommunities(names); // Update the state with all board names.
-        } else {
-          console.log("No boards found.");
-        }
-      } catch (error) {
-        console.error("Error fetching communities:", error);
-      }
-    };
-
     createPostBtn?.addEventListener("click", async () => {
       handleCreatePost();
     })
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
+
+  const fetchData = async () => {
+    try {
+      // Make a fetch call to your backend API
+      // const board = await addBoard("Games");
+      // console.log(board);
+      const response = (await getBoards()) as BackendResponse;
+      if (response.status == false) {
+        throw new Error("Failed to fetch communities");
+      }
+
+      const boards = response.data[0];
+      console.log(boards);
+
+      if (boards && boards.length > 0) {
+        const names = boards.map((board) => board.boardName);
+        setCommunities(names); // Update the state with all board names.
+      } else {
+        console.log("No boards found.");
+      }
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    }
+  };
 
   // Update ref when selectedCommunity changes
   useEffect(() => {
@@ -157,8 +158,10 @@ const CreatePost = (props: Theme) => {
     };
     const response = (await createPost(selectedCommunityRef.current, postData)) as postResponse;
     console.log(response);
-    if(response && response?.ok){
+
+    if (response && response?.ok) {
       navigate('/dashboard/mainPosts');
+      // window.location.href = "/dashboard/mainPosts";
     }
   };
 
@@ -239,6 +242,7 @@ const CreatePost = (props: Theme) => {
                   type="button"
                   className="small-button bg-dirty-light-green"
                   id="createPostBtn"
+                  // onClick={handleCreatePost}
                 >
                   Post
                 </button>

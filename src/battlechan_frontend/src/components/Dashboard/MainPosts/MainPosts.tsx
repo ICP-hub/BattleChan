@@ -82,11 +82,14 @@ const MainPosts = (props: Theme) => {
   const className = "Dashboard__MainPosts";
   const [backend] = useBackend();
   const { createPost, getBoards, getMainPosts, getArchivePosts } = PostApiHanlder();
-
+  
   useEffect(() => {
+    console.log("HERE");
     const fetchData = async () => {
       try {
+        console.log("IN FUNC");
         // Make a fetch call to your backend API
+        console.log(await getBoards());
         const response = (await getBoards()) as BackendResponse;
         if (response.status == false) {
           throw new Error("Failed to fetch communities");

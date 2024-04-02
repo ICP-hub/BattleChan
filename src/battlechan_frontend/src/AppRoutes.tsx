@@ -1,6 +1,6 @@
 // AppRoutes.tsx
 import React, { Suspense, lazy, useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./components/Loader/Loader";
 import { useConnect } from "@connect2ic/react";
@@ -16,12 +16,13 @@ const Analytics = React.lazy(() => import('../src/components/Dashboard/Analytics
 
 
 interface AppRoutesProps {
-  handleThemeSwitch: () => void; // Adjust based on the actual implementation
+    handleThemeSwitch: () => void; // Adjust based on the actual implementation
 }
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
     let { isConnected, principal, isIdle, isInitializing } = useConnect()
     const [allow, setAllow] = useState<null | boolean>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isInitializing == false) {
@@ -88,27 +89,17 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
             <Route
                 path="/dashboard/mainPosts/*"
                 element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <MainPosts handleThemeSwitch={handleThemeSwitch}/>
-                        </Suspense>
-                    ) : allow == false ?(
-
-                        <Navigate to="/" />
-                    ) : null
+                    <Suspense fallback={<Loader />}>
+                        <MainPosts handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
                 }
             />
             <Route
                 path="/dashboard/archivePosts/*"
                 element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <ArchivePosts handleThemeSwitch={handleThemeSwitch}/>
-                        </Suspense>
-                    ) : allow == false ?(
-
-                        <Navigate to="/" />
-                    ) : null
+                    <Suspense fallback={<Loader />}>
+                        <ArchivePosts handleThemeSwitch={handleThemeSwitch} />
+                    </Suspense>
                 }
             />
             <Route
@@ -116,7 +107,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                 element={
                     allow == true ? (
                         <Suspense fallback={<Loader />}>
-                            <Analytics handleThemeSwitch={handleThemeSwitch}/>
+                            <Analytics handleThemeSwitch={handleThemeSwitch} />
                         </Suspense>
                     ) : allow == false ? (
 
@@ -124,46 +115,6 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
                     ) : null
                 }
             />
-            <Route
-                path="/dashboard/mainPosts/*"
-                element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <MainPosts handleThemeSwitch={handleThemeSwitch}/>
-                        </Suspense>
-                    ) : allow == false ?(
-
-                        <Navigate to="/" />
-                    ) : null
-                }
-            />
-            <Route
-                path="/dashboard/archivePosts/*"
-                element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <ArchivePosts handleThemeSwitch={handleThemeSwitch}/>
-                        </Suspense>
-                    ) : allow == false ?(
-
-                        <Navigate to="/" />
-                    ) : null
-                }
-            />
-            <Route
-                path="/dashboard/analytics/*"
-                element={
-                    allow == true ? (
-                        <Suspense fallback={<Loader />}>
-                            <Analytics handleThemeSwitch={handleThemeSwitch}/>
-                        </Suspense>
-                    ) : allow == false ?(
-
-                        <Navigate to="/" />
-                    ) : null
-                }
-            />
-
         </Routes>
 
     );

@@ -8,75 +8,61 @@ const useBackend = () => {
 
 interface BackendResponse {
     status: boolean;
-    data: []; // Assuming 'data' is an array of arrays of Board objects.
+    data: [];
     error: string[];
 }
 
 const UserApiHanlder = () => {
     // Init backend
     const [backend] = useBackend();
-    const [isLoading, setIsLoading] = useState(false);
-    const [successfulSubmit, setSuccessfulSubmit] = useState(false);
-    // Create Contact
+
+    // Register User
     const registerUser = async (userName: string, profileImg: string) => {
         try {
-            setIsLoading(true);
-            console.log(backend);
-            // console.log(name, email, contact_number, message);
+            // console.log(backend);
             const data = {
                 userName: userName,
                 profileImg: profileImg,
             };
-            console.log(data);
+            // console.log(data);
             const res = await backend.createUserAccount(data);
-            console.log(res);
-            setSuccessfulSubmit(true);
+            // console.log(res);
             return res;
         } catch (err) {
-            console.error("Error creating contact : ", err);
-        } finally {
-            setIsLoading(false);
+            console.error("Error registering user: ", err);
         }
     };
 
+    // Update User Profile
     const updateUser = async (userName: string, profileImg: string) => {
         try {
-            setIsLoading(true);
-            // console.log(name, email, contact_number, message);
             const data = {
                 userName: userName,
-                profileImg: profileImg,
+                profileImg: "sdvasbd",
             };
             console.log(data);
             const res = await backend.updatedUserAccount(data);
             console.log("res",res);
-            setSuccessfulSubmit(true);
-            const response = (await backend.getUserInfo()) as BackendResponse;
-
-            return response;
+            // const response = (await backend.getUserInfo()) as BackendResponse;
+            return res;
         } catch (err) {
-            console.error("Error creating contact : ", err);
-        } finally {
-            setIsLoading(false);
+            console.error("Error updating user info : ", err);
         }
     };
 
+    // Verify is user registered or not 
     const isUserRegistered = async () => {
         try {
-            setIsLoading(true);
             const response = (await backend.getUserInfo()) as BackendResponse;
             console.log("data", response);
-            setSuccessfulSubmit(true);
             return response;
         } catch (err) {
             console.error("Error creating contact : ", err);
-        } finally {
-            setIsLoading(false);
         }
     };
 
     // Returns
-    return { registerUser, isUserRegistered, updateUser, isLoading, successfulSubmit };
+    return { registerUser, isUserRegistered, updateUser };
 };
 
 export default UserApiHanlder;

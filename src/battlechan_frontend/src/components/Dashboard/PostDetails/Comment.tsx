@@ -4,7 +4,18 @@ import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
 
-const Comment = () => {
+interface CommentInfo {
+  comment: string;
+  commentId: string;
+  createdAt: string;
+  likedBy: [];
+};
+
+interface CommentProps {
+  currentComment: CommentInfo[];
+}
+
+const Comment: React.FC<CommentProps> = ({ currentComment }) => {
   const [vote, setVote] = React.useState(true);
   const handleVote = (vote: boolean) => {
     setVote(vote);

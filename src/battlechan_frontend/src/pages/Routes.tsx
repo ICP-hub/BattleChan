@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
@@ -28,7 +28,7 @@ function Routing(props: Theme) {
           }
         />
         <Route path="/userProfile" element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />} />
-        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch}  />} />
         <Route path="/archivePosts" element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />} />
         <Route path="/analytics" element={<Analytics handleThemeSwitch={props.handleThemeSwitch} />} />
 
