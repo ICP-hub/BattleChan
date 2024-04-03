@@ -379,6 +379,32 @@ actor BattleChan {
     return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
   };
 
+  public shared query ({ caller = userId }) func archivePostFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostRes]> {
+    let archivedPost : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
+      case (?v) { List.toArray(v) };
+      case (null) {
+        return { data = null; status = true; error = ?notFound.noPageExist };
+      };
+    };
+    var listPost = List.nil<Types.PostInfo>();
+    for (post in archivedPost.vals()) {
+      if (post.1.board == boardName) {
+        listPost := List.push(post.1, listPost);
+      };
+    };
+    let sortedData : [var Types.PostRes] = bubbleSortPost(Array.thaw<Types.PostRes>(List.toArray(listPost)), filterOptions);
+
+    let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData), chunk_size);
+
+    if (paginatedPostInfo.size() < pageNo) {
+      return { data = null; status = false; error = ?notFound.noPageExist };
+    };
+
+    let page = paginatedPostInfo[pageNo];
+    return { data = ?page; status = true; error = null };
+
+  };
+
   public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostRes]> {
 
     let boardId = toBoardId(boardName);

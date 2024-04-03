@@ -45,7 +45,7 @@ module {
     public type PostReq = {
         postName : Text;
         postDes : Text;
-        postMetaData : Text;
+        postMetaData : [Int8];
     };
     public type ReplyId = Text;
     public type ReplyInfo = {
@@ -85,7 +85,7 @@ module {
         downvotedBy : [UserId];
         upvotes : Nat64;
         downvotes : Nat64;
-        postMetaData : Text;
+        postMetaData : [Int8];
         createdBy : {
             ownerId : Principal;
             userName : Text;
@@ -105,7 +105,7 @@ module {
         downvotedBy : [UserId];
         upvotes : Nat64;
         downvotes : Nat64;
-        postMetaData : Text;
+        postMetaData : [Int8];
         createdBy : {
             ownerId : Principal;
             userName : Text;

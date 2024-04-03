@@ -333,7 +333,7 @@ module {
             board = "";
             upvotes = 0;
             downvotes = 0;
-            postMetaData = "";
+            postMetaData = [];
             createdBy = {
                 ownerId = Principal.fromText("2vxsx-fae");
                 userName = "";
