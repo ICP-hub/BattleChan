@@ -23,9 +23,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
@@ -92,9 +92,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noAccount) };
@@ -191,6 +191,9 @@ module {
 
     public func updatePostExpireTime(time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
 
+        // if (anonymousCheck(userId) == true) {
+        //     Debug.trap(reject.anonymous);
+        // };
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?v) { v };
             case (null) { Debug.trap(reject.noPost) };
@@ -204,7 +207,7 @@ module {
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;
-            downvotes = postInfo.downvotes + 1;
+            downvotes = postInfo.downvotes;
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
             comments = postInfo.comments;
@@ -270,7 +273,7 @@ module {
         };
     };
 
-    public func withdraw(postId : Types.PostId, amount : Nat, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>) {
+    public func withdraw(postId : Types.PostId, amount : Nat, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>, withdrawPostTrie : Trie.Trie<Types.PostId, List.List<(Types.UserId, Nat)>>) {
 
         let postInfo : Types.PostInfo = switch (Trie.get(postTrie, textKey postId, Text.equal)) {
             case (?value) { value };
@@ -281,6 +284,7 @@ module {
         };
 
         let tokenLeft = (postInfo.expireAt - 5 * 60_000_000_000) - now();
+        let totalCommentersRewardInTime = (25 * tokenLeft) / 100;
 
         if (tokenLeft < 60_000_000_000) {
             Debug.trap(reject.oneMinLeft);
@@ -293,7 +297,6 @@ module {
                 rewardSeakersList := List.push((comment.createdBy.ownerId, comment.likedBy.size()), rewardSeakersList);
             };
         };
-        let data = List.toArray(rewardSeakersList);
 
     };
     public func bubbleSortPost(arr : [var Types.PostRes], filterOptions : Types.FilterOptions) : [var Types.PostRes] {
@@ -310,7 +313,7 @@ module {
             createdBy = {
                 ownerId = Principal.fromText("2vxsx-fae");
                 userName = "";
-                userProfile = "";
+                userProfile = [];
             };
             expireAt = 0;
             createdAt = "";

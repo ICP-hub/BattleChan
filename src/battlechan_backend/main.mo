@@ -21,6 +21,7 @@ import {
   createPostInfo;
   postArchive;
   updateVoteStatus;
+  updatePostExpireTime;
   bubbleSortPost;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
@@ -35,6 +36,7 @@ actor BattleChan {
   private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
+  private stable var withDrawPostTrie = Trie.empty<Types.PostId, List.List<(Types.UserId, Nat)>>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   private stable let freePostTime = 5;
@@ -127,7 +129,7 @@ actor BattleChan {
   // public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
   //   try {
 
-  //     let { updatedPostTrieMap; updatedExpireTime } = postVisiblity(postId, postTrieMap, time);
+  //     let { updatedPostTrieMap; updatedExpireTime } = updatePostExpireTime(time, postId, postTrieMap);
   //     postTrieMap := updatedPostTrieMap;
 
   //     #ok("successfully added Time");
