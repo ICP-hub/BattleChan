@@ -4,22 +4,7 @@ import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
-
-function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
-    const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
-    const date = new Date(milliseconds); // Convert milliseconds to a Date object
-
-    // Get the month, day, year, hour, and minute from the Date object
-    const month = date.toLocaleString('default', { month: 'short' }); // Short month name (e.g., Jan)
-    const day = date.getDate(); // Day of the month (1-31)
-    const year = date.getFullYear(); // Full year (e.g., 2023)
-    const hour = date.getHours(); // Hour (0-23)
-    const minute = date.getMinutes(); // Minute (0-59)
-    // Format the timestamp string
-    const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? '0' + minute : minute}`;
-
-    return timestamp;
-}
+import Constant from "../../../utils/constants";
 
 interface CommentInfo {
     comment: string;
@@ -30,7 +15,7 @@ interface CommentInfo {
 
 interface RepliesProps {
     commentId: string;
-  }
+}
 
 interface BackendResponse {
     status: boolean;
@@ -45,7 +30,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
     };
     const { getAllReplies } = CommentsApiHanlder();
     const [commentsData, setcommentsData] = React.useState<CommentInfo[]>([]);
-
+    const { convertNanosecondsToTimestamp } = Constant();
 
     const getReplies = async () => {
         const response = (await getAllReplies(commentId)) as BackendResponse;
@@ -108,7 +93,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
                             </button>
                         </div>
                     </div>
-{/* 
+                    {/* 
                     <div>
                         <button className="text-sm ml-[62px]">View replies</button>
                     </div> */}

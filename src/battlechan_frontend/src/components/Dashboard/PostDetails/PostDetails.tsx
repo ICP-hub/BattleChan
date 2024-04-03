@@ -17,24 +17,7 @@ import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { useMediaQuery } from "@mui/material";
 import PostApiHanlder from "../../../API_Handlers/post";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
-//backend
-// import { backend } from "../../../../../declarations/backend";
-
-function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
-  const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
-  const date = new Date(milliseconds); // Convert milliseconds to a Date object
-
-  // Get the month, day, year, hour, and minute from the Date object
-  const month = date.toLocaleString('default', { month: 'short' }); // Short month name (e.g., Jan)
-  const day = date.getDate(); // Day of the month (1-31)
-  const year = date.getFullYear(); // Full year (e.g., 2023)
-  const hour = date.getHours(); // Hour (0-23)
-  const minute = date.getMinutes(); // Minute (0-59)
-  // Format the timestamp string
-  const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? '0' + minute : minute}`;
-
-  return timestamp;
-}
+import Constant from "../../../utils/constants";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -89,6 +72,7 @@ const PostDetails = (props: Theme) => {
   const is700px = useMediaQuery("(min-width: 700px)");
   const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
   const { getAllComments } = CommentsApiHanlder();
+  const { convertNanosecondsToTimestamp } = Constant();
 
   const handleVote = (vote: boolean) => {
     setVote(vote);
