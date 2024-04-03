@@ -21,6 +21,7 @@ module {
         boardName : Text;
         boardDes : Text;
         postIds : [PostId];
+        totalPosts : Nat;
         createdAt : Text;
         updatedAt : ?Text;
     };
@@ -44,7 +45,7 @@ module {
     public type PostReq = {
         postName : Text;
         postDes : Text;
-        postMetaData : Text;
+        postMetaData : [Int8];
     };
     public type ReplyId = Text;
     public type ReplyInfo = {
@@ -80,10 +81,11 @@ module {
         postName : Text;
         postDes : Text;
         upvotedBy : [UserId];
+        board : Text;
         downvotedBy : [UserId];
         upvotes : Nat64;
         downvotes : Nat64;
-        postMetaData : Text;
+        postMetaData : [Int8];
         createdBy : {
             ownerId : Principal;
             userName : Text;
@@ -99,10 +101,11 @@ module {
         postName : Text;
         postDes : Text;
         upvotedBy : [UserId];
+        board : Text;
         downvotedBy : [UserId];
         upvotes : Nat64;
         downvotes : Nat64;
-        postMetaData : Text;
+        postMetaData : [Int8];
         createdBy : {
             ownerId : Principal;
             userName : Text;

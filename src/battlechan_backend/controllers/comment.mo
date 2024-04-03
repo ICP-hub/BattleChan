@@ -64,6 +64,7 @@ module {
             postName = postInfo.postName;
             postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
+            board = postInfo.board;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;
             downvotes = postInfo.downvotes;
@@ -124,6 +125,7 @@ module {
             postId = postInfo.postId;
             postName = postInfo.postName;
             postDes = postInfo.postDes;
+            board = postInfo.board;
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;
