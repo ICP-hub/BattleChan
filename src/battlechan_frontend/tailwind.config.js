@@ -22,6 +22,7 @@ export default {
       transparent: "#00000000",
     },
     screens: {
+      small_phone: "430px",
       phone: "550px",
       tablet: "700px",
       big_tablet: "870px",
