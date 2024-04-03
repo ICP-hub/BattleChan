@@ -9,7 +9,7 @@ module {
     public type UserId = Principal;
     public type UserReq = {
         userName : Text;
-        profileImg : Text;
+        profileImg : [Int8];
     };
     public type VoteStatus = {
         #upvote;
@@ -28,7 +28,7 @@ module {
     public type UserInfo = {
         userId : UserId;
         userName : Text;
-        profileImg : Text;
+        profileImg : [Int8];
         upvotedTo : [PostId];
         downvotedTo : [PostId];
         likedComments : [CommentId];
@@ -60,7 +60,7 @@ module {
         createdBy : {
             ownerId : Principal;
             userName : Text;
-            userProfile : Text;
+            userProfile : [Int8];
         };
         likedBy : [UserId];
         replies : Trie.Trie<ReplyId, ReplyInfo>;
@@ -87,7 +87,7 @@ module {
         createdBy : {
             ownerId : Principal;
             userName : Text;
-            userProfile : Text;
+            userProfile : [Int8];
         };
         comments : Trie.Trie<CommentId, CommentInfo>;
         createdAt : Text;
@@ -106,7 +106,7 @@ module {
         createdBy : {
             ownerId : Principal;
             userName : Text;
-            userProfile : Text;
+            userProfile : [Int8];
         };
         createdAt : Text;
         expireAt : Int;

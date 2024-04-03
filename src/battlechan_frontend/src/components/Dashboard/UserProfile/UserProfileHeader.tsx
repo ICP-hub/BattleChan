@@ -28,6 +28,16 @@ interface UserInfo {
 interface UserProfileHeaderProps {
   userInfo: UserInfo[];
 }
+
+interface BackendResponse {
+  status: boolean;
+  data: [];
+  error: string[];
+}
+
+interface UserData {
+  userName: string;
+}
  
 const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
 

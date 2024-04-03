@@ -32,6 +32,10 @@ interface UserData {
   userName: string;
 }
 
+interface Data {
+  ok: string;
+}
+
 const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
   const { registerUser, isUserRegistered, updateUser } = UserApiHanlder();
