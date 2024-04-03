@@ -58,6 +58,7 @@ module {
             postId = postId;
             postName = postReq.postName;
             postDes = postReq.postDes;
+            board = boardId;
             postMetaData = postReq.postMetaData;
             upvotedBy = [];
             downvotedBy = [];
@@ -77,6 +78,7 @@ module {
         let updatedBoardInfo : Types.BoardInfo = {
             boardName = boardInfo.boardName;
             boardDes = boardInfo.boardDes;
+            totalPosts = boardInfo.totalPosts +1;
             postIds = List.toArray(List.push(postId, List.fromArray(boardInfo.postIds)));
             createdAt = boardInfo.createdAt;
             updatedAt = ?Int.toText(now());
@@ -134,6 +136,7 @@ module {
                         postId = postInfo.postId;
                         postName = postInfo.postName;
                         postDes = postInfo.postDes;
+                        board = postInfo.board;
                         upvotedBy = List.toArray(List.push(userId, List.fromArray(postInfo.upvotedBy)));
                         downvotedBy = postInfo.downvotedBy;
                         upvotes = postInfo.upvotes + 1;
@@ -172,6 +175,7 @@ module {
                         postId = postInfo.postId;
                         postName = postInfo.postName;
                         postDes = postInfo.postDes;
+                        board = postInfo.board;
                         upvotedBy = postInfo.upvotedBy;
                         downvotedBy = List.toArray(List.push(userId, List.fromArray(postInfo.downvotedBy)));
                         upvotes = postInfo.upvotes;
@@ -205,6 +209,7 @@ module {
             postName = postInfo.postName;
             postDes = postInfo.postDes;
             upvotedBy = postInfo.upvotedBy;
+            board = postInfo.board;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;
             downvotes = postInfo.downvotes;
@@ -218,16 +223,24 @@ module {
         return Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
     };
 
-    public func postArchive(postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
+    public func postArchive(postId : Types.PostId, boardTrieMap : Trie.Trie<Types.BoardName, Types.BoardInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
         updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo>;
         updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
         updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>;
+        updateBoardTrie : Trie.Trie<Types.BoardName, Types.BoardInfo>;
     } {
 
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
+        let boardId = postInfo.board;
+
+        let boardInfo : Types.BoardInfo = switch (Trie.get(boardTrieMap, textKey boardId, Text.equal)) {
+            case (?r) { r };
+            case (null) { Debug.trap(reject.invalidBoard) };
+        };
+
         let userId = postInfo.createdBy.ownerId;
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
@@ -235,6 +248,14 @@ module {
         };
         if (now() < postInfo.expireAt) {
             Debug.trap(reject.expireNotAllowed);
+        };
+        let updatedBoardInfo : Types.BoardInfo = {
+            boardName = boardInfo.boardName;
+            boardDes = boardInfo.boardDes;
+            postIds = Array.filter<Types.PostId>(boardInfo.postIds, func x = x != postId);
+            totalPosts = boardInfo.totalPosts;
+            createdAt = boardInfo.createdAt;
+            updatedAt = ?Int.toText(now());
         };
         let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x != postId);
         let updateUserInfo : Types.UserInfo = {
@@ -266,10 +287,12 @@ module {
         let updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo> = Trie.put(userTrieMap, principalKey userId, Principal.equal, updateUserInfo).0;
         let updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo> = Trie.remove(postTrieMap, textKey postId, Text.equal).0;
         let updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>> = Trie.put(userAchivedPostTrie, principalKey userId, Principal.equal, achivedPostList).0;
+        let updateBoardTrie : Trie.Trie<Types.BoardName, Types.BoardInfo> = Trie.put(boardTrieMap, textKey boardId, Text.equal, updatedBoardInfo).0;
         return {
             updatedUserTrie;
             updatedPostTrie;
             updatedArchivedTrie;
+            updateBoardTrie;
         };
     };
 
@@ -307,6 +330,7 @@ module {
             postDes = "";
             upvotedBy = [];
             downvotedBy = [];
+            board = "";
             upvotes = 0;
             downvotes = 0;
             postMetaData = "";

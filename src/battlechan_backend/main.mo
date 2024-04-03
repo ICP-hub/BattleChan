@@ -6,7 +6,6 @@ import Trie "mo:base/Trie";
 import List "mo:base/List";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
-import ExperimentalCycles "mo:base/ExperimentalCycles";
 import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
@@ -21,7 +20,6 @@ import {
   createPostInfo;
   postArchive;
   updateVoteStatus;
-  updatePostExpireTime;
   bubbleSortPost;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
@@ -170,10 +168,16 @@ actor BattleChan {
 
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
-      let { updatedUserTrie; updatedPostTrie; updatedArchivedTrie } = postArchive(postId, userTrieMap, postTrieMap, userAchivedPostTrie);
+      let {
+        updatedUserTrie;
+        updatedPostTrie;
+        updatedArchivedTrie;
+        updateBoardTrie;
+      } = postArchive(postId, boardTrieMap, userTrieMap, postTrieMap, userAchivedPostTrie);
       userTrieMap := updatedUserTrie;
       postTrieMap := updatedPostTrie;
       userAchivedPostTrie := updatedArchivedTrie;
+      boardTrieMap := updateBoardTrie;
       #ok(successMessage.update);
 
     } catch (e) {
@@ -396,6 +400,7 @@ actor BattleChan {
             postId = r.postId;
             postName = r.postName;
             postDes = r.postDes;
+            board = r.board;
             upvotedBy = r.upvotedBy;
             downvotedBy = r.downvotedBy;
             upvotes = r.upvotes;
@@ -508,8 +513,8 @@ actor BattleChan {
     return { data = ?allData; status = true; error = null };
   };
 
-  public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat }]> {
-    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = Array.size(v.postIds) });
+  public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat; updatedAt : ?Text }]> {
+    let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat; updatedAt : ?Text }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = v.totalPosts; updatedAt = v.updatedAt });
     if (Array.size(boardPostData) == 0) {
       return { data = null; status = false; error = ?notFound.noData };
     };

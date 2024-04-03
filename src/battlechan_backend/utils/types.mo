@@ -21,6 +21,7 @@ module {
         boardName : Text;
         boardDes : Text;
         postIds : [PostId];
+        totalPosts : Nat;
         createdAt : Text;
         updatedAt : ?Text;
     };
@@ -80,6 +81,7 @@ module {
         postName : Text;
         postDes : Text;
         upvotedBy : [UserId];
+        board : Text;
         downvotedBy : [UserId];
         upvotes : Nat64;
         downvotes : Nat64;
@@ -99,6 +101,7 @@ module {
         postName : Text;
         postDes : Text;
         upvotedBy : [UserId];
+        board : Text;
         downvotedBy : [UserId];
         upvotes : Nat64;
         downvotes : Nat64;
