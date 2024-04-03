@@ -11,7 +11,7 @@ interface TabProps {
 
 interface UserInfo {
   createdAt: string;
-  createdComments: any[]; // Define appropriate type for these arrays
+  createdComments: string[];
   downvotedTo: any[];
   likedComments: any[];
   postIds: string[];
@@ -110,7 +110,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({userInfo}) => {
             <div className="block font-sans text-base">
               {/* Content for each tab */}
               {tab.id === "post" && <><PostTab userInfo={userInfo}/></>}
-              {tab.id === "comments" && <><CommentTab /></>}
+              {tab.id === "comments" && <><CommentTab userInfo={userInfo} /></>}
               {tab.id === "upvote" && <><UpvoteTab /></>}
               {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}
             </div>

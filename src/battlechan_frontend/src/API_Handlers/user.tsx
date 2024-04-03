@@ -14,7 +14,7 @@ interface BackendResponse {
 
 interface BackendResponseUserInfo {
   status: boolean;
-  data: UserInfo[]; // Assuming 'data' is an array of arrays of Board objects.
+  data: UserInfo[];
   error: string[];
 }
 
@@ -84,7 +84,7 @@ const UserApiHanlder = () => {
     const getUserInfo = async () => {
       try {
         const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
-        console.log(response.data)
+        console.log("getUserInfo res.data: ", response.data)
         return response.data;
       } catch (err) {
         console.error("Error getting user info: ", err);

@@ -43,10 +43,12 @@ const About = () => {
       <section
         className={
           className +
-          "__rightSide relative w-2/3 h-full flex-direction-col justify-around"
+          "__rightSide relative w-2/3 h-full tablet:flex-direction-col justify-around"
         }
       >
+        <div className="hidden tablet:block">
         <Cards />
+        </div>
 
         <img
           src={dollarCoin}

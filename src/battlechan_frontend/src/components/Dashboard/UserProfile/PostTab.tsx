@@ -3,7 +3,7 @@ import PostGrid from "./PostGrid";
 
 interface UserInfo {
   createdAt: string;
-  createdComments: any[]; // Define appropriate type for these arrays
+  createdComments: string[];
   downvotedTo: any[];
   likedComments: any[];
   postIds: string[];

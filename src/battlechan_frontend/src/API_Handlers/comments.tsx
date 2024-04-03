@@ -11,6 +11,14 @@ interface BackendResponse {
   data: [];
   error: string[];
 }
+interface Comment {
+  commentId: string;
+  createdAt: string;
+  likedBy: string[];
+  comment: string;
+  updatedAt: string[];
+  replies: { empty: null } | null;
+}
 
 const CommentsApiHanlder = () => {
   // Init backend
@@ -21,7 +29,7 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       const res = await backend.getAllCommentOfPost(postId, 10, 1);
-      console.log(res);
+      console.log("allCommentOfPost: ", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -40,8 +48,19 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  // Get single comment info of a user
+  const getUserCommentInfo = async (commentId: string) => {
+    try {
+      const res = await backend.getSingleComment(commentId) as BackendResponse;
+      // console.log("commentResponse: ", res);
+      return res.data;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
   // Returns
-  return { getAllComments, getAllReplies };
+  return { getAllComments, getAllReplies, getUserCommentInfo };
 };
 
 export default CommentsApiHanlder;
