@@ -63,10 +63,10 @@ const PostApiHanlder = () => {
     // };
 
     // Get Active Posts
-    const getMainPosts = async () => {
+    const getMainPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
             const res = await backend.getPostsByBoard();
-            // const res = await backend.postFilter({ upvote: true }, 10, 1);
+            // const res = await backend.postFilter(filter, chunkSize, pageNumber, boardName);
             console.log(res);
             return res;
         } catch (err) {
@@ -86,9 +86,9 @@ const PostApiHanlder = () => {
     };
 
     // Get Archived Post
-    const getArchivePosts = async () => {
+    const getArchivePosts = async (chunkSize: Number, pageNumber: Number,) => {
         try {
-            const res = await backend.getArchivedPost(BigInt(10), BigInt(2));
+            const res = await backend.getArchivedPost(chunkSize, pageNumber);
             console.log(res);
             return res;
         } catch (err) {

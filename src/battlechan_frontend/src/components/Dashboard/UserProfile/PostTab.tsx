@@ -1,7 +1,24 @@
 import React, { useState } from "react";
 import PostGrid from "./PostGrid";
 
-const PostTab = () => {
+interface UserInfo {
+  createdAt: string;
+  createdComments: any[]; // Define appropriate type for these arrays
+  downvotedTo: any[];
+  likedComments: any[];
+  postIds: string[];
+  profileImg: string;
+  replyIds: any[];
+  updatedAt: string[];
+  upvotedTo: any[];
+  userId: string;
+  userName: string;
+}
+interface PostTabProps {
+  userInfo: UserInfo[];
+}
+
+const PostTab: React.FC<PostTabProps> = ({userInfo}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Popular");
 
@@ -35,8 +52,8 @@ const PostTab = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeWidth="2"
                   d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"
                 />
               </svg>
@@ -44,11 +61,11 @@ const PostTab = () => {
             </button>
           </div>
         </div>
-        <PostGrid type="Popular" />
+        <PostGrid type="Popular" userInfo={userInfo} />
         <div className="flex items-center justify-between m-4">
           <h1 className="text-2xl font-bold dark:text-[#fff]">Archive</h1>
         </div>
-        <PostGrid type="Archive" />
+        <PostGrid type="Archive" userInfo={userInfo} />
       </div>
       {/* post tabs for mobile */}
       <div className="tablet:hidden">
@@ -98,8 +115,8 @@ const PostTab = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeWidth="2"
                   d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"
                 />
               </svg>
@@ -117,9 +134,9 @@ const PostTab = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
@@ -161,8 +178,8 @@ const PostTab = () => {
           )}
         </div>
         <div className="mt-3">
-          {activeSelection === "Popular" && <PostGrid type="Popular" />}
-          {activeSelection === "Archive" && <PostGrid type="Archive" />}
+          {activeSelection === "Popular" && <PostGrid type="Popular" userInfo={userInfo} />}
+          {activeSelection === "Archive" && <PostGrid type="Archive" userInfo={userInfo} />}
         </div>
       </div>
     </>

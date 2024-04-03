@@ -77,20 +77,41 @@ interface PostResponse {
   error: string[];
 }
 
+const post = [
+  {
+    postId: "#3109292588",
+    postName: "Test2",
+    postMetaData:
+      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+    postDes: "Test2",
+    expireAt: 1711625931614910010n,
+    createdAt: "Mar 28,2024; 17:03",
+  },
+];
+
 const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const [boardsData, setBoardsData] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeSelection, setActiveSelection] = useState("Recent");
+  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBoard, setSelectedBoard] = useState<string>("");
+
   const className = "Dashboard__MainPosts";
   const [backend] = useBackend();
-  const { createPost, getBoards, getMainPosts, getArchivePosts } = PostApiHanlder();
-  
+  const { createPost, getBoards, getMainPosts, getArchivePosts } =
+    PostApiHanlder();
+
+
+  const handleBoardChange = (boardName: string) => {
+    setSelectedBoard(boardName);
+  };
+
   useEffect(() => {
-    console.log("HERE");
     const fetchData = async () => {
       try {
-        console.log("IN FUNC");
         // Make a fetch call to your backend API
-        console.log(await getBoards());
         const response = (await getBoards()) as BackendResponse;
         if (response.status == false) {
           throw new Error("Failed to fetch communities");
@@ -111,31 +132,57 @@ const MainPosts = (props: Theme) => {
     fetchData();
   }, []);
 
+  const getAllPostFilter = async (filter: string = "recent", chunkSize: number = 10, pageNumber: number = 1, boardName: string) => {
+    try {
+      const res = await getMainPosts({ [filter]: null }, chunkSize, pageNumber, boardName);
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
+  const getAllArchivePostFilter = async (chunkSize: number = 10, pageNumber: number = 1) => {
+    try {
+      const res = await getArchivePosts(chunkSize, pageNumber);
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
   useEffect(() => {
     if (props.type == "archive") {
       getPosts("archive");
     } else {
       getPosts();
     }
-  }, [props.type]);
+  }, [props.type, currentPage, postsPerPage, selectedBoard]);
 
   async function getPosts(postsType?: string) {
     try {
       if (postsType === "archive") {
-        const response = (await getArchivePosts()) as PostResponse;
+        const response = (await getAllArchivePostFilter(postsPerPage, currentPage,)) as PostResponse;
         console.log("Archive Post Response: ", response);
         if (response.status === true && response.data) {
           const posts = response.data
             .flatMap((nestedArray) => nestedArray)
             .flatMap((element) => {
-              if (Array.isArray(element) && element.length === 2 && typeof element[1] === 'object') {
+              if (
+                Array.isArray(element) &&
+                element.length === 2 &&
+                typeof element[1] === "object"
+              ) {
                 return [element[1]]; // Include only the object part
               }
               return [];
             });
           // console.log(posts);
           posts.forEach((element) => {
-            const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+            const timestamp: string = convertNanosecondsToTimestamp(
+              BigInt(element.createdAt)
+            );
             console.log(timestamp);
             element.createdAt = timestamp;
             element.upvotes = Number(element.upvotes);
@@ -143,7 +190,7 @@ const MainPosts = (props: Theme) => {
           setPostsData(posts);
         }
       } else {
-        const response = (await getMainPosts()) as PostResponse;
+        const response = (await getAllPostFilter(activeSelection.toLocaleLowerCase(), postsPerPage, currentPage, selectedBoard)) as PostResponse;
         console.log("Main Posts Response: ", response);
         if (response.status === true && response.data) {
           // console.log(response);
@@ -167,11 +214,6 @@ const MainPosts = (props: Theme) => {
       console.error("Error fetching posts:", error);
     }
   }
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeSelection, setActiveSelection] = useState("Rank");
-  const [postsPerPage, setPostsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const totalPosts = postsData.length;
 
@@ -236,7 +278,7 @@ const MainPosts = (props: Theme) => {
 
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-            <Catalog boardsData={boardsData} />
+            <Catalog handleBoardChange={handleBoardChange} boardsData={boardsData} />
           </div>
 
           {/* catalog and pagination and sort for desktop  */}
@@ -261,29 +303,29 @@ const MainPosts = (props: Theme) => {
                     d="M5.55556 2.11133L10 2.11133M1.11111 9.88911L2.77778 9.88911M1.11111 2.11133L3.33333 2.11133M5 9.88911L10 9.88911M8.33333 6.00022L10 6.00022M1.11111 6.00022L6.11111 6.00022"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                   <path
                     d="M3.33332 2.11111C3.33332 2.72476 3.83078 3.22222 4.44443 3.22222C5.05808 3.22222 5.55554 2.72476 5.55554 2.11111C5.55554 1.49746 5.05808 1 4.44443 1C3.83078 1 3.33332 1.49746 3.33332 2.11111Z"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                   <path
                     d="M6.11115 5.99978C6.11115 6.61343 6.60861 7.11089 7.22226 7.11089C7.83591 7.11089 8.33337 6.61343 8.33337 5.99978C8.33337 5.38613 7.83591 4.88867 7.22226 4.88867C6.60861 4.88867 6.11115 5.38613 6.11115 5.99978Z"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                   <path
                     d="M2.77778 9.88894C2.77778 10.5026 3.27524 11.0001 3.88889 11.0001C4.50254 11.0001 5 10.5026 5 9.88894C5 9.27529 4.50254 8.77783 3.88889 8.77783C3.27524 8.77783 2.77778 9.27529 2.77778 9.88894Z"
                     stroke="currentColor"
                     stroke-opacity="0.5"
-                    stroke-width="0.5"
-                    stroke-linecap="round"
+                    strokeWidth="0.5"
+                    strokeLinecap="round"
                   />
                 </svg>
               </button>
@@ -354,31 +396,31 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Rank" ? "bg-[#295A31]" : ""
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Recent" ? "bg-[#295A31]" : ""
                         }`}
-                      onClick={() => handleSelection("Rank")}
+                      onClick={() => handleSelection("Recent")}
                     >
-                      Rank
+                      Recent
                     </a>
                   </li>
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "New" ? "bg-[#295A31]" : ""
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Upvote" ? "bg-[#295A31]" : ""
                         }`}
-                      onClick={() => handleSelection("New")}
+                      onClick={() => handleSelection("Upvote")}
                     >
-                      New
+                      Upvote
                     </a>
                   </li>
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Downvote" ? "bg-[#295A31]" : ""
                         }`}
-                      onClick={() => handleSelection("Last Reply")}
+                      onClick={() => handleSelection("Downvote")}
                     >
-                      Last Reply
+                      Downvote
                     </a>
                   </li>
                 </ul>

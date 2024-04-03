@@ -151,6 +151,11 @@ const PostDetails = (props: Theme) => {
     if (response && response.status == true) {
       const comments = response.data[0];
       if (comments && comments.length > 0) {
+        comments.forEach((element: any) => {
+          const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+          console.log(timestamp);
+          element.createdAt = timestamp;
+        });
         setcommentsData(comments);
       }
     }

@@ -6,11 +6,13 @@ import Trie "mo:base/Trie";
 import List "mo:base/List";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
+import ExperimentalCycles "mo:base/ExperimentalCycles";
 import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 
 import Types "utils/types";
+
 import Search "./controllers/search";
 import { createBoardInfo } "controllers/board";
 import { createUserInfo; updateUserInfo } "controllers/user";
@@ -153,6 +155,16 @@ actor BattleChan {
       #err(code, message);
     };
   };
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
+    try {
+
+      #ok(successMessage.update);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+    };
+  };
 
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
@@ -171,6 +183,7 @@ actor BattleChan {
     };
 
   };
+
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
     try {
       let { updatedPostInfo; updatedUserInfo } = createCommentInfo(userId, postId, comment, userTrieMap, postTrieMap);
@@ -334,11 +347,33 @@ actor BattleChan {
     return { data = ?pages[pageNo]; status = true; error = null }
 
   };
-  public query func getUserArchiveTrie() : async Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>> {
-    return userAchivedPostTrie;
+
+  public shared query ({ caller = userId }) func getAllCommentOfArchivedPost(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
+    let postArray : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
+      case (null) {
+        return { data = null; status = true; error = ?notFound.noArchivedPost };
+      };
+      case (?result) { List.toArray(result) };
+    };
+    let archivedPostTrieMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(postArray.vals(), Text.equal, Text.hash);
+    let postInfo : Types.PostInfo = switch (archivedPostTrieMap.get(postId)) {
+      case (null) {
+        return { data = null; status = true; error = ?notFound.noPost };
+      };
+      case (?r) { r };
+    };
+    let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+    if (commentData.size() < chunk_size) {
+      return { data = ?commentData; status = true; error = null };
+    };
+    let paginatedCommentInfo : [[Types.CommentInfo]] = paginate<Types.CommentInfo>(commentData, chunk_size);
+    if (paginatedCommentInfo.size() < pageNo) {
+      return { data = null; status = true; error = ?notFound.noPageExist };
+    };
+    return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
   };
 
-  public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostInfo]> {
+  public query func postFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostRes]> {
 
     let boardId = toBoardId(boardName);
     let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
@@ -351,10 +386,26 @@ actor BattleChan {
       };
       case (?r) { r };
     };
-    var postList = List.nil<Types.PostInfo>();
+    var postList = List.nil<Types.PostRes>();
     for (i in postIds.vals()) {
       switch (Trie.get(postTrieMap, textKey i, Text.equal)) {
-        case (?r) { postList := List.push(r, postList) };
+        case (?r) {
+          let postRes : Types.PostRes = {
+            postId = r.postId;
+            postName = r.postName;
+            postDes = r.postDes;
+            upvotedBy = r.upvotedBy;
+            downvotedBy = r.downvotedBy;
+            upvotes = r.upvotes;
+            downvotes = r.downvotes;
+            postMetaData = r.postMetaData;
+            createdBy = r.createdBy;
+            createdAt = r.createdAt;
+            expireAt = r.expireAt;
+            updatedAt = r.updatedAt;
+          };
+          postList := List.push(postRes, postList);
+        };
         case (null) {
           return { data = null; status = false; error = ?notFound.noPost };
         };
@@ -365,9 +416,9 @@ actor BattleChan {
     if (postArray.size() <= chunk_size) {
       return { data = ?postArray; status = false; error = null };
     };
-    let sortedData : [var Types.PostInfo] = bubbleSortPost(Array.thaw<Types.PostInfo>(postArray), filterOptions);
+    let sortedData : [var Types.PostRes] = bubbleSortPost(Array.thaw<Types.PostRes>(postArray), filterOptions);
 
-    let paginatedPostInfo : [[Types.PostInfo]] = paginate<Types.PostInfo>(Array.freeze<Types.PostInfo>(sortedData), chunk_size);
+    let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData), chunk_size);
 
     if (paginatedPostInfo.size() < pageNo) {
       return { data = null; status = false; error = ?notFound.noPageExist };

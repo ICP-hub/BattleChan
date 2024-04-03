@@ -3,7 +3,7 @@ import React from "react";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
-
+import Replies from "./Replies";
 interface CommentInfo {
   comment: string;
   commentId: string;
@@ -32,7 +32,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
 
             <h1 className="font-semibold">IamCool_1122</h1>
             <div className="ml-6 text-[#000] dark:text-[#fff] text-xs text-opacity-50 dark:text-opacity-50">
-              2 day ago ; &000001253
+              {comment.createdAt}
             </div>
           </div>
 
@@ -73,6 +73,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
           <div>
             <button className="text-sm ml-[62px]">View replies</button>
           </div>
+          <Replies commentId={comment.commentId} />
         </div>
       ))}
     </div>

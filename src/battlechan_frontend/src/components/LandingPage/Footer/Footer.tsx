@@ -20,11 +20,11 @@ const Footer = () => {
       <div
         className={
           className +
-          "__top p-8 big_tablet:flex-direction-row flex flex-col-reverse big_tablet:gap-0 gap-10"
+          "__top  w-full laptop:p-8 small_phone:py-8 px-2 p-3 big_tablet:flex-direction-row flex flex-col-reverse big_tablet:gap-0 small_phone:gap-10 gap-4"
         }
       >
         {/* Links */}
-        <section className="__left big_tablet:w-1/2 w-full flex-direction-row big_tablet:justify-evenly justify-center big_tablet:gap-20">
+        <section className="__left big_tablet:w-1/2 w-full flex-direction-row big_tablet:justify-evenly justify-evenly big_tablet:gap-20">
           {/* Left */}
           <div className="flex-direction-col items-start">
             <a href="#" className="m-4">
@@ -60,16 +60,16 @@ const Footer = () => {
 
         {/* Signup email input */}
         <section className="__right big_tablet:w-1/2 w-full flex-direction-col big_tablet:items-start items-center gap-4">
-          <p className="font-semibold">
+          <p className="font-semibold small_phone:text-base text-sm">
             Signup for latest updates to keep up to date with us
           </p>
 
-          <div className="emailInput gap-4 flex-row-center">
+          <div className="emailInput w-full small_phone:gap-4 gap-1 flex-row-center laptop:justify-start justify-center">
             <input
               type="email"
               name="email"
               placeholder="Enter your email"
-              className="emailInput rounded-[2rem] phone:text-lg text-base text-dark px-4 py-1"
+              className="emailInput w-[55%] rounded-[2rem] phone:text-lg text-base text-dark px-4 py-1"
             />
             <button
               type="button"
@@ -88,7 +88,7 @@ const Footer = () => {
           "__bottom bg-light text-dark phone:flex-row-center flex-col-center flex-col-reverse justify-around"
         }
       >
-        <section className="__links big_tablet:gap-10 tablet:gap-4 gap-2 flex-row-center text-base font-semibold">
+        <section className="__links big_tablet:gap-10 tablet:gap-4 gap-2 flex-row-center small_phone:text-base text-sm font-semibold">
           <span>&copy; Battlechan</span>
           <span>Terms of use</span>
           <span>Cookies</span>
@@ -96,7 +96,7 @@ const Footer = () => {
         </section>
 
         {/* Social Medias */}
-        <section className="__socialMedia flex-row-center py-2 big_tablet:gap-8 tablet:gap-4 gap-2 text-2xl">
+        <section className="__socialMedia flex-row-center py-2 big_tablet:gap-8 tablet:gap-4 phone:gap-2 gap-4 text-2xl">
           <FaSquareXTwitter />
           <SiMedium />
           <FaLinkedin />
