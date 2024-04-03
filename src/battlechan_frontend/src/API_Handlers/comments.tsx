@@ -3,13 +3,13 @@ import { useState } from "react";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
-    return useCanister("backend");
+  return useCanister("backend");
 };
 
 interface BackendResponse {
-    status: boolean;
-    data: []; 
-    error: string[];
+  status: boolean;
+  data: [];
+  error: string[];
 }
 interface Comment {
     commentId: string;
@@ -21,8 +21,8 @@ interface Comment {
   }
 
 const CommentsApiHanlder = () => {
-    // Init backend
-    const [backend] = useBackend();
+  // Init backend
+  const [backend] = useBackend();
 
     // Get All COmments of post
     const getAllComments = async (postId: string) => {
