@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 
@@ -7,12 +7,42 @@ import defaultImg from "../../../images/User.png";
 import UserProfileHeader from "./UserProfileHeader";
 import ProfileTabs from "./ProfileTabs";
 import PostGrid from "./PostGrid";
+import UserApiHanlder from "../../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: Function;
 };
 
+interface UserInfo {
+  createdAt: string;
+  createdComments: string[];
+  downvotedTo: any[];
+  likedComments: any[];
+  postIds: string[];
+  profileImg: string;
+  replyIds: any[];
+  updatedAt: string[];
+  upvotedTo: any[];
+  userId: string;
+  userName: string;
+}
+
+
 const UserProfile = (props: Theme) => {
+  const [userInfo, setUserInfo] = useState<UserInfo[]>([]);
+  const { getUserInfo } = UserApiHanlder();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserInfo();
+      if (data && data.length > 0) {
+        setUserInfo(data);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const className = "UserProfile";
   return (
     <React.Fragment>
@@ -27,11 +57,11 @@ const UserProfile = (props: Theme) => {
 
         <div className="container pb-12 mx-auto px-4 pt-8 tablet:px-12">
           <div className="mb-12">
-            <UserProfileHeader />
+            <UserProfileHeader userInfo={userInfo} />
           </div>
 
           <div className="container border border-green rounded-2xl tablet:px-12">
-            <ProfileTabs />
+            <ProfileTabs userInfo={userInfo} />
           </div>
         </div>
       </div>

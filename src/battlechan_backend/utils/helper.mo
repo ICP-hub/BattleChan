@@ -34,7 +34,7 @@ module {
         return postId;
     };
     public func checkVote<V>(arr : [V], value : V) : Bool {
-        switch (Array.find<V>(arr, func(x : V) : Bool { x == value })) {
+        switch (Array.find<V>(arr, func x = x == value)) {
             case (?data) { return true };
             case (null) { return false };
         };

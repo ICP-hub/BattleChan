@@ -3,13 +3,33 @@ import { useState } from "react";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
-    return useCanister("backend");
+  return useCanister("backend");
 };
 
 interface BackendResponse {
     status: boolean;
     data: [];
     error: string[];
+}
+
+interface BackendResponseUserInfo {
+  status: boolean;
+  data: UserInfo[];
+  error: string[];
+}
+
+interface UserInfo {
+  createdAt: string;
+  createdComments: any[]; // Define appropriate type for these arrays
+  downvotedTo: any[];
+  likedComments: any[];
+  postIds: string[];
+  profileImg: string;
+  replyIds: any[];
+  updatedAt: string[];
+  upvotedTo: any[];
+  userId: string;
+  userName: string;
 }
 
 const UserApiHanlder = () => {
@@ -61,8 +81,36 @@ const UserApiHanlder = () => {
         }
     };
 
-    // Returns
-    return { registerUser, isUserRegistered, updateUser };
+    const getUserInfo = async () => {
+      try {
+        const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
+        console.log("getUserInfo res.data: ", response.data)
+        return response.data;
+      } catch (err) {
+        console.error("Error getting user info: ", err);
+      }
+    };
+  
+    const getPostInfo = async (postId: string) => {
+      try {
+        const response = (await backend.getPostInfo(postId)) as BackendResponse;
+        console.log("post response: ", response.data)
+        return response.data;
+      } catch (err) {
+        console.error("Error getting user info: ", err);
+      }
+    };
+
+
+
+  // Returns
+  return {
+    registerUser,
+    isUserRegistered,
+    updateUser,
+    getUserInfo,
+    getPostInfo,
+  };
 };
 
 export default UserApiHanlder;

@@ -23,9 +23,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
@@ -92,9 +92,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noAccount) };
@@ -103,13 +103,14 @@ module {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
-
-        if (checkVote<Types.PostId>(userInfo.upvotedTo, postId) == true) {
-            Debug.trap(reject.alreadyVoted);
+        switch (Array.find<Types.PostId>(userInfo.upvotedTo, func x = x == postId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
         };
 
-        if (checkVote<Types.PostId>(userInfo.downvotedTo, postId) == true) {
-            Debug.trap(reject.alreadyVoted);
+        switch (Array.find<Types.PostId>(userInfo.downvotedTo, func x = x == postId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
         };
 
         switch (voteStatus) {
@@ -190,6 +191,9 @@ module {
 
     public func updatePostExpireTime(time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
 
+        // if (anonymousCheck(userId) == true) {
+        //     Debug.trap(reject.anonymous);
+        // };
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?v) { v };
             case (null) { Debug.trap(reject.noPost) };
@@ -203,7 +207,7 @@ module {
             upvotedBy = postInfo.upvotedBy;
             downvotedBy = postInfo.downvotedBy;
             upvotes = postInfo.upvotes;
-            downvotes = postInfo.downvotes + 1;
+            downvotes = postInfo.downvotes;
             postMetaData = postInfo.postMetaData;
             createdBy = postInfo.createdBy;
             comments = postInfo.comments;
@@ -268,60 +272,36 @@ module {
             updatedArchivedTrie;
         };
     };
-    // public func archivePost(userId : Types.UserId, postId : Types.PostId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : {
-    //     updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo>;
-    //     updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
-    //     updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>;
-    // } {
 
-    //     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
-    //         case (?value) { value };
-    //         case (null) { Debug.trap(reject.noAccount) };
-    //     };
-    //     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
-    //         case (?value) { value };
-    //         case (null) { Debug.trap(reject.noPost) };
-    //     };
+    public func withdraw(postId : Types.PostId, amount : Nat, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>, withdrawPostTrie : Trie.Trie<Types.PostId, List.List<(Types.UserId, Nat)>>) {
 
-    //     let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x == postId);
-    //     let updateUserInfo : Types.UserInfo = {
-    //         userId = userInfo.userId;
-    //         userName = userInfo.userName;
-    //         profileImg = userInfo.profileImg;
-    //         upvotedTo = userInfo.upvotedTo;
-    //         downvotedTo = userInfo.downvotedTo;
-    //         likedComments = userInfo.likedComments;
-    //         createdComments = userInfo.createdComments;
-    //         replyIds = userInfo.replyIds;
-    //         postIds = updatedPostIds;
-    //         createdAt = userInfo.createdAt;
-    //         updatedAt = ?Int.toText(now());
-    //     };
+        let postInfo : Types.PostInfo = switch (Trie.get(postTrie, textKey postId, Text.equal)) {
+            case (?value) { value };
+            case (null) { Debug.trap(reject.noPost) };
+        };
+        if (postInfo.createdBy.ownerId != userId) {
+            Debug.trap(reject.noAccess);
+        };
 
-    //     var achivedPostList : List.List<(Types.PostId, Types.PostInfo)> = List.nil<(Types.PostId, Types.PostInfo)>();
+        let tokenLeft = (postInfo.expireAt - 5 * 60_000_000_000) - now();
+        let totalCommentersRewardInTime = (25 * tokenLeft) / 100;
 
-    //     switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
-    //         case (?value) {
-    //             let tempList = List.push((postId, postInfo), value);
-    //             achivedPostList := tempList;
-    //         };
-    //         case (null) {
-    //             achivedPostList := List.push((postId, postInfo), achivedPostList);
-    //         };
-    //     };
+        if (tokenLeft < 60_000_000_000) {
+            Debug.trap(reject.oneMinLeft);
+        };
 
-    //     let updatedUserTrie : Trie.Trie<Types.UserId, Types.UserInfo> = Trie.put(userTrieMap, principalKey userId, Principal.equal, updateUserInfo).0;
-    //     let updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo> = Trie.remove(postTrieMap, textKey postId, Text.equal).0;
-    //     let updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>> = Trie.put(userAchivedPostTrie, principalKey userId, Principal.equal, achivedPostList).0;
-    //     return {
-    //         updatedUserTrie;
-    //         updatedPostTrie;
-    //         updatedArchivedTrie;
-    //     };
+        var rewardSeakersList : List.List<(Types.UserId, Nat)> = List.nil<(Types.UserId, Nat)>();
+        let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+        for (comment in commentData.vals()) {
+            if (comment.likedBy.size() > 5) {
+                rewardSeakersList := List.push((comment.createdBy.ownerId, comment.likedBy.size()), rewardSeakersList);
+            };
+        };
 
-    public func bubbleSortPost(arr : [var Types.PostInfo], filterOptions : Types.FilterOptions) : [var Types.PostInfo] {
+    };
+    public func bubbleSortPost(arr : [var Types.PostRes], filterOptions : Types.FilterOptions) : [var Types.PostRes] {
         var n = arr.size();
-        var temp : Types.PostInfo = {
+        var temp : Types.PostRes = {
             postId = "";
             postName = "";
             postDes = "";
@@ -333,9 +313,8 @@ module {
             createdBy = {
                 ownerId = Principal.fromText("2vxsx-fae");
                 userName = "";
-                userProfile = "";
+                userProfile = [];
             };
-            comments = Trie.empty<Types.CommentId, Types.CommentInfo>();
             expireAt = 0;
             createdAt = "";
             updatedAt = ?"";
