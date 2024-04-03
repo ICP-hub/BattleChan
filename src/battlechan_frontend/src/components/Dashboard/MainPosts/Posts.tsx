@@ -11,7 +11,8 @@ interface PostData {
   createdBy: {
     userName: string;
     userProfile: string;
-  }
+  },
+  upvotes: number;
 }
 
 interface PostsProps {
@@ -36,12 +37,13 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             <Post
               key={post.postId}
               id={post.postId}
+              postName={post.postName}
               imageUrl={post.postMetaData}
               userAvatarUrl="/src/images/main-post-user-avatar.jpg"
               timestamp={post.createdAt}
               duration="5:00"
               content={post.postDes}
-              likes="0"
+              likes={post.upvotes}
               comments={comments}
               expireAt={post.expireAt}
               userName={post.createdBy.userName}

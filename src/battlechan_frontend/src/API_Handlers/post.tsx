@@ -129,9 +129,20 @@ const PostApiHanlder = () => {
         }
     };
 
+    // Downvote a Post
+    const downvotePost = async (postId: string) => {
+        try {
+            const res = await backend.upvoteOrDownvotePost(postId, { downvote: null });
+            console.log(res);
+            return res;
+        } catch (err) {
+            console.error("Error downvoting a post : ", err);
+        }
+    };
+
 
     // Returns
-    return { createPost, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost };
+    return { createPost, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost };
 };
 
 export default PostApiHanlder;

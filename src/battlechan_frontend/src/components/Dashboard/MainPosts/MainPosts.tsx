@@ -56,7 +56,8 @@ type PostInfo = {
   createdBy: {
     userName: string;
     userProfile: string;
-  }
+  },
+  upvotes: number;
 };
 
 interface Board {
@@ -137,11 +138,10 @@ const MainPosts = (props: Theme) => {
             const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
             console.log(timestamp);
             element.createdAt = timestamp;
+            element.upvotes = Number(element.upvotes);
           });
           setPostsData(posts);
         }
-
-
       } else {
         const response = (await getMainPosts()) as PostResponse;
         console.log("Main Posts Response: ", response);
@@ -157,6 +157,7 @@ const MainPosts = (props: Theme) => {
             );
             console.log(timestamp);
             element.createdAt = timestamp;
+            element.upvotes = Number(element.upvotes);
           });
           // console.log(posts);
           setPostsData(posts);

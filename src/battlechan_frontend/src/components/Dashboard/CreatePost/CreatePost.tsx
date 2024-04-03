@@ -8,6 +8,7 @@ import { FiUpload } from "react-icons/fi";
 import bg from "../../../images/dashboard_bg.png";
 
 import PostApiHanlder from "../../../API_Handlers/post";
+import toast from "react-hot-toast";
 
 interface Board {
   boardName: string;
@@ -161,7 +162,10 @@ const CreatePost = (props: Theme) => {
 
     if (response && response?.ok) {
       navigate('/dashboard/mainPosts');
+      toast.success(response.ok);
       // window.location.href = "/dashboard/mainPosts";
+    } else {
+      toast.error("Error Creating your Post, Please verify and provide valid data!")
     }
   };
 
@@ -242,7 +246,7 @@ const CreatePost = (props: Theme) => {
                   type="button"
                   className="small-button bg-dirty-light-green"
                   id="createPostBtn"
-                  // onClick={handleCreatePost}
+                // onClick={handleCreatePost}
                 >
                   Post
                 </button>
