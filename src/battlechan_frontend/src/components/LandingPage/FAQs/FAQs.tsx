@@ -31,7 +31,7 @@ const FAQs = () => {
             list.map((item) => (
               <p className="questionPara flex-row-center tablet:p-2 p-1 border border-green rounded-[2rem]">
                 <span
-                  className={`py-1 px-3 font-semibold tablet:text-base text-sm dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+                  className={`py-1 px-3 font-semibold tablet:text-base text-sm text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
                 >
                   {item.index}
                 </span>

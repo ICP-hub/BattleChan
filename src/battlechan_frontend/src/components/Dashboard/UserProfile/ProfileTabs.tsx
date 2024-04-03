@@ -9,7 +9,25 @@ interface TabProps {
   label: string;
 }
 
-const ProfileTabs: React.FC = () => {
+interface UserInfo {
+  createdAt: string;
+  createdComments: string[];
+  downvotedTo: any[];
+  likedComments: any[];
+  postIds: string[];
+  profileImg: string;
+  replyIds: any[];
+  updatedAt: string[];
+  upvotedTo: any[];
+  userId: string;
+  userName: string;
+}
+
+interface ProfileTabsProps {
+  userInfo: UserInfo[];
+}
+
+const ProfileTabs: React.FC<ProfileTabsProps> = ({userInfo}) => {
   const [activeTab, setActiveTab] = useState<string>("post");
   const navigate = useNavigate();
 
@@ -70,9 +88,9 @@ const ProfileTabs: React.FC = () => {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
@@ -89,13 +107,13 @@ const ProfileTabs: React.FC = () => {
             id={tab.id}
             role="tabpanel"
           >
-            <p className="block font-sans text-base">
+            <div className="block font-sans text-base">
               {/* Content for each tab */}
-              {tab.id === "post" && <><PostTab /></>}
-              {tab.id === "comments" && <><CommentTab /></>}
+              {tab.id === "post" && <><PostTab userInfo={userInfo}/></>}
+              {tab.id === "comments" && <><CommentTab userInfo={userInfo} /></>}
               {tab.id === "upvote" && <><UpvoteTab /></>}
               {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}
-            </p>
+            </div>
           </div>
         ))}
       </div>
