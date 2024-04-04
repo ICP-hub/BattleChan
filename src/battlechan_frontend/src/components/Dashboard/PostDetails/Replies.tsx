@@ -7,8 +7,8 @@ import CommentsApiHanlder from "../../../API_Handlers/comments";
 import Constant from "../../../utils/constants";
 
 interface CommentInfo {
-  comment: string;
-  commentId: string;
+  reply: string;
+  replyId: string;
   createdAt: string;
   likedBy: [];
 }
@@ -34,7 +34,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
 
   const getReplies = async () => {
     const response = (await getAllReplies(commentId)) as BackendResponse;
-    console.log("reponse: ", response)
+    console.log("replies reponse: ", response)
     if (response && response.status == true) {
       const comments = response.data[0];
       if (comments && comments.length > 0) {
@@ -69,8 +69,8 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
           </div>
 
           {/* comment content */}
-          <div className="dark:text-[#fff] tablet:text-base text-sm dark:text-opacity-50 ml-10">
-            {comment.comment}
+          <div className="text-[#000] dark:text-[#fff] tablet:text-base text-sm dark:text-opacity-50 ml-10">
+            {comment.reply}
           </div>
 
           {/* upvote downvote and reply button */}

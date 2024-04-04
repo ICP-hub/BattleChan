@@ -75,7 +75,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
 
           {showReplies && (
             <div className="flex mt-2">
-              <div className="w-14 h-[1px] bg-[#fff] mt-6"></div>
+              <div className="w-14 h-[1px] bg-[#000] dark:bg-[#fff] mt-6"></div>
               <div className="ml-6">
                 <Replies commentId={comment.commentId} />
               </div>
@@ -83,7 +83,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
           )}
 
           <div className="-mb-[10px] flex items-center mt-2">
-            <div className="w-14 h-[1px] bg-[#fff]"></div>
+            <div className="w-14 h-[1px] bg-[#000] dark:bg-[#fff]"></div>
             <button
               onClick={() => {
                 setShowReplies((showReplies) => !showReplies);

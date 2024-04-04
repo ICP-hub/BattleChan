@@ -228,6 +228,9 @@ const PostDetails = (props: Theme) => {
   const handleUpvote = async (postId: string) => {
     // console.log(isConnected);
     // console.log(principal);
+    if(type === "archive"){
+      return;
+    }
     console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
       const data = (await upvotePost(postId)) as VoteResponse;
@@ -246,6 +249,9 @@ const PostDetails = (props: Theme) => {
   };
 
   const handleDownvote = async (postId: string) => {
+    if(type === "archive"){
+      return
+    }
     // console.log(isConnected);
     // console.log(principal);
     if (isUserAuthenticatedRef.current) {
@@ -316,12 +322,12 @@ const PostDetails = (props: Theme) => {
 
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
+                <div className={`${type==="archive"? "hidden": "flex"} flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}>
                   <MdOutlineVerifiedUser />
                   <span>{postsData?.upvotes}</span>
                 </div>
 
-                <div className="flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
+                <div className={`${type==="archive"? "hidden": "flex"} tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}>
                   <LiaCommentSolid />
                   <span>{commentsCount} Comments</span>
                 </div>
@@ -333,7 +339,7 @@ const PostDetails = (props: Theme) => {
               </div>
 
               <div className="text-lg">
-                <span className={`text-[#18AF00]`}>{time}</span> min left
+                <span className={` ${type==="archive"? "text-red": "text-[#18AF00]"}`}>{time}</span> min left
               </div>
             </div>
           </div>
@@ -343,7 +349,7 @@ const PostDetails = (props: Theme) => {
             <TbSquareChevronUpFilled
               className={`${
                 vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer`}
+              } cursor-pointer ${type==="archive"? "bg-opacity-50":""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
@@ -351,7 +357,7 @@ const PostDetails = (props: Theme) => {
             <TbSquareChevronDownFilled
               className={`${
                 !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer`}
+              } cursor-pointer ${type==="archive"? "bg-opacity-50":""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />
@@ -385,7 +391,7 @@ const PostDetails = (props: Theme) => {
           </div>
 
           {/* comment for mobile  */}
-          {!showComments && (
+          {!showComments && type === "archive" && (
             <div className="tablet:hidden my-8">
               <button
                 onClick={() => setShowComments(true)}
@@ -399,42 +405,43 @@ const PostDetails = (props: Theme) => {
           {/* Comment for desktop   */}
           {
             <div className={`mt-8 ${showComments ? "block" : "hidden"}`}>
-              <h1 className="font-bold tablet:text-lg">Comments</h1>
-              <div>
-                <form>
-                  <section className="mt-8">
-                    <input
-                      className="border-b border-opacity-50 border-[#fff] w-full bg-transparent p-2"
-                      type="text"
-                      placeholder="Add a comment"
-                      onChange={(e) => {
-                        setNewComment(e.target.value);
-                      }}
-                    />
-                    <div className="flex items-center justify-end mt-4">
-                      <div className="flex justify-center items-center gap-4">
-                        <button
-                          onClick={() => {
-                            setLoading(false);
-                          }}
-                          className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={handleAddComment}
-                          className={
-                            "border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer disabled:text-opacity-50 disabled:dark:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
-                          }
-                          disabled={loading}
-                        >
-                          Submit
-                        </button>
+              <h1 className={`font-bold tablet:text-lg ${type === "archive" ? "hidden" : "block"}`}>Comments</h1>
+              
+                <div>
+                  <form className={`${type === "archive" ? "hidden" : "block"}`}>
+                    <section className="mt-8">
+                      <input
+                        className="border-b border-opacity-50 border-[#000] dark:border-[#fff] w-full bg-transparent p-2"
+                        type="text"
+                        placeholder="Add a comment"
+                        onChange={(e) => {
+                          setNewComment(e.target.value);
+                        }}
+                      />
+                      <div className="flex items-center justify-end mt-4">
+                        <div className="flex justify-center items-center gap-4">
+                          <button
+                            onClick={() => {
+                              setLoading(false);
+                            }}
+                            className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleAddComment}
+                            className={
+                              "border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer disabled:text-opacity-50 disabled:dark:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
+                            }
+                            disabled={loading}
+                          >
+                            Submit
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </section>
-                </form>
-              </div>
+                    </section>
+                  </form>
+                </div>
               <div className="mt-8">
                 <Comment currentComment={commentsData} />
               </div>
