@@ -18,6 +18,7 @@ import { backend } from "../../../../../declarations/backend";
 import { useCanister, useConnect } from "@connect2ic/react";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
+import { Link } from "react-router-dom";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
@@ -39,7 +40,7 @@ type PostInfo = {
   createdBy: {
     userName: string;
     userProfile: Int8Array;
-  },
+  };
   upvotes: number;
 };
 
@@ -87,7 +88,6 @@ const MainPosts = (props: Theme) => {
     PostApiHanlder();
   const { convertNanosecondsToTimestamp } = Constant();
 
-
   const handleBoardChange = (boardName: string) => {
     setSelectedBoard(boardName);
   };
@@ -116,9 +116,19 @@ const MainPosts = (props: Theme) => {
     fetchData();
   }, []);
 
-  const getAllPostFilter = async (filter: string = "recent", chunkSize: number = 10, pageNumber: number = 1, boardName: string) => {
+  const getAllPostFilter = async (
+    filter: string = "recent",
+    chunkSize: number = 10,
+    pageNumber: number = 1,
+    boardName: string
+  ) => {
     try {
-      const res = await getMainPosts({ [filter]: null }, chunkSize, pageNumber, boardName);
+      const res = await getMainPosts(
+        { [filter]: null },
+        chunkSize,
+        pageNumber,
+        boardName
+      );
       console.log(res);
       return res;
     } catch (err) {
@@ -126,7 +136,10 @@ const MainPosts = (props: Theme) => {
     }
   };
 
-  const getAllArchivePostFilter = async (chunkSize: number = 10, pageNumber: number = 1) => {
+  const getAllArchivePostFilter = async (
+    chunkSize: number = 10,
+    pageNumber: number = 1
+  ) => {
     try {
       const res = await getArchivePosts(chunkSize, pageNumber);
       console.log(res);
@@ -147,7 +160,10 @@ const MainPosts = (props: Theme) => {
   async function getPosts(postsType?: string) {
     try {
       if (postsType === "archive") {
-        const response = (await getAllArchivePostFilter(postsPerPage, currentPage,)) as PostResponse;
+        const response = (await getAllArchivePostFilter(
+          postsPerPage,
+          currentPage
+        )) as PostResponse;
         console.log("Archive Post Response: ", response);
         if (response.status === true && response.data) {
           const posts = response.data
@@ -174,7 +190,12 @@ const MainPosts = (props: Theme) => {
           setPostsData(posts);
         }
       } else {
-        const response = (await getAllPostFilter(activeSelection.toLocaleLowerCase(), postsPerPage, currentPage, selectedBoard)) as PostResponse;
+        const response = (await getAllPostFilter(
+          activeSelection.toLocaleLowerCase(),
+          postsPerPage,
+          currentPage,
+          selectedBoard
+        )) as PostResponse;
         console.log("Main Posts Response: ", response);
         if (response.status === true && response.data) {
           // console.log(response);
@@ -254,15 +275,20 @@ const MainPosts = (props: Theme) => {
             <h1 className="font-bold tablet:text-3xl p-8">
               {props.type === "archive" ? "Archive" : "Most Popular"}
             </h1>
-            <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
-              <LuPlusCircle />
-              <span className="ml-1 leading-5">Create Post</span>
-            </button>
+            <Link to="/dashboard/createPost">
+              <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
+                <LuPlusCircle />
+                <span className="ml-1 leading-5">Create Post</span>
+              </button>
+            </Link>
           </div>
 
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-            <Catalog handleBoardChange={handleBoardChange} boardsData={boardsData} />
+            <Catalog
+              handleBoardChange={handleBoardChange}
+              boardsData={boardsData}
+            />
           </div>
 
           {/* catalog and pagination and sort for desktop  */}
@@ -380,8 +406,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Recent" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Recent" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Recent")}
                     >
                       Recent
@@ -390,8 +417,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Upvote" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Upvote" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Upvote")}
                     >
                       Upvote
@@ -400,8 +428,9 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Downvote" ? "bg-[#295A31]" : ""
-                        }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                        activeSelection === "Downvote" ? "bg-[#295A31]" : ""
+                      }`}
                       onClick={() => handleSelection("Downvote")}
                     >
                       Downvote

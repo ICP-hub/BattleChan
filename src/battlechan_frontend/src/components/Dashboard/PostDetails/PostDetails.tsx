@@ -21,6 +21,8 @@ import Constant from "../../../utils/constants";
 import { useConnect } from "@connect2ic/react";
 import toast from "react-hot-toast";
 import UserApiHanlder from "../../../API_Handlers/user";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -50,7 +52,7 @@ type PostInfo = {
   createdBy: {
     userName: string;
     userProfile: Int8Array;
-  },
+  };
 };
 
 type CommentInfo = {
@@ -79,8 +81,11 @@ interface ProfileData {
   status: boolean;
 }
 
-const PostDetails = (props: Theme) => {
+interface commentResponse {
+  ok: string;
+}
 
+const PostDetails = (props: Theme) => {
   const postId: string = useParams().postId ?? "";
   const decodedPostId = decodeURIComponent(postId);
   const [time, setTime] = useState("0:00");
@@ -90,9 +95,19 @@ const PostDetails = (props: Theme) => {
   const [commentsData, setcommentsData] = React.useState<CommentInfo[]>([]);
   const is700px = useMediaQuery("(min-width: 700px)");
   const [commentsCount, setCommentsCount] = useState(0);
+  const [newComment, setNewComment] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
 
-  const { getSingleMainPost, getSingleArchivePost, upvotePost, archivePost, downvotePost } = PostApiHanlder();
-  const { getAllComments } = CommentsApiHanlder();
+  const {
+    getSingleMainPost,
+    getSingleArchivePost,
+    upvotePost,
+    archivePost,
+    downvotePost,
+  } = PostApiHanlder();
+  const { getAllComments, createComment } = CommentsApiHanlder();
   const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
   let { isConnected, principal } = useConnect();
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
@@ -126,35 +141,45 @@ const PostDetails = (props: Theme) => {
     const minutes = Math.floor(seconds / 60); // Get remaining minutes
     const remainingSeconds = seconds % 60; // Get remaining seconds
     // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
   async function getPostDetail(postId: string) {
     try {
-      // const response = (await getSingleArchivePost(postId)) as BackendResponse;
-      const response = (await getSingleMainPost(postId)) as BackendResponse;
+      let response;
+      if (type === "archive") {
+        response = (await getSingleArchivePost(postId)) as BackendResponse;
+      } else {
+        response = (await getSingleMainPost(postId)) as BackendResponse;
+      }
       console.log(response);
       if (response.status === true && response.data) {
         console.log(response);
         const posts = response.data.flat(); // Flatten nested arrays if any
         posts.forEach((element: any) => {
-          const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+          const timestamp: string = convertNanosecondsToTimestamp(
+            BigInt(element.createdAt)
+          );
           console.log(timestamp);
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
           console.log("UPVOTE", element.upvotes);
-          const interval = setInterval((expireAt: BigInt) => {
-            const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-            const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+          const interval = setInterval(
+            (expireAt: BigInt) => {
+              const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
+              const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
 
-            if (remainingTime <= 0) {
-              clearInterval(interval);
-              setTime("0:00");
-              console.log('Post archived');
-            } else {
-              setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-            }
-          }, 1000, BigInt(element.expireAt));
+              if (remainingTime <= 0) {
+                clearInterval(interval);
+                setTime("0:00");
+                console.log("Post archived");
+              } else {
+                setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+              }
+            },
+            1000,
+            BigInt(element.expireAt)
+          );
         });
         let data = posts[0];
         setPostsData(data);
@@ -171,7 +196,9 @@ const PostDetails = (props: Theme) => {
       const comments = response.data[0];
       if (comments && comments.length > 0) {
         comments.forEach((element: any) => {
-          const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+          const timestamp: string = convertNanosecondsToTimestamp(
+            BigInt(element.createdAt)
+          );
           console.log(timestamp);
           element.createdAt = timestamp;
         });
@@ -179,7 +206,7 @@ const PostDetails = (props: Theme) => {
         setCommentsCount(comments.length);
       }
     }
-  }
+  };
 
   useEffect(() => {
     let upvoteBtn = document.getElementById("upvoteBtn");
@@ -196,11 +223,14 @@ const PostDetails = (props: Theme) => {
       upvoteBtn?.removeEventListener("click", handleUpvoteClick);
       downvoteBtn?.removeEventListener("click", handleDownvoteClick);
     };
-  }, [])
+  }, []);
 
   const handleUpvote = async (postId: string) => {
     // console.log(isConnected);
     // console.log(principal);
+    if(type === "archive"){
+      return;
+    }
     console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
       const data = (await upvotePost(postId)) as VoteResponse;
@@ -216,9 +246,12 @@ const PostDetails = (props: Theme) => {
       toast.error("Please first Connect your Wallet to Upvote this post!");
       // navigate("/");
     }
-  }
+  };
 
   const handleDownvote = async (postId: string) => {
+    if(type === "archive"){
+      return
+    }
     // console.log(isConnected);
     // console.log(principal);
     if (isUserAuthenticatedRef.current) {
@@ -234,11 +267,34 @@ const PostDetails = (props: Theme) => {
       toast.error("Please first Connect your Wallet to Downvote this post!");
       // navigate("/");
     }
+  };
+
+  async function handleAddComment(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
+    e.preventDefault();
+    setLoading(true);
+    const response = (await createComment(
+      postsData?.postId ?? "",
+      newComment
+    )) as commentResponse;
+    console.log(response);
+
+    if (response && response?.ok) {
+      toast.success(response.ok);
+      setLoading(false);
+      // window.location.href = "/dashboard/mainPosts";
+    } else {
+      toast.error(
+        "Error Creating comment, Please verify and provide valid data!"
+      );
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
     getComments();
-  }, [])
+  }, []);
 
   return (
     <React.Fragment>
@@ -266,12 +322,12 @@ const PostDetails = (props: Theme) => {
 
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
+                <div className={`${type==="archive"? "hidden": "flex"} flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}>
                   <MdOutlineVerifiedUser />
                   <span>{postsData?.upvotes}</span>
                 </div>
 
-                <div className="flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
+                <div className={`${type==="archive"? "hidden": "flex"} tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}>
                   <LiaCommentSolid />
                   <span>{commentsCount} Comments</span>
                 </div>
@@ -283,7 +339,7 @@ const PostDetails = (props: Theme) => {
               </div>
 
               <div className="text-lg">
-                <span className={`text-[#18AF00]`}>{time}</span> min left
+                <span className={` ${type==="archive"? "text-red": "text-[#18AF00]"}`}>{time}</span> min left
               </div>
             </div>
           </div>
@@ -291,15 +347,17 @@ const PostDetails = (props: Theme) => {
           {/* upvote and downvote button  */}
           <div className="flex gap-2 text-3xl mt-4 tablet:mt-11">
             <TbSquareChevronUpFilled
-              className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer`}
+              className={`${
+                vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer ${type==="archive"? "bg-opacity-50":""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
-              className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer`}
+              className={`${
+                !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer ${type==="archive"? "bg-opacity-50":""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />
@@ -332,9 +390,8 @@ const PostDetails = (props: Theme) => {
             </div>
           </div>
 
-
           {/* comment for mobile  */}
-          {!showComments && (
+          {!showComments && type === "archive" && (
             <div className="tablet:hidden my-8">
               <button
                 onClick={() => setShowComments(true)}
@@ -348,7 +405,43 @@ const PostDetails = (props: Theme) => {
           {/* Comment for desktop   */}
           {
             <div className={`mt-8 ${showComments ? "block" : "hidden"}`}>
-              <h1 className="font-bold tablet:text-lg">Comments</h1>
+              <h1 className={`font-bold tablet:text-lg ${type === "archive" ? "hidden" : "block"}`}>Comments</h1>
+              
+                <div>
+                  <form className={`${type === "archive" ? "hidden" : "block"}`}>
+                    <section className="mt-8">
+                      <input
+                        className="border-b border-opacity-50 border-[#000] dark:border-[#fff] w-full bg-transparent p-2"
+                        type="text"
+                        placeholder="Add a comment"
+                        onChange={(e) => {
+                          setNewComment(e.target.value);
+                        }}
+                      />
+                      <div className="flex items-center justify-end mt-4">
+                        <div className="flex justify-center items-center gap-4">
+                          <button
+                            onClick={() => {
+                              setLoading(false);
+                            }}
+                            className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleAddComment}
+                            className={
+                              "border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer disabled:text-opacity-50 disabled:dark:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
+                            }
+                            disabled={loading}
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </section>
+                  </form>
+                </div>
               <div className="mt-8">
                 <Comment currentComment={commentsData} />
               </div>

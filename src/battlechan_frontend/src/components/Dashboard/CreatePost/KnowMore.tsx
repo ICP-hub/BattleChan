@@ -3,11 +3,11 @@ import React from "react";
 const KnowMore = () => {
   return (
     <div className="KnowMoreAboutPosts pt-12 pb-40">
-      <h1 className="text-3xl font-semibold text-center p-8">
+      <h1 className="tablet:text-3xl text-2xl font-semibold text-center p-8">
         Know More About Posts
       </h1>
 
-      <ul className="list-disc px-[25vw]">
+      <ul className="list-disc xl:px-[25vw] laptop:px-[20vw] tablet:px-[15vw] px-[10vh] dark:text-grey tablet:text-base text-sm flex flex-col tablet:gap-2 gap-4">
         <li>
           Posting is free, and it grants 5 minutes of visibility to each new
           post.

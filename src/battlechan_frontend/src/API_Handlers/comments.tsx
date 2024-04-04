@@ -41,12 +41,25 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       const res = await backend.getAllRepliesofComment(commentId, 10, 1);
-      console.log(res);
+      console.log("replies res: ", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
     }
   };
+
+  // Get All COmments of post
+  const createComment = async (postId:string, comment: string) => {
+    try {
+        // console.log(backend);
+        console.log("comment data: ", postId, comment)
+        const res = await backend.createComment(postId, comment);
+        console.log(res);
+        return res;
+    } catch (err) {
+        console.error("Error creating post : ", err);
+    }
+};
 
   // Get single comment info of a user
   const getUserCommentInfo = async (commentId: string) => {
@@ -60,7 +73,7 @@ const CommentsApiHanlder = () => {
   };
 
   // Returns
-  return { getAllComments, getAllReplies, getUserCommentInfo };
+  return { getAllComments, getAllReplies, getUserCommentInfo, createComment };
 };
 
 export default CommentsApiHanlder;
