@@ -91,17 +91,17 @@ const ProfileOverlay = (props: Props) => {
         }
         onClick={(e) => e.stopPropagation()}
       >
-        <section className="w-full flex-row-center justify-start tablet:gap-8 gap-4 tablet:px-8 px-4">
+        <section className="w-full flex-row-center justify-start tablet:gap-8 gap-4 px-2">
           <img
             src={fileURL}
             alt="User Profile Image"
-            className="tablet:w-[80px] w-[50px]"
+            className="tablet:w-[80px] w-[50px] rounded-lg"
           />
           <span className="text-lg">{userName} </span>
         </section>
 
         <fieldset>
-          <legend className="tablet:p-4 p-2 text-lg">Personal</legend>
+          <legend className="p-2 text-lg">Personal</legend>
 
           <hr />
 
@@ -150,7 +150,7 @@ const ProfileOverlay = (props: Props) => {
         </fieldset>
 
         <fieldset>
-          <legend className="tablet:p-4 p-2 text-lg">View Mode</legend>
+          <legend className="p-2 text-lg">View Mode</legend>
 
           <hr />
 
