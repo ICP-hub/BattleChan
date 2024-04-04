@@ -66,12 +66,12 @@ module {
         let seconds = min * 60;
         seconds * 1_000_000_000;
     };
-    public func increaseTime(min : Int) : Int {
-        let increasedTime = secToNanoSec(min) + now();
+    public func increaseTime(min : Int, expireTime : Int) : Int {
+        let increasedTime = secToNanoSec(min) + expireTime;
         return increasedTime;
     };
-    public func decreaseTime(min : Int) : Int {
-        let decreasedTime = now() - secToNanoSec(min);
+    public func decreaseTime(min : Int, expireTime : Int) : Int {
+        let decreasedTime = expireTime - secToNanoSec(min);
         return decreasedTime;
     };
 

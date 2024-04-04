@@ -17,7 +17,7 @@ interface UserInfo {
   downvotedTo: any[];
   likedComments: any[];
   postIds: string[];
-  profileImg: string;
+  profileImg: Int8Array;
   replyIds: any[];
   updatedAt: string[];
   upvotedTo: any[];
