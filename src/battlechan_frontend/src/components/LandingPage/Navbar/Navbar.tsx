@@ -66,7 +66,7 @@ const Navbar = (props: Theme) => {
 
         <button
           className={
-            className + "__connectWalletBtn flex-row-center green-button small_phone:px-4 px-2 small_phone:py-2.5 py-2"
+            className + "__connectWalletBtn flex-row-center bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
           }
         >
           <NavConnectButton />
