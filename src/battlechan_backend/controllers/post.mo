@@ -53,7 +53,7 @@ module {
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
-        let updatedExpireTime = increaseTime(postTime);
+        let updatedExpireTime = increaseTime(postTime, now());
         let newPost : Types.PostInfo = {
             postId = postId;
             postName = postReq.postName;
@@ -117,7 +117,7 @@ module {
 
         switch (voteStatus) {
             case (#upvote) {
-                let updatedExpireTime = increaseTime(voteTime);
+                let updatedExpireTime = increaseTime(voteTime, postInfo.expireAt);
                 return {
                     updatedUserInfo : Types.UserInfo = {
                         userId = userInfo.userId;
@@ -152,8 +152,8 @@ module {
                 };
             };
             case (#downvote) {
-                let updateExpireTime = decreaseTime(voteTime);
-                if (decreaseTime(voteTime) < 0) {
+                let updateExpireTime = decreaseTime(voteTime, postInfo.expireAt);
+                if (decreaseTime(voteTime, postInfo.expireAt) < 0) {
                     Debug.trap(reject.downvoteNotAllowed);
                 };
                 return {
@@ -203,7 +203,7 @@ module {
             case (null) { Debug.trap(reject.noPost) };
         };
 
-        let updatedExpireTime = increaseTime(time);
+        let updatedExpireTime = increaseTime(time, postInfo.expireAt);
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
