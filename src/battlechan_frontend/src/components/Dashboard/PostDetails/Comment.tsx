@@ -1,35 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
 import Replies from "./Replies";
+
 interface CommentInfo {
   comment: string;
   commentId: string;
   createdAt: string;
   likedBy: [];
-};
+}
 
 interface CommentProps {
   currentComment: CommentInfo[];
 }
 
 const Comment: React.FC<CommentProps> = ({ currentComment }) => {
+  const [showReplies, setShowReplies] = useState(false);
   const [vote, setVote] = React.useState(true);
   const handleVote = (vote: boolean) => {
     setVote(vote);
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div>
       {/* comment details */}
-      {currentComment.map((comment, index) => (
-        <div key={index}>
-          {/* user details */}
-          <div className="flex items-center gap-4">
-            <div className="w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded bg-[url('/src/images/comment-avatar.jpg')] bg-cover bg-no-repeat bg-center"></div>
+      {/* <div key={index}> */}
+      {/* user details */}
 
+      {currentComment.map((comment, index) => (
+        <div key={index} className="flex flex-col gap-4 border-l relative pt-3">
+          <div className="absolute -left-6 top-0 w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded bg-[url('/src/images/comment-avatar.jpg')] bg-cover bg-no-repeat bg-center"></div>
+          <div className="flex items-center gap-4 ml-10">
             <h1 className="font-semibold">IamCool_1122</h1>
             <div className="ml-6 text-[#000] dark:text-[#fff] text-xs text-opacity-50 dark:text-opacity-50">
               {comment.createdAt}
@@ -37,12 +40,12 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
           </div>
 
           {/* comment content */}
-          <div className="dark:text-[#fff] tablet:text-base text-sm dark:text-opacity-50 ml-[62px]">
+          <div className="dark:text-[#fff] tablet:text-base text-sm dark:text-opacity-50 ml-10">
             {comment.comment}
           </div>
 
           {/* upvote downvote and reply button */}
-          <div className="flex-row-center gap-10 ml-[62px]">
+          <div className="flex-row-center gap-10 ml-10">
             <div className="flex gap-2 text-3xl">
               <TbSquareChevronUpFilled
                 className={`${
@@ -70,10 +73,26 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
             </div>
           </div>
 
-          <div>
-            <button className="text-sm ml-[62px]">View replies</button>
+          {showReplies && (
+            <div className="flex mt-2">
+              <div className="w-14 h-[1px] bg-[#fff] mt-6"></div>
+              <div className="ml-6">
+                <Replies commentId={comment.commentId} />
+              </div>
+            </div>
+          )}
+
+          <div className="-mb-[10px] flex items-center mt-2">
+            <div className="w-14 h-[1px] bg-[#fff]"></div>
+            <button
+              onClick={() => {
+                setShowReplies((showReplies) => !showReplies);
+              }}
+              className="text-sm ml-1"
+            >
+              {showReplies ? "Hide Replies" : "View replies"}
+            </button>
           </div>
-          <Replies commentId={comment.commentId} />
         </div>
       ))}
     </div>

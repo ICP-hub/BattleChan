@@ -101,8 +101,9 @@ const Body = () => {
         }
       >
         <h1
-          className={`text-4xl tablet:text-5xl text-center font-bold ${darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-            } leading-relaxed`}
+          className={`text-4xl tablet:text-5xl text-center tablet:text-left font-bold ${
+            darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
+          } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
