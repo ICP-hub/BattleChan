@@ -30,7 +30,7 @@ const PostApiHanlder = () => {
             // console.log(boardName)
             // console.log(postData)
             const res = await backend.createPost(boardName, postData);
-            // console.log(res);
+            console.log(res);
             return res;
         } catch (err) {
             console.error("Error creating post : ", err);
