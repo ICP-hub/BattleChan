@@ -18,7 +18,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 // import store from "../src/redux/store/store.js";
 import AppRoutes from "./AppRoutes"; // Make sure the path is correct
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 // import { backend } from "../../declarations/backend/index";
 import {
