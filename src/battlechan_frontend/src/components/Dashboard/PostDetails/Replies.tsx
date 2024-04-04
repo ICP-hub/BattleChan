@@ -55,6 +55,12 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
     getReplies();
   }, []);
 
+  if(commentsData.length === 0){
+    return (
+      <div className="-ml-5 mt-3 text-sm">No Replies</div>
+    )
+  }
+
   return (
     <>
       {commentsData.map((comment, index) => (
