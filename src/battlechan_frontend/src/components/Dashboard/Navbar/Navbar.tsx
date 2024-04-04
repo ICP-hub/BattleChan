@@ -140,7 +140,7 @@ const Navbar = (props: Theme) => {
           <img
             src={fileURL}
             onClick={() => setShowOverlay(!showOverlay)}
-            className="tablet:min-w-[40px] min-w-[30px] tablet:max-w-[45px]  max-w-[35px] cursor-pointer"
+            className="tablet:min-w-[40px] min-w-[30px] h-[40px] object-cover rounded-md tablet:max-w-[45px] max-w-[35px] cursor-pointer"
           />
         )}
 
@@ -157,7 +157,7 @@ const Navbar = (props: Theme) => {
             <img
               src={fileURL}
               alt="USER IMAGE"
-              className="min-w-[50px] max-w-[55px] cursor-pointer"
+              className="min-w-[50px] max-w-[55px] rounded-md cursor-pointer"
               onClick={() => setShowOverlay(!showOverlay)}
             />
           </React.Fragment>
