@@ -17,24 +17,10 @@ import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { useMediaQuery } from "@mui/material";
 import PostApiHanlder from "../../../API_Handlers/post";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
-//backend
-// import { backend } from "../../../../../declarations/backend";
-
-function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
-  const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
-  const date = new Date(milliseconds); // Convert milliseconds to a Date object
-
-  // Get the month, day, year, hour, and minute from the Date object
-  const month = date.toLocaleString('default', { month: 'short' }); // Short month name (e.g., Jan)
-  const day = date.getDate(); // Day of the month (1-31)
-  const year = date.getFullYear(); // Full year (e.g., 2023)
-  const hour = date.getHours(); // Hour (0-23)
-  const minute = date.getMinutes(); // Minute (0-59)
-  // Format the timestamp string
-  const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? '0' + minute : minute}`;
-
-  return timestamp;
-}
+import Constant from "../../../utils/constants";
+import { useConnect } from "@connect2ic/react";
+import toast from "react-hot-toast";
+import UserApiHanlder from "../../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -42,6 +28,7 @@ type Theme = {
 
 const post = {
   vote: true,
+  upvotes: 0,
   commentCount: "750",
   timeToken: "250k",
   postId: "#12356890",
@@ -55,11 +42,15 @@ const post = {
 type PostInfo = {
   postId: string;
   postName: string;
-  postMetaData: string;
+  postMetaData: Int8Array;
   postDes: string;
   expireAt: BigInt;
   createdAt: string;
-  upvotes: BigInt;
+  upvotes: number;
+  createdBy: {
+    userName: string;
+    userProfile: Int8Array;
+  },
 };
 
 type CommentInfo = {
@@ -75,24 +66,51 @@ interface BackendResponse {
   error: string[];
 }
 
+interface VoteResponse {
+  ok: string;
+  err: {
+    [key: string]: string;
+  };
+}
+
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
+}
+
 const PostDetails = (props: Theme) => {
-  // let postId = "123";
+
   const postId: string = useParams().postId ?? "";
   const decodedPostId = decodeURIComponent(postId);
-  // console.log(decodedPostId);
-
   const [time, setTime] = useState("0:00");
   const [postsData, setPostsData] = useState<PostInfo>();
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
   const [commentsData, setcommentsData] = React.useState<CommentInfo[]>([]);
   const is700px = useMediaQuery("(min-width: 700px)");
-  const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
-  const { getAllComments } = CommentsApiHanlder();
+  const [commentsCount, setCommentsCount] = useState(0);
 
-  const handleVote = (vote: boolean) => {
-    setVote(vote);
-  };
+  const { getSingleMainPost, getSingleArchivePost, upvotePost, archivePost, downvotePost } = PostApiHanlder();
+  const { getAllComments } = CommentsApiHanlder();
+  const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
+  let { isConnected, principal } = useConnect();
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+
+  useEffect(() => {
+    isUserAuthenticatedRef.current = isUserAuthenticated;
+  }, [isUserAuthenticated]);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (isConnected && principal) {
+        setIsUserAuthenticated(true);
+      }
+    };
+
+    checkAuthentication();
+  }, [isConnected, principal]);
 
   useEffect(() => {
     if (!is700px) {
@@ -123,7 +141,8 @@ const PostDetails = (props: Theme) => {
           const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
           console.log(timestamp);
           element.createdAt = timestamp;
-
+          element.upvotes = Number(element.upvotes);
+          console.log("UPVOTE", element.upvotes);
           const interval = setInterval((expireAt: BigInt) => {
             const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
             const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
@@ -151,8 +170,69 @@ const PostDetails = (props: Theme) => {
     if (response && response.status == true) {
       const comments = response.data[0];
       if (comments && comments.length > 0) {
+        comments.forEach((element: any) => {
+          const timestamp: string = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+          console.log(timestamp);
+          element.createdAt = timestamp;
+        });
         setcommentsData(comments);
+        setCommentsCount(comments.length);
       }
+    }
+  }
+
+  useEffect(() => {
+    let upvoteBtn = document.getElementById("upvoteBtn");
+    let downvoteBtn = document.getElementById("downvoteBtn");
+
+    const handleUpvoteClick = () => handleUpvote(postId);
+    const handleDownvoteClick = () => handleDownvote(postId);
+
+    upvoteBtn?.addEventListener("click", handleUpvoteClick);
+    downvoteBtn?.addEventListener("click", handleDownvoteClick);
+
+    // Clean up the event listeners
+    return () => {
+      upvoteBtn?.removeEventListener("click", handleUpvoteClick);
+      downvoteBtn?.removeEventListener("click", handleDownvoteClick);
+    };
+  }, [])
+
+  const handleUpvote = async (postId: string) => {
+    // console.log(isConnected);
+    // console.log(principal);
+    console.log(isUserAuthenticatedRef.current);
+    if (isUserAuthenticatedRef.current) {
+      const data = (await upvotePost(postId)) as VoteResponse;
+      if (data && data?.ok) {
+        // toast.success(data?.ok);
+        toast.success("Successfully Upvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
+    } else {
+      toast.error("Please first Connect your Wallet to Upvote this post!");
+      // navigate("/");
+    }
+  }
+
+  const handleDownvote = async (postId: string) => {
+    // console.log(isConnected);
+    // console.log(principal);
+    if (isUserAuthenticatedRef.current) {
+      const data = (await downvotePost(postId)) as VoteResponse;
+      if (data && data?.ok) {
+        toast.success("Successfully Downvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
+    } else {
+      toast.error("Please first Connect your Wallet to Downvote this post!");
+      // navigate("/");
     }
   }
 
@@ -180,7 +260,7 @@ const PostDetails = (props: Theme) => {
           <div className="max-w-3xl">
             <img
               className="block h-auto w-full"
-              src={postsData?.postMetaData}
+              src={convertInt8ToBase64(postsData?.postMetaData || undefined)}
               alt="post image"
             />
 
@@ -188,12 +268,12 @@ const PostDetails = (props: Theme) => {
               <div className="flex items-center gap-4">
                 <div className="flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
                   <MdOutlineVerifiedUser />
-                  <span>0</span>
+                  <span>{postsData?.upvotes}</span>
                 </div>
 
                 <div className="flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
                   <LiaCommentSolid />
-                  <span>{0} Comments</span>
+                  <span>{commentsCount} Comments</span>
                 </div>
 
                 {/* <div className="hidden tablet:flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
@@ -213,35 +293,29 @@ const PostDetails = (props: Theme) => {
             <TbSquareChevronUpFilled
               className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
                 } cursor-pointer`}
-              onClick={() => handleVote(true)}
+              id="upvoteBtn"
+              onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
               className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
                 } cursor-pointer`}
-              onClick={() => handleVote(false)}
+              id="downvoteBtn"
+              onClick={() => handleDownvote(postId)}
             />
           </div>
 
           {/* user avatar and post details  */}
           <div className="flex justify-between items-center mt-5 tablet:justify-start tablet:gap-8 tablet:mt-14">
             <div className="flex gap-2 items-center justify-center">
-              <div className="w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded">
-                <svg
-                  className="w-5 h-5 tablet:w-9 tablet:h-9"
-                  viewBox="0 0 11 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5.50159 0.962891C6.12289 0.962891 6.71873 1.22769 7.15805 1.69904C7.59738 2.17039 7.84418 2.80967 7.84418 3.47625C7.84418 4.14284 7.59738 4.78212 7.15805 5.25347C6.71873 5.72482 6.12289 5.98962 5.50159 5.98962C4.8803 5.98962 4.28445 5.72482 3.84513 5.25347C3.40581 4.78212 3.159 4.14284 3.159 3.47625C3.159 2.80967 3.40581 2.17039 3.84513 1.69904C4.28445 1.22769 4.8803 0.962891 5.50159 0.962891ZM5.50159 7.2463C8.09016 7.2463 10.1868 8.37103 10.1868 9.75967V11.0163H0.816406V9.75967C0.816406 8.37103 2.91303 7.2463 5.50159 7.2463Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-
+              {/* <div className="w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded"> */}
+              <img
+                src={convertInt8ToBase64(postsData?.createdBy.userProfile)}
+                alt="Profile Image"
+                className="w-5 h-5 tablet:w-9 tablet:h-9 rounded-lg object-cover"
+              />
               <h1 className="font-semibold tablet:text-lg text-md">
-                Khushali
+                {postsData?.createdBy.userName}
               </h1>
             </div>
 

@@ -19,7 +19,7 @@ const PostApiHanlder = () => {
     const [successfulSubmit, setSuccessfulSubmit] = useState(false);
 
     // Create a Post
-    const createPost = async (boardName: string, { postName, postDes, postMetaData }: { postName: string, postDes: string, postMetaData: string }) => {
+    const createPost = async (boardName: string, { postName, postDes, postMetaData }: { postName: string, postDes: string, postMetaData: Int8Array | undefined }) => {
         try {
             console.log(backend);
             const postData = {
@@ -63,10 +63,10 @@ const PostApiHanlder = () => {
     // };
 
     // Get Active Posts
-    const getMainPosts = async () => {
+    const getMainPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
             const res = await backend.getPostsByBoard();
-            // const res = await backend.postFilter({ upvote: true }, 10, 1);
+            // const res = await backend.postFilter(filter, chunkSize, pageNumber, boardName);
             console.log(res);
             return res;
         } catch (err) {
@@ -86,9 +86,9 @@ const PostApiHanlder = () => {
     };
 
     // Get Archived Post
-    const getArchivePosts = async () => {
+    const getArchivePosts = async (chunkSize: Number, pageNumber: Number,) => {
         try {
-            const res = await backend.getArchivedPost(BigInt(10), BigInt(2));
+            const res = await backend.getArchivedPost(chunkSize, pageNumber);
             console.log(res);
             return res;
         } catch (err) {
@@ -126,12 +126,25 @@ const PostApiHanlder = () => {
             return res;
         } catch (err) {
             console.error("Error upvoting a post : ", err);
+            return err;
+        }
+    };
+
+    // Downvote a Post
+    const downvotePost = async (postId: string) => {
+        try {
+            const res = await backend.upvoteOrDownvotePost(postId, { downvote: null });
+            console.log(res);
+            return res;
+        } catch (err) {
+            console.error("Error downvoting a post : ", err);
+            return err;
         }
     };
 
 
     // Returns
-    return { createPost, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost };
+    return { createPost, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost };
 };
 
 export default PostApiHanlder;

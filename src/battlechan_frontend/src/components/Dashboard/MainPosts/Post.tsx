@@ -8,17 +8,20 @@ import PostApiHanlder from "../../../API_Handlers/post";
 import { Link, useNavigate } from "react-router-dom";
 import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
+import CommentsApiHanlder from "../../../API_Handlers/comments";
+import Constant from "../../../utils/constants";
 
 interface PostProps {
   id: string;
-  imageUrl: string;
+  postName: string;
+  imageUrl: Int8Array;
   userAvatarUrl: string;
   userName: string;
-  userProfile: string;
+  userProfile: Int8Array;
   timestamp: string;
   duration: string;
   content: string;
-  likes: string;
+  likes: number;
   comments: number;
   expireAt: BigInt;
   type?: string;
@@ -28,8 +31,23 @@ interface Response {
   ok: string;
 }
 
+interface VoteResponse {
+  ok: string;
+  err: {
+    [key: string]: string;
+  };
+}
+
+
+interface CommentsResponse {
+  status: boolean;
+  data: [][];
+  error: string[];
+}
+
 const Post: React.FC<PostProps> = ({
   id,
+  postName,
   imageUrl,
   userAvatarUrl,
   userName,
@@ -42,42 +60,34 @@ const Post: React.FC<PostProps> = ({
   userProfile,
   type,
 }) => {
-  let { isConnected, principal } = useConnect();
   const [time, setTime] = useState("0:00");
+  const [commentsCount, setCommentsCount] = useState(0);
   const [vote, setVote] = React.useState(true);
   const className = "Dashboard__MainPosts__Post";
-  const { upvotePost, archivePost } = PostApiHanlder();
+  const { upvotePost, archivePost, downvotePost } = PostApiHanlder();
+  const { getAllComments } = CommentsApiHanlder();
   const navigate = useNavigate();
-
-  const isAuthenticated = () => {
-    if (isConnected && principal) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  const handleVote = (vote: boolean) => {
-    setVote(vote);
-  };
-
-  const handleUpvote = async (postId: string) => {
-    console.log(isConnected);
-    console.log(principal);
-    const isValidUser = isAuthenticated();
-    if (isValidUser) {
-      // const data = await upvotePost(postId);
-      // console.log(data);
-      console.log("IF")
-      toast.success("User is Authenticated!");
-    } else {
-      console.log("ELSE")
-      toast.error("User is not Authenticated!");
-      navigate("/");
-    }
-    console.log(postId);
-  }
+  let { isConnected, principal } = useConnect();
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+  const { convertInt8ToBase64 } = Constant();
+  useEffect(() => {
+    isUserAuthenticatedRef.current = isUserAuthenticated;
+  }, [isUserAuthenticated]);
 
   useEffect(() => {
+    const checkAuthentication = async () => {
+      if (isConnected && principal) {
+        setIsUserAuthenticated(true);
+      }
+    };
+
+    checkAuthentication();
+  }, [isConnected, principal]);
+
+  useEffect(() => {
+    getCommentsCounts();
+
     const interval = setInterval(() => {
       const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
       const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
@@ -95,12 +105,63 @@ const Post: React.FC<PostProps> = ({
     return () => clearInterval(interval);
   }, [expireAt]); // Run effect when expireAt changes
 
+
+  const handleUpvote = async (postId: string) => {
+    // console.log(isConnected);
+    // console.log(principal);
+    console.log(isUserAuthenticatedRef.current);
+    if (isUserAuthenticatedRef.current) {
+      const data = (await upvotePost(postId)) as VoteResponse;
+      if (data && data?.ok) {
+        // toast.success(data?.ok);
+        toast.success("Successfully Upvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
+    } else {
+      toast.error("Please first Connect your Wallet to Upvote this post!");
+      // navigate("/");
+    }
+  }
+
+  const handleDownvote = async (postId: string) => {
+    // console.log(isConnected);
+    // console.log(principal);
+    if (isUserAuthenticatedRef.current) {
+      const data = (await downvotePost(postId)) as VoteResponse;
+      if (data && data?.ok) {
+        toast.success("Successfully Downvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
+    } else {
+      toast.error("Please first Connect your Wallet to Downvote this post!");
+      // navigate("/");
+    }
+  }
+
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
-    if(response && response?.ok){
+    if (response && response?.ok) {
       console.log("POST ARCHIVED!");
     }
   }
+
+  const getCommentsCounts = async () => {
+    const response = (await getAllComments(id)) as CommentsResponse;
+    if (response && response.status == true) {
+      let data = response.data[0];
+      if (data && data.length > 0) {
+        console.log(length);
+        setCommentsCount(data.length);
+      }
+    }
+  }
+
   const formatTime = (remainingTime: bigint) => {
     const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
     const minutes = Math.floor(seconds / 60); // Get remaining minutes
@@ -127,7 +188,7 @@ const Post: React.FC<PostProps> = ({
           <img
             alt="post image"
             className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
-            src={imageUrl}
+            src={convertInt8ToBase64(imageUrl)}
           />
 
           <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
@@ -136,7 +197,7 @@ const Post: React.FC<PostProps> = ({
               <div className="w-full flex items-center gap-2">
                 <img
                   className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                  src={userAvatarUrl}
+                  src={convertInt8ToBase64(userProfile)}
                   alt="user avatar"
                 />
 
@@ -166,7 +227,8 @@ const Post: React.FC<PostProps> = ({
 
             {/* Content on bottom */}
             <section className="mt-1">
-              <p className="tablet:text-lg text-sm">{content}</p>
+              <p className="tablet:text-lg text-sm font-semibold">{postName}</p>
+              <p className="tablet:text-lg text-sm text-gray-800">{content.length > 70 ? `${content.slice(0, 70)}...` : content}</p>
             </section>
           </div>
         </section>
@@ -180,13 +242,15 @@ const Post: React.FC<PostProps> = ({
           <TbSquareChevronUpFilled
             className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
               } cursor-pointer`}
-            onClick={() => handleUpvote(id)}
+            id="upvoteBtn"
+            onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
             className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
               } cursor-pointer`}
-            onClick={() => handleVote(false)}
+            id="downvoteBtn"
+            onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />
         </div>
 
@@ -198,7 +262,7 @@ const Post: React.FC<PostProps> = ({
           </div>
           <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
             <LiaCommentSolid />
-            <span>{750} Comments</span>
+            <span>{commentsCount} Comments</span>
           </div>
         </div>
       </section>
