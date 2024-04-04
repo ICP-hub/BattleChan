@@ -98,9 +98,6 @@ module {
              Debug.trap(reject.anonymous);
          };
 
-         if (anonymousCheck(userId) == true) {
-            Debug.trap(reject.anonymous);
-        };
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) { Debug.trap(reject.noAccount) };
