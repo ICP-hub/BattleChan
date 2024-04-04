@@ -83,7 +83,6 @@ const MainPosts = (props: Theme) => {
   const [selectedBoard, setSelectedBoard] = useState<string>("");
 
   const className = "Dashboard__MainPosts";
-  const [backend] = useBackend();
   const { createPost, getBoards, getMainPosts, getArchivePosts } =
     PostApiHanlder();
   const { convertNanosecondsToTimestamp } = Constant();

@@ -34,3 +34,5 @@ echo "Approved amount: $(dfx canister call ledger icrc2_allowance "(record {acco
 dfx --identity $TRANSFERRER_ID canister call ledger icrc2_transfer_from "(record { from = record { owner = principal \"$APPROVER_PRINCIPAL\"}; to = record { owner = principal \"$TRANSFERRER_PRINCIPAL\" }; amount = 300000000 })"
 
 debug_print 4
+
+ {fee = null ; memo = null ; from_subaccount = null ; created_at_time = null ; amount =  1 ; expected_allowance = null ; expires_at = null ; spender =  {owner = backendCanisterId ; subaccount = null }}

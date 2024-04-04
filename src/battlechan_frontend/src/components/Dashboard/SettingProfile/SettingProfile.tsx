@@ -31,13 +31,12 @@ const userData = {
 
 interface UserData {
   userName: string;
-  profileImg: Int8Array
+  profileImg: Int8Array;
 }
 
 interface Data {
   ok: string;
 }
-
 
 interface ProfileData {
   userName: string;
@@ -45,10 +44,10 @@ interface ProfileData {
   status: boolean;
 }
 
-
 const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
-  const { registerUser, isUserRegistered, updateUser, getProfileData } = UserApiHanlder();
+  const { registerUser, isUserRegistered, updateUser, getProfileData } =
+    UserApiHanlder();
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
@@ -61,21 +60,27 @@ const SettingProfile = (props: Theme) => {
   const [userName, setUserName] = React.useState("Please Update your Username");
   //this is to maintain the name typed by the user
   const [inputUserName, setInputUserName] = React.useState("");
-  
+
   // selected image file
-  const [fileData, setFileData] = React.useState<{ base64: string; int8Array: Int8Array } | null>(null);
- 
+  const [fileData, setFileData] = React.useState<{
+    base64: string;
+    int8Array: Int8Array;
+  } | null>(null);
+
   const { handleFileUpload, convertInt8ToBase64 } = Constant();
   React.useRef(isRegistered);
   const userNameRef = React.useRef(userName);
   const fileDataRef = React.useRef(fileData);
+  const className = "Dashboard__SettingProfile";
 
-  const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInput = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     try {
       const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
       setFileData({ base64, int8Array });
     } catch (error) {
-      if (typeof error === 'string') {
+      if (typeof error === "string") {
         toast.error(error); // Display the error message
         console.error("Error:", error);
       } else {
@@ -84,7 +89,10 @@ const SettingProfile = (props: Theme) => {
     }
   };
 
-  const className = "Dashboard__SettingProfile";
+  function handleFileChange() {
+    // const imageUrl = URL.createObjectURL(inputfile.files[0]);
+    setFileURL(fileData?.base64 || "");
+  }
 
   function handleNameChange() {
     setShowInput(true);
@@ -99,11 +107,6 @@ const SettingProfile = (props: Theme) => {
       setInputUserName("");
     }
     console.log("Input username:", inputUserName); // Add this line
-  }
-
-  function handleFileChange() {
-    // const imageUrl = URL.createObjectURL(inputfile.files[0]);
-    setFileURL(fileData?.base64 || "");
   }
 
   useEffect(() => {
@@ -166,7 +169,7 @@ const SettingProfile = (props: Theme) => {
                 binary += String.fromCharCode(byte);
               });
               let base64 = btoa(binary);
-              
+
               console.log(base64);
               // setFileURL(base64);
             };
@@ -189,7 +192,10 @@ const SettingProfile = (props: Theme) => {
     if (registerBtn) {
       registerBtn.addEventListener("click", async () => {
         if (isRegisteredRef.current === true) {
-          const data = await updateUser(userNameRef.current, fileDataRef.current?.int8Array);
+          const data = await updateUser(
+            userNameRef.current,
+            fileDataRef.current?.int8Array
+          );
           if (data && (data as Data)?.ok) {
             toast.success((data as Data).ok);
           } else {
@@ -199,7 +205,10 @@ const SettingProfile = (props: Theme) => {
           }
         } else {
           try {
-            const data = await registerUser(userNameRef.current, fileDataRef.current?.int8Array);
+            const data = await registerUser(
+              userNameRef.current,
+              fileDataRef.current?.int8Array
+            );
             if (data && (data as Data)?.ok) {
               toast.success((data as Data).ok);
             } else {
@@ -290,7 +299,6 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-
               className={`${
                 showInput
                   ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
@@ -311,7 +319,6 @@ const SettingProfile = (props: Theme) => {
 
           <label
             htmlFor="profile"
-
             className={`text-light dark:text-dark bg-dark dark:bg-light phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold cursor-pointer`}
             onClick={handleFileChange}
           >
