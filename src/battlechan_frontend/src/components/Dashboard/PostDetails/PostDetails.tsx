@@ -22,6 +22,7 @@ import { useConnect } from "@connect2ic/react";
 import toast from "react-hot-toast";
 import UserApiHanlder from "../../../API_Handlers/user";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -80,6 +81,10 @@ interface ProfileData {
   status: boolean;
 }
 
+interface commentResponse {
+  ok: string;
+}
+
 const PostDetails = (props: Theme) => {
   const postId: string = useParams().postId ?? "";
   const decodedPostId = decodeURIComponent(postId);
@@ -90,6 +95,10 @@ const PostDetails = (props: Theme) => {
   const [commentsData, setcommentsData] = React.useState<CommentInfo[]>([]);
   const is700px = useMediaQuery("(min-width: 700px)");
   const [commentsCount, setCommentsCount] = useState(0);
+  const [newComment, setNewComment] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
 
   const {
     getSingleMainPost,
@@ -98,7 +107,7 @@ const PostDetails = (props: Theme) => {
     archivePost,
     downvotePost,
   } = PostApiHanlder();
-  const { getAllComments } = CommentsApiHanlder();
+  const { getAllComments, createComment } = CommentsApiHanlder();
   const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
   let { isConnected, principal } = useConnect();
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
@@ -137,8 +146,12 @@ const PostDetails = (props: Theme) => {
 
   async function getPostDetail(postId: string) {
     try {
-      // const response = (await getSingleArchivePost(postId)) as BackendResponse;
-      const response = (await getSingleMainPost(postId)) as BackendResponse;
+      let response;
+      if (type === "archive") {
+        response = (await getSingleArchivePost(postId)) as BackendResponse;
+      } else {
+        response = (await getSingleMainPost(postId)) as BackendResponse;
+      }
       console.log(response);
       if (response.status === true && response.data) {
         console.log(response);
@@ -250,13 +263,28 @@ const PostDetails = (props: Theme) => {
     }
   };
 
-  function handleAddComment (e: React.MouseEvent<HTMLButtonElement, MouseEvent>){
+  async function handleAddComment(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     e.preventDefault();
+    setLoading(true);
+    const response = (await createComment(
+      postsData?.postId ?? "",
+      newComment
+    )) as commentResponse;
+    console.log(response);
 
-    
-
+    if (response && response?.ok) {
+      toast.success(response.ok);
+      setLoading(false);
+      // window.location.href = "/dashboard/mainPosts";
+    } else {
+      toast.error(
+        "Error Creating comment, Please verify and provide valid data!"
+      );
+      setLoading(false);
+    }
   }
-
 
   useEffect(() => {
     getComments();
@@ -375,20 +403,35 @@ const PostDetails = (props: Theme) => {
               <div>
                 <form>
                   <section className="mt-8">
-                  <input
-                    className="border-b border-opacity-50 border-[#fff] w-full bg-transparent p-2"
-                    type="text"
-                    placeholder="Add a comment"
-                  />
-                  <div className="flex items-center justify-between mt-4">
-                    <MdOutlineEmojiEmotions size={25} />
-                    <div className="flex justify-center items-center gap-4">
-                      <button className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold">Cancel</button>
-                      <button onClick={handleAddComment} className="border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold">
-                        Submit
-                      </button>
+                    <input
+                      className="border-b border-opacity-50 border-[#fff] w-full bg-transparent p-2"
+                      type="text"
+                      placeholder="Add a comment"
+                      onChange={(e) => {
+                        setNewComment(e.target.value);
+                      }}
+                    />
+                    <div className="flex items-center justify-end mt-4">
+                      <div className="flex justify-center items-center gap-4">
+                        <button
+                          onClick={() => {
+                            setLoading(false);
+                          }}
+                          className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleAddComment}
+                          className={
+                            "border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer disabled:text-opacity-50 disabled:dark:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
+                          }
+                          disabled={loading}
+                        >
+                          Submit
+                        </button>
+                      </div>
                     </div>
-                  </div>
                   </section>
                 </form>
               </div>

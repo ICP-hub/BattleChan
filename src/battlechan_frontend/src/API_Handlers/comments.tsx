@@ -48,6 +48,19 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  // Get All COmments of post
+  const createComment = async (postId:string, comment: string) => {
+    try {
+        // console.log(backend);
+        console.log("comment data: ", postId, comment)
+        const res = await backend.createComment(postId, comment);
+        console.log(res);
+        return res;
+    } catch (err) {
+        console.error("Error creating post : ", err);
+    }
+};
+
   // Get single comment info of a user
   const getUserCommentInfo = async (commentId: string) => {
     try {
@@ -60,7 +73,7 @@ const CommentsApiHanlder = () => {
   };
 
   // Returns
-  return { getAllComments, getAllReplies, getUserCommentInfo };
+  return { getAllComments, getAllReplies, getUserCommentInfo, createComment };
 };
 
 export default CommentsApiHanlder;
