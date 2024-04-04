@@ -121,7 +121,7 @@ const SettingProfile = (props: Theme) => {
     if (registerBtn) {
       registerBtn.addEventListener("click", async () => {
         if (isRegisteredRef.current === true) {
-          const data = await updateUser(userNameRef.current, "");
+          const data = await updateUser(userNameRef.current,"");
           if (data && (data as Data )?.ok) {
             toast.success((data as Data).ok);
           } else {
