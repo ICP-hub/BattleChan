@@ -23,9 +23,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //    Debug.trap(reject.anonymous);
-        //};
+        if (anonymousCheck(userId) == true) {
+           Debug.trap(reject.anonymous);
+        ;
 
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
@@ -196,9 +196,9 @@ module {
 
     public func updatePostExpireTime(time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
 
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?v) { v };
             case (null) { Debug.trap(reject.noPost) };
