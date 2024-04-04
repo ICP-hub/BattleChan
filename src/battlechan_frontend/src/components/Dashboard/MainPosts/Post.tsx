@@ -10,6 +10,7 @@ import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
 import Constant from "../../../utils/constants";
+// import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 interface PostProps {
   id: string;
@@ -70,6 +71,8 @@ const Post: React.FC<PostProps> = ({
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
   const { convertInt8ToBase64 } = Constant();
+  // const { icrc2_approve } = TokensApiHanlder();
+
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
   }, [isUserAuthenticated]);
@@ -107,7 +110,9 @@ const Post: React.FC<PostProps> = ({
   const handleUpvote = async (postId: string) => {
     // console.log(isConnected);
     // console.log(principal);
-    console.log(isUserAuthenticatedRef.current);
+    // console.log(isUserAuthenticatedRef.current);
+    // const data = await icrc2_approve();
+    // console.log(data);
     if (isUserAuthenticatedRef.current) {
       const data = (await upvotePost(postId)) as VoteResponse;
       if (data && data?.ok) {
@@ -120,7 +125,6 @@ const Post: React.FC<PostProps> = ({
       }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
-      // navigate("/");
     }
   };
 
@@ -138,7 +142,6 @@ const Post: React.FC<PostProps> = ({
       }
     } else {
       toast.error("Please first Connect your Wallet to Downvote this post!");
-      // navigate("/");
     }
   };
 
@@ -173,8 +176,7 @@ const Post: React.FC<PostProps> = ({
       className={
         className +
         " " +
-        `flex flex-col gap-4 xl:p-5 p-3 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${
-          type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
+        `flex flex-col gap-4 xl:p-5 p-3 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
         }`
       }
     >
@@ -209,11 +211,10 @@ const Post: React.FC<PostProps> = ({
                         <div className="flex items-center gap-2">
                           <div className="text-1xl tablet:text-lg text-nowrap">
                             <span
-                              className={`${
-                                type === "archive"
+                              className={`${type === "archive"
                                   ? "text-red"
                                   : "text-light-green"
-                              }`}
+                                }`}
                             >
                               {type === "archive" ? "0:00 " : `${time} `}
                             </span>
@@ -274,11 +275,10 @@ const Post: React.FC<PostProps> = ({
                         <div className="flex items-center gap-2">
                           <div className="text-1xl tablet:text-lg text-nowrap">
                             <span
-                              className={`${
-                                type === "archive"
+                              className={`${type === "archive"
                                   ? "text-red"
                                   : "text-light-green"
-                              }`}
+                                }`}
                             >
                               {type === "archive" ? "0:00 " : `${time} `}
                             </span>
@@ -317,17 +317,15 @@ const Post: React.FC<PostProps> = ({
 
         <div className="buttons flex-row-center gap-2 ml-3 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${
-              vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-            } cursor-pointer`}
+            className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${
-              !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-            } cursor-pointer`}
+            className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />

@@ -38,8 +38,15 @@ interface BackendResponse {
 interface UserData {
   userName: string;
 }
- 
-const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
+
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
+};
+
+
+const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userInfo }) => {
 
   const { principal, activeProvider } = useConnect();
   let loggedInBy = activeProvider?.meta.name;
@@ -47,33 +54,29 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
   const [isRegistered, setIsRegistered] = React.useState(false);
   const [userName, setUserName] = React.useState("");
   const isRegisteredRef = React.useRef(isRegistered);
-  const { isUserRegistered } = UserApiHanlder();
+  const { isUserRegistered, getProfileData } = UserApiHanlder();
 
   useEffect(() => {
     isRegisteredRef.current = isRegistered;
   }, [isRegistered]);
-  
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
-    const response = (await isUserRegistered()) as BackendResponse;
-    if (response && response.status !== false) {
-      const userDataArray: UserData[] = response.data;
-      setUserName(userDataArray[0]?.userName)
-      setIsRegistered(true);
-      // console.log("SETTED TRUe", isRegistered);
-    } else {
-      if (principal) {
-        setUserName(truncateString(principal, 17));
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = (await getProfileData()) as ProfileData;
+      if (response && response.status !== false) {
+        setUserName(response?.userName);
+        setIsRegistered(true);
+      } else {
+        if (principal) {
+          setUserName(truncateString(principal, 17));
+        }
+        setIsRegistered(false);
       }
-      // console.log("SET FALSE")
-      setIsRegistered(false);
-    }
-    // console.log("isRegisteredData", response);
-    // console.log("isRegistered", isRegistered);
-  };
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchProfile();
+  }, [userName]);
 
   return (
     <div className="bg-green rounded-2xl w-full p-6 tablet:p-[2.344rem] relative flex items-center gap-4 tablet:gap-12">
@@ -112,7 +115,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
       </div>
       <div className="flex flex-col justify-center">
         <h1 className="font-inter font-bold text-[#FFFFFF] text-sm tablet:text-2xl laptop:text-[2.5rem]">
-           {userInfo.length > 0 && userInfo[0]?.userName}
+          {userInfo.length > 0 && userInfo[0]?.userName}
         </h1>
         <p className="tablet:mt-2 font-inter text-[#FFFFFF] text-opacity-50 text-xs tablet:text-base laptop:text-xl leading-5">
           {loggedInBy}

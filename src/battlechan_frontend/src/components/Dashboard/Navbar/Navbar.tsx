@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -39,12 +40,14 @@ const Navbar = (props: Theme) => {
   const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(defaultImg);
   const [userName, setUserName] = React.useState("");
+  // const { getTimeTokens } = TokensApiHanlder();
 
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
   const { principal, isConnected } = useConnect();
-
+  console.log(principal);
+  
   useEffect(() => {
     const body = document.querySelector("body")?.style;
     if (body && showOverlay == true) {
@@ -70,6 +73,16 @@ const Navbar = (props: Theme) => {
     // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
   }, [userName]);
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      console.log("START");
+      // const data = await getTimeTokens();
+      // console.log(data);
+    };
+
+    fetchBalance();
+  }, [])
 
   return (
     <div
