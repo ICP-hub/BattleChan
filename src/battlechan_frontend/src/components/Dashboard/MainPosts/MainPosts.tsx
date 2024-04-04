@@ -17,30 +17,12 @@ import CreatePostBtn from "../Body/CreatePostBtn";
 import { backend } from "../../../../../declarations/backend";
 import { useCanister, useConnect } from "@connect2ic/react";
 import PostApiHanlder from "../../../API_Handlers/post";
+import Constant from "../../../utils/constants";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
   return useCanister("backend");
 };
-
-function convertNanosecondsToTimestamp(nanoseconds: bigint): string {
-  const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
-  const date = new Date(milliseconds); // Convert milliseconds to a Date object
-
-  // Get the month, day, year, hour, and minute from the Date object
-  const month = date.toLocaleString("default", { month: "short" }); // Short month name (e.g., Jan)
-  const day = date.getDate(); // Day of the month (1-31)
-  const year = date.getFullYear(); // Full year (e.g., 2023)
-  const hour = date.getHours(); // Hour (0-23)
-  const minute = date.getMinutes(); // Minute (0-59)
-
-  // Format the timestamp string
-  const timestamp = `${month} ${day},${year}; ${hour}:${
-    minute < 10 ? "0" + minute : minute
-  }`;
-
-  return timestamp;
-}
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -50,14 +32,15 @@ type Theme = {
 type PostInfo = {
   postId: string;
   postName: string;
-  postMetaData: string;
+  postMetaData: Int8Array;
   postDes: string;
   expireAt: BigInt;
   createdAt: string;
   createdBy: {
     userName: string;
-    userProfile: string;
-  };
+    userProfile: Int8Array;
+  },
+  upvotes: number;
 };
 
 interface Board {
@@ -85,18 +68,29 @@ const post = [
       "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
     postDes: "Test2",
     expireAt: 1711625931614910010n,
-    createdAt: "Mar 28,2024; 17:03",
+    createdAt: "Mar 28,2024; 17:03",
   },
 ];
 
 const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const [boardsData, setBoardsData] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeSelection, setActiveSelection] = useState("Recent");
+  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBoard, setSelectedBoard] = useState<string>("");
 
   const className = "Dashboard__MainPosts";
   const [backend] = useBackend();
   const { createPost, getBoards, getMainPosts, getArchivePosts } =
     PostApiHanlder();
+  const { convertNanosecondsToTimestamp } = Constant();
+
+
+  const handleBoardChange = (boardName: string) => {
+    setSelectedBoard(boardName);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,18 +116,38 @@ const MainPosts = (props: Theme) => {
     fetchData();
   }, []);
 
+  const getAllPostFilter = async (filter: string = "recent", chunkSize: number = 10, pageNumber: number = 1, boardName: string) => {
+    try {
+      const res = await getMainPosts({ [filter]: null }, chunkSize, pageNumber, boardName);
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
+  const getAllArchivePostFilter = async (chunkSize: number = 10, pageNumber: number = 1) => {
+    try {
+      const res = await getArchivePosts(chunkSize, pageNumber);
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
   useEffect(() => {
     if (props.type == "archive") {
       getPosts("archive");
     } else {
       getPosts();
     }
-  }, [props.type]);
+  }, [props.type, currentPage, postsPerPage, selectedBoard]);
 
   async function getPosts(postsType?: string) {
     try {
       if (postsType === "archive") {
-        const response = (await getArchivePosts()) as PostResponse;
+        const response = (await getAllArchivePostFilter(postsPerPage, currentPage,)) as PostResponse;
         console.log("Archive Post Response: ", response);
         if (response.status === true && response.data) {
           const posts = response.data
@@ -155,11 +169,12 @@ const MainPosts = (props: Theme) => {
             );
             console.log(timestamp);
             element.createdAt = timestamp;
+            element.upvotes = Number(element.upvotes);
           });
           setPostsData(posts);
         }
       } else {
-        const response = (await getMainPosts()) as PostResponse;
+        const response = (await getAllPostFilter(activeSelection.toLocaleLowerCase(), postsPerPage, currentPage, selectedBoard)) as PostResponse;
         console.log("Main Posts Response: ", response);
         if (response.status === true && response.data) {
           // console.log(response);
@@ -173,6 +188,7 @@ const MainPosts = (props: Theme) => {
             );
             console.log(timestamp);
             element.createdAt = timestamp;
+            element.upvotes = Number(element.upvotes);
           });
           // console.log(posts);
           setPostsData(posts);
@@ -182,11 +198,6 @@ const MainPosts = (props: Theme) => {
       console.error("Error fetching posts:", error);
     }
   }
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeSelection, setActiveSelection] = useState("Rank");
-  const [postsPerPage, setPostsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const totalPosts = postsData.length;
 
@@ -251,7 +262,7 @@ const MainPosts = (props: Theme) => {
 
           {/* catalog for desktop  */}
           <div className="pl-10 -mr-2 overflow-hidden">
-            <Catalog boardsData={boardsData} />
+            <Catalog handleBoardChange={handleBoardChange} boardsData={boardsData} />
           </div>
 
           {/* catalog and pagination and sort for desktop  */}
@@ -369,34 +380,31 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Rank" ? "bg-[#295A31]" : ""
-                      }`}
-                      onClick={() => handleSelection("Rank")}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Recent" ? "bg-[#295A31]" : ""
+                        }`}
+                      onClick={() => handleSelection("Recent")}
                     >
-                      Rank
+                      Recent
                     </a>
                   </li>
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "New" ? "bg-[#295A31]" : ""
-                      }`}
-                      onClick={() => handleSelection("New")}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Upvote" ? "bg-[#295A31]" : ""
+                        }`}
+                      onClick={() => handleSelection("Upvote")}
                     >
-                      New
+                      Upvote
                     </a>
                   </li>
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Last Reply" ? "bg-[#295A31]" : ""
-                      }`}
-                      onClick={() => handleSelection("Last Reply")}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Downvote" ? "bg-[#295A31]" : ""
+                        }`}
+                      onClick={() => handleSelection("Downvote")}
                     >
-                      Last Reply
+                      Downvote
                     </a>
                   </li>
                 </ul>
