@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
+import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -23,7 +24,7 @@ interface ProfileData {
   userName: string;
   profileImg: string;
   status: boolean;
-};
+}
 
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
@@ -31,7 +32,6 @@ const truncateString = (str: string, maxLength: number): string => {
   }
   return str.slice(0, maxLength) + "...";
 };
-//
 
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
@@ -43,7 +43,7 @@ const Navbar = (props: Theme) => {
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
-  const { principal } = useConnect();
+  const { principal, isConnected } = useConnect();
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -75,7 +75,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light tablet:py-6 py-4 xl:px-16 laptop:px-12 tablet:px-10 p-4 gap-2 border-b border-grey`
+        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light tablet:py-6 py-4 xl:px-16 laptop:px-12 tablet:px-6 phone:px-4 px-2 gap-2 border-b border-grey`
       }
     >
       <Link to="/dashboard">
@@ -83,7 +83,7 @@ const Navbar = (props: Theme) => {
           src={darkColor == "dark" ? dark_logo : light_logo}
           className={
             className +
-            "__logo tablet:w-28 w-20 object-contain pointer-events-none"
+            "__logo tablet:w-28 w-20  object-contain pointer-events-none"
           }
           alt="BATTLE CHAN"
         />
@@ -92,7 +92,7 @@ const Navbar = (props: Theme) => {
       <section
         className={
           className +
-          "__rightSection flex-row-center font-bold xl:gap-8 tablet:gap-4 gap-2"
+          "__rightSection flex-row-center font-bold xl:gap-8 tablet:gap-4 phone:gap-2 gap-1"
         }
       >
         {is1100px && (
@@ -136,32 +136,52 @@ const Navbar = (props: Theme) => {
           <FaRegBell className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
         )} */}
 
-        {!is1000px && (
-          <img
-            src={fileURL}
-            onClick={() => setShowOverlay(!showOverlay)}
-            className="tablet:min-w-[40px] min-w-[30px] h-[40px] object-cover rounded-md tablet:max-w-[45px] max-w-[35px] cursor-pointer"
-          />
-        )}
-
-        {is1000px && (
-          <React.Fragment>
-            <div className="__userName_and_coins flex flex-col items-start">
-              <p className="text-nowrap">{userName}</p>
-              <div className="coinsCount flex-row-center gap-2">
-                <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
-                <span className="text-light-green">550</span>
-              </div>
-            </div>
-
+        {!is1000px &&
+          (isConnected ? (
             <img
               src={fileURL}
-              alt="USER IMAGE"
-              className="min-w-[50px] max-w-[55px] rounded-md cursor-pointer"
               onClick={() => setShowOverlay(!showOverlay)}
+              className="tablet:min-w-[40px] min-w-[30px] h-[40px] object-cover rounded-md tablet:max-w-[45px] max-w-[35px] cursor-pointer"
             />
-          </React.Fragment>
-        )}
+          ) : (
+            <button
+              className={
+                className +
+                "__connectWalletBtn flex-row-center bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
+              }
+            >
+              <NavConnectButton />
+            </button>
+          ))}
+
+        {is1000px &&
+          (isConnected ? (
+            <React.Fragment>
+              <div className="__userName_and_coins flex flex-col items-start">
+                <p className="text-nowrap">{userName}</p>
+                <div className="coinsCount flex-row-center gap-2">
+                  <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
+                  <span className="text-light-green">550</span>
+                </div>
+              </div>
+
+              <img
+                src={fileURL}
+                alt="USER IMAGE"
+                className="min-w-[50px] max-w-[55px] rounded-md cursor-pointer"
+                onClick={() => setShowOverlay(!showOverlay)}
+              />
+            </React.Fragment>
+          ) : (
+            <button
+              className={
+                className +
+                "__connectWalletBtn flex-row-center bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
+              }
+            >
+              <NavConnectButton />
+            </button>
+          ))}
 
         <ProfileOverlay
           display={showOverlay}
