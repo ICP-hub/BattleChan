@@ -30,7 +30,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment }) => {
       {/* user details */}
 
       {currentComment.map((comment, index) => (
-        <div key={index} className="flex flex-col gap-4 border-l relative pt-3">
+        <div key={index} className="flex flex-col gap-4 border-l relative pt-3 mt-7">
           <div className="absolute -left-6 top-0 w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded bg-[url('/src/images/comment-avatar.jpg')] bg-cover bg-no-repeat bg-center"></div>
           <div className="flex items-center gap-4 ml-10">
             <h1 className="font-semibold">IamCool_1122</h1>

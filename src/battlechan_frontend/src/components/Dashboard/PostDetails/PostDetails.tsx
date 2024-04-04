@@ -395,7 +395,7 @@ const PostDetails = (props: Theme) => {
             <div className="tablet:hidden my-8">
               <button
                 onClick={() => setShowComments(true)}
-                className="small-button bg-light text-dark cursor-pointer font-semibold"
+                className={`small-button bg-light text-dark cursor-pointer font-semibold ${type === "archive" ? "hidden" : "block"}`}
               >
                 See Comments
               </button>
