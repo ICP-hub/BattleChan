@@ -14,18 +14,18 @@ const About = () => {
     <div
       className={
         className +
-        " w-full h-[90vh] px-24 bg-green flex-direction-row relative text-light"
+        " w-full h-[90vh] tablet:px-24 bg-green flex-direction-row relative text-light"
       }
     >
       {/* Texts on the left side */}
       <section
         className={
           className +
-          "__leftSide w-1/3 h-full gap-8 py-24 flex flex-col items-start justify-evenly"
+          "__leftSide tablet:w-1/3 h-full gap-8 py-24 flex flex-col items-center tablet:items-start justify-evenly"
         }
       >
-        <h1 className="text-5xl font-bold"> About Battlechan</h1>
-        <p className="text-base font-normal">
+        <h1 className="text-5xl font-bold text-center tablet:text-left"> About Battlechan</h1>
+        <p className="text-base font-normal text-center tablet:text-left">
           BattleChan, is a digital platform inspired by 4chan with a competitive
           twist on post interactions, designed around the concept of tokenized
           time ($TIME tokens).
@@ -33,7 +33,7 @@ const About = () => {
 
         <button
           role="button"
-          className={className + "__guideBtn white-button flex-row-center"}
+          className={className + "__guideBtn white-button flex-row-center text-center"}
         >
           Guide <FiArrowRight />
         </button>
@@ -43,7 +43,7 @@ const About = () => {
       <section
         className={
           className +
-          "__rightSide relative w-2/3 h-full tablet:flex-direction-col justify-around"
+          "__rightSide relative w-2/3 h-full hidden tablet:flex-direction-col justify-around"
         }
       >
         <div className="hidden tablet:block">
