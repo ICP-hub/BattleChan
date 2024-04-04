@@ -97,9 +97,9 @@ const PostApiHanlder = () => {
     };
 
     // Get Single Active Post
-    const getSingleMainPost = async (postId: string) => {
+    const getSingleMainPost = async (postId: string , status : string) => {
         try {
-            const res = await backend.getPostInfo(postId);
+            const res = await backend.getPostInfo(postId, "active");
             console.log(res);
             return res;
         } catch (err) {
@@ -108,9 +108,9 @@ const PostApiHanlder = () => {
     };
 
     // Get single Archived Post
-    const getSingleArchivePost = async (postId: string) => {
+    const getSingleArchivePost = async (postId: string , status : string) => {
         try {
-            const res = await backend.getSingleArchivedPost(postId);
+            const res = await backend.getSingleArchivedPost(postId , "archive");
             console.log(res);
             return res;
         } catch (err) {

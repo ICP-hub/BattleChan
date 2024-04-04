@@ -111,10 +111,16 @@ const PostDetails = (props: Theme) => {
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
-  async function getPostDetail(postId: string) {
+  async function getPostDetail(postId: string, status : string) {
     try {
+      let response ; 
+      if(status == "active"){
+       response = (await getSingleMainPost(postId, status)) as BackendResponse;
+      }else{
+      response = (await getSingleArchivePost(postId , status)) as BackendResponse;
+      }
       // const response = (await getSingleArchivePost(postId)) as BackendResponse;
-      const response = (await getSingleMainPost(postId)) as BackendResponse;
+      // const response = (await getSingleMainPost(postId, status)) as BackendResponse;
       console.log(response);
       if (response.status === true && response.data) {
         console.log(response);

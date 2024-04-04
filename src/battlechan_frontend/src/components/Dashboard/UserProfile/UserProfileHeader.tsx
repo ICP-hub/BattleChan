@@ -10,6 +10,15 @@ const truncateString = (str: string, maxLength: number): string => {
   }
   return str.slice(0, maxLength) + '...';
 };
+interface BackendResponse {
+  status: boolean;
+  data: [];
+  error: string[];
+}
+
+interface UserData {
+  userName: string;
+}
 
 interface UserInfo {
   createdAt: string;

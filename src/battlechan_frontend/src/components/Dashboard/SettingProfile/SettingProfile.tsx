@@ -12,6 +12,9 @@ import toast from "react-hot-toast";
 const useBackend = () => {
   return useCanister("backend");
 };
+interface Data {
+  ok: string;
+}
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -102,7 +105,7 @@ const SettingProfile = (props: Theme) => {
       registerBtn.addEventListener("click", async () => {
         if (isRegisteredRef.current === true) {
           const data = await updateUser(userNameRef.current, "");
-          if (data && (data as Data)?.ok) {
+          if (data && (data as Data )?.ok) {
             toast.success((data as Data).ok);
           } else {
             toast.error(
