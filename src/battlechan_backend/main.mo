@@ -9,6 +9,8 @@ import Debug "mo:base/Debug";
 import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
+import Int "mo:base/Int";
+import Deque "mo:base/Deque";
 
 import Types "utils/types";
 
@@ -21,6 +23,7 @@ import {
   postArchive;
   updateVoteStatus;
   bubbleSortPost;
+  updatePostExpireTime;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId; paginate } "utils/helper";
@@ -34,16 +37,19 @@ actor BattleChan {
   private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
-  private stable var withDrawPostTrie = Trie.empty<Types.PostId, List.List<(Types.UserId, Nat)>>();
+  // private stable var withDrawPostTrie = Trie.empty<Types.PostId, List.List<(Types.UserId, Nat)>>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   private stable let freePostTime = 5;
   private stable let voteTime = 1;
+  let decimal = 100000000;
   stable var postNameRootNode : Search.Node = Search.createNode();
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
-  let tokenCanisterId = "bw4dl-smaaa-aaaaa-qaacq-cai";
+  let tokenCanisterId = "j7rta-caaaa-aaaan-ql7ka-cai";
+  let backendCanisterId = Principal.fromText("jeupf-yyaaa-aaaan-ql7iq-cai");
+  let ledger = actor (tokenCanisterId) : Token.Token;
 
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
     try {
@@ -124,47 +130,49 @@ actor BattleChan {
     };
   };
 
-  // public shared ({ caller = userId }) func updatePostVisiblity(time : Int, postId : Types.PostId) : async Types.Result {
+  public shared ({ caller = userId }) func updatePostVisiblity(timeToken : Nat, postId : Types.PostId) : async Token.Result_2 {
+    postTrieMap := updatePostExpireTime(userId, timeToken, postId, postTrieMap);
+    await icrc2_transferFrom(userId, backendCanisterId, timeToken * decimal);
+  };
+
+  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Token.Result_2 {
+
+    // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+    let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
+    var paymentStatus : Token.Result_2 = #Ok(0);
+    switch (voteStatus) {
+      case (#upvote) { 
+        paymentStatus := await icrc2_transferFrom(userId, backendCanisterId, voteTime * 100000000);
+      };
+      case (#downvote) {
+        paymentStatus := await ledger.icrc1_transfer({
+          to = {
+            owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
+            subaccount = null;
+          };
+          fee = null;
+          memo = null;
+          from_subaccount = null;
+          created_at_time = null;
+          amount = (50 * voteTime * 100000000) / 100;
+        });
+
+      };
+    };
+    userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+    postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+    paymentStatus;
+  };
+  // public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
   //   try {
 
-  //     let { updatedPostTrieMap; updatedExpireTime } = updatePostExpireTime(time, postId, postTrieMap);
-  //     postTrieMap := updatedPostTrieMap;
-
-  //     #ok("successfully added Time");
+  //     #ok(successMessage.update);
   //   } catch (e) {
   //     let code = Error.code(e);
   //     let message = Error.message(e);
   //     #err(code, message);
   //   };
   // };
-
-  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
-    try {
-      // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
-      let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
-
-      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
-      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-
-      #ok(successMessage.update);
-    } catch (e) {
-
-      let code = Error.code(e);
-      let message = Error.message(e);
-
-      #err(code, message);
-    };
-  };
-  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
-    try {
-
-      #ok(successMessage.update);
-    } catch (e) {
-      let code = Error.code(e);
-      let message = Error.message(e);
-      #err(code, message);
-    };
-  };
 
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
@@ -555,8 +563,6 @@ actor BattleChan {
     };
   };
 
-  let ledger = actor (tokenCanisterId) : Token.Token;
-
   public func burnToken(amount : Nat) : async Token.Result_2 {
     await ledger.icrc1_transfer({
       to = {
@@ -587,10 +593,10 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func icrc2_transferFrom(transferto : Principal, amount : Nat) : async Token.Result_2 {
+  public func icrc2_transferFrom(transferFrom : Principal, transferto : Principal, amount : Nat) : async Token.Result_2 {
     await ledger.icrc2_transfer_from({
       spender_subaccount = null;
-      from = { owner = userId; subaccount = null };
+      from = { owner = transferFrom; subaccount = null };
       to = { owner = transferto; subaccount = null };
       amount;
       fee = null;

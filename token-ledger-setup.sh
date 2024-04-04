@@ -22,7 +22,7 @@ record {
      minting_account = record { owner = principal \"m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe\" };
      transfer_fee = 100;
      metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\"; }; 1000000 }; };
+     initial_balances = vec { record { record { owner = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\"; }; 1000000000000000000 }; };
      archive_options = record {
          num_blocks_to_archive = 1000000000;
          trigger_threshold = 1000000000;

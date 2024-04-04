@@ -14,7 +14,7 @@ import Nat "mo:base/Nat";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
-import { checkVote; increaseTime; decreaseTime } "../utils/helper";
+import { increaseTime; decreaseTime } "../utils/helper";
 import { principalKey; textKey } "../keys";
 module {
 
@@ -193,14 +193,17 @@ module {
 
     };
 
-    public func updatePostExpireTime(time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
+    public func updatePostExpireTime(userId : Types.UserId, time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
 
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?v) { v };
             case (null) { Debug.trap(reject.noPost) };
+        };
+        if (userId != postInfo.createdBy.ownerId) {
+            Debug.trap(reject.noAccess);
         };
 
         let updatedExpireTime = increaseTime(time, postInfo.expireAt);
