@@ -75,7 +75,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light py-4 xl:px-16 laptop:px-8 tablet:px-6 px-4 gap-2 border-b border-grey`
+        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light py-4 xl:px-12 laptop:px-6 px-4 gap-2 border-b border-grey`
       }
     >
       <Link to="/dashboard">
@@ -92,7 +92,7 @@ const Navbar = (props: Theme) => {
       <section
         className={
           className +
-          "__rightSection flex-row-center font-bold xl:gap-8 tablet:gap-4 gap-2"
+          "__rightSection flex-row-center font-bold tablet:gap-4 gap-2"
         }
       >
         {is1000px && (
