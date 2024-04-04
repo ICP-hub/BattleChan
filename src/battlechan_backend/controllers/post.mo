@@ -25,7 +25,7 @@ module {
     } {
         if (anonymousCheck(userId) == true) {
            Debug.trap(reject.anonymous);
-        ;
+        };
 
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
