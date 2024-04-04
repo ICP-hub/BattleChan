@@ -41,7 +41,7 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       const res = await backend.getAllRepliesofComment(commentId, 10, 1);
-      console.log(res);
+      console.log("replies res: ", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
