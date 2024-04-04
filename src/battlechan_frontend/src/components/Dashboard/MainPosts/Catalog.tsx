@@ -9,7 +9,7 @@ interface CatalogProps {
 }
 
 
-const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
+const Catalog: React.FC<CatalogProps & { handleBoardChange: (boardName: string) => void }> = ({ boardsData, handleBoardChange }) => {
   const className = "Dashboard__MainPosts__Catalog";
   const [searchParams] = useSearchParams();
   const board = searchParams.get("boardName");
@@ -23,6 +23,7 @@ const Catalog:React.FC <CatalogProps> = ({boardsData}) => {
 
   const handleClick = (boardName: string) => {
     setActiveItem(boardName.toLowerCase());
+    handleBoardChange(boardName);
   };
 
   // const items = [

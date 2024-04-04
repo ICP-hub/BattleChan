@@ -9,12 +9,20 @@ import userimg from "../../../images/User.png";
 import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
+import defaultImg from "../../../images/User.png";
 import { Link } from "react-router-dom";
 
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
+import UserApiHanlder from "../../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: Function;
+};
+
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
 };
 
 const truncateString = (str: string, maxLength: number): string => {
@@ -28,10 +36,14 @@ const truncateString = (str: string, maxLength: number): string => {
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
   const darkColor = document.documentElement.className;
+  const { getProfileData } = UserApiHanlder();
+  const [fileURL, setFileURL] = React.useState(defaultImg);
+  const [userName, setUserName] = React.useState("");
 
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
+  const { principal } = useConnect();
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -42,12 +54,22 @@ const Navbar = (props: Theme) => {
     }
   }, [showOverlay]);
 
-  const { principal, activeProvider } = useConnect();
-  let loggedInBy = activeProvider?.meta.name;
-  let user = "";
-  if (principal) {
-    user = truncateString(principal, 17);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await getProfileData()) as ProfileData;
+      if (response && response.status !== false) {
+        setUserName(response?.userName);
+        setFileURL(response?.profileImg);
+      } else {
+        if (principal) {
+          setUserName(truncateString(principal, 17));
+        }
+      }
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [userName]);
 
   return (
     <div
@@ -110,13 +132,13 @@ const Navbar = (props: Theme) => {
           <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
         )}
 
-        {is1000px && (
+        {/* {is1000px && (
           <FaRegBell className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
-        )}
+        )} */}
 
         {!is1000px && (
           <img
-            src={userimg}
+            src={fileURL}
             onClick={() => setShowOverlay(!showOverlay)}
             className="tablet:min-w-[40px] min-w-[30px] tablet:max-w-[45px]  max-w-[35px] cursor-pointer"
           />
@@ -125,7 +147,7 @@ const Navbar = (props: Theme) => {
         {is1000px && (
           <React.Fragment>
             <div className="__userName_and_coins flex flex-col items-start">
-              <p className="text-nowrap">{user}</p>
+              <p className="text-nowrap">{userName}</p>
               <div className="coinsCount flex-row-center gap-2">
                 <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
                 <span className="text-light-green">550</span>
@@ -133,9 +155,9 @@ const Navbar = (props: Theme) => {
             </div>
 
             <img
-              src={userimg}
+              src={fileURL}
               alt="USER IMAGE"
-              className="min-w-[40px] max-w-[45px] cursor-pointer"
+              className="min-w-[50px] max-w-[55px] cursor-pointer"
               onClick={() => setShowOverlay(!showOverlay)}
             />
           </React.Fragment>

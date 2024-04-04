@@ -7,6 +7,7 @@ import defaultImg from "../../../images/User.png";
 import { useCanister, useConnect } from "@connect2ic/react";
 import UserApiHanlder from "../../../API_Handlers/user";
 import toast from "react-hot-toast";
+import Constant from "../../../utils/constants";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
@@ -33,11 +34,24 @@ const userData = {
 
 interface UserData {
   userName: string;
+  profileImg: Int8Array
 }
+
+interface Data {
+  ok: string;
+}
+
+
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
+}
+
 
 const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
-  const { registerUser, isUserRegistered, updateUser } = UserApiHanlder();
+  const { registerUser, isUserRegistered, updateUser, getProfileData } = UserApiHanlder();
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
@@ -49,12 +63,29 @@ const SettingProfile = (props: Theme) => {
   const [inputFileName, setInputFileName] = React.useState("");
 
   //this is to show the name on the screen or set it in server
-  const [userName, setUserName] = React.useState(userData.name);
+  const [userName, setUserName] = React.useState("Please Update your Username");
   //this is to maintain the name typed by the user
   const [inputUserName, setInputUserName] = React.useState("");
-
+  const { handleFileUpload, convertInt8ToBase64 } = Constant();
   React.useRef(isRegistered);
   const userNameRef = React.useRef(userName);
+  const [fileData, setFileData] = React.useState<{ base64: string; int8Array: Int8Array } | null>(null);
+  const fileDataRef = React.useRef(fileData);
+
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
+      setFileData({ base64, int8Array });
+    } catch (error) {
+      if (typeof error === 'string') {
+        toast.error(error); // Display the error message
+        console.error("Error:", error);
+      } else {
+        console.error("Error:", error);
+      }
+    }
+  };
+
 
   const className = "Dashboard__SettingProfile";
 
@@ -73,34 +104,20 @@ const SettingProfile = (props: Theme) => {
     console.log("Input username:", inputUserName); // Add this line
   }
 
-  function handleFileChange(inputfile: any) {
-    const imageUrl = URL.createObjectURL(inputfile.files[0]);
-    setFileURL(imageUrl);
+  function handleFileChange() {
+    // const imageUrl = URL.createObjectURL(inputfile.files[0]);
+    setFileURL(fileData?.base64 || "");
   }
 
-  useEffect(() => {
-    const fileInput = document.getElementById("profile");
-
-    const handleFileInputChange = (event: any) => {
-      const files = event.target.files;
-
-      if (files.length > 0) {
-        const file = files[0];
-        const fileName = file.name;
-        setInputFileName(fileName);
-      } else {
-        setInputFileName("No file Selected");
-      }
-    };
-
-    if (fileInput) {
-      fileInput.addEventListener("change", handleFileInputChange);
+  React.useEffect(() => {
+    // Check if fileData has been updated
+    if (fileData && fileData.base64) {
+      handleFileChange();
     }
-  }, [handleFileChange]);
+  }, [fileData]);
 
   React.useEffect(() => {
     const registerBtn = document.getElementById("registerBtn");
-
     if (registerBtn) {
       registerBtn.addEventListener("click", async () => {
         if (isRegisteredRef.current === true) {
@@ -114,7 +131,7 @@ const SettingProfile = (props: Theme) => {
           }
         } else {
           try {
-            const data = await registerUser(userNameRef.current, "");
+            const data = await registerUser(userNameRef.current, fileDataRef.current?.int8Array);
             if (data && (data as Data)?.ok) {
               toast.success((data as Data).ok);
             } else {
@@ -133,22 +150,19 @@ const SettingProfile = (props: Theme) => {
   React.useEffect(() => {
     isRegisteredRef.current = isRegistered;
     userNameRef.current = userName;
-  }, [isRegistered, userName]);
+    fileDataRef.current = fileData;
+  }, [isRegistered, userName, fileData]);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const response = (await isUserRegistered()) as BackendResponse;
+      const response = (await getProfileData()) as ProfileData;
       if (response && response.status !== false) {
-        const userDataArray: UserData[] = response.data;
-        setInputUserName(userDataArray[0]?.userName);
+        setUserName(response?.userName);
+        setFileURL(response?.profileImg);
         setIsRegistered(true);
-        // console.log("SETTED TRUe", isRegistered);
       } else {
-        // console.log("SET FALSE")
         setIsRegistered(false);
       }
-      // console.log("isRegisteredData", response);
-      // console.log("isRegistered", isRegistered);
     };
 
     // Add dependencies to the dependency array to avoid infinite loop
@@ -204,11 +218,10 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${
-                showInput
-                  ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
-                  : " bg-dark dark:bg-light"
-              } text-light dark:text-dark py-2 px-4 rounded-lg font-semibold`}
+              className={`${showInput
+                ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
+                : " bg-dark dark:bg-light"
+                } text-light dark:text-dark py-2 px-4 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change
@@ -225,7 +238,6 @@ const SettingProfile = (props: Theme) => {
           <label
             htmlFor="profile"
             className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold cursor-pointer`}
-            onClick={(e: any) => handleFileChange(e.target)}
           >
             Change
           </label>
@@ -236,7 +248,7 @@ const SettingProfile = (props: Theme) => {
             id="profile"
             className="hidden"
             accept="image/*"
-            onChange={(e: any) => handleFileChange(e.target)}
+            onChange={handleChange}
           />
         </section>
 

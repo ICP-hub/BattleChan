@@ -26,7 +26,7 @@ interface UserInfo {
   downvotedTo: any[];
   likedComments: any[];
   postIds: string[];
-  profileImg: string;
+  profileImg: Int8Array;
   replyIds: any[];
   updatedAt: string[];
   upvotedTo: any[];
@@ -36,6 +36,16 @@ interface UserInfo {
 
 interface UserProfileHeaderProps {
   userInfo: UserInfo[];
+}
+
+interface BackendResponse {
+  status: boolean;
+  data: [];
+  error: string[];
+}
+
+interface UserData {
+  userName: string;
 }
  
 const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({userInfo}) => {
