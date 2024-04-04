@@ -22,10 +22,10 @@ import { useConnect } from "@connect2ic/react";
 import toast from "react-hot-toast";
 import UserApiHanlder from "../../../API_Handlers/user";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 
 type Theme = {
   handleThemeSwitch: Function;
-  type?: string;
 };
 
 const post = {
@@ -97,6 +97,8 @@ const PostDetails = (props: Theme) => {
   const [commentsCount, setCommentsCount] = useState(0);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
 
   const {
     getSingleMainPost,
@@ -131,11 +133,7 @@ const PostDetails = (props: Theme) => {
     } else {
       setShowComments(true);
     }
-    if (props.type === "archive") {
-      getPostDetail(decodedPostId, "archive");
-    } else {
-      getPostDetail(decodedPostId);
-    }
+    getPostDetail(decodedPostId);
   }, [is700px]);
 
   const formatTime = (remainingTime: bigint) => {
@@ -146,10 +144,10 @@ const PostDetails = (props: Theme) => {
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  async function getPostDetail(postId: string, postsType?: string) {
+  async function getPostDetail(postId: string) {
     try {
       let response;
-      if (postsType === "archive") {
+      if (type === "archive") {
         response = (await getSingleArchivePost(postId)) as BackendResponse;
       } else {
         response = (await getSingleMainPost(postId)) as BackendResponse;

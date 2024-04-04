@@ -52,6 +52,7 @@ const CommentsApiHanlder = () => {
   const createComment = async (postId:string, comment: string) => {
     try {
         // console.log(backend);
+        console.log("comment data: ", postId, comment)
         const res = await backend.createComment(postId, comment);
         console.log(res);
         return res;
