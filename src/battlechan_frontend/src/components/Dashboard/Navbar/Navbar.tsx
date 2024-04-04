@@ -92,7 +92,7 @@ const Navbar = (props: Theme) => {
       <section
         className={
           className +
-          "__rightSection flex-row-center font-bold xl:gap-8 tablet:gap-4 phone:gap-2 gap-1"
+          "__rightSection flex-row-center font-bold xl:gap-8 tablet:gap-4 gap-2"
         }
       >
         {is1100px && (
