@@ -9,14 +9,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
+import Constant from "../../../utils/constants";
 
 interface PostProps {
   id: string;
   postName: string;
-  imageUrl: string;
+  imageUrl: Int8Array;
   userAvatarUrl: string;
   userName: string;
-  userProfile: string;
+  userProfile: Int8Array;
   timestamp: string;
   duration: string;
   content: string;
@@ -28,6 +29,13 @@ interface PostProps {
 
 interface Response {
   ok: string;
+}
+
+interface VoteResponse {
+  ok: string;
+  err: {
+    [key: string]: string;
+  };
 }
 
 
@@ -62,7 +70,7 @@ const Post: React.FC<PostProps> = ({
   let { isConnected, principal } = useConnect();
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
-
+  const { convertInt8ToBase64 } = Constant();
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
   }, [isUserAuthenticated]);
@@ -76,10 +84,6 @@ const Post: React.FC<PostProps> = ({
 
     checkAuthentication();
   }, [isConnected, principal]);
-
-  const handleVote = (vote: boolean) => {
-    setVote(vote);
-  };
 
   useEffect(() => {
     getCommentsCounts();
@@ -101,55 +105,43 @@ const Post: React.FC<PostProps> = ({
     return () => clearInterval(interval);
   }, [expireAt]); // Run effect when expireAt changes
 
-  useEffect(() => {
-    let upvoteBtn = document.getElementById("upvoteBtn");
-    let downvoteBtn = document.getElementById("downvoteBtn");
-
-    const handleUpvoteClick = () => handleUpvote(id);
-    const handleDownvoteClick = () => handleDownvote(id);
-
-    upvoteBtn?.addEventListener("click", handleUpvoteClick);
-    downvoteBtn?.addEventListener("click", handleDownvoteClick);
-
-    // Clean up the event listeners
-    return () => {
-      upvoteBtn?.removeEventListener("click", handleUpvoteClick);
-      downvoteBtn?.removeEventListener("click", handleDownvoteClick);
-    };
-  }, [])
-
 
   const handleUpvote = async (postId: string) => {
     // console.log(isConnected);
     // console.log(principal);
     console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
-      const data = await upvotePost(postId);
-      console.log(data);
-      console.log("IF")
-      toast.success("User is Authenticated!");
+      const data = (await upvotePost(postId)) as VoteResponse;
+      if (data && data?.ok) {
+        // toast.success(data?.ok);
+        toast.success("Successfully Upvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
     } else {
-      console.log("ELSE")
-      toast.error("Please first Login to Upvote this post!");
+      toast.error("Please first Connect your Wallet to Upvote this post!");
       // navigate("/");
     }
-    console.log(postId);
   }
 
   const handleDownvote = async (postId: string) => {
-    console.log(isConnected);
-    console.log(principal);
+    // console.log(isConnected);
+    // console.log(principal);
     if (isUserAuthenticatedRef.current) {
-      const data = await downvotePost(postId);
-      console.log(data);
-      console.log("IF")
-      toast.success("User is Authenticated!");
+      const data = (await downvotePost(postId)) as VoteResponse;
+      if (data && data?.ok) {
+        toast.success("Successfully Downvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
     } else {
-      console.log("ELSE")
-      toast.error("Please first Login to Downvote this post!");
+      toast.error("Please first Connect your Wallet to Downvote this post!");
       // navigate("/");
     }
-    console.log(postId);
   }
 
   const archive = async () => {
@@ -196,7 +188,7 @@ const Post: React.FC<PostProps> = ({
           <img
             alt="post image"
             className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
-            src={imageUrl}
+            src={convertInt8ToBase64(imageUrl)}
           />
 
           <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
@@ -205,7 +197,7 @@ const Post: React.FC<PostProps> = ({
               <div className="w-full flex items-center gap-2">
                 <img
                   className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                  src={userAvatarUrl}
+                  src={convertInt8ToBase64(userProfile)}
                   alt="user avatar"
                 />
 
@@ -235,7 +227,7 @@ const Post: React.FC<PostProps> = ({
 
             {/* Content on bottom */}
             <section className="mt-1">
-              <p className="tablet:text-lg text-sm">{postName}</p>
+              <p className="tablet:text-lg text-sm font-semibold">{postName}</p>
               <p className="tablet:text-lg text-sm text-gray-800">{content.length > 70 ? `${content.slice(0, 70)}...` : content}</p>
             </section>
           </div>

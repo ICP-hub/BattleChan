@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { FaRegBell } from "react-icons/fa";
@@ -13,11 +13,18 @@ import { BsPersonCircle } from "react-icons/bs";
 import { SiInternetcomputer } from "react-icons/si";
 import { useMediaQuery } from "@mui/material";
 import toast from "react-hot-toast"
+import UserApiHanlder from "../../../API_Handlers/user";
 
 type Props = {
   display: boolean;
   setProfilePopUp: any;
   handleThemeSwitch: any;
+};
+
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
 };
 
 const truncateString = (str: string, maxLength: number): string => {
@@ -35,17 +42,31 @@ const ProfileOverlay = (props: Props) => {
   const setProfilePopUp = props.setProfilePopUp;
   const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
+  const { getProfileData } = UserApiHanlder();
+  const [fileURL, setFileURL] = React.useState(UserImg);
+  const [userName, setUserName] = React.useState("");
 
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
   };
   const { principal, activeProvider } = useConnect();
 
-  let loggedInBy = activeProvider?.meta.name;
-  let user = "";
-  if (principal) {
-    user = truncateString(principal, 17);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await getProfileData()) as ProfileData;
+      if (response && response.status !== false) {
+        setUserName(response?.userName);
+        setFileURL(response?.profileImg);
+      } else {
+        if (principal) {
+          setUserName(truncateString(principal, 17));
+        }
+      }
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [userName]);
 
   const logoutHandler = () => {
     disconnect()
@@ -72,11 +93,11 @@ const ProfileOverlay = (props: Props) => {
       >
         <section className="w-full flex-row-center justify-start tablet:gap-8 gap-4 tablet:px-8 px-4">
           <img
-            src={UserImg}
+            src={fileURL}
             alt="User Profile Image"
             className="tablet:w-[80px] w-[50px]"
           />
-          <span className="text-lg">{user} </span>
+          <span className="text-lg">{userName} </span>
         </section>
 
         <fieldset>
@@ -118,14 +139,14 @@ const ProfileOverlay = (props: Props) => {
             </button>
           </Link>
 
-          {!is1000px && (
-            <Link to="/dashboard">
-              <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
-                <FaRegBell />
-                Notifications
-              </button>
-            </Link>
-          )}
+          {/* {!is1000px && (
+            // <Link to="/dashboard">
+            //   <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
+            //     <FaRegBell />
+            //     Notifications
+            //   </button>
+            // </Link>
+          )} */}
         </fieldset>
 
         <fieldset>

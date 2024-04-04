@@ -4,13 +4,13 @@ import Post from "./Post";
 interface PostData {
   postId: string;
   postName: string;
-  postMetaData: string;
+  postMetaData: Int8Array;
   postDes: string;
   expireAt: BigInt;
   createdAt: string;
   createdBy: {
     userName: string;
-    userProfile: string;
+    userProfile: Int8Array;
   },
   upvotes: number;
 }

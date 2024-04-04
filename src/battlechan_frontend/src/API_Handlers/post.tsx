@@ -19,7 +19,7 @@ const PostApiHanlder = () => {
     const [successfulSubmit, setSuccessfulSubmit] = useState(false);
 
     // Create a Post
-    const createPost = async (boardName: string, { postName, postDes, postMetaData }: { postName: string, postDes: string, postMetaData: string }) => {
+    const createPost = async (boardName: string, { postName, postDes, postMetaData }: { postName: string, postDes: string, postMetaData: Int8Array | undefined }) => {
         try {
             console.log(backend);
             const postData = {
@@ -126,6 +126,7 @@ const PostApiHanlder = () => {
             return res;
         } catch (err) {
             console.error("Error upvoting a post : ", err);
+            return err;
         }
     };
 
@@ -137,6 +138,7 @@ const PostApiHanlder = () => {
             return res;
         } catch (err) {
             console.error("Error downvoting a post : ", err);
+            return err;
         }
     };
 
