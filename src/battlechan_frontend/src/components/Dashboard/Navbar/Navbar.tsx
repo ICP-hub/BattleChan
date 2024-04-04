@@ -75,7 +75,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light tablet:py-6 py-4 xl:px-16 laptop:px-12 tablet:px-6 phone:px-4 px-2 gap-2 border-b border-grey`
+        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light py-4 xl:px-16 laptop:px-8 tablet:px-6 px-4 gap-2 border-b border-grey`
       }
     >
       <Link to="/dashboard">
@@ -95,7 +95,7 @@ const Navbar = (props: Theme) => {
           "__rightSection flex-row-center font-bold xl:gap-8 tablet:gap-4 gap-2"
         }
       >
-        {is1100px && (
+        {is1000px && (
           <div className="input relative flex-row-center text-[#767676]">
             <IoSearch className={`absolute text-3xl ml-4 p-1`} />
             <input
@@ -128,7 +128,7 @@ const Navbar = (props: Theme) => {
           </button>
         </div>
 
-        {!is1100px && (
+        {!is1000px && (
           <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
         )}
 
@@ -141,7 +141,7 @@ const Navbar = (props: Theme) => {
             <img
               src={fileURL}
               onClick={() => setShowOverlay(!showOverlay)}
-              className="tablet:min-w-[40px] min-w-[30px] h-[40px] object-cover rounded-md tablet:max-w-[45px] max-w-[35px] cursor-pointer"
+              className="tablet:min-w-[50px] min-w-[30px] tablet:h-[57px] h-[40px] object-cover rounded-md tablet:max-w-[45px] max-w-[35px] cursor-pointer"
             />
           ) : (
             <button
@@ -168,7 +168,7 @@ const Navbar = (props: Theme) => {
               <img
                 src={fileURL}
                 alt="USER IMAGE"
-                className="min-w-[50px] max-w-[55px] rounded-md cursor-pointer"
+                className="min-w-[50px] h-[57px] object-cover rounded-md cursor-pointer"
                 onClick={() => setShowOverlay(!showOverlay)}
               />
             </React.Fragment>
