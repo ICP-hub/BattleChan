@@ -62,7 +62,7 @@ const PostTab: React.FC<PostTabProps> = ({userInfo}) => {
           </div>
         </div>
         <PostGrid type="Popular" userInfo={userInfo} />
-        <div className="flex items-center justify-between m-4">
+        <div className="flex items-center justify-between mt-4">
           <h1 className="text-2xl font-bold dark:text-[#fff]">Archive</h1>
         </div>
         <PostGrid type="Archive" userInfo={userInfo} />

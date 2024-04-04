@@ -262,7 +262,7 @@ const MainPosts = (props: Theme) => {
 
         <div
           className={
-            className + " " + "px-12 pb-12 dark:text-[#fff] overflow-hidden"
+            className + " " + " max-w-7xl mx-auto px-4 tablet:px-12 pb-12 dark:text-[#fff] overflow-hidden"
           }
         >
           {/* create post button for desktop  */}
