@@ -74,7 +74,6 @@ const Constant = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     return new Promise<{ int8Array: Int8Array, base64: string }>((resolve, reject) => {
-      console.log("Here");
       const file = event.target.files?.[0];
 
       if (!file) return reject('No file selected');
@@ -92,7 +91,6 @@ const Constant = () => {
       const reader = new FileReader();
 
       reader.onload = (e) => {
-        console.log("Hell");
         if (e.target && e.target.result) {
           const img = new Image();
           img.src = e.target.result.toString();

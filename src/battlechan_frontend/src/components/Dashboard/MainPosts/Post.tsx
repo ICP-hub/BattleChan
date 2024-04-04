@@ -95,7 +95,7 @@ const Post: React.FC<PostProps> = ({
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
-        // archive();
+        archive();
         // console.log("Post archived");
       } else {
         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
@@ -122,7 +122,7 @@ const Post: React.FC<PostProps> = ({
       }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
-      // navigate("/");
+      navigate("/");
     }
   }
 
@@ -140,7 +140,7 @@ const Post: React.FC<PostProps> = ({
       }
     } else {
       toast.error("Please first Connect your Wallet to Downvote this post!");
-      // navigate("/");
+      navigate("/");
     }
   }
 

@@ -29,7 +29,7 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       const res = await backend.getAllCommentOfPost(postId, 10, 1);
-      console.log("allCommentOfPost: ", res);
+      // console.log("allCommentOfPost: ", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -41,7 +41,7 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       const res = await backend.getAllRepliesofComment(commentId, 10, 1);
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (err) {
       console.error("Error: ", err);

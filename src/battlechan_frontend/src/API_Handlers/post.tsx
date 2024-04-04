@@ -27,10 +27,10 @@ const PostApiHanlder = () => {
                 postDes: postDes, // Add your postDes data here
                 postMetaData: postMetaData, // Add your postMetaData data here
             };
-            console.log(boardName)
-            console.log(postData)
+            // console.log(boardName)
+            // console.log(postData)
             const res = await backend.createPost(boardName, postData);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error creating post : ", err);
@@ -40,11 +40,11 @@ const PostApiHanlder = () => {
     // Get Boards Data
     const getBoards = async () => {
         try {
-            console.log("backend");
+            // console.log("backend");
             // console.log(backend);
-            console.log("isconnect", isConnected);
+            // console.log("isconnect", isConnected);
             const res = await backend.getTotalPostInBoard();
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -65,9 +65,13 @@ const PostApiHanlder = () => {
     // Get Active Posts
     const getMainPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
+            // console.log(filter);
+            // console.log(chunkSize);
+            // console.log(pageNumber);
+            // console.log(boardName);
             const res = await backend.getPostsByBoard();
             // const res = await backend.postFilter(filter, chunkSize, pageNumber, boardName);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -78,7 +82,7 @@ const PostApiHanlder = () => {
     const archivePost = async (postId: string) => {
         try {
             const res = await backend.archivePost(postId);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error archiving a post : ", err);
@@ -89,7 +93,7 @@ const PostApiHanlder = () => {
     const getArchivePosts = async (chunkSize: Number, pageNumber: Number,) => {
         try {
             const res = await backend.getArchivedPost(chunkSize, pageNumber);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -100,7 +104,7 @@ const PostApiHanlder = () => {
     const getSingleMainPost = async (postId: string) => {
         try {
             const res = await backend.getPostInfo(postId);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -111,7 +115,7 @@ const PostApiHanlder = () => {
     const getSingleArchivePost = async (postId: string) => {
         try {
             const res = await backend.getSingleArchivedPost(postId);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -122,7 +126,7 @@ const PostApiHanlder = () => {
     const upvotePost = async (postId: string) => {
         try {
             const res = await backend.upvoteOrDownvotePost(postId, { upvote: null });
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error upvoting a post : ", err);
@@ -134,7 +138,7 @@ const PostApiHanlder = () => {
     const downvotePost = async (postId: string) => {
         try {
             const res = await backend.upvoteOrDownvotePost(postId, { downvote: null });
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error downvoting a post : ", err);
