@@ -56,20 +56,21 @@ const SettingProfile = (props: Theme) => {
 
   //this is to show the image on the screen or set it in server
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
-  //this is to maintain the file changes by the user
-  const [inputFileName, setInputFileName] = React.useState("");
 
   //this is to show the name on the screen or set it in server
   const [userName, setUserName] = React.useState("Please Update your Username");
   //this is to maintain the name typed by the user
   const [inputUserName, setInputUserName] = React.useState("");
+  
+  // selected image file
+  const [fileData, setFileData] = React.useState<{ base64: string; int8Array: Int8Array } | null>(null);
+ 
   const { handleFileUpload, convertInt8ToBase64 } = Constant();
   React.useRef(isRegistered);
   const userNameRef = React.useRef(userName);
-  const [fileData, setFileData] = React.useState<{ base64: string; int8Array: Int8Array } | null>(null);
   const fileDataRef = React.useRef(fileData);
 
-  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
       setFileData({ base64, int8Array });
@@ -82,7 +83,6 @@ const SettingProfile = (props: Theme) => {
       }
     }
   };
-
 
   const className = "Dashboard__SettingProfile";
 
@@ -106,10 +106,81 @@ const SettingProfile = (props: Theme) => {
     setFileURL(fileData?.base64 || "");
   }
 
-  React.useEffect(() => {
-    // Check if fileData has been updated
-    if (fileData && fileData.base64) {
-      handleFileChange();
+  useEffect(() => {
+    const fileInput = document.getElementById("profile");
+
+    const handleFileInputChange = (event: any) => {
+      console.log("Here");
+      const file = event.target.files?.[0];
+
+      if (!file) return;
+
+      const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
+
+      if (file.size > maxSize) {
+        toast.success("File size exceeds the limit of 1.7MB");
+        return;
+      }
+
+      if (file.type.startsWith("image")) {
+        console.log("Here1");
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+          console.log("Hello");
+          if (e.target && e.target.result) {
+            const img = new Image();
+            img.src = e.target.result.toString();
+
+            img.onload = async () => {
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+
+              if (!ctx) return;
+
+              canvas.width = img.width;
+              canvas.height = img.height;
+              ctx.drawImage(img, 0, 0, img.width, img.height);
+
+              const quality = 0.7; // Adjust image quality here
+              const dataURL = canvas.toDataURL("image/jpeg", quality);
+
+              // Convert data URL to Blob
+              const blob = await fetch(dataURL).then((res) => res.blob());
+
+              console.log("blob:", blob);
+              // Convert Blob to ArrayBuffer
+              const arrayBuffer = await blob.arrayBuffer();
+
+              console.log("array:", arrayBuffer);
+              // Convert ArrayBuffer to Int8Array
+              const int8Array = new Int8Array(arrayBuffer);
+              console.log(int8Array);
+
+              // Base64
+              const uint8Array = new Uint8Array(int8Array);
+
+              // Convert Uint8Array to base64
+              let binary = "";
+              uint8Array.forEach((byte) => {
+                binary += String.fromCharCode(byte);
+              });
+              let base64 = btoa(binary);
+              
+              console.log(base64);
+              // setFileURL(base64);
+            };
+          }
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        alert("Please upload an image file");
+      }
+    };
+
+    if (fileInput) {
+      fileInput.addEventListener("change", handleFileInputChange);
     }
   }, [fileData]);
 
@@ -167,7 +238,11 @@ const SettingProfile = (props: Theme) => {
   }, [isRegistered, userName]);
 
   return (
-    <div className={className + " " + "bg-[#ECECEC] dark:bg-dark z-0 relative"}>
+    <div
+      className={
+        className + " " + "min-h-screen bg-[#ECECEC] dark:bg-dark z-0 relative"
+      }
+    >
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
       <NavButtons />
@@ -181,14 +256,14 @@ const SettingProfile = (props: Theme) => {
       )}
 
       <div
-        className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-4 text-dark dark:text-light`}
+        className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-8 text-dark dark:text-light`}
       >
         <h1 className="laptop:text-3xl text-2xl font-bold text-center">
           Customize Profile
         </h1>
 
-        <section className="profileName laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
-          <div className="name flex flex-col items-start gap-2">
+        <section className="profileName laptop:p-4 p-2 laptop:m-8 my-4 rounded-lg border border-light-green flex-row-center justify-between">
+          <div className="name flex flex-col items-start gap-2 phone:text-base text-sm">
             <span className="font-semibold py-1">User Name</span>
             {!showInput && <span>{userName}</span>}
             {showInput && (
@@ -206,7 +281,7 @@ const SettingProfile = (props: Theme) => {
             {showInput && (
               <button
                 type="button"
-                className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold`}
+                className={`text-light dark:text-dark bg-dark dark:bg-light laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
                 onClick={handleSaveBtn}
               >
                 Save
@@ -215,10 +290,12 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${showInput
-                ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
-                : " bg-dark dark:bg-light"
-                } text-light dark:text-dark py-2 px-4 rounded-lg font-semibold`}
+
+              className={`${
+                showInput
+                  ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
+                  : " bg-dark dark:bg-light"
+              } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change
@@ -226,15 +303,17 @@ const SettingProfile = (props: Theme) => {
           </div>
         </section>
 
-        <section className="profilePhoto laptop:p-4 p-2 m-8 rounded-lg border border-light-green flex-row-center justify-between">
-          <div className="name flex flex-col items-start">
+        <section className="profilePhoto laptop:p-4 p-2 laptop:m-8 my-4 rounded-lg border border-light-green flex-row-center justify-between">
+          <div className="name flex flex-col items-start phone:text-base text-sm">
             <span className="font-semibold">Profile Picture</span>
             <span>Image Must Be in Jpeg Format</span>
           </div>
 
           <label
             htmlFor="profile"
-            className={`text-light dark:text-dark bg-dark dark:bg-light py-2 px-4 rounded-lg font-semibold cursor-pointer`}
+
+            className={`text-light dark:text-dark bg-dark dark:bg-light phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold cursor-pointer`}
+            onClick={handleFileChange}
           >
             Change
           </label>
@@ -245,23 +324,19 @@ const SettingProfile = (props: Theme) => {
             id="profile"
             className="hidden"
             accept="image/*"
-            onChange={handleChange}
+            onChange={handleFileInput}
           />
         </section>
 
-        <section className="image p-8 flex flex-col items-start">
+        <section className="image laptop:p-8 py-4 flex flex-col items-start">
           <img
             src={fileURL}
             alt="Profile Image"
-            className="laptop:w-[150px] w-[120px] laptop:h-[150px] h-[120px] rounded-lg object-cover"
+            className="laptop:w-[150px] phone:w-[120px] w-[100px] laptop:h-[150px] phone:h-[120px] h-[100px] rounded-lg object-cover"
           />
-
-          <p className={`${inputFileName == "" ? "hidden" : "block"} py-2`}>
-            {inputFileName}
-          </p>
         </section>
 
-        <section className="image p-4 m-8 flex-col-center">
+        <section className="image p-4 laptop:m-8 my-4 flex-col-center">
           <button
             className="green-button"
             type="button"
