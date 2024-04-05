@@ -88,7 +88,7 @@ const Navbar = (props: Theme) => {
     <div
       className={
         className +
-        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light py-4 xl:px-12 laptop:px-6 pl-4 pr-2 gap-2 border-b border-grey`
+        ` flex-row-center justify-between bg-[#ECECEC] dark:bg-dark text-dark dark:text-light py-4 xl:px-12 laptop:px-6 px-4 gap-2 border-b border-grey`
       }
     >
       <Link to="/dashboard">
@@ -121,8 +121,8 @@ const Navbar = (props: Theme) => {
         <div
           className={
             className +
-            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
-            "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
+            `__timeToken text-dark dark:text-light small_phone:gap-2 gap-1 flex-row-center border border-green rounded-[3rem]` +
+            "  tablet:p-1.5 p-1 tablet:pl-6 small_phone:pl-3 pl-2 tablet:text-base text-sm text-nowrap"
           }
         >
           1 Time Token:
