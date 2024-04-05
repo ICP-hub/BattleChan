@@ -155,10 +155,8 @@ const SettingProfile = (props: Theme) => {
               // Convert Blob to ArrayBuffer
               const arrayBuffer = await blob.arrayBuffer();
 
-              console.log("array:", arrayBuffer);
               // Convert ArrayBuffer to Int8Array
               const int8Array = new Int8Array(arrayBuffer);
-              console.log(int8Array);
 
               // Base64
               const uint8Array = new Uint8Array(int8Array);
@@ -169,9 +167,6 @@ const SettingProfile = (props: Theme) => {
                 binary += String.fromCharCode(byte);
               });
               let base64 = btoa(binary);
-
-              console.log(base64);
-              // setFileURL(base64);
             };
           }
         };
@@ -286,7 +281,7 @@ const SettingProfile = (props: Theme) => {
               />
             )}
           </div>
-          <div className="flex-row-center gap-2">
+          <div className="small_phone:flex-row-center flex flex-col gap-2">
             {showInput && (
               <button
                 type="button"
@@ -344,19 +339,7 @@ const SettingProfile = (props: Theme) => {
         </section>
 
         <section className="image p-4 laptop:m-8 my-4 flex-col-center">
-          <button
-            className="green-button"
-            type="button"
-            id="registerBtn"
-            onClick={() => {
-              console.log(
-                "Input username from btn:",
-                userName,
-                "Input image:",
-                fileURL
-              ); // Add this line
-            }}
-          >
+          <button className="green-button" type="button" id="registerBtn">
             Update
           </button>
         </section>
