@@ -27,10 +27,10 @@ interface UserInfo {
   userName: string;
 }
 
-
 const UserProfile = (props: Theme) => {
   const [userInfo, setUserInfo] = useState<UserInfo[]>([]);
   const { getUserInfo } = UserApiHanlder();
+  const className = "UserProfile";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,11 +43,14 @@ const UserProfile = (props: Theme) => {
     fetchData();
   }, []);
 
-  const className = "UserProfile";
   return (
     <React.Fragment>
       <div
-        className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`}
+        className={
+          className +
+          " " +
+          `min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`
+        }
       >
         <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 

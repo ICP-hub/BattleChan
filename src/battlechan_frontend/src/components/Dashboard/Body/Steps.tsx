@@ -7,12 +7,12 @@ const Steps = () => {
       className={
         className +
         " " +
-        `h-full flex tablet:flex-row-center justify-between tablet:justify-evenly py-8 px-3 tablet:p-10 my-8 mx-4 tablet:mx-16  border border-light-green rounded-xl bg-light dark:bg-dark text-xs gap-2 tablet:text-lg`
+        `flex big_tablet:flex-row-center justify-between big_tablet:justify-evenly py-8 px-3 big_tablet:p-10 my-8 mx-4 big_tablet:mx-16  border border-light-green rounded-xl bg-light dark:bg-dark text-xs gap-2 big_tablet:text-lg`
       }
     >
       <div className="flex flex-col gap-4 items-start">
         <span
-          className={`hidden tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`hidden big_tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           1
         </span>
@@ -21,7 +21,7 @@ const Steps = () => {
 
       <div className="flex flex-col gap-4 items-start">
         <span
-          className={`hidden tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`hidden big_tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           2
         </span>
@@ -29,7 +29,7 @@ const Steps = () => {
       </div>
       <div className="flex flex-col gap-4 items-start">
         <span
-          className={`hidden tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`hidden big_tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           3
         </span>

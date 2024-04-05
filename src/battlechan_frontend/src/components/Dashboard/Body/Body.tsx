@@ -18,6 +18,7 @@ import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
+
 import CatalogSVG from "../MainPosts/CatalogSVG";
 
 interface Board {
@@ -102,14 +103,14 @@ const Body = () => {
         }
       >
         <h1
-          className={`text-4xl tablet:text-5xl text-center tablet:text-left font-bold ${
+          className={`text-4xl tablet:text-5xl text-center big_tablet:text-left font-bold ${
             darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
           } leading-relaxed`}
         >
           BattleChan: Decentralized Discussion Battlefield
         </h1>
         <p
-          className={`text-dark dark:text-light font-normal tablet:font-semibold text-lg text-center tablet:text-start`}
+          className={`text-dark dark:text-light font-normal tablet:font-semibold text-lg text-center big_tablet:text-start`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
@@ -138,9 +139,7 @@ const Body = () => {
         <div className="flex justify-between">
           <div className="">
             {boardNames.map((boardName, index) => (
-              <div
-                className={`flex ml-6`}
-              >
+              <div className={`flex ml-6`}>
                 <button
                   className="inline-flex flex-wrap items-center  cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                   onClick={() => {
@@ -155,9 +154,7 @@ const Body = () => {
           </div>
           <div className="">
             {boardSizes.map((boardSize, index) => (
-              <div
-                className={` text-center flex items-center p-2 gap-2`}
-              >
+              <div className={` text-center flex items-center p-2 gap-2`}>
                 <span className="font-semibold">
                   {boardSize !== undefined ? boardSize.toString() : ""}
                 </span>
@@ -233,8 +230,6 @@ const Body = () => {
           </tbody>
         </table>
       </div>
-
-      <div></div>
     </div>
   );
 };
