@@ -18,7 +18,7 @@ import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
-
+import CatalogSVG from "../MainPosts/CatalogSVG";
 
 interface Board {
   [x: string]: any;
@@ -53,7 +53,10 @@ const Body = () => {
       if (boards && boards.length > 0) {
         const names = boards.map((board) => board.boardName);
         const sizes = boards.map((board) => Number(board.size));
-        const createdAt = boards.map((board) => convertNanosecondsToTimeAgo(board?.updatedAt[0]) || undefined);
+        const createdAt = boards.map(
+          (board) =>
+            convertNanosecondsToTimeAgo(board?.updatedAt[0]) || undefined
+        );
         const cleanedCreatedAt = createdAt.map((date) => date || "");
         console.log("names is ", names);
         console.log("size is ", sizes);
@@ -73,8 +76,6 @@ const Body = () => {
   }, []);
   const className = "Home";
 
-
-
   return (
     <div
       className={
@@ -84,8 +85,8 @@ const Body = () => {
       style={
         darkColor == "dark"
           ? {
-            backgroundImage: `url(${bg})`,
-          }
+              backgroundImage: `url(${bg})`,
+            }
           : {}
       }
     >
@@ -114,7 +115,9 @@ const Body = () => {
         </p>
       </div>
 
-      <Steps />
+      <div className="tablet:h-48">
+        <Steps />
+      </div>
 
       <div
         className={
@@ -127,13 +130,47 @@ const Body = () => {
           <div className="data__label py-4 tablet:py-4 pl-6 tablet:px-0 h-full tablet:text-lg font-semibold">
             Name of Subject
           </div>
-          <div className="data__label big_tablet:hidden py-4 tablet:py-6 pr-6 tablet:px-4 h-full tablet:text-lg font-semibold">
+          <div className="data__label big_tablet:hidden py-4 tablet:py-6 pr-10 tablet:px-4 h-full tablet:text-lg font-semibold">
             Total Posts
+          </div>
+        </div>
+
+        <div className="flex justify-between">
+          <div className="">
+            {boardNames.map((boardName, index) => (
+              <div
+                className={`flex ml-6`}
+              >
+                <button
+                  className="inline-flex flex-wrap items-center  cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                  onClick={() => {
+                    navigate(`/dashboard/mainPosts?boardName=${boardName}`);
+                  }}
+                >
+                  <CatalogSVG label={boardName} />
+                  {boardName}
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="">
+            {boardSizes.map((boardSize, index) => (
+              <div
+                className={` text-center flex items-center p-2 gap-2`}
+              >
+                <span className="font-semibold">
+                  {boardSize !== undefined ? boardSize.toString() : ""}
+                </span>
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                  {createdAt[index] !== "" ? createdAt[index] : "No Posts"}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="relative hidden tablet:block overflow-x-auto my-24 px-9 py-6 border border-dark dark:border-light rounded-md mx-20 no-scrollbar">
+      <div className="h-48 w-auto relative hidden tablet:flex items-center justify-center overflow-x-auto my-24 p-10 border border-dark dark:border-light rounded-xl mx-16 no-scrollbar">
         <table className="w-full text-left">
           <thead className="text-xs tablet:text-base">
             <tr className="bg-dirty-light-green">
@@ -141,16 +178,28 @@ const Body = () => {
                 Name of the Subject
               </th>
               {boardNames.map((boardName, index) => (
-                <th key={index} scope="col" className="">
+                <th
+                  key={index}
+                  scope="col"
+                  className={`${
+                    index === boardNames.length - 1 ? "rounded-e-xl" : ""
+                  }`}
+                >
                   {boardName && (
-                    <div className="flex justify-center border-r">
+                    <div
+                      className={`flex justify-center border-r ${
+                        index === boardNames.length - 1 ? "border-r-0" : ""
+                      }`}
+                    >
                       <button
                         className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                         onClick={() => {
-                          navigate(`/dashboard/mainPosts?boardName=${boardName}`);
+                          navigate(
+                            `/dashboard/mainPosts?boardName=${boardName}`
+                          );
                         }}
                       >
-                        <MdOutlineAddBusiness />
+                        <CatalogSVG label={boardName} />
                         {boardName}
                       </button>
                     </div>
@@ -166,8 +215,14 @@ const Body = () => {
               </th>
               {boardSizes.map((boardSize, index) => (
                 <td key={index} className="">
-                  <div className=" border-r text-center flex flex-col flex-wrap items-center justify-center p-2">
-                    <span className="">{boardSize !== undefined ? boardSize.toString() : ''}</span>
+                  <div
+                    className={` border-r text-center flex flex-col flex-wrap items-center justify-center p-2 ${
+                      index === boardNames.length - 1 ? "border-r-0" : ""
+                    }`}
+                  >
+                    <span className="">
+                      {boardSize !== undefined ? boardSize.toString() : ""}
+                    </span>
                     <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
                       {createdAt[index] !== "" ? createdAt[index] : "No Posts"}
                     </span>

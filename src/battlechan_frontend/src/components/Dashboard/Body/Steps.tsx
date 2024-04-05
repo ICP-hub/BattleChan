@@ -7,7 +7,7 @@ const Steps = () => {
       className={
         className +
         " " +
-        `flex tablet:flex-row-center justify-between tablet:justify-evenly py-8 px-3 tablet:p-10 my-8 mx-4 tablet:mx-16  border border-light-green rounded-xl bg-light dark:bg-dark text-xs gap-2 tablet:text-lg`
+        `h-full flex tablet:flex-row-center justify-between tablet:justify-evenly py-8 px-3 tablet:p-10 my-8 mx-4 tablet:mx-16  border border-light-green rounded-xl bg-light dark:bg-dark text-xs gap-2 tablet:text-lg`
       }
     >
       <div className="flex flex-col gap-4 items-start">
