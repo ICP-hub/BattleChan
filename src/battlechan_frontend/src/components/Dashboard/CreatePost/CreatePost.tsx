@@ -51,10 +51,11 @@ const CreatePost = (props: Theme) => {
   const postNameRef = React.useRef(postName);
   const postDesRef = React.useRef(postDes); // Ref to store latest selected community
   const fileDataRef = React.useRef(fileData);
-
+  
   const is870px = useMediaQuery("(min-width: 870px)");
   const navigate = useNavigate();
   const location = useLocation();
+  const className = "HomePage__CreatePost";
 
   const handleFileInput = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -150,7 +151,6 @@ const CreatePost = (props: Theme) => {
     }
   };
 
-  const className = "HomePage__CreatePost";
 
   return (
     <div className="bg-[#ECECEC] dark:bg-dark relative z-0">
