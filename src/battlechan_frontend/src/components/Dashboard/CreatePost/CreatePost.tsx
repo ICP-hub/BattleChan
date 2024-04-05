@@ -62,6 +62,7 @@ const CreatePost = (props: Theme) => {
     try {
       const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
       setFileData({ base64, int8Array });
+      setFileURL(base64 || "");
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error); // Display the error message
@@ -87,11 +88,15 @@ const CreatePost = (props: Theme) => {
   }, [fileData]);
 
   React.useEffect(() => {
-    let createPostBtn = document.getElementById("createPostBtn");
-    // Fetch data from backend canister function getTotalPostInBoard
-    createPostBtn?.addEventListener("click", async () => {
-      handleCreatePost();
+    let createPostBtn = document.getElementsByClassName("createPostBtn");
+    Array.from(createPostBtn).forEach((btn: Element) => {
+      btn.addEventListener("click", async () => {
+        handleCreatePost();
+      });
     });
+    // createPostBtn?.addEventListener("click", async () => {
+    //   handleCreatePost();
+    // });
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
@@ -128,6 +133,7 @@ const CreatePost = (props: Theme) => {
   }, [selectedCommunity, postDes, postName]);
 
   const handleCreatePost = async () => {
+    console.log("HERE");
     const postData = {
       postName: postNameRef.current,
       postDes: postDesRef.current,
@@ -234,9 +240,9 @@ const CreatePost = (props: Theme) => {
                   </button>
                   <button
                     type="button"
-                    className="small-button text-light bg-dirty-light-green"
+                    className="createPostBtn small-button text-light bg-dirty-light-green"
                     id="createPostBtn"
-                    // onClick={handleCreatePost}
+                  // onClick={handleCreatePost}
                   >
                     Post
                   </button>
@@ -245,9 +251,8 @@ const CreatePost = (props: Theme) => {
             </section>
 
             <section
-              className={`big_tablet:w-1/2 w-full big_tablet:h-full phone:h-[60dvh] h-[40dvh] tablet:text-base text-sm bg-dirty-light-green bg-opacity-25 flex-col-center rounded-lg ${
-                fileURL == "" ? "justify-center py-8" : "justify-between p-4"
-              }`}
+              className={`big_tablet:w-1/2 w-full big_tablet:h-full phone:h-[60dvh] h-[40dvh] tablet:text-base text-sm bg-dirty-light-green bg-opacity-25 flex-col-center rounded-lg ${fileURL == "" ? "justify-center py-8" : "justify-between p-4"
+                }`}
             >
               {/* <input type="file" name="image" /> */}
               {fileURL == "" ? (
@@ -299,9 +304,9 @@ const CreatePost = (props: Theme) => {
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 font-semibold text-sm text-light rounded-[2rem] bg-dirty-light-green"
+                  className="createPostBtn px-4 py-2 font-semibold text-sm text-light rounded-[2rem] bg-dirty-light-green"
                   id="createPostBtn"
-                  // onClick={handleCreatePost}
+                // onClick={handleCreatePost}
                 >
                   Post
                 </button>

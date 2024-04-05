@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CatalogSVG from "./CatalogSVG";
 import { useSearchParams } from "react-router-dom";
 
-  
+
 
 interface CatalogProps {
   boardsData: string[]
@@ -13,7 +13,14 @@ const Catalog: React.FC<CatalogProps & { handleBoardChange: (boardName: string) 
   const className = "Dashboard__MainPosts__Catalog";
   const [searchParams] = useSearchParams();
   const board = searchParams.get("boardName");
-  const [activeItem, setActiveItem] = useState<string | null>("cinema");
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Set the default selected board when the component mounts or when boardsData changes
+    if (boardsData.length > 0 && activeItem === null) {
+      setActiveItem(boardsData[0].toLowerCase());
+    }
+  }, [boardsData]);
 
   useEffect(() => {
     if (board) {
@@ -47,7 +54,7 @@ const Catalog: React.FC<CatalogProps & { handleBoardChange: (boardName: string) 
       <ul className="flex items-center justify-start">
         {boardsData.map((boardName) => (
           <li key={boardName} className="mr-4">
-            <button onClick={() => handleClick(boardName)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === boardName.toLowerCase() ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]": "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
+            <button onClick={() => handleClick(boardName)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === boardName.toLowerCase() ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]" : "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
               <CatalogSVG label={boardName} />
               <span className="ml-1 leading-5">{boardName}</span>
               <svg
