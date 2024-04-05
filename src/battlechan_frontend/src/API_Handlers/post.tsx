@@ -65,10 +65,10 @@ const PostApiHanlder = () => {
     // Get Active Posts
     const getMainPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
-            console.log(filter);
-            console.log(chunkSize);
-            console.log(pageNumber);
-            console.log(boardName);
+            // console.log(filter);
+            // console.log(chunkSize);
+            // console.log(pageNumber);
+            // console.log(boardName);
             const res = await backend.getPostsByBoard();
             // const res = await backend.postFilter(filter, chunkSize, pageNumber, boardName);
             // console.log(res);
@@ -93,10 +93,10 @@ const PostApiHanlder = () => {
     // Get Archived Post
     const getArchivePosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
-            console.log(filter);
-            console.log(chunkSize);
-            console.log(pageNumber);
-            console.log(boardName);
+            // console.log(filter);
+            // console.log(chunkSize);
+            // console.log(pageNumber);
+            // console.log(boardName);
             const res = await backend.getArchivedPost(chunkSize, pageNumber);
             // console.log(res);
             return res;
