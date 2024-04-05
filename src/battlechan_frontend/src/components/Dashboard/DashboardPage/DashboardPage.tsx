@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
+import ApexCharts from "react-apexcharts";
+
 import Posts from "./Posts";
 import Comments from "./Comments";
+import Navbar from "../Navbar/Navbar";
+import NavButtons from "../NavButtons/NavButtons";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -46,12 +48,17 @@ const DashboardPage = (props: Theme) => {
   };
 
   useEffect(() => {
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    const chartElement = document.querySelector("#chart");
 
-    // Clean up the chart on unmount
-    return () => chart.destroy();
-  }, []); // Empty dependency array ensures the effect runs only once on mount
+    // Check if chartElement is not null
+    if (chartElement) {
+      const chart = new ApexCharts(chartElement, options);
+      chart.render();
+
+      // Clean up the chart on unmount
+      return () => null;
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-light dark:bg-dark dark:bg-green-gradient bg-center-top bg-cover bg-no-repeat">
