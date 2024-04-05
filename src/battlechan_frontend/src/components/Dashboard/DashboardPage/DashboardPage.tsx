@@ -10,10 +10,6 @@ type Theme = {
   handleThemeSwitch: Function;
 };
 
-type Width = {
-  chart: boolean;
-};
-
 const DashboardPage = (props: Theme) => {
   const className = "dashboard__dashboardPage";
   const cardContainer =
@@ -52,11 +48,11 @@ const DashboardPage = (props: Theme) => {
 
     // Check if chartElement is not null
     if (chartElement) {
-      const chart = new ApexCharts(chartElement, options);
+      const chart = new ApexCharts(document.querySelector("#chart"), options);
       chart.render();
 
       // Clean up the chart on unmount
-      return () => null;
+      // return () => chart.destroy();
     }
   }, []);
 

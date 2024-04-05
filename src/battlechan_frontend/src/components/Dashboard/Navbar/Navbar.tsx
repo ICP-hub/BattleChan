@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
+import { ConnectDialog } from "@connect2ic/react";
 
-import { FaRegBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
-import userimg from "../../../images/User.png";
 import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
@@ -15,7 +14,6 @@ import { Link } from "react-router-dom";
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
-import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -42,11 +40,9 @@ const Navbar = (props: Theme) => {
   const [userName, setUserName] = React.useState("");
   // const { getTimeTokens } = TokensApiHanlder();
 
-  const is1100px = useMediaQuery("(min-width: 1100px)");
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
   const { principal, isConnected } = useConnect();
-  console.log(principal);
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -76,7 +72,6 @@ const Navbar = (props: Theme) => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      console.log("START");
       // const data = await getTimeTokens();
       // console.log(data);
     };
@@ -196,6 +191,8 @@ const Navbar = (props: Theme) => {
           handleThemeSwitch={props.handleThemeSwitch}
         />
       </section>
+
+      <ConnectDialog />
     </div>
   );
 };
