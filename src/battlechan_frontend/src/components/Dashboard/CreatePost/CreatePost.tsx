@@ -55,6 +55,7 @@ const CreatePost = (props: Theme) => {
   const is870px = useMediaQuery("(min-width: 870px)");
   const navigate = useNavigate();
   const location = useLocation();
+  const className = "HomePage__CreatePost";
 
   const handleFileInput = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -88,11 +89,14 @@ const CreatePost = (props: Theme) => {
   }, [fileData]);
 
   React.useEffect(() => {
-    let createPostBtn = document.getElementsByClassName("createPostBtn");
-    Array.from(createPostBtn).forEach((btn: Element) => {
-      btn.addEventListener("click", async () => {
-        handleCreatePost();
-      });
+    let createPostBtn1 = document.getElementById("createPostBtn1");
+    let createPostBtn2 = document.getElementById("createPostBtn2");
+    createPostBtn1?.addEventListener("click", async () => {
+      handleCreatePost();
+    });
+
+    createPostBtn2?.addEventListener("click", async () => {
+      handleCreatePost();
     });
     // createPostBtn?.addEventListener("click", async () => {
     //   handleCreatePost();
@@ -133,7 +137,7 @@ const CreatePost = (props: Theme) => {
   }, [selectedCommunity, postDes, postName]);
 
   const handleCreatePost = async () => {
-    console.log("HERE");
+    // console.log("HERE");
     const postData = {
       postName: postNameRef.current,
       postDes: postDesRef.current,
@@ -156,7 +160,6 @@ const CreatePost = (props: Theme) => {
     }
   };
 
-  const className = "HomePage__CreatePost";
 
   return (
     <div className="bg-[#ECECEC] dark:bg-dark relative z-0">
@@ -241,7 +244,7 @@ const CreatePost = (props: Theme) => {
                   <button
                     type="button"
                     className="createPostBtn small-button text-light bg-dirty-light-green"
-                    id="createPostBtn"
+                    id="createPostBtn1"
                   // onClick={handleCreatePost}
                   >
                     Post
@@ -305,7 +308,7 @@ const CreatePost = (props: Theme) => {
                 <button
                   type="button"
                   className="createPostBtn px-4 py-2 font-semibold text-sm text-light rounded-[2rem] bg-dirty-light-green"
-                  id="createPostBtn"
+                  id="createPostBtn2"
                 // onClick={handleCreatePost}
                 >
                   Post

@@ -92,7 +92,7 @@ const SettingProfile = (props: Theme) => {
 
   function handleFileChange() {
     // const imageUrl = URL.createObjectURL(inputfile.files[0]);
-    setFileURL(fileData?.base64 || defaultImg);
+    setFileURL(fileData?.base64 || (fileURL || defaultImg));
   }
 
   function handleNameChange() {
@@ -287,7 +287,7 @@ const SettingProfile = (props: Theme) => {
               />
             )}
           </div>
-          <div className="flex-row-center gap-2">
+          <div className="small_phone:flex-row-center flex flex-col gap-2">
             {showInput && (
               <button
                 type="button"
@@ -344,19 +344,7 @@ const SettingProfile = (props: Theme) => {
         </section>
 
         <section className="image p-4 laptop:m-8 my-4 flex-col-center">
-          <button
-            className="green-button"
-            type="button"
-            id="registerBtn"
-            onClick={() => {
-              console.log(
-                "Input username from btn:",
-                userName,
-                "Input image:",
-                fileURL
-              ); // Add this line
-            }}
-          >
+          <button className="green-button" type="button" id="registerBtn">
             Update
           </button>
         </section>
