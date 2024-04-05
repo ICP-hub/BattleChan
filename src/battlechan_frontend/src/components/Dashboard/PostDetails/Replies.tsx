@@ -6,7 +6,13 @@ import { PiArrowBendUpRightBold } from "react-icons/pi";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
 import Constant from "../../../utils/constants";
 
+interface User {
+  userName: string;
+  userProfile: Int8Array;
+}
+
 interface CommentInfo {
+  createdBy: User;
   reply: string;
   replyId: string;
   createdAt: string;
@@ -30,7 +36,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
   };
   const { getAllReplies } = CommentsApiHanlder();
   const [commentsData, setcommentsData] = React.useState<CommentInfo[]>([]);
-  const { convertNanosecondsToTimestamp } = Constant();
+  const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
 
   const getReplies = async () => {
     const response = (await getAllReplies(commentId)) as BackendResponse;
@@ -64,12 +70,16 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
   return (
     <>
       {commentsData.map((comment, index) => (
-        <div className="flex flex-col gap-4 relative pt-3">
+        <div className="flex flex-col gap-4 relative mt-4">
           {/* user details */}
-          <div className="absolute -left-6 top-0 w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded bg-[url('/src/images/comment-avatar.jpg')] bg-cover bg-no-repeat bg-center"></div>
-          <div className="flex items-center gap-4 ml-10">
-            <h1 className="font-semibold">IamCool_1122</h1>
-            <div className="ml-6 text-[#000] dark:text-[#fff] text-xs text-opacity-50 dark:text-opacity-50">
+          <div className={`absolute tablet:-left-4 tablet:-left-5 top-0 w-8 h-8 tablet:w-10 tablet:h-10 bg-[#686868] text-[#fff] flex justify-center rounded`}>
+            {/* <img className="block h-full w-full object-cover rounded" src={convertInt8ToBase64(comment.createdBy.userProfile)} alt="" /> */}
+            <img className="block h-full w-full object-cover rounded" src={'/src/images/comment-avatar.jpg'} alt="" />
+          </div>
+
+          <div className="flex flex-col tablet:flex-row tablet:items-center ml-10 tablet:mt-2">
+            <h1 className="font-semibold">{"comment.createdBy.userName"}</h1>
+            <div className="tablet:ml-6 text-[#000] dark:text-[#fff] text-xs text-opacity-50 dark:text-opacity-50">
               {comment.createdAt}
             </div>
           </div>
@@ -97,7 +107,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
               />
             </div>
 
-            <div>
+            {/* <div>
               <button
                 className="flex-row-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1 cursor-pointer"
                 type="button"
@@ -105,7 +115,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
                 <PiArrowBendUpRightBold />
                 <span>Reply</span>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       ))}

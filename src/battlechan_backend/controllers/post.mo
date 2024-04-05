@@ -23,9 +23,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //    Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+           Debug.trap(reject.anonymous);
+        };
 
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
@@ -94,9 +94,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
