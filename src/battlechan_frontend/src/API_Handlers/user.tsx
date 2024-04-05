@@ -45,9 +45,9 @@ const UserApiHanlder = () => {
         userName: userName,
         profileImg: profileImg,
       };
-      console.log(data);
+      // console.log(data);
       const res = await backend.createUserAccount(data);
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (err) {
       console.error("Error registering user: ", err);
@@ -61,9 +61,9 @@ const UserApiHanlder = () => {
         userName: userName,
         profileImg: profileImg,
       };
-      console.log(data);
+      // console.log(data);
       const res = await backend.updatedUserAccount(data);
-      console.log("res", res);
+      // console.log("res", res);
       // const response = (await backend.getUserInfo()) as BackendResponse;
       return res;
     } catch (err) {
@@ -75,7 +75,7 @@ const UserApiHanlder = () => {
   const isUserRegistered = async () => {
     try {
       const response = (await backend.getUserInfo()) as BackendResponse;
-      console.log("data", response);
+      // console.log("data", response);
       return response;
     } catch (err) {
       console.error("Error creating contact : ", err);
@@ -85,7 +85,7 @@ const UserApiHanlder = () => {
   const getUserInfo = async () => {
     try {
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
-      console.log("getUserInfo res.data: ", response.data)
+      // console.log("getUserInfo res.data: ", response.data)
       return response.data;
     } catch (err) {
       console.error("Error getting user info: ", err);
@@ -95,7 +95,7 @@ const UserApiHanlder = () => {
   const getPostInfo = async (postId: string) => {
     try {
       const response = (await backend.getPostInfo(postId)) as BackendResponse;
-      console.log("post response: ", response.data)
+      // console.log("post response: ", response.data)
       return response.data;
     } catch (err) {
       console.error("Error getting user info: ", err);

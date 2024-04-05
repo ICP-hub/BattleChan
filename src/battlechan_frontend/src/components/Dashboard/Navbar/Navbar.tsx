@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -39,11 +40,13 @@ const Navbar = (props: Theme) => {
   const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(defaultImg);
   const [userName, setUserName] = React.useState("");
+  // const { getTimeTokens } = TokensApiHanlder();
 
   const is1100px = useMediaQuery("(min-width: 1100px)");
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
   const { principal, isConnected } = useConnect();
+  console.log(principal);
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -71,6 +74,16 @@ const Navbar = (props: Theme) => {
     fetchData();
   }, [userName]);
 
+  useEffect(() => {
+    const fetchBalance = async () => {
+      console.log("START");
+      // const data = await getTimeTokens();
+      // console.log(data);
+    };
+
+    fetchBalance();
+  }, []);
+
   return (
     <div
       className={
@@ -83,7 +96,7 @@ const Navbar = (props: Theme) => {
           src={darkColor == "dark" ? dark_logo : light_logo}
           className={
             className +
-            "__logo tablet:w-28 w-20  object-contain pointer-events-none"
+            "__logo tablet:w-28 small_phone:w-20 w-16 object-contain pointer-events-none"
           }
           alt="BATTLE CHAN"
         />
@@ -95,23 +108,21 @@ const Navbar = (props: Theme) => {
           "__rightSection flex-row-center font-bold tablet:gap-4 gap-2"
         }
       >
-        {is1000px && (
-          <div className="input relative flex-row-center text-[#767676]">
-            <IoSearch className={`absolute text-3xl ml-4 p-1`} />
-            <input
-              type="text"
-              name="search"
-              placeholder="Search here...."
-              className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor}`}
-            />
-          </div>
-        )}
+        <div className="input relative flex-row-center text-[#767676] laptop:flex hidden">
+          <IoSearch className={`absolute text-3xl ml-4 p-1`} />
+          <input
+            type="text"
+            name="search"
+            placeholder="Search here...."
+            className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor}`}
+          />
+        </div>
 
         <div
           className={
             className +
-            `__timeToken text-dark dark:text-light gap-2 flex-row-center border border-green rounded-[3rem]` +
-            "  tablet:p-1.5 p-1 tablet:pl-6 pl-3 tablet:text-base text-sm text-nowrap"
+            `__timeToken text-dark dark:text-light small_phone:gap-2 gap-1 flex-row-center border border-green rounded-[3rem]` +
+            "  tablet:p-1.5 p-1 tablet:pl-6 small_phone:pl-3 pl-2 tablet:text-base text-sm text-nowrap"
           }
         >
           1 Time Token:
@@ -129,12 +140,8 @@ const Navbar = (props: Theme) => {
         </div>
 
         {!is1000px && (
-          <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
+          <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer small_phone:block hidden" />
         )}
-
-        {/* {is1000px && (
-          <FaRegBell className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer" />
-        )} */}
 
         {!is1000px &&
           (isConnected ? (

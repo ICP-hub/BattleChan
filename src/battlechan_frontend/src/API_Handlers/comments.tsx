@@ -88,7 +88,7 @@ const CommentsApiHanlder = () => {
   const getUserCommentInfo = async (commentId: string) => {
     try {
       const res = await backend.getSingleComment(commentId) as BackendResponse;
-      // console.log("commentResponse: ", res);
+      console.log("commentResponse: ", res);
       return res.data;
     } catch (err) {
       console.error("Error: ", err);
