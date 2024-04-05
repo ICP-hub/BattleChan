@@ -271,7 +271,7 @@ const MainPosts = (props: Theme) => {
 
           {/* most popular heading & create post button  */}
           <div className="flex justify-between tablet:justify-center items-center">
-            <h1 className="font-bold tablet:text-3xl p-8">
+            <h1 className="font-bold tablet:text-3xl tablet:p-8">
               {props.type === "archive" ? "Archive" : "Most Popular"}
             </h1>
             <Link to="/dashboard/createPost">
@@ -283,7 +283,7 @@ const MainPosts = (props: Theme) => {
           </div>
 
           {/* catalog for desktop  */}
-          <div className="pl-10 -mr-2 overflow-hidden">
+          <div className=" -mr-2 overflow-hidden">
             <Catalog
               handleBoardChange={handleBoardChange}
               boardsData={boardsData}

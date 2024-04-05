@@ -41,10 +41,10 @@ const Catalog: React.FC<CatalogProps & { handleBoardChange: (boardName: string) 
       className={
         className +
         " " +
-        "hidden w-full tablet:inline-flex flex-nowrap  overflow-x-auto no-scrollbar"
+        "hidden w-full tablet:flex"
       }
     >
-      <ul className="flex items-center justify-start">
+      <ul className="flex items-center justify-center flex-wrap">
         {boardsData.map((boardName) => (
           <li key={boardName} className="mr-4">
             <button onClick={() => handleClick(boardName)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === boardName.toLowerCase() ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]": "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
