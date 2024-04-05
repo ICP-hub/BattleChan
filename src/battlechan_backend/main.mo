@@ -47,7 +47,7 @@ actor BattleChan {
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
-  let tokenCanisterId = "j7rta-caaaa-aaaan-ql7ka-cai";
+  let tokenCanisterId = "weoa5-5qaaa-aaaan-qmctq-cai";
   let backendCanisterId = Principal.fromText("jeupf-yyaaa-aaaan-ql7iq-cai");
   let ledger = actor (tokenCanisterId) : Token.Token;
 
@@ -135,44 +135,52 @@ actor BattleChan {
     await icrc2_transferFrom(userId, backendCanisterId, timeToken * decimal);
   };
 
-  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Token.Result_2 {
+  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
+    try {
+      // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+      let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
+      // var paymentStatus : Token.Result_2 = #Ok(0);
+      // switch (voteStatus) {
+      //   case (#upvote) {
+      //     paymentStatus := await icrc2_transferFrom(userId, backendCanisterId, voteTime * 100000000);
+      //   };
+      //   case (#downvote) {
+      //     paymentStatus := await ledger.icrc1_transfer({
+      //       to = {
+      //         owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
+      //         subaccount = null;
+      //       };
+      //       fee = null;
+      //       memo = null;
+      //       from_subaccount = null;
+      //       created_at_time = null;
+      //       amount = (50 * voteTime * 100000000) / 100;
+      //     });
 
-    // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
-    let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
-    var paymentStatus : Token.Result_2 = #Ok(0);
-    switch (voteStatus) {
-      case (#upvote) { 
-        paymentStatus := await icrc2_transferFrom(userId, backendCanisterId, voteTime * 100000000);
-      };
-      case (#downvote) {
-        paymentStatus := await ledger.icrc1_transfer({
-          to = {
-            owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
-            subaccount = null;
-          };
-          fee = null;
-          memo = null;
-          from_subaccount = null;
-          created_at_time = null;
-          amount = (50 * voteTime * 100000000) / 100;
-        });
+      //   };
+      // };
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+      #ok(successMessage.update);
+      // paymentStatus;
+    } catch (e) {
 
-      };
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+
     };
-    userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
-    postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-    paymentStatus;
   };
-  // public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
-  //   try {
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
+    try {
 
-  //     #ok(successMessage.update);
-  //   } catch (e) {
-  //     let code = Error.code(e);
-  //     let message = Error.message(e);
-  //     #err(code, message);
-  //   };
-  // };
+      #ok(successMessage.update);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+    };
+  };
 
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {

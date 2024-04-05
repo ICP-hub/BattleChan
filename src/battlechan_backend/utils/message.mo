@@ -14,6 +14,7 @@ module {
         noComment = "No Comment found !";
         noReply = "No Reply found !";
         alreadyVoted = "already Voted!";
+        outOfToken = "Token Withdraw failed! Not Enough tokens.";
         noAccess = "no Access";
         notValid = "not Valid Text";
         oneMinLeft = " cannot withdraw only one minute left";

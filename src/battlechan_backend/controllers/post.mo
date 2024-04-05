@@ -24,7 +24,7 @@ module {
         newPost : Types.PostInfo;
     } {
         if (anonymousCheck(userId) == true) {
-           Debug.trap(reject.anonymous);
+            Debug.trap(reject.anonymous);
         };
 
         if (checkText(postReq.postName, 100) == false) {
@@ -300,7 +300,7 @@ module {
         };
     };
 
-    public func withdraw(postId : Types.PostId, amount : Nat, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>, withdrawPostTrie : Trie.Trie<Types.PostId, List.List<(Types.UserId, Nat)>>) {
+    public func withdraw(postId : Types.PostId, amount : Int, userId : Types.UserId, postTrie : Trie.Trie<Types.PostId, Types.PostInfo>, withdrawPostTrie : Trie.Trie<Types.PostId, List.List<(Types.UserId, Nat)>>) {
 
         let postInfo : Types.PostInfo = switch (Trie.get(postTrie, textKey postId, Text.equal)) {
             case (?value) { value };
@@ -309,22 +309,58 @@ module {
         if (postInfo.createdBy.ownerId != userId) {
             Debug.trap(reject.noAccess);
         };
+        let withDrawAmount = amount * 100_000_000;
+        let postToken = ((postInfo.expireAt - 5 * 60_000_000_000) - now()) / 100;
+        if (withDrawAmount > postToken) {
+            Debug.trap(reject.outOfToken);
+        };
+        let tokenLeft = postToken - withDrawAmount;
 
-        let tokenLeft = (postInfo.expireAt - 5 * 60_000_000_000) - now();
-        let totalCommentersRewardInTime = (25 * tokenLeft) / 100;
-
+        Debug.print(debug_show (tokenLeft));
+        let totalCommentersReward = (25 * withDrawAmount) / 100;
+        let ownerReward = withDrawAmount - totalCommentersReward;
         if (tokenLeft < 60_000_000_000) {
             Debug.trap(reject.oneMinLeft);
         };
 
-        var rewardSeakersList : List.List<(Types.UserId, Nat)> = List.nil<(Types.UserId, Nat)>();
+        var rewardSeakersTrie : Trie.Trie<Types.UserId, { likes : Nat; amount : Int }> = Trie.empty<Types.UserId, { likes : Nat; amount : Int }>();
         let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+        var totalLikesOnComment = 0;
         for (comment in commentData.vals()) {
             if (comment.likedBy.size() > 5) {
-                rewardSeakersList := List.push((comment.createdBy.ownerId, comment.likedBy.size()), rewardSeakersList);
+                let ownerId = comment.createdBy.ownerId;
+                totalLikesOnComment := totalLikesOnComment + comment.likedBy.size();
+                rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { likes = comment.likedBy.size(); amount = 0 }).0;
             };
         };
+        let rewardSeakersArray = Trie.toArray<Types.UserId, { likes : Nat; amount : Int }, (Types.UserId, { likes : Nat; amount : Int })>(rewardSeakersTrie, func(k, v) = (k, v));
 
+        for (reward in rewardSeakersArray.vals()) {
+            let ownerId = reward.0;
+            let userLikes = reward.1.likes;
+            let rewardAmountInPercent = (userLikes / totalLikesOnComment) * 100;
+            let userRewardAmount = (rewardAmountInPercent * totalCommentersReward) / 100;
+            rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { likes = userLikes; amount = userRewardAmount }).0;
+        };
+        let updatedExpireTime = postInfo.expireAt - (tokenLeft * 100);
+        let updatedPostInfo : Types.PostInfo = {
+            postId = postInfo.postId;
+            postName = postInfo.postName;
+            postDes = postInfo.postDes;
+            upvotedBy = postInfo.upvotedBy;
+            board = postInfo.board;
+            downvotedBy = postInfo.downvotedBy;
+            upvotes = postInfo.upvotes;
+            downvotes = postInfo.downvotes;
+            postMetaData = postInfo.postMetaData;
+            createdBy = postInfo.createdBy;
+            comments = postInfo.comments;
+            expireAt = updatedExpireTime;
+            createdAt = postInfo.createdAt;
+            updatedAt = ?Int.toText(now());
+        };
+        Trie.put(postTrie, textKey postId, Text.equal , updatedPostInfo).0;
+        
     };
     public func bubbleSortPost(arr : [var Types.PostRes], filterOptions : Types.FilterOptions) : [var Types.PostRes] {
         var n = arr.size();
