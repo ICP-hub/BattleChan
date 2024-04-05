@@ -115,6 +115,14 @@ const MainPosts = (props: Theme) => {
     fetchData();
   }, []);
 
+  // Set the default selected board here
+  useEffect(() => {
+    if (boardsData.length > 0) {
+      setSelectedBoard(boardsData[0]);
+      console.log("selectedboard", selectedBoard)
+    }
+  }, [boardsData]);
+
   const getAllPostFilter = async (
     filter: string = "recent",
     chunkSize: number = 10,
@@ -136,11 +144,16 @@ const MainPosts = (props: Theme) => {
   };
 
   const getAllArchivePostFilter = async (
+    filter: string = "recent",
     chunkSize: number = 10,
-    pageNumber: number = 1
+    pageNumber: number = 1,
+    boardName: string
   ) => {
     try {
-      const res = await getArchivePosts(chunkSize, pageNumber);
+      const res = await getArchivePosts({ [filter]: null },
+        chunkSize,
+        pageNumber,
+        boardName);
       console.log(res);
       return res;
     } catch (err) {
@@ -160,8 +173,10 @@ const MainPosts = (props: Theme) => {
     try {
       if (postsType === "archive") {
         const response = (await getAllArchivePostFilter(
+          activeSelection.toLocaleLowerCase(),
           postsPerPage,
-          currentPage
+          currentPage,
+          selectedBoard
         )) as PostResponse;
         console.log("Archive Post Response: ", response);
         if (response.status === true && response.data) {
@@ -182,7 +197,6 @@ const MainPosts = (props: Theme) => {
             const timestamp: string = convertNanosecondsToTimestamp(
               BigInt(element.createdAt)
             );
-            console.log(timestamp);
             element.createdAt = timestamp;
             element.upvotes = Number(element.upvotes);
           });
@@ -199,7 +213,6 @@ const MainPosts = (props: Theme) => {
         if (response.status === true && response.data) {
           // console.log(response);
           const posts = response.data.flat(); // Flatten nested arrays if any
-          console.log(posts);
           posts.forEach((element) => {
             console.log("element", element);
             console.log(element.createdAt);
@@ -405,9 +418,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Recent" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Recent" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Recent")}
                     >
                       Recent
@@ -416,9 +428,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Upvote" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Upvote" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Upvote")}
                     >
                       Upvote
@@ -427,9 +438,8 @@ const MainPosts = (props: Theme) => {
                   <li>
                     <a
                       href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${
-                        activeSelection === "Downvote" ? "bg-[#295A31]" : ""
-                      }`}
+                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Downvote" ? "bg-[#295A31]" : ""
+                        }`}
                       onClick={() => handleSelection("Downvote")}
                     >
                       Downvote
@@ -450,258 +460,3 @@ const MainPosts = (props: Theme) => {
 };
 
 export default MainPosts;
-
-// const postsData = [
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Alexander Frem",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-//   {
-//     id: "#123056043",
-//     imageUrl: "/src/images/main-post-image.jpg",
-//     userAvatarUrl: "/src/images/main-post-user-avatar.jpg",
-//     userName: "Saurabh Singh",
-//     timestamp: "Oct 29, 2023 ; 13:30",
-//     duration: "5:00 min",
-//     content:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-//     likes: "250K",
-//     comments: 750,
-//   },
-// ];

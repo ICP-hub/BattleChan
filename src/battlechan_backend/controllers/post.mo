@@ -22,8 +22,7 @@ module {
         updatedBoardInfo : Types.BoardInfo;
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
-    } 
-    {
+    } {
         if (anonymousCheck(userId) == true) {
            Debug.trap(reject.anonymous);
         };
@@ -94,8 +93,7 @@ module {
     public func updateVoteStatus(userId : Types.UserId, voteTime : Int, voteStatus : Types.VoteStatus, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : async {
         updatedUserInfo : Types.UserInfo;
         updatedPostInfo : Types.PostInfo;
-    } 
-    {
+    } {
         if (anonymousCheck(userId) == true) {
             Debug.trap(reject.anonymous);
         };

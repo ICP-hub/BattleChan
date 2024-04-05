@@ -107,7 +107,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
               />
             </div>
 
-            <div>
+            {/* <div>
               <button
                 className="flex-row-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1 cursor-pointer"
                 type="button"
@@ -115,7 +115,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
                 <PiArrowBendUpRightBold />
                 <span>Reply</span>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       ))}

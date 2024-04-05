@@ -8,6 +8,7 @@ import PostApiHanlder from "../../../API_Handlers/post";
 import postList from "./PostsList";
 import Constant from "../../../utils/constants";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
+import { Link } from "react-router-dom";
 
 type PostInfo = {
   postId: string;
@@ -21,6 +22,7 @@ type PostInfo = {
     userProfile: Int8Array;
   };
   upvotes: number;
+  commentsCount: number;
 };
 
 interface Board {
@@ -55,22 +57,16 @@ const Post = () => {
   const [activeSelection, setActiveSelection] = useState("Recent");
   const [postsPerPage, setPostsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [commentCounts, setCommentsCount] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
-  const { getMainPosts, getArchivePosts, getBoards } = PostApiHanlder();
+  const { getRecentPosts, getArchivePosts, getBoards } = PostApiHanlder();
   const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
-  const {getAllComments} = CommentsApiHanlder()
+  const { getAllComments } = CommentsApiHanlder()
   const className = "LandingPage__TrendingPosts";
 
-  const getAllPostFilter = async (
-    boardName: string
-  ) => {
+  const getAllPostFilter = async () => {
     try {
-      const res = await getMainPosts(
-        { ["recent"]: null },
-        10,
-        1,
-        boardName
-      );
+      const res = await getRecentPosts();
       console.log(res);
       return res;
     } catch (err) {
@@ -103,25 +99,36 @@ const Post = () => {
 
   async function getPosts() {
     try {
-      const response = (await getAllPostFilter(
-        boardsData
-      )) as PostResponse;
+      const response = (await getAllPostFilter()) as PostResponse;
       console.log("Main Posts Response: ", response);
       if (response.status === true && response.data) {
         // console.log(response);
-        const posts = response.data.flat(); // Flatten nested arrays if any
-        console.log(posts);
-        posts.forEach((element) => {
-          console.log("element", element);
-          console.log(element.createdAt);
-          const timestamp: string = convertNanosecondsToTimestamp(
-            BigInt(element.createdAt)
-          );
-          console.log(timestamp);
+        const posts = response.data
+          .flatMap((nestedArray) => nestedArray)
+          .flatMap((element) => {
+            if (
+              Array.isArray(element) &&
+              element.length === 2 &&
+              typeof element[1] === "object"
+            ) {
+              return [element[1]]; // Include only the object part
+            }
+            return [];
+          });
+        // console.log(posts);
+        // Create an array to store promises for comments count retrieval
+        const commentsCountPromises = posts.map(element => getCommentsCounts(element.postId));
+        // Wait for all comments count retrieval promises to resolve
+        const commentsCounts = await Promise.all(commentsCountPromises);
+        posts.forEach((element, index) => {
+          // console.log("ele.createdAt", element.createdAt);
+          const timestamp = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+          // console.log(timestamp);
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
+          // Assign comments count to each post
+          element.commentsCount = commentsCounts[index] || 0;
         });
-        // console.log(posts);
         setPostsData(posts);
       }
     } catch (error) {
@@ -165,41 +172,47 @@ const Post = () => {
         >
           {/* Card */}
           {postsData.map((post, index) => (
-            <div className="trendingPostCard w-[380px] rounded-lg bg-light text-dark shadow-md shadow-dark">
-              {/* Cover Image */}
-              <img
-                src={convertInt8ToBase64(post.postMetaData)}
-                alt="Post Cover Image"
-                className="postImage w-full"
-              />
+            <Link
+              key={post.postId}
+              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}?type=archive`}
+            >
+              <div className="trendingPostCard w-[380px] rounded-lg bg-light text-dark shadow-md shadow-dark">
+                {/* Cover Image */}
+                <img
+                  src={convertInt8ToBase64(post.postMetaData)}
+                  alt="Post Cover Image"
+                  className="postImage w-full"
+                />
 
-              {/* Details */}
-              <div className="postData w-full p-6 flex-direction-col gap-4">
-                <div className="top flex-row-center justify-between">
-                  {/* Owner Profile Photo and Name */}
-                  <section className="owner flex-row-center gap-2">
-                    <img
-                      src={convertInt8ToBase64(post.createdBy.userProfile)}
-                      alt="Profile Image"
-                      className="w-[35px]"
-                    />
-                    <span className="text-[20px] font-semibold">
-                      {post.createdBy.userName}
-                    </span>
-                  </section>
+                {/* Details */}
+                <div className="postData w-full p-6 flex-direction-col gap-4">
+                  <div className="top flex-row-center justify-between">
+                    {/* Owner Profile Photo and Name */}
+                    <section className="owner flex-row-center gap-2">
+                      <img
+                        src={convertInt8ToBase64(post.createdBy.userProfile)}
+                        alt="Profile Image"
+                        className="w-[35px]"
+                      />
+                      <span className="text-[20px] font-semibold">
+                        {post.createdBy.userName}
+                      </span>
+                    </section>
 
-                  {/* Date, Time and ID  */}
-                  <section className="flex-direction-row gap-2 text-[15px]">
-                    <span className="text-xs">{post.createdAt}</span>
-                    <span className="text-xs">{post.postId}</span>
-                  </section>
-                </div>
+                    {/* Date, Time and ID  */}
+                    <section className="flex-direction-row gap-2 text-[15px]">
+                      <span className="text-xs">{post.createdAt}</span>
+                      <span className="text-xs">{post.postId}</span>
+                    </section>
+                  </div>
 
-                <p className="postContent">{post.postDes}</p>
+                  <p className="postContent">{post.postDes.length > 70
+                    ? `${post.postDes.slice(0, 220)}...`
+                    : post.postDes}</p>
 
-                <div className="bottom flex-row-center justify-between">
-                  {/* Upvote and Downvote buttons */}
-                  <section className="buttons flex-row-center gap-2 text-3xl">
+                  <div className="bottom flex-row-center justify-between">
+                    {/* Upvote and Downvote buttons */}
+                    {/* <section className="buttons flex-row-center gap-2 text-3xl">
                     <TbSquareChevronUpFilled
                       className={`${votes[index]
                         ? "text-dirty-light-green"
@@ -215,26 +228,27 @@ const Post = () => {
                         } cursor-pointer`}
                       onClick={() => handleVote(index, false)}
                     />
-                  </section>
+                  </section> */}
 
-                  {/* Total tokens and comments count */}
-                  <section className="counts gap-4 flex-direction-row">
-                    <span className="timeToken flex-row-center gap-1">
-                      <MdOutlineVerifiedUser />
-                      {post.upvotes}
-                    </span>
-                    <span className="comments flex-row-center gap-1">
-                      <LiaCommentSolid />
-                      {0} Comments
-                    </span>
-                  </section>
+                    {/* Total tokens and comments count */}
+                    <section className="counts gap-4 flex-direction-row">
+                      <span className="timeToken flex-row-center gap-1">
+                        <MdOutlineVerifiedUser />
+                        {post.upvotes}
+                      </span>
+                      <span className="comments flex-row-center gap-1">
+                        <LiaCommentSolid />
+                        {post.commentsCount} Comments
+                      </span>
+                    </section>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
-    </div>
+    </div >
   );
 };
 
