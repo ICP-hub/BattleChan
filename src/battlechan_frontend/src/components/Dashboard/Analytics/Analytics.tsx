@@ -34,7 +34,8 @@ const data: DataItem[] = [
     imageUrl: "/src/images/trendingPost_coverImg.png",
   },
   {
-    message: "You loss one token by Downvoting Kd_1129 with post Id #1256320000",
+    message:
+      "You loss one token by Downvoting Kd_1129 with post Id #1256320000",
     username: "Kd_1129",
     time: "3hrs ago",
     tokenChange: -1,
@@ -57,23 +58,23 @@ const Analytics = (props: Theme) => {
         <Navbar handleThemeSwitch={props.handleThemeSwitch} />
         <NavButtons />
 
-        <div className="dark:text-[#fff] px-6 tablet:px-10">
-          <h1 className="font-bold text-center mt-9 text-xl tablet:text-3xl">
+        <div className="dark:text-[#fff] px-6 tablet:px-10 gap-8 flex flex-col">
+          <h1 className="font-bold text-center tablet:pt-12 pt-5 laptop:text-4xl phone:text-3xl text-2xl">
             Time Balance
           </h1>
 
           {/* balance check  */}
-          <div className="bg-green rounded-[10px] p-4 mt-14 relative overflow-hidden">
+          <div className="bg-green rounded-[10px] p-4 relative overflow-hidden">
             {/* balance check and sports/filter button */}
             <div className="flex justify-between items-center text-[#fff]">
               <h2 className="font-bold tablet:text-3xl tablet:ml-11">
                 Balance Check
               </h2>
               <div className="flex items-center justify-center gap-2 z-10">
-                <button className="border border-[#fff] dark:border-[#fff] text-[#fff] dark:text-[#fff] rounded-md px-6 py-2 font-semibold text-xs tablet:text-base">
+                <button className="border border-[#fff] dark:border-[#fff] text-[#fff] dark:text-[#fff] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
                   Today
                 </button>
-                <button className="flex items-center justify-center bg-[#fff] dark:bg-[#fff] text-[#000] dark:text-[#000] rounded-md px-6 py-2 font-semibold text-xs tablet:text-base">
+                <button className="flex items-center justify-center bg-[#fff] dark:bg-[#fff] text-[#000] dark:text-[#000] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
                   <svg
                     className="w-3 h-3 tablet:w-5 tablet:h-5 text-gray-800 dark:text-white mr-1"
                     aria-hidden="true"
@@ -283,7 +284,7 @@ const Analytics = (props: Theme) => {
           </div>
 
           {/* upvote downvote buy earn from others cards  */}
-          <div className="flex items-center flex-wrap justify-center mt-8 text-[#fff]">
+          <div className="flex items-center flex-wrap justify-center text-[#fff]">
             <div className="p-2 w-1/2 tablet:w-1/4">
               <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
                 <div>Upvote</div>
@@ -311,8 +312,8 @@ const Analytics = (props: Theme) => {
           </div>
 
           {/* transaction overview  */}
-          <div className="mt-12 pb-28">
-            <h1 className="font-semibold text-lg text-center mb-14 tablet:text-2xl">
+          <div className="pb-28">
+            <h1 className="font-semibold text-lg text-center mb-8 tablet:text-2xl">
               Transaction Overview
             </h1>
 
@@ -325,17 +326,28 @@ const Analytics = (props: Theme) => {
                   {/* message  */}
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
-                    {item.message.split(" ").map((word, index) => {
-                if (word === "Upvoting") {
-                  return <span key={index} className="text-[#18AF00]">{word} </span>;
-                } else if (word === "Downvoting") {
-                  return <span key={index} className="text-red">{word} </span>;
-                } else if (item.username && word.includes(item.username ?? "")) {
-                  return <strong key={index}>{word} </strong>;
-                } else {
-                  return <span key={index}>{word} </span>;
-                }
-              })}
+                      {item.message.split(" ").map((word, index) => {
+                        if (word === "Upvoting") {
+                          return (
+                            <span key={index} className="text-[#18AF00]">
+                              {word}{" "}
+                            </span>
+                          );
+                        } else if (word === "Downvoting") {
+                          return (
+                            <span key={index} className="text-red">
+                              {word}{" "}
+                            </span>
+                          );
+                        } else if (
+                          item.username &&
+                          word.includes(item.username ?? "")
+                        ) {
+                          return <strong key={index}>{word} </strong>;
+                        } else {
+                          return <span key={index}>{word} </span>;
+                        }
+                      })}
                     </div>
 
                     {/* time  */}

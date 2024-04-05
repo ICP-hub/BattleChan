@@ -9,7 +9,8 @@ import { IoHardwareChipOutline } from "react-icons/io5";
 import { IoGameControllerOutline } from "react-icons/io5";
 
 const DataNumbers = () => {
-  const className = "DataNumbers";
+  const className = "dashboard__DataNumbers";
+
   return (
     <div
       className={
