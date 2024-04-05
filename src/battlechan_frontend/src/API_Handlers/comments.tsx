@@ -36,6 +36,17 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  const getAllCommentsOfArchivedPost = async (postId: string) => {
+    try {
+      // console.log(backend);
+      const res = await backend.getAllCommentOfArchivedPost(postId, 10, 1);
+      console.log("allCommentOfArchivedPost: ", res);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
   // Get All COmments of post
   const getAllReplies = async (commentId: string) => {
     try {
@@ -61,6 +72,18 @@ const CommentsApiHanlder = () => {
     }
 };
 
+  const createCommentReply = async (commentId:string, reply: string) => {
+    try {
+        // console.log(backend);
+        console.log("reply data: ", commentId, reply)
+        const res = await backend.createCommentReply(commentId, reply);
+        console.log(res);
+        return res;
+    } catch (err) {
+        console.error("Error creating post : ", err);
+    }
+};
+
   // Get single comment info of a user
   const getUserCommentInfo = async (commentId: string) => {
     try {
@@ -73,7 +96,7 @@ const CommentsApiHanlder = () => {
   };
 
   // Returns
-  return { getAllComments, getAllReplies, getUserCommentInfo, createComment };
+  return { getAllComments, getAllReplies, getUserCommentInfo, createComment, getAllCommentsOfArchivedPost, createCommentReply };
 };
 
 export default CommentsApiHanlder;

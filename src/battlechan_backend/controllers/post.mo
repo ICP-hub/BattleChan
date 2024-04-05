@@ -191,7 +191,6 @@ module {
                 };
             };
         };
-
     };
 
     public func updatePostExpireTime(userId : Types.UserId, time : Nat, postId : Types.PostId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : Trie.Trie<Types.PostId, Types.PostInfo> {
@@ -199,6 +198,7 @@ module {
         if (anonymousCheck(userId) == true) {
             Debug.trap(reject.anonymous);
         };
+
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?v) { v };
             case (null) { Debug.trap(reject.noPost) };
@@ -224,6 +224,7 @@ module {
             createdAt = postInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
+
         return Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
     };
 
@@ -232,7 +233,8 @@ module {
         updatedPostTrie : Trie.Trie<Types.PostId, Types.PostInfo>;
         updatedArchivedTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>;
         updateBoardTrie : Trie.Trie<Types.BoardName, Types.BoardInfo>;
-    } {
+    } 
+    {
 
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?value) { value };
@@ -306,6 +308,7 @@ module {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
+        
         if (postInfo.createdBy.ownerId != userId) {
             Debug.trap(reject.noAccess);
         };
@@ -420,5 +423,4 @@ module {
         };
         return arr;
     };
-
 };

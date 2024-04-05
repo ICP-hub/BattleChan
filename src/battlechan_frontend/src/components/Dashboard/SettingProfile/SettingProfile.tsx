@@ -79,6 +79,7 @@ const SettingProfile = (props: Theme) => {
     try {
       const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
       setFileData({ base64, int8Array });
+      setFileURL(base64 || defaultImg);
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error); // Display the error message
@@ -91,7 +92,7 @@ const SettingProfile = (props: Theme) => {
 
   function handleFileChange() {
     // const imageUrl = URL.createObjectURL(inputfile.files[0]);
-    setFileURL(fileData?.base64 || "");
+    setFileURL(fileData?.base64 || (fileURL || defaultImg));
   }
 
   function handleNameChange() {
@@ -109,83 +110,83 @@ const SettingProfile = (props: Theme) => {
     console.log("Input username:", inputUserName); // Add this line
   }
 
-  useEffect(() => {
-    const fileInput = document.getElementById("profile");
+  // useEffect(() => {
+  //   const fileInput = document.getElementById("profile");
 
-    const handleFileInputChange = (event: any) => {
-      console.log("Here");
-      const file = event.target.files?.[0];
+  //   const handleFileInputChange = (event: any) => {
+  //     console.log("Here");
+  //     const file = event.target.files?.[0];
 
-      if (!file) return;
+  //     if (!file) return;
 
-      const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
+  //     const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
 
-      if (file.size > maxSize) {
-        toast.success("File size exceeds the limit of 1.7MB");
-        return;
-      }
+  //     if (file.size > maxSize) {
+  //       toast.success("File size exceeds the limit of 1.7MB");
+  //       return;
+  //     }
 
-      if (file.type.startsWith("image")) {
-        console.log("Here1");
-        const reader = new FileReader();
+  //     if (file.type.startsWith("image")) {
+  //       console.log("Here1");
+  //       const reader = new FileReader();
 
-        reader.onload = async (e) => {
-          console.log("Hello");
-          if (e.target && e.target.result) {
-            const img = new Image();
-            img.src = e.target.result.toString();
+  //       reader.onload = async (e) => {
+  //         console.log("Hello");
+  //         if (e.target && e.target.result) {
+  //           const img = new Image();
+  //           img.src = e.target.result.toString();
 
-            img.onload = async () => {
-              const canvas = document.createElement("canvas");
-              const ctx = canvas.getContext("2d");
+  //           img.onload = async () => {
+  //             const canvas = document.createElement("canvas");
+  //             const ctx = canvas.getContext("2d");
 
-              if (!ctx) return;
+  //             if (!ctx) return;
 
-              canvas.width = img.width;
-              canvas.height = img.height;
-              ctx.drawImage(img, 0, 0, img.width, img.height);
+  //             canvas.width = img.width;
+  //             canvas.height = img.height;
+  //             ctx.drawImage(img, 0, 0, img.width, img.height);
 
-              const quality = 0.7; // Adjust image quality here
-              const dataURL = canvas.toDataURL("image/jpeg", quality);
+  //             const quality = 0.7; // Adjust image quality here
+  //             const dataURL = canvas.toDataURL("image/jpeg", quality);
 
-              // Convert data URL to Blob
-              const blob = await fetch(dataURL).then((res) => res.blob());
+  //             // Convert data URL to Blob
+  //             const blob = await fetch(dataURL).then((res) => res.blob());
 
-              console.log("blob:", blob);
-              // Convert Blob to ArrayBuffer
-              const arrayBuffer = await blob.arrayBuffer();
+  //             console.log("blob:", blob);
+  //             // Convert Blob to ArrayBuffer
+  //             const arrayBuffer = await blob.arrayBuffer();
 
-              console.log("array:", arrayBuffer);
-              // Convert ArrayBuffer to Int8Array
-              const int8Array = new Int8Array(arrayBuffer);
-              console.log(int8Array);
+  //             console.log("array:", arrayBuffer);
+  //             // Convert ArrayBuffer to Int8Array
+  //             const int8Array = new Int8Array(arrayBuffer);
+  //             console.log(int8Array);
 
-              // Base64
-              const uint8Array = new Uint8Array(int8Array);
+  //             // Base64
+  //             const uint8Array = new Uint8Array(int8Array);
 
-              // Convert Uint8Array to base64
-              let binary = "";
-              uint8Array.forEach((byte) => {
-                binary += String.fromCharCode(byte);
-              });
-              let base64 = btoa(binary);
+  //             // Convert Uint8Array to base64
+  //             let binary = "";
+  //             uint8Array.forEach((byte) => {
+  //               binary += String.fromCharCode(byte);
+  //             });
+  //             let base64 = btoa(binary);
 
-              console.log(base64);
-              // setFileURL(base64);
-            };
-          }
-        };
+  //             console.log(base64);
+  //             // setFileURL(base64);
+  //           };
+  //         }
+  //       };
 
-        reader.readAsDataURL(file);
-      } else {
-        alert("Please upload an image file");
-      }
-    };
+  //       reader.readAsDataURL(file);
+  //     } else {
+  //       alert("Please upload an image file");
+  //     }
+  //   };
 
-    if (fileInput) {
-      fileInput.addEventListener("change", handleFileInputChange);
-    }
-  }, [fileData]);
+  //   if (fileInput) {
+  //     fileInput.addEventListener("change", handleFileInputChange);
+  //   }
+  // }, [fileData]);
 
   React.useEffect(() => {
     const registerBtn = document.getElementById("registerBtn");
@@ -244,7 +245,7 @@ const SettingProfile = (props: Theme) => {
 
     // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
-  }, [isRegistered, userName]);
+  }, [isRegistered, userName, fileData]);
 
   return (
     <div
@@ -286,7 +287,7 @@ const SettingProfile = (props: Theme) => {
               />
             )}
           </div>
-          <div className="flex-row-center gap-2">
+          <div className="small_phone:flex-row-center flex flex-col gap-2">
             {showInput && (
               <button
                 type="button"
@@ -299,11 +300,10 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${
-                showInput
+              className={`${showInput
                   ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
                   : " bg-dark dark:bg-light"
-              } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+                } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change
@@ -344,19 +344,7 @@ const SettingProfile = (props: Theme) => {
         </section>
 
         <section className="image p-4 laptop:m-8 my-4 flex-col-center">
-          <button
-            className="green-button"
-            type="button"
-            id="registerBtn"
-            onClick={() => {
-              console.log(
-                "Input username from btn:",
-                userName,
-                "Input image:",
-                fileURL
-              ); // Add this line
-            }}
-          >
+          <button className="green-button" type="button" id="registerBtn">
             Update
           </button>
         </section>
