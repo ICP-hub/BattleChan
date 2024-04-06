@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PostTab from "./PostTab";
 import CommentTab from "./CommentTab";
 import UpvoteTab from "./UpvoteTab";
 import { useNavigate } from "react-router-dom";
+import CommentsApiHanlder from "../../../API_Handlers/comments";
 
 interface TabProps {
   id: string;
@@ -27,9 +28,36 @@ interface ProfileTabsProps {
   userInfo: UserInfo[];
 }
 
-const ProfileTabs: React.FC<ProfileTabsProps> = ({userInfo}) => {
+interface Comment {
+  commentId: string;
+  createdAt: string;
+  likedBy: string[];
+  comment: string;
+  updatedAt: string[];
+  replies: { empty: null } | null;
+}
+
+const ProfileTabs: React.FC<ProfileTabsProps> = ({ userInfo }) => {
   const [activeTab, setActiveTab] = useState<string>("post");
   const navigate = useNavigate();
+  const { getUserCommentInfo } = CommentsApiHanlder();
+  const [commentData, setCommentData] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    const getUserComments = async () => {
+      if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
+        const fetchedComments:Comment[] = [];
+        for (const commentId of userInfo[0].createdComments) {
+          const fetchedCommentInfo = await getUserCommentInfo(commentId) as Comment[];
+          if (fetchedCommentInfo && fetchedCommentInfo.length > 0) {
+            fetchedComments.push(fetchedCommentInfo[0]);
+          }
+        }
+        setCommentData(fetchedComments);
+      }
+    };
+    getUserComments();
+  }, [userInfo, getUserCommentInfo]);
 
   const tabs: TabProps[] = [
     { id: "post", label: "Post" },
@@ -109,8 +137,8 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({userInfo}) => {
           >
             <div className="block font-sans text-base">
               {/* Content for each tab */}
-              {tab.id === "post" && <><PostTab userInfo={userInfo}/></>}
-              {tab.id === "comments" && <><CommentTab userInfo={userInfo} /></>}
+              {tab.id === "post" && <><PostTab userInfo={userInfo} /></>}
+              {tab.id === "comments" && <><CommentTab commentData={commentData} /></>}
               {tab.id === "upvote" && <><UpvoteTab /></>}
               {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}
             </div>

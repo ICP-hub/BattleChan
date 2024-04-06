@@ -16,7 +16,7 @@ interface UserInfo {
   userName: string;
 }
 interface CommentTabProps {
-  userInfo: UserInfo[];
+  commentData: Comment[];
 }
 interface Comment {
   commentId: string;
@@ -27,9 +27,9 @@ interface Comment {
   replies: { empty: null } | null;
 }
 
-const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
+const CommentTab: React.FC<CommentTabProps> = ({ commentData }) => {
   const { getUserCommentInfo } = CommentsApiHanlder();
-  const [commentData, setCommentData] = useState<Comment[]>([]);
+  // const [commentData, setCommentData] = useState<Comment[]>([]);
 
   const multilineEllipsisStyle: React.CSSProperties = {
     overflow: "hidden",
@@ -38,21 +38,21 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
     WebkitBoxOrient: "vertical",
   };
 
-  useEffect(() => {
-    const getUserComments = async () => {
-      if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
-        const fetchedComments:Comment[] = [];
-        for (const commentId of userInfo[0].createdComments) {
-          const fetchedCommentInfo = await getUserCommentInfo(commentId) as Comment[];
-          if (fetchedCommentInfo && fetchedCommentInfo.length > 0) {
-            fetchedComments.push(fetchedCommentInfo[0]);
-          }
-        }
-        setCommentData(fetchedComments);
-      }
-    };
-    getUserComments();
-  }, [userInfo, getUserCommentInfo]);
+  // useEffect(() => {
+  //   const getUserComments = async () => {
+  //     if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
+  //       const fetchedComments:Comment[] = [];
+  //       for (const commentId of userInfo[0].createdComments) {
+  //         const fetchedCommentInfo = await getUserCommentInfo(commentId) as Comment[];
+  //         if (fetchedCommentInfo && fetchedCommentInfo.length > 0) {
+  //           fetchedComments.push(fetchedCommentInfo[0]);
+  //         }
+  //       }
+  //       setCommentData(fetchedComments);
+  //     }
+  //   };
+  //   getUserComments();
+  // }, [userInfo, getUserCommentInfo]);
 
   return (
     <div className="flex flex-col gap-4">

@@ -46,7 +46,6 @@ const Navbar = (props: Theme) => {
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
   const { principal, isConnected } = useConnect();
-  console.log(principal);
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -74,15 +73,15 @@ const Navbar = (props: Theme) => {
     fetchData();
   }, [userName]);
 
-  useEffect(() => {
-    const fetchBalance = async () => {
-      console.log("START");
-      // const data = await getTimeTokens();
-      // console.log(data);
-    };
+  // useEffect(() => {
+  //   const fetchBalance = async () => {
+  //     console.log("START");
+  //     // const data = await getTimeTokens();
+  //     // console.log(data);
+  //   };
 
-    fetchBalance();
-  }, []);
+  //   fetchBalance();
+  // }, []);
 
   return (
     <div

@@ -3,6 +3,7 @@ import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 import Posts from "./Posts";
 import Comments from "./Comments";
+import ApexCharts from "react-apexcharts";
 
 type Theme = {
   handleThemeSwitch: Function;
