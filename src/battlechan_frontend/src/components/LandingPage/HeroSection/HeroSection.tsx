@@ -4,7 +4,8 @@ import "./HeroSection.scss";
 import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import desktops from "../../../images/desktops.png";
-import backImage from "../../../images/background_img.png";
+// import backImage from "../../../images/background_img.png";
+import backImage from "../../../images/bg.svg";
 
 const HeroSection = () => {
   const className = "LandingPage__HeroSection";
