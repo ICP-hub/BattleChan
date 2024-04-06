@@ -332,6 +332,7 @@ const PostDetails = (props: Theme) => {
               className="block h-auto w-full"
               src={convertInt8ToBase64(postsData?.postMetaData || undefined)}
               alt="post image"
+              loading="lazy"
             />
 
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">

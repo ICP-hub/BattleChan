@@ -48,17 +48,17 @@ const Catalog: React.FC<CatalogProps & { handleBoardChange: (boardName: string) 
       className={
         className +
         " " +
-        "hidden w-full tablet:flex"
+        "w-full tablet:flex my-4 tablet:my-0"
       }
     >
       <ul className="flex items-center justify-center flex-wrap">
         {boardsData.map((boardName) => (
           <li key={boardName} className="mr-4">
-            <button onClick={() => handleClick(boardName)} className={`inline-flex items-center gap-2 justify-center text-base px-11 py-4 my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === boardName.toLowerCase() ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]" : "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
+            <button onClick={() => handleClick(boardName)} className={`inline-flex items-center gap-2 justify-center text-base px-4 tablet:px-11 py-2 tablet:py-4 my-2 tablet:my-4 rounded-full font-semibold shadow-sm shadow-[#0000001F] ${activeItem === boardName.toLowerCase() ? "bg-[#000] dark:bg-[#fff] text-[#fff]  dark:text-[#000]" : "bg-[#EDEDED] dark:bg-[#000] text-[#0D0D0D] dark:text-[#fff] text-opacity-50"}`}>
               <CatalogSVG label={boardName} />
               <span className="ml-1 leading-5">{boardName}</span>
               <svg
-                className="w-[6px] h-[3px] tablet:w-[13px] tablet:h-[7px]"
+                className="hidden tablet:inline-flex w-[6px] h-[3px] tablet:w-[13px] tablet:h-[7px]"
                 viewBox="0 0 6 3"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
