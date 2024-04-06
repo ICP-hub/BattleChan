@@ -10,7 +10,6 @@ import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
-import Deque "mo:base/Deque";
 
 import Types "utils/types";
 
@@ -24,6 +23,8 @@ import {
   updateVoteStatus;
   bubbleSortPost;
   updatePostExpireTime;
+  withdraw;
+  claim;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId; paginate } "utils/helper";
@@ -37,7 +38,7 @@ actor BattleChan {
   private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
-  // private stable var withDrawPostTrie = Trie.empty<Types.PostId, List.List<(Types.UserId, Nat)>>();
+  private stable var withdrawPostTrie = Trie.empty<Types.PostId, List.List<Types.WithdrawRecord>>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   private stable let freePostTime = 5;
@@ -171,17 +172,29 @@ actor BattleChan {
 
     };
   };
-  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
-    try {
 
-      #ok(successMessage.update);
-    } catch (e) {
-      let code = Error.code(e);
-      let message = Error.message(e);
-      #err(code, message);
-    };
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Int) : async Token.Result_2 {
+    let { updatedPostTrie; updatedWithDrawPostTrie; ownerReward } = withdraw(postId, amount, userId, postTrieMap, withdrawPostTrie);
+    postTrieMap := updatedPostTrie;
+    withdrawPostTrie := updatedWithDrawPostTrie;
+    let paymentRes = await ledger.icrc1_transfer({
+      to = {
+        owner = userId;
+        subaccount = null;
+      };
+      fee = null;
+      memo = null;
+      from_subaccount = null;
+      created_at_time = null;
+      amount = ownerReward;
+    });
+    paymentRes;
   };
 
+  public shared ({ caller = userId }) func claimReward(index : Nat, postId : Types.PostId) {
+    let { updatedWithDrawPostTrie; amount } = claim(index, userId, postId, userTrieMap, withdrawPostTrie);
+    withdrawPostTrie := updatedWithDrawPostTrie;
+  };
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
       let {
@@ -568,6 +581,37 @@ actor BattleChan {
     switch (Trie.get(boardTrieMap, textKey boardId, Text.equal)) {
       case (?board) { true };
       case (null) { false };
+    };
+  };
+
+  public query func getTotalCounts() : async Types.Result_1<{ userData : Nat; postData : Nat; userAchivedPostData : Nat; withdrawPost : Nat }> {
+    let totalData = {
+      userData = Trie.size(userTrieMap);
+      postData = Trie.size(postTrieMap);
+      userAchivedPostData = Trie.size(userAchivedPostTrie);
+      withdrawPost = Trie.size(withdrawPostTrie);
+    };
+    return {
+      data = ?totalData;
+      status = true;
+      error = null;
+    };
+  };
+  public query func getTotalCommentsInPost(postId : Types.PostId) : async Types.Result_1<Nat> {
+    let postInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return {
+          data = null;
+          status = false;
+          error = ?notFound.noPost;
+        };
+      };
+    };
+    return {
+      data = ?Trie.size(postInfo.comments);
+      status = false;
+      error = null;
     };
   };
 

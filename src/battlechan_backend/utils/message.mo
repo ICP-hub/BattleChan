@@ -20,6 +20,7 @@ module {
         oneMinLeft = " cannot withdraw only one minute left";
         downvoteNotAllowed = "cannot downVote less than 1 minute left to expire";
         expireNotAllowed = "cannot expire post! ";
+        insufficentBalance = "Insufficient Balance In Canister";
     };
     public let notFound = {
         noUser = "No User Exist!";
