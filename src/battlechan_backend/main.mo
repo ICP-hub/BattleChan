@@ -10,7 +10,6 @@ import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
-import Deque "mo:base/Deque";
 
 import Types "utils/types";
 
@@ -24,6 +23,8 @@ import {
   updateVoteStatus;
   bubbleSortPost;
   updatePostExpireTime;
+  withdraw;
+  claim;
 } "controllers/post";
 import { createReply; updateLikesInReplies } "controllers/reply";
 import { getUniqueId; toBoardId; getPostIdFromCommentId; getPostId; paginate } "utils/helper";
@@ -37,7 +38,7 @@ actor BattleChan {
   private stable var userTrieMap = Trie.empty<Types.UserId, Types.UserInfo>();
   private stable var boardTrieMap = Trie.empty<Types.BoardName, Types.BoardInfo>();
   private stable var postTrieMap = Trie.empty<Types.PostId, Types.PostInfo>();
-  // private stable var withDrawPostTrie = Trie.empty<Types.PostId, List.List<(Types.UserId, Nat)>>();
+  private stable var withdrawPostTrie = Trie.empty<Types.PostId, List.List<Types.WithdrawRecord>>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   private stable let freePostTime = 5;
@@ -47,7 +48,7 @@ actor BattleChan {
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
-  let tokenCanisterId = "j7rta-caaaa-aaaan-ql7ka-cai";
+  let tokenCanisterId = "weoa5-5qaaa-aaaan-qmctq-cai";
   let backendCanisterId = Principal.fromText("jeupf-yyaaa-aaaan-ql7iq-cai");
   let ledger = actor (tokenCanisterId) : Token.Token;
 
@@ -135,45 +136,65 @@ actor BattleChan {
     await icrc2_transferFrom(userId, backendCanisterId, timeToken * decimal);
   };
 
-  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Token.Result_2 {
+  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
+    try {
+      // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
+      let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
+      // var paymentStatus : Token.Result_2 = #Ok(0);
+      // switch (voteStatus) {
+      //   case (#upvote) {
+      //     paymentStatus := await icrc2_transferFrom(userId, backendCanisterId, voteTime * 100000000);
+      //   };
+      //   case (#downvote) {
+      //     paymentStatus := await ledger.icrc1_transfer({
+      //       to = {
+      //         owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
+      //         subaccount = null;
+      //       };
+      //       fee = null;
+      //       memo = null;
+      //       from_subaccount = null;
+      //       created_at_time = null;
+      //       amount = (50 * voteTime * 100000000) / 100;
+      //     });
 
-    // let userId : Principal = Principal.fromText("bkyz2-fmaaa-aaaaa-qaaaq-cai");
-    let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
-    var paymentStatus : Token.Result_2 = #Ok(0);
-    switch (voteStatus) {
-      case (#upvote) { 
-        paymentStatus := await icrc2_transferFrom(userId, backendCanisterId, voteTime * 100000000);
-      };
-      case (#downvote) {
-        paymentStatus := await ledger.icrc1_transfer({
-          to = {
-            owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
-            subaccount = null;
-          };
-          fee = null;
-          memo = null;
-          from_subaccount = null;
-          created_at_time = null;
-          amount = (50 * voteTime * 100000000) / 100;
-        });
+      //   };
+      // };
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+      #ok(successMessage.update);
+      // paymentStatus;
+    } catch (e) {
 
-      };
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+
     };
-    userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
-    postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-    paymentStatus;
   };
-  // public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
-  //   try {
 
-  //     #ok(successMessage.update);
-  //   } catch (e) {
-  //     let code = Error.code(e);
-  //     let message = Error.message(e);
-  //     #err(code, message);
-  //   };
-  // };
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Int) : async Token.Result_2 {
+    let { updatedPostTrie; updatedWithDrawPostTrie; ownerReward } = withdraw(postId, amount, userId, postTrieMap, withdrawPostTrie);
+    postTrieMap := updatedPostTrie;
+    withdrawPostTrie := updatedWithDrawPostTrie;
+    let paymentRes = await ledger.icrc1_transfer({
+      to = {
+        owner = userId;
+        subaccount = null;
+      };
+      fee = null;
+      memo = null;
+      from_subaccount = null;
+      created_at_time = null;
+      amount = ownerReward;
+    });
+    paymentRes;
+  };
 
+  public shared ({ caller = userId }) func claimReward(index : Nat, postId : Types.PostId) {
+    let { updatedWithDrawPostTrie; amount } = claim(index, userId, postId, userTrieMap, withdrawPostTrie);
+    withdrawPostTrie := updatedWithDrawPostTrie;
+  };
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
       let {
@@ -560,6 +581,37 @@ actor BattleChan {
     switch (Trie.get(boardTrieMap, textKey boardId, Text.equal)) {
       case (?board) { true };
       case (null) { false };
+    };
+  };
+
+  public query func getTotalCounts() : async Types.Result_1<{ userData : Nat; postData : Nat; userAchivedPostData : Nat; withdrawPost : Nat }> {
+    let totalData = {
+      userData = Trie.size(userTrieMap);
+      postData = Trie.size(postTrieMap);
+      userAchivedPostData = Trie.size(userAchivedPostTrie);
+      withdrawPost = Trie.size(withdrawPostTrie);
+    };
+    return {
+      data = ?totalData;
+      status = true;
+      error = null;
+    };
+  };
+  public query func getTotalCommentsInPost(postId : Types.PostId) : async Types.Result_1<Nat> {
+    let postInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
+      case (?value) { value };
+      case (null) {
+        return {
+          data = null;
+          status = false;
+          error = ?notFound.noPost;
+        };
+      };
+    };
+    return {
+      data = ?Trie.size(postInfo.comments);
+      status = false;
+      error = null;
     };
   };
 
