@@ -317,14 +317,14 @@ const Post: React.FC<PostProps> = ({
 
         <div className="buttons flex-row-center gap-2 ml-3 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
               } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
               } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
