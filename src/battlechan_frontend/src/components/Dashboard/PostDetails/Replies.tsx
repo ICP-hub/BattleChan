@@ -79,7 +79,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
           </div>
 
           <div className="flex flex-col tablet:flex-row tablet:items-center ml-10 tablet:mt-2">
-            <h1 className="font-semibold">{"comment.createdBy.userName"}</h1>
+            <h1 className="font-semibold">{"userName"}</h1>
             <div className="tablet:ml-6 text-[#000] dark:text-[#fff] text-xs text-opacity-50 dark:text-opacity-50">
               {comment.createdAt}
             </div>

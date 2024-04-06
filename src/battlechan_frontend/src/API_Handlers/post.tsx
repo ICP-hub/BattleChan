@@ -6,12 +6,6 @@ const useBackend = () => {
     return useCanister("backend");
 };
 
-interface BackendResponse {
-    status: boolean;
-    data: []; // Assuming 'data' is an array of arrays of Board objects.
-    error: string[];
-}
-
 const PostApiHanlder = () => {
     // Init backend
     const [backend] = useCanister("backend");

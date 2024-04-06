@@ -119,7 +119,7 @@ const MainPosts = (props: Theme) => {
   useEffect(() => {
     if (boardsData.length > 0) {
       setSelectedBoard(boardsData[0]);
-      console.log("selectedboard", selectedBoard)
+      // console.log("selectedboard", selectedBoard)
     }
   }, [boardsData]);
 
@@ -136,7 +136,7 @@ const MainPosts = (props: Theme) => {
         pageNumber,
         boardName
       );
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -178,7 +178,7 @@ const MainPosts = (props: Theme) => {
           currentPage,
           selectedBoard
         )) as PostResponse;
-        console.log("Archive Post Response: ", response);
+        // console.log("Archive Post Response: ", response);
         if (response.status === true && response.data) {
           const posts = response.data
             .flatMap((nestedArray) => nestedArray)
@@ -209,17 +209,17 @@ const MainPosts = (props: Theme) => {
           currentPage,
           selectedBoard
         )) as PostResponse;
-        console.log("Main Posts Response: ", response);
+        // console.log("Main Posts Response: ", response);
         if (response.status === true && response.data) {
           // console.log(response);
           const posts = response.data.flat(); // Flatten nested arrays if any
           posts.forEach((element) => {
-            console.log("element", element);
-            console.log(element.createdAt);
+            // console.log("element", element);
+            // console.log(element.createdAt);
             const timestamp: string = convertNanosecondsToTimestamp(
               BigInt(element.createdAt)
             );
-            console.log(timestamp);
+            // console.log(timestamp);
             element.createdAt = timestamp;
             element.upvotes = Number(element.upvotes);
           });

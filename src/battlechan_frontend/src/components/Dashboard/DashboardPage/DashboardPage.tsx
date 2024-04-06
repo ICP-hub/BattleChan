@@ -4,6 +4,7 @@ import NavButtons from "../NavButtons/NavButtons";
 import Posts from "./Posts";
 import Comments from "./Comments";
 import ApexCharts from "react-apexcharts";
+import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -16,7 +17,7 @@ type Width = {
 const DashboardPage = (props: Theme) => {
   const className = "dashboard__dashboardPage";
   const cardContainer =
-    "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] w-[150px] laptop:m-4 m-3 laptop:font-base text-sm";
+    "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] w-[150px] laptop:m-4 m-3 laptop:font-base text-sm text-light";
   const cardStyle =
     "bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md phone:p-8 p-4";
 
@@ -46,13 +47,20 @@ const DashboardPage = (props: Theme) => {
     ],
   };
 
-  useEffect(() => {
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+  const data01 = [
+    { name: 'Upvote', value: 125 },
+    { name: 'Downvote', value: 15 },
+    { name: 'Earned', value: 120 },
+    { name: 'Buy', value: 100 },
+  ];
 
-    // Clean up the chart on unmount
-    return () => chart.destroy();
-  }, []); // Empty dependency array ensures the effect runs only once on mount
+  // useEffect(() => {
+  //   const chart = new ApexCharts(document.querySelector("#chart"), options);
+  //   chart.render();
+
+  //   // Clean up the chart on unmount
+  //   return () => chart.destroy();
+  // }, []); // Empty dependency array ensures the effect runs only once on mount
 
   return (
     <div className="min-h-screen bg-light dark:bg-dark dark:bg-green-gradient bg-center-top bg-cover bg-no-repeat">
@@ -110,6 +118,8 @@ const DashboardPage = (props: Theme) => {
             </div>
           </div>
 
+
+{/* 
           <div
             className={
               className + "__rightSection " + " flex-row-center flex-wrap"
@@ -119,16 +129,28 @@ const DashboardPage = (props: Theme) => {
               id="chart"
               className="big_tablet:w-auto w-full bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md laptop:p-8 big_tablet:p-2 py-4 small_phone:px-12 px-4"
             >
-              <div id="chart" />
+              <PieChart width={400} height={400}>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={data01}
+                  cx={200}
+                  cy={200}
+                  outerRadius={150}
+                  fill="#8884d8"
+                  label
+                />
+                <Tooltip />
+              </PieChart>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <Posts />
 
         <Comments />
 
-        <div
+        {/* <div
           className={
             className +
             "__bottom " +
@@ -147,7 +169,7 @@ const DashboardPage = (props: Theme) => {
           <button className="small-button bg-dark text-light dark:bg-light dark:text-dark rounded-lg">
             Withdraw
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

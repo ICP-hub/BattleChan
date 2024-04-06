@@ -170,7 +170,7 @@ const PostDetails = (props: Theme) => {
           console.log(timestamp);
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
-          console.log("UPVOTE", element.upvotes);
+          // console.log("UPVOTE", element.upvotes);
           const interval = setInterval(
             (expireAt: BigInt) => {
               const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
@@ -332,24 +332,21 @@ const PostDetails = (props: Theme) => {
               className="block h-auto w-full"
               src={convertInt8ToBase64(postsData?.postMetaData || undefined)}
               alt="post image"
-              loading="lazy"
-            />
+              loading="lazy" />
 
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
               <div className="flex items-center gap-4">
                 <div
-                  className={`${
-                    type === "archive" ? "hidden" : "flex"
-                  } flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  className={`${type === "archive" ? "hidden" : "flex"
+                    } flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                 >
                   <MdOutlineVerifiedUser />
                   <span>{postsData?.upvotes}</span>
                 </div>
 
                 <div
-                  className={`${
-                    type === "archive" ? "hidden" : "flex"
-                  } tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  className={`${type === "archive" ? "hidden" : "flex"
+                    } tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                 >
                   <LiaCommentSolid />
                   <span>{commentsCount} Comments</span>
@@ -363,9 +360,8 @@ const PostDetails = (props: Theme) => {
 
               <div className="text-lg">
                 <span
-                  className={` ${
-                    type === "archive" ? "text-red" : "text-[#18AF00]"
-                  }`}
+                  className={` ${type === "archive" ? "text-red" : "text-[#18AF00]"
+                    }`}
                 >
                   {time}
                 </span>{" "}
@@ -377,17 +373,15 @@ const PostDetails = (props: Theme) => {
           {/* upvote and downvote button  */}
           <div className="flex gap-2 text-3xl mt-4 tablet:mt-11">
             <TbSquareChevronUpFilled
-              className={`${
-                vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
-              className={`${
-                !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />

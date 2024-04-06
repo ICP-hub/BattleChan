@@ -51,7 +51,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   const { createCommentReply, likeComment } = CommentsApiHanlder();
 
   function showMoreComments() {
-    setVisibleComments((prevValue) => prevValue + 10);
+    setVisibleComments((prevValue) => prevValue + 5);
   }
 
   async function handleAddReply(

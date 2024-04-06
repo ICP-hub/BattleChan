@@ -157,7 +157,7 @@ const Post: React.FC<PostProps> = ({
     if (response && response.status == true) {
       let data = response.data[0];
       if (data && data.length > 0) {
-        console.log(length);
+        // console.log(length);
         setCommentsCount(data.length);
       }
     }

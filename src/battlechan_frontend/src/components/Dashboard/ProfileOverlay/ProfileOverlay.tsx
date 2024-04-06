@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FaRegBell } from "react-icons/fa";
 import UserImg from "../../../images/User.png";
@@ -14,6 +14,7 @@ import { SiInternetcomputer } from "react-icons/si";
 import { useMediaQuery } from "@mui/material";
 import toast from "react-hot-toast";
 import UserApiHanlder from "../../../API_Handlers/user";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 type Props = {
   display: boolean;
@@ -45,6 +46,10 @@ const ProfileOverlay = (props: Props) => {
   const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(UserImg);
   const [userName, setUserName] = React.useState("");
+  const [tokenBalance, setTokenBalance] = React.useState(0);
+  const { getBalance } = TokensApiHanlder();
+  const navigate = useNavigate();
+
 
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
@@ -68,9 +73,22 @@ const ProfileOverlay = (props: Props) => {
     fetchData();
   }, [userName]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (principal) {
+        const data = await getBalance(principal || "");
+        setTokenBalance(Number(data));
+      }
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [principal]);
+
   const logoutHandler = () => {
     disconnect();
-    toast.success("Logout successfully.");
+    toast.success("Logged out successfully.");
+    navigate("/");
   };
 
   return (
@@ -78,8 +96,7 @@ const ProfileOverlay = (props: Props) => {
       className={
         className +
         " " +
-        `${
-          display ? "block" : "hidden"
+        `${display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
@@ -123,7 +140,7 @@ const ProfileOverlay = (props: Props) => {
                   Time Balance
                 </p>
               </Link>
-              <p>XYZ</p>
+              <p>{tokenBalance}</p>
             </div>
           </section>
 
