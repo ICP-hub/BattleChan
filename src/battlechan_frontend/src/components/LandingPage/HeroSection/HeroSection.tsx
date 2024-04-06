@@ -4,7 +4,8 @@ import "./HeroSection.scss";
 import { ConnectButton, ConnectDialog } from "@connect2ic/react";
 
 import desktops from "../../../images/desktops.png";
-import backImage from "../../../images/background_img.png";
+// import backImage from "../../../images/background_img.png";
+import backImage from "../../../images/bg.svg";
 
 const HeroSection = () => {
   const className = "LandingPage__HeroSection";
@@ -32,7 +33,7 @@ const HeroSection = () => {
       >
         <h1
           className={
-            `tablet:text-left text-dark dark:text-light text-center font-bold` +
+            ` text-dark dark:text-light text-center font-bold` +
             " tablet:text-5xl phone:text-4xl text-2xl"
           }
         >

@@ -40,6 +40,7 @@ module {
             Debug.trap(reject.anonymous);
         };
 
+
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
         };

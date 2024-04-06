@@ -12,7 +12,7 @@ import { TbSettings } from "react-icons/tb";
 import { BsPersonCircle } from "react-icons/bs";
 import { SiInternetcomputer } from "react-icons/si";
 import { useMediaQuery } from "@mui/material";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 import UserApiHanlder from "../../../API_Handlers/user";
 
 type Props = {
@@ -25,7 +25,7 @@ interface ProfileData {
   userName: string;
   profileImg: string;
   status: boolean;
-};
+}
 
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
@@ -35,7 +35,7 @@ const truncateString = (str: string, maxLength: number): string => {
 };
 
 const ProfileOverlay = (props: Props) => {
-  const { isConnected, disconnect } = useConnect()
+  const { isConnected, disconnect } = useConnect();
 
   const className = "ProfileOverlay";
   const display = props.display;
@@ -69,16 +69,17 @@ const ProfileOverlay = (props: Props) => {
   }, [userName]);
 
   const logoutHandler = () => {
-    disconnect()
-    toast.success("Logout successfully.")
-  }
+    disconnect();
+    toast.success("Logout successfully.");
+  };
 
   return (
     <div
       className={
         className +
         " " +
-        `${display ? "block" : "hidden"
+        `${
+          display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
@@ -116,11 +117,12 @@ const ProfileOverlay = (props: Props) => {
             </div>
 
             <div className="Time_Balance flex-row-center justify-between">
-              <p className="flex-row-center gap-2">
-                <RxLapTimer />
-                Time Balance
-              </p>
-
+              <Link to="/dashboard/analytics">
+                <p className="flex-row-center gap-2 hover:text-grey">
+                  <RxLapTimer />
+                  Time Balance
+                </p>
+              </Link>
               <p>XYZ</p>
             </div>
           </section>
@@ -181,8 +183,6 @@ const ProfileOverlay = (props: Props) => {
             Logout
           </button>
         )}
-
-
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
+import { MdOutlineVerifiedUser } from "react-icons/md";
 import Replies from "./Replies";
 import Constant from "../../../utils/constants";
 import toast from "react-hot-toast";
@@ -30,6 +31,10 @@ interface ReplyResponse {
   ok: string;
 }
 
+interface LikeResponse {
+  ok: string;
+}
+
 const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [activeReplyButton, setActiveReplyButton] = useState<string | null>(
@@ -38,13 +43,21 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   const [loading, setLoading] = useState(false);
   const [reply, setReply] = useState("");
   const [vote, setVote] = React.useState(true);
-  const handleVote = (vote: boolean) => {
-    setVote(vote);
-  };
+  const [visibleComments, setVisibleComments] = useState(1);
+  // const handleVote = (vote: boolean) => {
+  //   setVote(vote);
+  // };
   const { convertInt8ToBase64 } = Constant();
-  const { createCommentReply } = CommentsApiHanlder();
+  const { createCommentReply, likeComment } = CommentsApiHanlder();
 
-  async function handleAddReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, commentId: string) {
+  function showMoreComments() {
+    setVisibleComments((prevValue) => prevValue + 1);
+  }
+
+  async function handleAddReply(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    commentId: string
+  ) {
     e.preventDefault();
     setLoading(true);
     const response = (await createCommentReply(
@@ -65,13 +78,36 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
     }
   }
 
+  async function handleLikeComment(commentId: string, vote: boolean) {
+    setVote(vote);
+
+    const postId = commentId.split("_")[0];
+
+    if (vote) {
+      const response = (await likeComment(
+        postId ?? "",
+        commentId ?? ""
+      )) as LikeResponse;
+      console.log(response);
+
+      if (response && response?.ok) {
+        toast.success(response.ok);
+        // window.location.href = "/dashboard/mainPosts";
+      } else {
+        toast.error(
+          "Error liking comment, Please verify and provide valid data!"
+        );
+      }
+    }
+  }
+
   return (
-    <div>
+    <div className="ml-5">
       {/* comment details */}
       {/* <div key={index}> */}
       {/* user details */}
 
-      {currentComment.map((comment, index) => (
+      {currentComment.slice(0, visibleComments).map((comment, index) => (
         <div key={index} className="flex flex-col gap-4 border-l relative mt-7">
           {/* <div className={`absolute -left-6 top-0 w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded bg-[url(${convertInt8ToBase64(comment.createdBy.userProfile)})] bg-cover bg-no-repeat bg-center`}></div> */}
           <div
@@ -97,19 +133,35 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
 
           {/* upvote downvote and reply button */}
           <div className="flex-row-center gap-10 ml-10">
-            <div className="flex gap-2 text-3xl">
+            {/* show likes of comment  */}
+            <div
+              className={`flex tablet:text-lg text-xs items-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+            >
+              <MdOutlineVerifiedUser />
+              <span>{comment.likedBy.length}</span>
+            </div>
+
+            <div
+              className={`gap-2 text-3xl ${
+                type === "archive" ? "hidden" : "flex"
+              }`}
+            >
               <TbSquareChevronUpFilled
                 className={`${
                   vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
                 } cursor-pointer`}
-                onClick={() => handleVote(true)}
+                onClick={() => {
+                  handleLikeComment(comment.commentId, true);
+                }}
               />
 
               <TbSquareChevronDownFilled
                 className={`${
                   !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
                 } cursor-pointer`}
-                onClick={() => handleVote(false)}
+                onClick={() => {
+                  handleLikeComment(comment.commentId, false);
+                }}
               />
             </div>
 
@@ -148,14 +200,16 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
                     <div className="flex justify-center items-center gap-4">
                       <button
                         onClick={() => {
-                          setActiveReplyButton(null)
+                          setActiveReplyButton(null);
                         }}
                         className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={(e)=>{handleAddReply(e, comment.commentId)}}
+                        onClick={(e) => {
+                          handleAddReply(e, comment.commentId);
+                        }}
                         className={
                           "border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer disabled:text-opacity-50 disabled:dark:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
                         }
@@ -196,6 +250,14 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
           </div>
         </div>
       ))}
+      <button
+        onClick={showMoreComments}
+        className={
+          `mt-8 border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer ${currentComment.length <= visibleComments ? "hidden" : "block"}`
+        }
+      >
+        Load More
+      </button>
     </div>
   );
 };
