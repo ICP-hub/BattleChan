@@ -95,8 +95,20 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  const likeComment = async (postId:string, commentId: string) => {
+    try {
+        // console.log(backend);
+        console.log("like comment data: ", postId, commentId)
+        const res = await backend.likeComment(postId, commentId);
+        console.log(res);
+        return res;
+    } catch (err) {
+        console.error("Error liking comment : ", err);
+    }
+};
+
   // Returns
-  return { getAllComments, getAllReplies, getUserCommentInfo, createComment, getAllCommentsOfArchivedPost, createCommentReply };
+  return { getAllComments, getAllReplies, getUserCommentInfo, createComment, getAllCommentsOfArchivedPost, createCommentReply, likeComment };
 };
 
 export default CommentsApiHanlder;
