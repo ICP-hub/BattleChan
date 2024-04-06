@@ -92,7 +92,7 @@ const SettingProfile = (props: Theme) => {
 
   function handleFileChange() {
     // const imageUrl = URL.createObjectURL(inputfile.files[0]);
-    setFileURL(fileData?.base64 || (fileURL || defaultImg));
+    setFileURL(fileData?.base64 || fileURL || defaultImg);
   }
 
   function handleNameChange() {
@@ -268,7 +268,7 @@ const SettingProfile = (props: Theme) => {
       <div
         className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-8 text-dark dark:text-light`}
       >
-        <h1 className="laptop:text-3xl text-2xl font-bold text-center">
+        <h1 className="laptop:text-4xl text-laptop:text-4xl phone:text-3xl text-2xl font-bold text-center mb-8">
           Customize Profile
         </h1>
 
@@ -300,10 +300,11 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${showInput
+              className={`${
+                showInput
                   ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
                   : " bg-dark dark:bg-light"
-                } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+              } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change
