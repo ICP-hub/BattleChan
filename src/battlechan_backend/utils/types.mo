@@ -56,7 +56,13 @@ module {
     public type ReplyInfo = {
         replyId : Text;
         reply : Text;
-        likes : Nat64;
+        likedBy : [UserId];
+        dislikedBy : [UserId];
+        createdBy : {
+            ownerId : Principal;
+            userName : Text;
+            userProfile : [Int8];
+        };
         createdAt : Text;
         updatedAt : ?Text;
     };
@@ -69,6 +75,7 @@ module {
             userProfile : [Int8];
         };
         likedBy : [UserId];
+        dislikedBy : [UserId];
         replies : Trie.Trie<ReplyId, ReplyInfo>;
         createdAt : Text;
         updatedAt : ?Text;

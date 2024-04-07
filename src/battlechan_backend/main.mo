@@ -216,7 +216,6 @@ actor BattleChan {
       #err(code, message);
 
     };
-
   };
 
   public shared ({ caller = userId }) func createComment(postId : Types.PostId, comment : Text) : async Types.Result {
@@ -236,9 +235,9 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func likeComment(postId : Types.PostId, commentId : Types.CommentId) : async Types.Result {
+  public shared ({ caller = userId }) func likeComment(postId : Types.PostId, voteStatus : Types.VoteStatus, commentId : Types.CommentId) : async Types.Result {
     try {
-      let { updatedUserInfo; updatedPostInfo } = updateLikedComments(userId, postId, commentId, userTrieMap, postTrieMap);
+      let { updatedUserInfo; updatedPostInfo } = updateLikedComments(userId, postId, voteStatus, commentId, userTrieMap, postTrieMap);
 
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
@@ -271,10 +270,10 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func likeCommentReply(commentId : Types.CommentId, replyId : Types.ReplyId) : async Types.Result {
+  public shared ({ caller = userId }) func likeCommentReply(commentId : Types.CommentId, voteStatus : Types.VoteStatus, replyId : Types.ReplyId) : async Types.Result {
     try {
       let postId = getPostIdFromCommentId(commentId);
-      let postInfo : Types.PostInfo = updateLikesInReplies(userId, commentId, replyId, postTrieMap, userTrieMap);
+      let postInfo : Types.PostInfo = updateLikesInReplies(userId, commentId, replyId, voteStatus, postTrieMap, userTrieMap);
 
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, postInfo).0;
 

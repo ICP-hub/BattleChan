@@ -9,8 +9,8 @@ import TrendingPost from "../../components/LandingPage/TrendingPosts/TrendingPos
 import HeroSection from "../../components/LandingPage/HeroSection/HeroSection";
 import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/AttractiveCompo";
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
-import { useConnect } from '@connect2ic/react';
-import { useNavigate } from 'react-router-dom';
+import { useConnect } from "@connect2ic/react";
+import { useNavigate } from "react-router-dom";
 
 // import { backend } from "../../../../declarations/backend/index";
 
@@ -19,7 +19,7 @@ type Theme = {
 };
 
 function Landing(props: Theme) {
-  let { isConnected, principal, isIdle, isInitializing } = useConnect()
+  let { isConnected, principal, isIdle, isInitializing } = useConnect();
   const [allow, setAllow] = useState<null | boolean>(null);
   const navigate = useNavigate();
 
@@ -27,17 +27,16 @@ function Landing(props: Theme) {
     if (isInitializing == false) {
       setAllow(principal ? true : false);
     }
-    console.log("intitilizing is ", isInitializing)
-
+    console.log("intitilizing is ", isInitializing);
   }, [principal, isInitializing]);
 
-  console.log("allow is ", allow)
-  console.log("principal is ", principal)
+  console.log("allow is ", allow);
+  console.log("principal is ", principal);
 
   React.useEffect(() => {
     if (principal) {
-      console.log('Principalm eff of aepr :', principal);
-      navigate('/dashboard/settingProfile');
+      console.log("Principalm eff of aepr :", principal);
+      navigate("/dashboard/settingProfile");
       // Perform any other actions that depend on the updated principal value
     }
   }, [principal]);

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
@@ -8,6 +8,7 @@ import PostDetails from "../components/Dashboard/PostDetails/PostDetails";
 import CreatePost from "../components/Dashboard/CreatePost/CreatePost";
 import ArchivePosts from "../components/Dashboard/ArchivePosts/ArchivePosts";
 import Analytics from "../components/Dashboard/Analytics/Analytics";
+import DashboardPage from "../components/Dashboard/DashboardPage/DashboardPage";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -22,15 +23,34 @@ function Routing(props: Theme) {
           element={<Dashboard handleThemeSwitch={props.handleThemeSwitch} />}
         />
         <Route
+          path="/dashboard"
+          element={
+            <DashboardPage handleThemeSwitch={props.handleThemeSwitch} />
+          }
+        />
+
+        <Route
           path="/settingProfile"
           element={
             <SettingProfile handleThemeSwitch={props.handleThemeSwitch} />
           }
         />
-        <Route path="/userProfile" element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />} />
-        <Route path="/mainPosts" element={<MainPosts handleThemeSwitch={props.handleThemeSwitch}  />} />
-        <Route path="/archivePosts" element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />} />
-        <Route path="/analytics" element={<Analytics handleThemeSwitch={props.handleThemeSwitch} />} />
+        <Route
+          path="/userProfile"
+          element={<UserProfile handleThemeSwitch={props.handleThemeSwitch} />}
+        />
+        <Route
+          path="/mainPosts"
+          element={<MainPosts handleThemeSwitch={props.handleThemeSwitch} />}
+        />
+        <Route
+          path="/archivePosts"
+          element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />}
+        />
+        <Route
+          path="/analytics"
+          element={<Analytics handleThemeSwitch={props.handleThemeSwitch} />}
+        />
 
         <Route
           path="/postDetails/:postId"
