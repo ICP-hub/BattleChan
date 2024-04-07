@@ -13,7 +13,7 @@ import { checkText } "../utils/validations";
 import { getUniqueId; getPostIdFromCommentId } "../utils/helper";
 import { principalKey; textKey } "../keys";
 module {
-    public func createReply(userId : Types.UserId, commentId : Types.CommentId, reply : Text, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
+    public func createReply(userId : Types.UserId, commentId : Types.CommentId, reply : Text, userTrieMap : Types.UserTrieMap, postTrieMap : Types.PostTrieMap) : {
         updatedPostInfo : Types.PostInfo;
         updatedUserInfo : Types.UserInfo;
     } {
@@ -39,7 +39,13 @@ module {
         let newReply : Types.ReplyInfo = {
             replyId;
             reply;
-            likes = 0;
+            createdBy = {
+                ownerId = userId;
+                userName = userInfo.userName;
+                userProfile = userInfo.profileImg;
+            };
+            likedBy = [];
+            dislikedBy = [];
             createdAt = Int.toText(now());
             updatedAt = null;
         };
@@ -49,6 +55,7 @@ module {
             commentId;
             comment = commentInfo.comment;
             likedBy = commentInfo.likedBy;
+            dislikedBy = commentInfo.dislikedBy;
             createdBy = commentInfo.createdBy;
             replies = updatedReplyTrie;
             createdAt = commentInfo.createdAt;
@@ -87,12 +94,12 @@ module {
         };
         { updatedPostInfo; updatedUserInfo };
     };
-    public func updateLikesInReplies(userId : Types.UserId, commentId : Types.CommentId, replyId : Types.ReplyId, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>) : Types.PostInfo {
+    public func updateLikesInReplies(userId : Types.UserId, commentId : Types.CommentId, replyId : Types.ReplyId, voteStatus : Types.VoteStatus, postTrieMap : Types.PostTrieMap, userTrieMap : Types.UserTrieMap) : Types.PostInfo {
 
         let postId = getPostIdFromCommentId(commentId);
-        let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+        switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (null) { trap(reject.noAccount) };
-            case (?userData) { userData };
+            case (?userData) {};
         };
         let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
             case (?value) { value };
@@ -108,12 +115,29 @@ module {
             case (null) { trap(reject.noReply) };
         };
 
-        let newReply : Types.ReplyInfo = {
-            replyId = replyInfo.replyId;
-            reply = replyInfo.reply;
-            likes = replyInfo.likes +1;
-            createdAt = Int.toText(now());
-            updatedAt = null;
+        let newReply : Types.ReplyInfo = switch (voteStatus) {
+            case (#upvote) {
+                {
+                    replyId = replyInfo.replyId;
+                    reply = replyInfo.reply;
+                    createdBy = replyInfo.createdBy;
+                    likedBy = List.toArray(List.push(userId, List.fromArray(replyInfo.likedBy)));
+                    dislikedBy = replyInfo.dislikedBy;
+                    createdAt = Int.toText(now());
+                    updatedAt = null;
+                };
+            };
+            case (#downvote) {
+                {
+                    replyId = replyInfo.replyId;
+                    reply = replyInfo.reply;
+                    createdBy = replyInfo.createdBy;
+                    likedBy = replyInfo.likedBy;
+                    dislikedBy = List.toArray(List.push(userId, List.fromArray(replyInfo.dislikedBy)));
+                    createdAt = Int.toText(now());
+                    updatedAt = null;
+                };
+            };
         };
 
         let updatedCommentInfo : Types.CommentInfo = {
@@ -121,6 +145,7 @@ module {
             comment = commentInfo.comment;
             createdBy = commentInfo.createdBy;
             likedBy = commentInfo.likedBy;
+            dislikedBy = commentInfo.dislikedBy;
             replies = Trie.put(commentInfo.replies, textKey replyId, Text.equal, newReply).0;
             createdAt = commentInfo.createdAt;
             updatedAt = ?Int.toText(now());
