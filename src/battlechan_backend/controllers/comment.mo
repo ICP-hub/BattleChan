@@ -16,7 +16,7 @@ import { getUniqueId } "../utils/helper";
 import { principalKey; textKey } "../keys";
 
 module {
-    public func createCommentInfo(userId : Types.UserId, postId : Types.PostId, comment : Text, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
+    public func createCommentInfo(userId : Types.UserId, postId : Types.PostId, comment : Text, userTrieMap : Types.UserTrieMap, postTrieMap : Types.PostTrieMap) : {
         updatedPostInfo : Types.PostInfo;
         updatedUserInfo : Types.UserInfo;
     } {
@@ -42,6 +42,7 @@ module {
                 userProfile = userInfo.profileImg;
             };
             likedBy = [];
+            dislikedBy = [];
             replies = Trie.empty<Types.ReplyId, Types.ReplyInfo>();
             createdAt = Int.toText(now());
             updatedAt = null;
@@ -82,7 +83,14 @@ module {
         };
     };
 
-    public func updateLikedComments(userId : Types.UserId, postId : Types.PostId, commentId : Types.CommentId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) : {
+    public func updateLikedComments(
+        userId : Types.UserId,
+        postId : Types.PostId,
+        voteStatus : Types.VoteStatus,
+        commentId : Types.CommentId,
+        userTrieMap : Types.UserTrieMap,
+        postTrieMap : Types.PostTrieMap,
+    ) : {
         updatedPostInfo : Types.PostInfo;
         updatedUserInfo : Types.UserInfo;
     } {
@@ -111,15 +119,33 @@ module {
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
-        let updatedCommentInfo : Types.CommentInfo = {
-            commentId = commentInfo.commentId;
-            comment = commentInfo.comment;
-            createdBy = commentInfo.createdBy;
-            likedBy = List.toArray(List.push(userId, List.fromArray(commentInfo.likedBy)));
-            replies = commentInfo.replies;
-            createdAt = commentInfo.createdAt;
-            updatedAt = ?Int.toText(now());
+        let updatedCommentInfo : Types.CommentInfo = switch (voteStatus) {
+            case (#upvote) {
+                {
+                    commentId = commentInfo.commentId;
+                    comment = commentInfo.comment;
+                    createdBy = commentInfo.createdBy;
+                    likedBy = List.toArray(List.push(userId, List.fromArray(commentInfo.likedBy)));
+                    dislikedBy = commentInfo.dislikedBy;
+                    replies = commentInfo.replies;
+                    createdAt = commentInfo.createdAt;
+                    updatedAt = ?Int.toText(now());
+                };
+            };
+            case (#downvote) {
+                {
+                    commentId = commentInfo.commentId;
+                    comment = commentInfo.comment;
+                    createdBy = commentInfo.createdBy;
+                    likedBy = commentInfo.likedBy;
+                    dislikedBy = List.toArray(List.push(userId, List.fromArray(commentInfo.dislikedBy)));
+                    replies = commentInfo.replies;
+                    createdAt = commentInfo.createdAt;
+                    updatedAt = ?Int.toText(now());
+                };
+            };
         };
+
         let updatedCommentTrie : Trie.Trie<Types.CommentId, Types.CommentInfo> = Trie.put(postInfo.comments, textKey commentId, Text.equal, updatedCommentInfo).0;
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;

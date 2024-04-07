@@ -216,6 +216,7 @@ const PostDetails = (props: Theme) => {
           console.log(timestamp);
           element.createdAt = timestamp;
         });
+        // console.log(comments);
         setcommentsData(comments);
         setCommentsCount(comments.length);
       }

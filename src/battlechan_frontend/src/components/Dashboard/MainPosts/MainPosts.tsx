@@ -61,6 +61,11 @@ interface PostResponse {
   error: string[];
 }
 
+interface TotalCountsResponse {
+  mainPostCounts: number;
+  archivePostCounts: number;
+}
+
 const post = [
   {
     postId: "#3109292588",
@@ -78,12 +83,13 @@ const MainPosts = (props: Theme) => {
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Recent");
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage, setPostsPerPage] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
 
   const className = "Dashboard__MainPosts";
-  const { createPost, getBoards, getMainPosts, getArchivePosts } =
+  const { createPost, getBoards, getMainPosts, getArchivePosts, getTotalCounts } =
     PostApiHanlder();
   const { convertNanosecondsToTimestamp } = Constant();
 
@@ -91,6 +97,23 @@ const MainPosts = (props: Theme) => {
     setSelectedBoard(boardName);
   };
 
+  // Get Total Post's Counts
+  useEffect(() => {
+    async function getTotalPosts() {
+      try {
+        const response = (await getTotalCounts()) as TotalCountsResponse;
+        console.log(response);
+        setTotalPosts(response?.mainPostCounts);
+      } catch (error) {
+        console.error("Error fetching total posts:", error);
+      }
+    }
+    getTotalPosts();
+  }, []);
+
+
+
+  // Get Boards
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -123,6 +146,7 @@ const MainPosts = (props: Theme) => {
     }
   }, [boardsData]);
 
+  // Main Post Filter
   const getAllPostFilter = async (
     filter: string = "recent",
     chunkSize: number = 10,
@@ -143,6 +167,7 @@ const MainPosts = (props: Theme) => {
     }
   };
 
+  // Archive Post Filter
   const getAllArchivePostFilter = async (
     filter: string = "recent",
     chunkSize: number = 10,
@@ -161,6 +186,7 @@ const MainPosts = (props: Theme) => {
     }
   };
 
+  // Check if Route is Archive or not
   useEffect(() => {
     if (props.type == "archive") {
       getPosts("archive");
@@ -169,6 +195,7 @@ const MainPosts = (props: Theme) => {
     }
   }, [props.type, currentPage, postsPerPage, selectedBoard]);
 
+  // Fetch Post's Data
   async function getPosts(postsType?: string) {
     try {
       if (postsType === "archive") {
@@ -209,12 +236,13 @@ const MainPosts = (props: Theme) => {
           currentPage,
           selectedBoard
         )) as PostResponse;
-        // console.log("Main Posts Response: ", response);
+        console.log("Main Posts Response: ", response);
         if (response.status === true && response.data) {
-          // console.log(response);
+          console.log("res", response);
           const posts = response.data.flat(); // Flatten nested arrays if any
+          console.log("POSTS", posts);
           posts.forEach((element) => {
-            // console.log("element", element);
+            console.log("element", element);
             // console.log(element.createdAt);
             const timestamp: string = convertNanosecondsToTimestamp(
               BigInt(element.createdAt)
@@ -231,8 +259,6 @@ const MainPosts = (props: Theme) => {
       console.error("Error fetching posts:", error);
     }
   }
-
-  const totalPosts = postsData.length;
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
