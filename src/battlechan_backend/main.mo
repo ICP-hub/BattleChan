@@ -606,7 +606,7 @@ public query func getTotalCounts() : async Types.Result_1<{ userData : Nat; post
     error = null;
   };
 };
-public shared query ({ caller = userId }) func getUserTotalCounts() : async Types.Result_1<{postData = userInfo.postIds.size(), comments : Nat, userArchivedPost : Nat, likedPost : Nat, dislikedPost : Nat> {
+public shared query ({ caller = userId }) func getUserTotalCounts() : async Types.Result_1<{postData : Nat; comments : Nat; userArchivedPost : Nat; likedPost : Nat;dislikedPost : Nat ;}> {
   let userInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
     case (?value) { value };
     case (null) {
