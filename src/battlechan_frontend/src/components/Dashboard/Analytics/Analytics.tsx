@@ -329,7 +329,6 @@ const Analytics = (props: Theme) => {
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
                       {item.message.split(" ").map((word, index) => {
-                        console.log(word);
                         if (word === "Upvote:") {
                           return (
                             <span key={index} className="text-[#18AF00]">

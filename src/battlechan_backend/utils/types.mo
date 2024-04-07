@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 import Trie "mo:base/Trie";
 import Error "mo:base/Error";
 import Nat64 "mo:base/Nat64";
+import List "mo:base/List";
 
 module {
     public type Key<K> = Trie.Key<K>;
@@ -15,6 +16,10 @@ module {
         #upvote;
         #downvote;
     };
+    public type UserTrieMap = Trie.Trie<UserId, UserInfo>;
+    public type BoardTrieMap = Trie.Trie<BoardName, BoardInfo>;
+    public type PostTrieMap = Trie.Trie<PostId, PostInfo>;
+    public type WithdrawTrieMap = Trie.Trie<PostId, List.List<WithdrawRecord>>;
     public type BoardName = Text;
     public type CommentId = Text;
     public type BoardInfo = {
@@ -95,6 +100,18 @@ module {
         createdAt : Text;
         expireAt : Int;
         updatedAt : ?Text;
+    };
+    public type CommentRewards = {
+        likes : Nat;
+        amount : Int;
+        claimedStatus : Bool;
+    };
+    public type WithdrawRecord = {
+        postId : PostId;
+        commentersReward : Trie.Trie<UserId, CommentRewards>;
+        ownerId : UserId;
+        ownerReward : Int;
+        createdAt : Text;
     };
     public type PostRes = {
         postId : PostId;
