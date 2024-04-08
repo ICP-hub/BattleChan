@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
+import { ConnectDialog } from "@connect2ic/react";
 
-import { FaRegBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
-import userimg from "../../../images/User.png";
 import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
@@ -43,7 +42,6 @@ const Navbar = (props: Theme) => {
   const [userName, setUserName] = React.useState("");
   const { getBalance } = TokensApiHanlder();
 
-  const is1100px = useMediaQuery("(min-width: 1100px)");
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
   const { principal, isConnected } = useConnect();
@@ -199,6 +197,8 @@ const Navbar = (props: Theme) => {
           handleThemeSwitch={props.handleThemeSwitch}
         />
       </section>
+
+      <ConnectDialog />
     </div>
   );
 };
