@@ -34,7 +34,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             `laptop:w-1/2 w-full p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
           }
         >
-            <Post
+            <MemoizedPost
               key={post.postId}
               id={post.postId}
               postName={post.postName}
@@ -55,5 +55,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
     </React.Fragment>
   );
 };
+
+const MemoizedPost = React.memo(Post);
 
 export default Posts;
