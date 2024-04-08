@@ -99,7 +99,7 @@ const Body = () => {
         className={
           className +
           "__tagLines" +
-          " w-full small_phone:my-12 my-6 gap-2 flex flex-col big_tablet:items-start items-center big_tablet:flex-row justify-between phone:px-[6vw] px-2"
+          " w-full small_phone:my-12 my-6 gap-4 laptop:px-[6vw] phone:px-[8vw] px-2 flex flex-col big_tablet:items-start items-center big_tablet:flex-row justify-between"
         }
       >
         <h1
@@ -107,13 +107,13 @@ const Body = () => {
             darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
           } leading-normal`}
         >
-          BattleChan: Decentralized
+          BattleChan: <br className="block phone:hidden" /> Decentralized
           <br />
           Discussion Battlefield
         </h1>
 
         <p
-          className={`big_tablet:w-1/3 w-full tablet:mt-4 mt-2 text-dark dark:text-light font-normal xl:text-lg big_tablet:text-sm tablet:text-base phone:text-sm text-xs text-center big_tablet:text-start`}
+          className={`big_tablet:w-1/3 w-full text-dark dark:text-light font-normal xl:text-lg big_tablet:text-sm tablet:text-base phone:text-sm text-xs text-center big_tablet:text-start`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
