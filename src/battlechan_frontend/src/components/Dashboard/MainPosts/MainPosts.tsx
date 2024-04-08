@@ -83,7 +83,7 @@ const MainPosts = (props: Theme) => {
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Recent");
-  const [postsPerPage, setPostsPerPage] = useState(2);
+  const [postsPerPage, setPostsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
@@ -102,8 +102,12 @@ const MainPosts = (props: Theme) => {
     async function getTotalPosts() {
       try {
         const response = (await getTotalCounts()) as TotalCountsResponse;
-        console.log(response);
-        setTotalPosts(response?.mainPostCounts);
+        // console.log(response);
+        if (props.type == "archive") {
+          setTotalPosts(response?.archivePostCounts);
+        } else {
+          setTotalPosts(response?.mainPostCounts);
+        }
       } catch (error) {
         console.error("Error fetching total posts:", error);
       }
@@ -198,62 +202,35 @@ const MainPosts = (props: Theme) => {
   // Fetch Post's Data
   async function getPosts(postsType?: string) {
     try {
+      let response;
       if (postsType === "archive") {
-        const response = (await getAllArchivePostFilter(
+        response = (await getAllArchivePostFilter(
           activeSelection.toLocaleLowerCase(),
           postsPerPage,
           currentPage,
           selectedBoard
         )) as PostResponse;
-        // console.log("Archive Post Response: ", response);
-        if (response.status === true && response.data) {
-          const posts = response.data
-            .flatMap((nestedArray) => nestedArray)
-            .flatMap((element) => {
-              if (
-                Array.isArray(element) &&
-                element.length === 2 &&
-                typeof element[1] === "object"
-              ) {
-                return [element[1]]; // Include only the object part
-              }
-              return [];
-            });
-          // console.log(posts);
-          posts.forEach((element) => {
-            const timestamp: string = convertNanosecondsToTimestamp(
-              BigInt(element.createdAt)
-            );
-            element.createdAt = timestamp;
-            element.upvotes = Number(element.upvotes);
-          });
-          setPostsData(posts);
-        }
       } else {
-        const response = (await getAllPostFilter(
+        response = (await getAllPostFilter(
           activeSelection.toLocaleLowerCase(),
           postsPerPage,
           currentPage,
           selectedBoard
         )) as PostResponse;
-        console.log("Main Posts Response: ", response);
-        if (response.status === true && response.data) {
-          console.log("res", response);
-          const posts = response.data.flat(); // Flatten nested arrays if any
-          console.log("POSTS", posts);
-          posts.forEach((element) => {
-            console.log("element", element);
-            // console.log(element.createdAt);
-            const timestamp: string = convertNanosecondsToTimestamp(
-              BigInt(element.createdAt)
-            );
-            // console.log(timestamp);
-            element.createdAt = timestamp;
-            element.upvotes = Number(element.upvotes);
-          });
-          // console.log(posts);
-          setPostsData(posts);
-        }
+      }
+      console.log("Main Posts Response: ", response);
+      if (response.status === true && response.data) {
+        const posts = response.data.flat();
+        posts.forEach((element) => {
+          const timestamp: string = convertNanosecondsToTimestamp(
+            BigInt(element.createdAt)
+          );
+          // console.log(timestamp);
+          element.createdAt = timestamp;
+          element.upvotes = Number(element.upvotes);
+        });
+        // console.log(posts);
+        setPostsData(posts);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);

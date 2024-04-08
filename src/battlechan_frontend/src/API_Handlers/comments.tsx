@@ -137,11 +137,23 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       console.log("like comment data: ", postId, commentId)
-      const res = await backend.likeComment(postId, commentId);
+      const res = await backend.likeComment(postId, { upvote: null }, commentId);
       console.log(res);
       return res;
     } catch (err) {
       console.error("Error liking comment : ", err);
+    }
+  };
+
+  const dislikeComment = async (postId: string, commentId: string) => {
+    try {
+      // console.log(backend);
+      console.log("dislike comment data: ", postId, commentId)
+      const res = await backend.likeComment(postId, { downvote: null }, commentId);
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.error("Error disliking comment : ", err);
     }
   };
 
@@ -173,7 +185,7 @@ const CommentsApiHanlder = () => {
   };
 
   // Returns
-  return { getAllComments, getAllReplies, getUserCommentInfo, createComment, getAllCommentsOfArchivedPost, createCommentReply, likeComment, getUserSingleComment};
+  return { getAllComments, getAllReplies, getUserCommentInfo, createComment, getAllCommentsOfArchivedPost, createCommentReply, likeComment, dislikeComment, getUserSingleComment};
 };
 
 export default CommentsApiHanlder;

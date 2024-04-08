@@ -77,12 +77,12 @@ const PostApiHanlder = () => {
     // Get Active Posts
     const getMainPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
-            console.log(filter);
-            console.log(chunkSize);
-            console.log(pageNumber);
-            console.log(boardName);
+            // console.log(filter);
+            // console.log(chunkSize);
+            // console.log(pageNumber);
+            // console.log(boardName);
             // const res = await backend.getPostsByBoard();
-            const res = await backend.postFilter(filter, pageNumber, chunkSize, boardName);
+            const res = await backend.postFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
             console.log(res);
             return res;
         } catch (err) {
@@ -91,9 +91,14 @@ const PostApiHanlder = () => {
     };
 
     // Get Recent Posts
-    const getRecentPosts = async () => {
+    const getRecentPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
-            const res = await backend.getArchivedPost(BigInt(10), BigInt(1));
+            // console.log(filter);
+            // console.log(chunkSize);
+            // console.log(pageNumber);
+            // console.log(boardName);
+            // const res = await backend.getArchivedPost(BigInt(10), BigInt(1));
+            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
             // console.log(res);
             return res;
         } catch (err) {
@@ -109,8 +114,8 @@ const PostApiHanlder = () => {
             // console.log(chunkSize);
             // console.log(pageNumber);
             // console.log(boardName);
-            const res = await backend.getArchivedPost(chunkSize, pageNumber);
-            // const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName);
+            // const res = await backend.getArchivedPost(chunkSize, pageNumber);
+            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
             // console.log(res);
             return res;
         } catch (err) {

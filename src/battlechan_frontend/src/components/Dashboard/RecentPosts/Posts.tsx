@@ -64,10 +64,13 @@ const Post = () => {
   const { getAllComments } = CommentsApiHanlder()
   const className = "LandingPage__TrendingPosts";
 
-  const getAllPostFilter = async () => {
+  const getAllPostFilter = async (selectedBoard: string) => {
     try {
-      const res = await getRecentPosts();
-      console.log(res);
+      const res = await getRecentPosts({ ["recent"]: null },
+        postsPerPage,
+        currentPage,
+        selectedBoard);
+      // console.log(res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -85,6 +88,7 @@ const Post = () => {
         const boards = response.data[0];
         if (boards && boards.length > 0) {
           setBoardsData(boards[0]?.boardName);
+          setSelectedBoard(boards[0]?.boardName);
         } else {
           console.log("No boards found.");
         }
@@ -94,28 +98,18 @@ const Post = () => {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
     getPosts();
   }, []);
 
   async function getPosts() {
     try {
-      const response = (await getAllPostFilter()) as PostResponse;
-      console.log("Main Posts Response: ", response);
+      const response = (await getAllPostFilter(selectedBoard)) as PostResponse;
       if (response.status === true && response.data) {
         // console.log(response);
-        const posts = response.data
-          .flatMap((nestedArray) => nestedArray)
-          .flatMap((element) => {
-            if (
-              Array.isArray(element) &&
-              element.length === 2 &&
-              typeof element[1] === "object"
-            ) {
-              return [element[1]]; // Include only the object part
-            }
-            return [];
-          });
-        // console.log(posts);
+        const posts = response.data.flat(); // Flatten nested arrays if any
         // Create an array to store promises for comments count retrieval
         const commentsCountPromises = posts.map(element => getCommentsCounts(element.postId));
         // Wait for all comments count retrieval promises to resolve
