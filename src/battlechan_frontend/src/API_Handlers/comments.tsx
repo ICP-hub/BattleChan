@@ -100,7 +100,7 @@ const CommentsApiHanlder = () => {
   const createComment = async (postId: string, comment: string) => {
     try {
       // console.log(backend);
-      console.log("comment data: ", postId, comment)
+      // console.log("comment data: ", postId, comment)
       const res = await backend.createComment(postId, comment);
       console.log(res);
       return res;
@@ -112,7 +112,7 @@ const CommentsApiHanlder = () => {
   const createCommentReply = async (commentId: string, reply: string) => {
     try {
       // console.log(backend);
-      console.log("reply data: ", commentId, reply)
+      // console.log("reply data: ", commentId, reply)
       const res = await backend.createCommentReply(commentId, reply);
       console.log(res);
       return res;
@@ -136,7 +136,7 @@ const CommentsApiHanlder = () => {
   const likeComment = async (postId: string, commentId: string) => {
     try {
       // console.log(backend);
-      console.log("like comment data: ", postId, commentId)
+      // console.log("like comment data: ", postId, commentId)
       const res = await backend.likeComment(postId, { upvote: null }, commentId);
       console.log(res);
       return res;
@@ -148,7 +148,7 @@ const CommentsApiHanlder = () => {
   const dislikeComment = async (postId: string, commentId: string) => {
     try {
       // console.log(backend);
-      console.log("dislike comment data: ", postId, commentId)
+      // console.log("dislike comment data: ", postId, commentId)
       const res = await backend.likeComment(postId, { downvote: null }, commentId);
       console.log(res);
       return res;
