@@ -59,7 +59,7 @@ const PostGrid: React.FC<PostGridProps> = ({ type, userInfo }) => {
           const postId = string.match(/#(\d+)/)?.[0] ?? undefined;
           const data = await getPostInfo(postId ?? "");
           if (data && data.length > 0) {
-            console.log("post data here: ", data);
+            // console.log("post data here: ", data);
             setPostData(data);
           }
         }

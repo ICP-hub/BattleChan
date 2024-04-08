@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FaRegBell } from "react-icons/fa";
 import UserImg from "../../../images/User.png";
@@ -14,6 +14,7 @@ import { SiInternetcomputer } from "react-icons/si";
 import { useMediaQuery } from "@mui/material";
 import toast from "react-hot-toast";
 import UserApiHanlder from "../../../API_Handlers/user";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 type Props = {
   display: boolean;
@@ -35,21 +36,24 @@ const truncateString = (str: string, maxLength: number): string => {
 };
 
 const ProfileOverlay = (props: Props) => {
+  const [fileURL, setFileURL] = React.useState(UserImg);
+  const [userName, setUserName] = React.useState("");
+  const [tokenBalance, setTokenBalance] = React.useState(0);
   const { isConnected, disconnect } = useConnect();
+  const { principal, activeProvider } = useConnect();
+  const { getProfileData } = UserApiHanlder();
+  const { getBalance } = TokensApiHanlder();
+  const navigate = useNavigate();
 
-  const className = "ProfileOverlay";
   const display = props.display;
   const setProfilePopUp = props.setProfilePopUp;
   const darkColor = document.documentElement.className;
-  const is1000px = useMediaQuery("(min-width: 1000px)");
-  const { getProfileData } = UserApiHanlder();
-  const [fileURL, setFileURL] = React.useState(UserImg);
-  const [userName, setUserName] = React.useState("");
+
+  const className = "ProfileOverlay";
 
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
   };
-  const { principal, activeProvider } = useConnect();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,9 +72,22 @@ const ProfileOverlay = (props: Props) => {
     fetchData();
   }, [userName]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (principal) {
+        const data = await getBalance(principal || "");
+        setTokenBalance(Number(data));
+      }
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [principal]);
+
   const logoutHandler = () => {
     disconnect();
-    toast.success("Logout successfully.");
+    toast.success("Logged out successfully.");
+    navigate("/");
   };
 
   return (
@@ -78,8 +95,7 @@ const ProfileOverlay = (props: Props) => {
       className={
         className +
         " " +
-        `${
-          display ? "block" : "hidden"
+        `${display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
@@ -106,36 +122,38 @@ const ProfileOverlay = (props: Props) => {
 
           <hr />
 
+
           <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 p-3 my-2">
-            <div className="ICP_Balance flex-row-center justify-between">
+            {/* <div className="ICP_Balance flex-row-center justify-between">
               <p className="flex-row-center gap-2">
                 <SiInternetcomputer />
                 <span>ICP Balance</span>
               </p>
 
-              <p>XYZ</p>
-            </div>
+              <p className="p-3">XYZ</p>
+            </div> */}
 
-            <div className="Time_Balance flex-row-center justify-between">
+            <div className="Time_Balance flex-row-center justify-between hover:bg-dirty-light-green hover:text-light transition">
               <Link to="/dashboard/analytics">
-                <p className="flex-row-center gap-2 hover:text-grey">
+                <p className="flex-row-center gap-2 p-3">
                   <RxLapTimer />
                   Time Balance
                 </p>
               </Link>
-              <p>XYZ</p>
+
+              <p className="p-3">{tokenBalance}</p>
             </div>
           </section>
 
           <Link to="/dashboard/userProfile">
-            <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
+            <button className="flex-row-center w-full gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm hover:bg-light hover:text-dark transition">
               <BsPersonCircle />
               My Profile
             </button>
           </Link>
 
           <Link to="/dashboard/settingProfile">
-            <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
+            <button className="flex-row-center w-full gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm hover:bg-light hover:text-dark transition">
               <TbSettings />
               Settings
             </button>

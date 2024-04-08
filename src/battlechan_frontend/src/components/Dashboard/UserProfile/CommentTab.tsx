@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import defaultCommentImage from "../../../images/comment-tab-post-image.jpg";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
+import Constant from "../../../utils/constants";
+import { Link } from "react-router-dom";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 interface UserInfo {
   createdAt: string;
@@ -18,6 +21,7 @@ interface UserInfo {
 interface CommentTabProps {
   userInfo: UserInfo[];
 }
+
 interface Comment {
   commentId: string;
   createdAt: string;
@@ -25,11 +29,19 @@ interface Comment {
   comment: string;
   updatedAt: string[];
   replies: { empty: null } | null;
+  createdBy: {
+    userName: string;
+    userProfile: Int8Array;
+  };
+  postImage: Int8Array;
+  postId: string;
 }
 
 const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
-  const { getUserCommentInfo } = CommentsApiHanlder();
+  const { getUserCommentInfo, getUserSingleComment } = CommentsApiHanlder();
+  const { convertInt8ToBase64 } = Constant();
   const [commentData, setCommentData] = useState<Comment[]>([]);
+  const { getSingleMainPost } = PostApiHanlder();
 
   const multilineEllipsisStyle: React.CSSProperties = {
     overflow: "hidden",
@@ -41,18 +53,16 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
   useEffect(() => {
     const getUserComments = async () => {
       if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
-        const fetchedComments:Comment[] = [];
         for (const commentId of userInfo[0].createdComments) {
-          const fetchedCommentInfo = await getUserCommentInfo(commentId) as Comment[];
-          if (fetchedCommentInfo && fetchedCommentInfo.length > 0) {
-            fetchedComments.push(fetchedCommentInfo[0]);
+          let data = await getUserSingleComment(commentId);
+          if(data && data.length > 0){
+            setCommentData(data);
           }
         }
-        setCommentData(fetchedComments);
       }
     };
     getUserComments();
-  }, [userInfo, getUserCommentInfo]);
+  }, [userInfo, getUserSingleComment]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,18 +73,12 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
           <>
             <div key={comment.commentId} className="flex items-start justify-between gap-4 mt-2">
               {/* user avatar  */}
-              <div className="min-w-8 min-h-8 tablet:min-w-12 tablet:min-h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded">
-                <svg
-                  className="w-5 h-5 tablet:w-9 tablet:h-9"
-                  viewBox="0 0 11 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5.50159 0.962891C6.12289 0.962891 6.71873 1.22769 7.15805 1.69904C7.59738 2.17039 7.84418 2.80967 7.84418 3.47625C7.84418 4.14284 7.59738 4.78212 7.15805 5.25347C6.71873 5.72482 6.12289 5.98962 5.50159 5.98962C4.8803 5.98962 4.28445 5.72482 3.84513 5.25347C3.40581 4.78212 3.159 4.14284 3.159 3.47625C3.159 2.80967 3.40581 2.17039 3.84513 1.69904C4.28445 1.22769 4.8803 0.962891 5.50159 0.962891ZM5.50159 7.2463C8.09016 7.2463 10.1868 8.37103 10.1868 9.75967V11.0163H0.816406V9.75967C0.816406 8.37103 2.91303 7.2463 5.50159 7.2463Z"
-                    fill="currentColor"
-                  />
-                </svg>
+              <div className="min-w-8 min-h-8 tablet:min-w-12 tablet:min-h-12 bg-[#fff] text-[#fff] flex items-center justify-center rounded">
+                <img
+                  src={convertInt8ToBase64(comment.createdBy.userProfile)}
+                  alt="USER IMAGE"
+                  className="min-w-[50px] h-[57px] object-cover rounded-md cursor-pointer"
+                />
               </div>
               {/* comment and likes  */}
               <div className="w-full flex flex-col">
@@ -98,20 +102,25 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
                   </svg>
                   <span>{comment.likedBy.length}</span>
                 </div>
-                <div className="hidden tablet:block mt-2">
+                {/* <div className="hidden tablet:block mt-2">
                   <button className="text-[10px] tablet:text-sm dark:text-[#fff]">
                     View replies
                   </button>
-                </div>
+                </div> */}
               </div>
               {/* comment post image  */}
+              {/* <Link
+                key={comment.postId}
+                to={`/dashboard/postDetails/${encodeURIComponent(comment.postId)}`}
+              > */}
               <div className="ml-4 max-w-16 tablet:max-w-32 rounded-sm">
                 <img
                   className="block h-auto w-full rounded"
-                  src={defaultCommentImage}
+                  src={convertInt8ToBase64(comment.postImage)}
                   alt="comment img"
                 />
               </div>
+              {/* </Link> */}
             </div>
           </>
         ))}

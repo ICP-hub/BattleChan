@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
+import { ConnectDialog } from "@connect2ic/react";
 
-import { FaRegBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
-import userimg from "../../../images/User.png";
 import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
@@ -36,17 +35,19 @@ const truncateString = (str: string, maxLength: number): string => {
 
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
-  const darkColor = document.documentElement.className;
-  const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(defaultImg);
+  const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
+  
+  const { getProfileData } = UserApiHanlder();
+  const { principal, isConnected } = useConnect();
+  const { getBalance } = TokensApiHanlder();
+  
   // const { getTimeTokens } = TokensApiHanlder();
-
-  const is1100px = useMediaQuery("(min-width: 1100px)");
+  
+  const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
-  const { principal, isConnected } = useConnect();
-  console.log(principal);
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -63,6 +64,7 @@ const Navbar = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
+        // console.log("balance", data);
       } else {
         if (principal) {
           setUserName(truncateString(principal, 17));
@@ -75,14 +77,16 @@ const Navbar = (props: Theme) => {
   }, [userName]);
 
   useEffect(() => {
-    const fetchBalance = async () => {
-      console.log("START");
-      // const data = await getTimeTokens();
-      // console.log(data);
+    const fetchData = async () => {
+      if (principal) {
+        const data = await getBalance(principal || "");
+        setTokenBalance(Number(data));
+      }
     };
 
-    fetchBalance();
-  }, []);
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [principal]);
 
   return (
     <div
@@ -168,7 +172,7 @@ const Navbar = (props: Theme) => {
                 <p className="text-nowrap">{userName}</p>
                 <div className="coinsCount flex-row-center gap-2">
                   <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
-                  <span className="text-light-green">550</span>
+                  <span className="text-light-green">{tokenBalance}</span>
                 </div>
               </div>
 
@@ -196,6 +200,8 @@ const Navbar = (props: Theme) => {
           handleThemeSwitch={props.handleThemeSwitch}
         />
       </section>
+
+      <ConnectDialog />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PostTab from "./PostTab";
 import CommentTab from "./CommentTab";
 import UpvoteTab from "./UpvoteTab";
@@ -27,7 +27,7 @@ interface ProfileTabsProps {
   userInfo: UserInfo[];
 }
 
-const ProfileTabs: React.FC<ProfileTabsProps> = ({userInfo}) => {
+const ProfileTabs: React.FC<ProfileTabsProps> = ({ userInfo }) => {
   const [activeTab, setActiveTab] = useState<string>("post");
   const navigate = useNavigate();
 
@@ -109,7 +109,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({userInfo}) => {
           >
             <div className="block font-sans text-base">
               {/* Content for each tab */}
-              {tab.id === "post" && <><PostTab userInfo={userInfo}/></>}
+              {tab.id === "post" && <><PostTab userInfo={userInfo} /></>}
               {tab.id === "comments" && <><CommentTab userInfo={userInfo} /></>}
               {tab.id === "upvote" && <><UpvoteTab /></>}
               {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}

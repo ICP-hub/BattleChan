@@ -59,7 +59,7 @@ const Footer = () => {
         </section>
 
         {/* Signup email input */}
-        <section className="__right hidden big_tablet:w-1/2 w-full tablet:flex-direction-col big_tablet:items-start items-center gap-4">
+        {/* <section className="__right hidden big_tablet:w-1/2 w-full tablet:flex-direction-col big_tablet:items-start items-center gap-4">
           <p className="font-semibold small_phone:text-base text-sm">
             Signup for latest updates to keep up to date with us
           </p>
@@ -78,7 +78,7 @@ const Footer = () => {
               Get Updates
             </button>
           </div>
-        </section>
+        </section> */}
       </div>
 
       {/* Bottom */}

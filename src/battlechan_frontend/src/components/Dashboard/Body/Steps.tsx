@@ -10,7 +10,7 @@ const Steps = () => {
         `flex big_tablet:flex-row-center justify-between big_tablet:justify-evenly py-8 px-3 big_tablet:p-10 my-8 mx-4 big_tablet:mx-16  border border-light-green rounded-xl bg-light dark:bg-dark text-xs gap-2 big_tablet:text-lg`
       }
     >
-      <div className="flex flex-col gap-4 items-start">
+      <div className="flex flex-col gap-4 items-center">
         <span
           className={`hidden big_tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
@@ -19,7 +19,7 @@ const Steps = () => {
         <span>Connect your Wallet.</span>
       </div>
 
-      <div className="flex flex-col gap-4 items-start">
+      <div className="flex flex-col gap-4 items-center">
         <span
           className={`hidden big_tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
@@ -27,7 +27,7 @@ const Steps = () => {
         </span>
         <span>Make Post : Earn Time</span>
       </div>
-      <div className="flex flex-col gap-4 items-start">
+      <div className="flex flex-col gap-4 items-center">
         <span
           className={`hidden big_tablet:inline-block py-2 px-4 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >

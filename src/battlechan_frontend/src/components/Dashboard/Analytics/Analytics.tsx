@@ -11,6 +11,8 @@ import CreatePostBtn from "../Body/CreatePostBtn";
 
 import { backend } from "../../../../../declarations/backend";
 import { IoEllipse } from "react-icons/io5";
+import trendingPost_coverImg from "../../../images/trendingPost_coverImg.png";
+import mybalance_Img from "../../../images/my-balance-img.png";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -27,25 +29,25 @@ interface DataItem {
 
 const data: DataItem[] = [
   {
-    message: "You loss one token by Upvoting Kd_1129 with post Id #1256320000",
+    message: "Upvote: Kd_1129 with post Id #1256320000",
     username: "Kd_1129",
     time: "3hrs ago",
     tokenChange: -1,
-    imageUrl: "/src/images/trendingPost_coverImg.png",
+    imageUrl: trendingPost_coverImg,
   },
   {
     message:
-      "You loss one token by Downvoting Kd_1129 with post Id #1256320000",
+      "Downvote: Kd_1129 with post Id #1256320000",
     username: "Kd_1129",
     time: "3hrs ago",
     tokenChange: -1,
-    imageUrl: "/src/images/trendingPost_coverImg.png",
+    imageUrl: trendingPost_coverImg,
   },
   {
     message: "You Earn 100$ Time token on Buying.",
     time: "3hrs ago",
     tokenChange: 100,
-    imageUrl: "/src/images/trendingPost_coverImg.png",
+    imageUrl: trendingPost_coverImg,
   },
 ];
 
@@ -74,7 +76,7 @@ const Analytics = (props: Theme) => {
                 <button className="border border-[#fff] dark:border-[#fff] text-[#fff] dark:text-[#fff] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
                   Today
                 </button>
-                <button className="flex items-center justify-center bg-[#fff] dark:bg-[#fff] text-[#000] dark:text-[#000] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
+                {/* <button className="flex items-center justify-center bg-[#fff] dark:bg-[#fff] text-[#000] dark:text-[#000] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
                   <svg
                     className="w-3 h-3 tablet:w-5 tablet:h-5 text-gray-800 dark:text-white mr-1"
                     aria-hidden="true"
@@ -90,7 +92,7 @@ const Analytics = (props: Theme) => {
                     />
                   </svg>
                   Filter
-                </button>
+                </button> */}
               </div>
             </div>
             {/* my balance  */}
@@ -98,7 +100,7 @@ const Analytics = (props: Theme) => {
               <div className="bg-[#fff] rounded-md w-32 tablet:w-48">
                 <img
                   className="block h-20 tablet:h-32 w-full object-cover"
-                  src="/src/images/my-balance-img.png"
+                  src={mybalance_Img}
                   alt="myBalance img"
                 />
               </div>
@@ -327,13 +329,13 @@ const Analytics = (props: Theme) => {
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
                       {item.message.split(" ").map((word, index) => {
-                        if (word === "Upvoting") {
+                        if (word === "Upvote:") {
                           return (
                             <span key={index} className="text-[#18AF00]">
                               {word}{" "}
                             </span>
                           );
-                        } else if (word === "Downvoting") {
+                        } else if (word === "Downvote:") {
                           return (
                             <span key={index} className="text-red">
                               {word}{" "}

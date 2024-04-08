@@ -36,7 +36,7 @@ const PostTab: React.FC<PostTabProps> = ({userInfo}) => {
       <div className="hidden tablet:block">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold dark:text-[#fff]">Popular</h1>
-          <div className="flex items-center justify-center gap-2">
+          {/* <div className="flex items-center justify-center gap-2">
             <button className="border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-6 py-2 font-semibold">
               Sports
             </button>
@@ -59,7 +59,7 @@ const PostTab: React.FC<PostTabProps> = ({userInfo}) => {
               </svg>
               Filter
             </button>
-          </div>
+          </div> */}
         </div>
         <PostGrid type="Popular" userInfo={userInfo} />
         <div className="flex items-center justify-between mt-4">
