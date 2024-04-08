@@ -18,10 +18,12 @@ const Comments = () => {
           " " +
           padding +
           " " +
-          "flex flex-col justify-between mb-3 font-sans text-base"
+          "flex flex-col justify-between font-sans text-base"
         }
       >
-        <h1 className="text-2xl font-bold dark:text-[#fff]">Comments</h1>
+        <h1 className="tablet:text-2xl text-lg font-bold dark:text-[#fff]">
+          Comments
+        </h1>
       </header>
 
       <div
@@ -32,7 +34,7 @@ const Comments = () => {
           " " +
           fontSize +
           " " +
-          "w-full tablet:mb-8 mb-4"
+          "w-full tablet:mb-8 phone:mb-4"
         }
       >
         <table className="w-full bg-dirty-light-green text-light rounded-lg">
