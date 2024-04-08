@@ -3,10 +3,17 @@ import "./NavConnectButton.scss";
 
 import { useMediaQuery } from "@mui/material";
 import { MdArrowOutward } from "react-icons/md";
-import { ConnectButton } from "@connect2ic/react";
+import { ConnectButton, useDialog } from "@connect2ic/react";
+// import { ConnectDialog, useConnect, useDialog } from "@connect2ic/react"
 
 const NavConnectButton = () => {
   const is820px = useMediaQuery("(min-width: 820px)");
+  // const { open } = useDialog();
+
+  // const loginHandler = () => {
+  //   console.log("LOGIN");
+  //   open();
+  // }
 
   useEffect(() => {
     const button = document.querySelector(".connect-button");

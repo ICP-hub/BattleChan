@@ -24,7 +24,7 @@ const Posts = () => {
         <h1 className="tablet:text-2xl text-lg font-bold dark:text-[#fff]">
           Popular
         </h1>
-        <div className="flex items-center justify-center gap-2">
+        {/* <div className="flex items-center justify-center gap-2">
           <button className="tablet:text-base text-xs border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-6 py-2 font-semibold">
             Sports
           </button>
@@ -47,7 +47,7 @@ const Posts = () => {
             </svg>
             Filter
           </button>
-        </div>
+        </div> */}
       </header>
 
       <div

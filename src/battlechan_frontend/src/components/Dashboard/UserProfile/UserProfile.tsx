@@ -34,7 +34,9 @@ const UserProfile = (props: Theme) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // console.log("HERE");
       const data = await getUserInfo();
+      // console.log(data);
       if (data && data.length > 0) {
         setUserInfo(data);
       }

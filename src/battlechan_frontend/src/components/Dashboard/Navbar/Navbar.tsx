@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -37,8 +38,9 @@ const Navbar = (props: Theme) => {
   const darkColor = document.documentElement.className;
   const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(defaultImg);
+  const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
-  // const { getTimeTokens } = TokensApiHanlder();
+  const { getBalance } = TokensApiHanlder();
 
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
@@ -59,6 +61,7 @@ const Navbar = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
+        // console.log("balance", data);
       } else {
         if (principal) {
           setUserName(truncateString(principal, 17));
@@ -71,13 +74,16 @@ const Navbar = (props: Theme) => {
   }, [userName]);
 
   useEffect(() => {
-    const fetchBalance = async () => {
-      // const data = await getTimeTokens();
-      // console.log(data);
+    const fetchData = async () => {
+      if (principal) {
+        const data = await getBalance(principal || "");
+        setTokenBalance(Number(data));
+      }
     };
 
-    fetchBalance();
-  }, []);
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [principal]);
 
   return (
     <div
@@ -163,7 +169,7 @@ const Navbar = (props: Theme) => {
                 <p className="text-nowrap">{userName}</p>
                 <div className="coinsCount flex-row-center gap-2">
                   <img src={goldcoin} alt="Gold coin" className="w-[20px]" />
-                  <span className="text-light-green">550</span>
+                  <span className="text-light-green">{tokenBalance}</span>
                 </div>
               </div>
 

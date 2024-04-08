@@ -48,10 +48,10 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   //   setVote(vote);
   // };
   const { convertInt8ToBase64 } = Constant();
-  const { createCommentReply, likeComment } = CommentsApiHanlder();
+  const { createCommentReply, likeComment, dislikeComment } = CommentsApiHanlder();
 
   function showMoreComments() {
-    setVisibleComments((prevValue) => prevValue + 1);
+    setVisibleComments((prevValue) => prevValue + 5);
   }
 
   async function handleAddReply(
@@ -91,7 +91,22 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
       console.log(response);
 
       if (response && response?.ok) {
-        toast.success(response.ok);
+        toast.success("You liked the comment!");
+        // window.location.href = "/dashboard/mainPosts";
+      } else {
+        toast.error(
+          "Error liking comment, Please verify and provide valid data!"
+        );
+      }
+    } else {
+      const response = (await dislikeComment(
+        postId ?? "",
+        commentId ?? ""
+      )) as LikeResponse;
+      console.log(response);
+
+      if (response && response?.ok) {
+        toast.success("You disliked the comment!");
         // window.location.href = "/dashboard/mainPosts";
       } else {
         toast.error(
@@ -142,23 +157,20 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
             </div>
 
             <div
-              className={`gap-2 text-3xl ${
-                type === "archive" ? "hidden" : "flex"
-              }`}
+              className={`gap-2 text-3xl ${type === "archive" ? "hidden" : "flex"
+                }`}
             >
               <TbSquareChevronUpFilled
-                className={`${
-                  vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer`}
+                className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                  } cursor-pointer`}
                 onClick={() => {
                   handleLikeComment(comment.commentId, true);
                 }}
               />
 
               <TbSquareChevronDownFilled
-                className={`${
-                  !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer`}
+                className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                  } cursor-pointer`}
                 onClick={() => {
                   handleLikeComment(comment.commentId, false);
                 }}

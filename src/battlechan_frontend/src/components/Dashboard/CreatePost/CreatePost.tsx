@@ -151,7 +151,7 @@ const CreatePost = (props: Theme) => {
 
     if (response && response?.ok) {
       navigate("/dashboard/mainPosts");
-      toast.success(response.ok);
+      toast.success("Post Created Successfully!");
       // window.location.href = "/dashboard/mainPosts";
     } else {
       toast.error(

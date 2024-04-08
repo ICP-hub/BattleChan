@@ -6,10 +6,22 @@ const useBackend = () => {
     return useCanister("backend");
 };
 
-interface BackendResponse {
+interface Counts {
+    postData: bigint;
+    userAchivedPostData: bigint;
+    userData: bigint;
+    withdrawPost: bigint;
+}
+
+interface TotalCounts {
     status: boolean;
-    data: []; // Assuming 'data' is an array of arrays of Board objects.
+    data: Counts[][];
     error: string[];
+}
+
+interface TotalCountsResponse {
+    mainPostCounts: number;
+    archivePostCounts: number;
 }
 
 const PostApiHanlder = () => {
@@ -69,9 +81,9 @@ const PostApiHanlder = () => {
             // console.log(chunkSize);
             // console.log(pageNumber);
             // console.log(boardName);
-            const res = await backend.getPostsByBoard();
-            // const res = await backend.postFilter(filter, chunkSize, pageNumber, boardName);
-            // console.log(res);
+            // const res = await backend.getPostsByBoard();
+            const res = await backend.postFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
+            console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -79,9 +91,14 @@ const PostApiHanlder = () => {
     };
 
     // Get Recent Posts
-    const getRecentPosts = async () => {
+    const getRecentPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
         try {
-            const res = await backend.getArchivedPost(BigInt(10), BigInt(1));
+            // console.log(filter);
+            // console.log(chunkSize);
+            // console.log(pageNumber);
+            // console.log(boardName);
+            // const res = await backend.getArchivedPost(BigInt(10), BigInt(1));
+            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
             // console.log(res);
             return res;
         } catch (err) {
@@ -97,7 +114,8 @@ const PostApiHanlder = () => {
             // console.log(chunkSize);
             // console.log(pageNumber);
             // console.log(boardName);
-            const res = await backend.getArchivedPost(chunkSize, pageNumber);
+            // const res = await backend.getArchivedPost(chunkSize, pageNumber);
+            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
             // console.log(res);
             return res;
         } catch (err) {
@@ -162,9 +180,27 @@ const PostApiHanlder = () => {
         }
     };
 
+    // Get Total Counts of Posts
+    const getTotalCounts = async () => {
+        try {
+            let res = { mainPostCounts: 0, archivePostCounts: 0 } as TotalCountsResponse;
+            const totalCounts = (await backend.getTotalCounts()) as TotalCounts;
+            // console.log(totalCounts);
+            if (totalCounts && totalCounts?.data) {
+                const counts = totalCounts.data.flat();
+                res.mainPostCounts = Number(counts[0]?.postData);
+                res.archivePostCounts = Number(counts[0]?.userAchivedPostData);
+            }
+            return res;
+        } catch (err) {
+            console.error("Error: ", err);
+            return err;
+        }
+    };
+
 
     // Returns
-    return { createPost, getRecentPosts, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost };
+    return { createPost, getRecentPosts, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost, getTotalCounts };
 };
 
 export default PostApiHanlder;

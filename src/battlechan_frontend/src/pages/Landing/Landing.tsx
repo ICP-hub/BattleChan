@@ -11,8 +11,7 @@ import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/Attrac
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 import { useConnect } from "@connect2ic/react";
 import { useNavigate } from "react-router-dom";
-
-// import { backend } from "../../../../declarations/backend/index";
+import { HiOutlineArrowUp } from 'react-icons/hi';
 
 type Theme = {
   handleThemeSwitch: any;
@@ -44,30 +43,30 @@ function Landing(props: Theme) {
   const handleThemeSwitch = props.handleThemeSwitch;
   const className = "LandingPage";
 
-  type BackendResponseDirect = {
-    status: boolean;
-    data: any[]; // Replace 'any' with a more specific type if possible
-    error: string[];
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleScroll = () => {
+    const scrollTop = window.scrollY;
+
+    if (scrollTop > 300) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
   };
 
-  async function Helo() {
-    console.log("hello");
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
-    // const response = await backend.getTotalPostInBoard(); // Assuming the casting is handled elsewhere or not necessary here.
+  React.useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    // Assuming 'response.data[0]' contains the array of boards
-    //   const boards = response.data[0];
-
-    //   if (boards && boards.length > 0) {
-    //     // Loop through each board and print the boardName
-    //     boards.forEach((board) => {
-    //       // console.log(board.name);
-    //     });
-    //   } else {
-    //     console.log("No boards found.");
-    //   }
-    //   console.log(boards);
-  }
 
   return (
     <main
@@ -76,6 +75,14 @@ function Landing(props: Theme) {
         ` w-full h-full text-dark dark:text-light bg-light dark:bg-dark`
       }
     >
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-6 right-6 ${isVisible ? 'opacity-100' : 'opacity-0'
+          } transition-opacity duration-500 ease-in-out bg-blue-500 hover:bg-blue-600 text-light dark:text-dark bg-dark dark:bg-light font-bold py-2 px-4 rounded-full shadow-lg z-10`}
+      >
+        <HiOutlineArrowUp className="text-xl" />
+      </button>
+
       <Navbar handleThemeSwitch={handleThemeSwitch} />
 
       <HeroSection />

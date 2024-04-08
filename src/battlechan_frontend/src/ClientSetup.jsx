@@ -5,13 +5,18 @@ import { InternetIdentity } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers";
 import { Connect2ICProvider } from "@connect2ic/react";
 import { backend, canisterId, idlFactory } from "../../declarations/backend/index";
+import { ledger, canisterId as ledgerCanisterID, idlFactory as ledgeridlFactory } from "../../declarations/ledger/index";
 
 const client = createClient({
     canisters: {
         backend: {
-          canisterId: canisterId,
-          idlFactory: idlFactory
-        }
+            canisterId: canisterId,
+            idlFactory: idlFactory
+        },
+        ledger: {
+            canisterId: ledgerCanisterID,
+            idlFactory: ledgeridlFactory
+        },
     },
     providers: [new InternetIdentity(), new PlugWallet()],
 });

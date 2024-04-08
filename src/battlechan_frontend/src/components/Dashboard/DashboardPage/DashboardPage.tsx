@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
-
 import Posts from "./Posts";
 import Comments from "./Comments";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 import { useMediaQuery } from "@mui/material";
+import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -16,7 +15,7 @@ const DashboardPage = (props: Theme) => {
   const is550px = useMediaQuery("(max-width: 550px)");
 
   const cardContainer =
-    "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] w-[150px] laptop:m-4 m-3 laptop:font-base text-sm";
+    "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] w-[150px] laptop:m-4 m-3 laptop:font-base text-sm text-light";
   const cardStyle =
     "bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md phone:p-8 p-4";
 
@@ -83,6 +82,7 @@ const DashboardPage = (props: Theme) => {
             </div>
           </div>
 
+
           <div
             className={
               className + "__rightSection " + " flex-row-center flex-wrap"
@@ -116,7 +116,7 @@ const DashboardPage = (props: Theme) => {
 
         <Comments />
 
-        <div
+        {/* <div
           className={
             className +
             "__bottom " +
@@ -135,7 +135,7 @@ const DashboardPage = (props: Theme) => {
           <button className="small-button bg-dark text-light dark:bg-light dark:text-dark rounded-lg">
             Withdraw
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
