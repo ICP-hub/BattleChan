@@ -54,7 +54,7 @@ const DashboardPage = (props: Theme) => {
             className={
               className +
               "__leftSection " +
-              " self-center grid grid-cols-[50%_minmax(0px,_1fr)] row-span-2"
+              " self-center grid grid-cols-[50%_minmax(0px,_1fr)] row-span-2 text-[#fff]"
             }
           >
             <div className={cardContainer}>
