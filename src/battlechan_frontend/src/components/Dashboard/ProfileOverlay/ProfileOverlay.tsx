@@ -36,25 +36,24 @@ const truncateString = (str: string, maxLength: number): string => {
 };
 
 const ProfileOverlay = (props: Props) => {
-  const { isConnected, disconnect } = useConnect();
-
-  const className = "ProfileOverlay";
-  const display = props.display;
-  const setProfilePopUp = props.setProfilePopUp;
-  const darkColor = document.documentElement.className;
-  const is1000px = useMediaQuery("(min-width: 1000px)");
-  const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(UserImg);
   const [userName, setUserName] = React.useState("");
   const [tokenBalance, setTokenBalance] = React.useState(0);
+  const { isConnected, disconnect } = useConnect();
+  const { principal, activeProvider } = useConnect();
+  const { getProfileData } = UserApiHanlder();
   const { getBalance } = TokensApiHanlder();
   const navigate = useNavigate();
 
+  const display = props.display;
+  const setProfilePopUp = props.setProfilePopUp;
+  const darkColor = document.documentElement.className;
+
+  const className = "ProfileOverlay";
 
   const handleClosePopup = () => {
     setProfilePopUp(false); // Close the popup
   };
-  const { principal, activeProvider } = useConnect();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,6 +122,7 @@ const ProfileOverlay = (props: Props) => {
 
           <hr />
 
+
           <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 p-3 my-2">
             {/* <div className="ICP_Balance flex-row-center justify-between">
               <p className="flex-row-center gap-2">
@@ -130,29 +130,30 @@ const ProfileOverlay = (props: Props) => {
                 <span>ICP Balance</span>
               </p>
 
-              <p>XYZ</p>
+              <p className="p-3">XYZ</p>
             </div> */}
 
-            <div className="Time_Balance flex-row-center justify-between">
+            <div className="Time_Balance flex-row-center justify-between hover:bg-dirty-light-green hover:text-light transition">
               <Link to="/dashboard/analytics">
-                <p className="flex-row-center gap-2 hover:text-grey">
+                <p className="flex-row-center gap-2 p-3">
                   <RxLapTimer />
                   Time Balance
                 </p>
               </Link>
-              <p>{tokenBalance}</p>
+
+              <p className="p-3">{tokenBalance}</p>
             </div>
           </section>
 
           <Link to="/dashboard/userProfile">
-            <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
+            <button className="flex-row-center w-full gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm hover:bg-light hover:text-dark transition">
               <BsPersonCircle />
               My Profile
             </button>
           </Link>
 
           <Link to="/dashboard/settingProfile">
-            <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
+            <button className="flex-row-center w-full gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm hover:bg-light hover:text-dark transition">
               <TbSettings />
               Settings
             </button>

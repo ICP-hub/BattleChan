@@ -11,7 +11,7 @@ interface PostData {
   createdBy: {
     userName: string;
     userProfile: Int8Array;
-  },
+  };
   upvotes: number;
 }
 
@@ -34,22 +34,22 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             `laptop:w-1/2 w-full p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
           }
         >
-            <MemoizedPost
-              key={post.postId}
-              id={post.postId}
-              postName={post.postName}
-              imageUrl={post.postMetaData}
-              userAvatarUrl="/src/images/main-post-user-avatar.jpg"
-              timestamp={post.createdAt}
-              duration="5:00"
-              content={post.postDes}
-              likes={post.upvotes}
-              comments={comments}
-              expireAt={post.expireAt}
-              userName={post.createdBy.userName}
-              userProfile={post.createdBy.userProfile}
-              type={type}
-            />
+          <Post
+            key={post.postId}
+            id={post.postId}
+            postName={post.postName}
+            imageUrl={post.postMetaData}
+            userAvatarUrl="/src/images/main-post-user-avatar.jpg"
+            timestamp={post.createdAt}
+            duration="5:00"
+            content={post.postDes}
+            likes={post.upvotes}
+            comments={comments}
+            expireAt={post.expireAt}
+            userName={post.createdBy.userName}
+            userProfile={post.createdBy.userProfile}
+            type={type}
+          />
         </div>
       ))}
     </React.Fragment>

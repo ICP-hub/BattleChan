@@ -19,6 +19,7 @@ import { useCanister, useConnect } from "@connect2ic/react";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
 import { Link } from "react-router-dom";
+import WithdrawOverlay from "../WithdrawOverlay/WithdrawOverlay";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {
@@ -88,10 +89,16 @@ const MainPosts = (props: Theme) => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
 
-  const className = "Dashboard__MainPosts";
-  const { createPost, getBoards, getMainPosts, getArchivePosts, getTotalCounts } =
-    PostApiHanlder();
   const { convertNanosecondsToTimestamp } = Constant();
+  const {
+    createPost,
+    getBoards,
+    getMainPosts,
+    getArchivePosts,
+    getTotalCounts,
+  } = PostApiHanlder();
+
+  const className = "Dashboard__MainPosts";
 
   const handleBoardChange = (boardName: string) => {
     setSelectedBoard(boardName);
@@ -114,8 +121,6 @@ const MainPosts = (props: Theme) => {
     }
     getTotalPosts();
   }, []);
-
-
 
   // Get Boards
   useEffect(() => {
@@ -146,6 +151,7 @@ const MainPosts = (props: Theme) => {
   useEffect(() => {
     if (boardsData.length > 0) {
       setSelectedBoard(boardsData[0]);
+
       // console.log("selectedboard", selectedBoard)
     }
   }, [boardsData]);
@@ -179,10 +185,12 @@ const MainPosts = (props: Theme) => {
     boardName: string
   ) => {
     try {
-      const res = await getArchivePosts({ [filter]: null },
+      const res = await getArchivePosts(
+        { [filter]: null },
         chunkSize,
         pageNumber,
-        boardName);
+        boardName
+      );
       console.log(res);
       return res;
     } catch (err) {
@@ -268,48 +276,49 @@ const MainPosts = (props: Theme) => {
   };
 
   return (
-    <>
+    <div
+      className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat relative z-0`}
+    >
+      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
+      <NavButtons />
+
       <div
-        className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat relative`}
+        className={
+          className +
+          " " +
+          " max-w-7xl mx-auto px-4 tablet:px-12 pb-12 dark:text-[#fff] overflow-hidden"
+        }
       >
-        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
-        <NavButtons />
+        {/* create post button for desktop  */}
+        <div className="mb-4 hidden tablet:flex justify-center">
+          <CreatePostBtn />
+        </div>
 
-        <div
-          className={
-            className + " " + " max-w-7xl mx-auto px-4 tablet:px-12 pb-12 dark:text-[#fff] overflow-hidden"
-          }
-        >
-          {/* create post button for desktop  */}
-          <div className="mb-4 hidden tablet:flex justify-center">
-            <CreatePostBtn />
-          </div>
+        {/* most popular heading & create post button  */}
+        <div className="flex justify-between tablet:justify-center items-center">
+          <h1 className="font-bold tablet:text-3xl tablet:p-8">
+            {props.type === "archive" ? "Archive" : "Most Popular"}
+          </h1>
+          <Link to="/dashboard/createPost">
+            <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
+              <LuPlusCircle />
+              <span className="ml-1 leading-5">Create Post</span>
+            </button>
+          </Link>
+        </div>
 
-          {/* most popular heading & create post button  */}
-          <div className="flex justify-between tablet:justify-center items-center">
-            <h1 className="font-bold tablet:text-3xl tablet:p-8">
-              {props.type === "archive" ? "Archive" : "Most Popular"}
-            </h1>
-            <Link to="/dashboard/createPost">
-              <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
-                <LuPlusCircle />
-                <span className="ml-1 leading-5">Create Post</span>
-              </button>
-            </Link>
-          </div>
+        {/* catalog for desktop  */}
+        <div className=" -mr-2 overflow-hidden">
+          <Catalog
+            handleBoardChange={handleBoardChange}
+            boardsData={boardsData}
+          />
+        </div>
 
-          {/* catalog for desktop  */}
-          <div className=" -mr-2 overflow-hidden">
-            <Catalog
-              handleBoardChange={handleBoardChange}
-              boardsData={boardsData}
-            />
-          </div>
-
-          {/* catalog and pagination and sort for desktop  */}
-          <div className="flex justify-between items-center tablet:px-10 py-2">
-            {/* catalog and filter button  */}
-            {/* <div className="tablet:hidden flex items-center">
+        {/* catalog and pagination and sort for desktop  */}
+        <div className="flex justify-between items-center tablet:px-10 py-2">
+          {/* catalog and filter button  */}
+          {/* <div className="tablet:hidden flex items-center">
               <button className="flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-full font-semibold text-xs">
                 <MdOutlineAddBusiness className="tablet:text-2xl text-lg" />
                 <span className="ml-1 leading-5">Business</span>
@@ -354,39 +363,40 @@ const MainPosts = (props: Theme) => {
               </button>
             </div> */}
 
-            {/* pagination  */}
-            <Pagination
-              totalPosts={totalPosts}
-              currentPage={currentPage}
-              postsPerPage={postsPerPage}
-              goToPrevPage={goToPrevPage}
-              goToNextPage={goToNextPage}
-              goToPage={goToPage}
-            />
+          {/* pagination  */}
+          <Pagination
+            totalPosts={totalPosts}
+            currentPage={currentPage}
+            postsPerPage={postsPerPage}
+            goToPrevPage={goToPrevPage}
+            goToNextPage={goToNextPage}
+            goToPage={goToPage}
+          />
 
-            {/* sort drop down for desktop  */}
-            <div className="flex justify-end items-center gap-2 tablet:gap-6">
-              <div className="flex items-center justify-center gap-1">
-                <CgSortAz className="tablet:text-2xl text-sm" />
-                <span className="text-xs tablet:text-base">Sort :</span>
-              </div>
-              {/* drop down button */}
-              <div className="-mt-1 tablet:mt-0">
-                <button
-                  id="sortDropdown"
-                  data-dropdown-toggle="dropdown"
-                  className="text-[#000] dark:text-[#fff] bg-transparent text-xs tablet:text-base text-center inline-flex items-center gap-4"
-                  type="button"
-                  onClick={toggleDropdown}
-                >
-                  {activeSelection}
-                  <FaAngleDown />
-                </button>
-              </div>
+          {/* sort drop down for desktop  */}
+          <div className="flex justify-end items-center gap-2 tablet:gap-6">
+            <div className="flex items-center justify-center gap-1">
+              <CgSortAz className="tablet:text-2xl text-sm" />
+              <span className="text-xs tablet:text-base">Sort :</span>
+            </div>
+            {/* drop down button */}
+            <div className="-mt-1 tablet:mt-0">
+              <button
+                id="sortDropdown"
+                data-dropdown-toggle="dropdown"
+                className="text-[#000] dark:text-[#fff] bg-transparent text-xs tablet:text-base text-center inline-flex items-center gap-4"
+                type="button"
+                onClick={toggleDropdown}
+              >
+                {activeSelection}
+                <FaAngleDown />
+              </button>
             </div>
           </div>
-          {/* sort dropdown for mobile */}
-          {/* <div className="tablet:hidden flex-row-center justify-end gap-2 my-3">
+        </div>
+
+        {/* sort dropdown for mobile */}
+        {/* <div className="tablet:hidden flex-row-center justify-end gap-2 my-3">
             <div className="flex-row-center justify-center gap-1">
               <CgSortAz />
               <span className="text-xs tablet:text-base">Sort :</span>
@@ -404,57 +414,61 @@ const MainPosts = (props: Theme) => {
               </button>
             </div>
           </div> */}
-          <div className="flex justify-end tablet:px-20 px-2 absolute right-0">
-            {isOpen && (
-              <div
-                id="sortDropdownList"
-                className="z-10 bg-green rounded-lg shadow w-32"
+
+        <div className="flex justify-end tablet:px-20 px-2 absolute right-0">
+          {isOpen && (
+            <div
+              id="sortDropdownList"
+              className="z-10 bg-green rounded-lg shadow w-32"
+            >
+              <ul
+                className=" rounded-lg text-[#000] dark:text-[#fff] text-center overflow-hidden"
+                aria-labelledby="dropdownDefaultButton"
               >
-                <ul
-                  className=" rounded-lg text-[#000] dark:text-[#fff] text-center overflow-hidden"
-                  aria-labelledby="dropdownDefaultButton"
-                >
-                  <li>
-                    <a
-                      href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Recent" ? "bg-[#295A31]" : ""
-                        }`}
-                      onClick={() => handleSelection("Recent")}
-                    >
-                      Recent
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Upvote" ? "bg-[#295A31]" : ""
-                        }`}
-                      onClick={() => handleSelection("Upvote")}
-                    >
-                      Upvote
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="javascript:void(0)"
-                      className={`block px-4 py-2 text-[10px] tablet:text-base ${activeSelection === "Downvote" ? "bg-[#295A31]" : ""
-                        }`}
-                      onClick={() => handleSelection("Downvote")}
-                    >
-                      Downvote
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-          {/* posts  */}
-          <div className="xl:px-10 mt-8 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
-            <Posts currentPosts={currentPosts} type={props.type} />
-          </div>
+                <li>
+                  <a
+                    href="javascript:void(0)"
+                    className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                      activeSelection === "Recent" ? "bg-[#295A31]" : ""
+                    }`}
+                    onClick={() => handleSelection("Recent")}
+                  >
+                    Recent
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="javascript:void(0)"
+                    className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                      activeSelection === "Upvote" ? "bg-[#295A31]" : ""
+                    }`}
+                    onClick={() => handleSelection("Upvote")}
+                  >
+                    Upvote
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="javascript:void(0)"
+                    className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                      activeSelection === "Downvote" ? "bg-[#295A31]" : ""
+                    }`}
+                    onClick={() => handleSelection("Downvote")}
+                  >
+                    Downvote
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* posts  */}
+        <div className="xl:px-10 mt-8 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
+          <Posts currentPosts={currentPosts} type={props.type} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
