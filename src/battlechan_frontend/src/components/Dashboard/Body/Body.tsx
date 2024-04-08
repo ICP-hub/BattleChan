@@ -99,7 +99,7 @@ const Body = () => {
         className={
           className +
           "__tagLines" +
-          " w-full small_phone:my-12 my-6 gap-4 laptop:px-[6vw] phone:px-[8vw] px-2 flex flex-col big_tablet:items-start items-center big_tablet:flex-row justify-between"
+          " w-full small_phone:my-12 tablet:my-16 my-6 gap-4 laptop:px-[6vw] phone:px-[8vw] px-2 flex flex-col big_tablet:items-start items-center big_tablet:flex-row justify-between"
         }
       >
         <h1
