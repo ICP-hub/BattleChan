@@ -160,7 +160,6 @@ const CreatePost = (props: Theme) => {
     }
   };
 
-
   return (
     <div className="bg-[#ECECEC] dark:bg-dark relative z-0">
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
@@ -179,12 +178,12 @@ const CreatePost = (props: Theme) => {
         className={className + " " + "text-dark dark:text-light flex flex-col"}
       >
         <div className="createPost">
-          <h1 className="text-3xl font-semibold text-center tablet:py-12 py-4 pb-8">
+          <h1 className="laptop:text-4xl text-laptop:text-4xl tablet:text-3xl small_phone:text-2xl text-lg font-semibold text-center tablet:py-12 py-4 pb-8">
             Create Your Post
           </h1>
 
           <div className="big_tablet:h-[80vh] border border-light-green rounded-lg big_tablet:gap-8 gap-6 laptop:p-8 tablet:p-6 p-4 laptop:mx-20 tablet:mx-10 mx-6 bg-transparent big_tablet:flex-row-center flex flex-col">
-            <section className="big_tablet:w-1/2 w-full h-full tablet:text-base text-sm flex flex-col items-start big_tablet:gap-0 gap-3">
+            <section className="big_tablet:w-1/2 w-full h-full tablet:text-base phone:text-sm text-xs flex flex-col items-start big_tablet:gap-0 gap-3">
               <label className="font-semibold tablet:py-4 py-0" htmlFor="title">
                 Your Title *
               </label>
@@ -192,7 +191,7 @@ const CreatePost = (props: Theme) => {
                 type="text"
                 name="title"
                 placeholder="Enter the title/topic of your post"
-                className="w-full italic bg-light dark:bg-dark border border-light-green rounded-md p-3"
+                className="w-full italic bg-light dark:bg-dark border border-light-green rounded-md phone:p-3 p-1"
                 onChange={(e) => setPostName(e.target.value)}
               />
 
@@ -206,7 +205,7 @@ const CreatePost = (props: Theme) => {
                 name="description"
                 cols={50}
                 rows={5}
-                className="w-full p-3 italic bg-light dark:bg-dark border border-light-green rounded-md"
+                className="w-full phone:p-3 p-1 italic bg-light dark:bg-dark border border-light-green rounded-md"
                 placeholder="Describe about your post in a nutshell"
                 onChange={(e) => setPostDes(e.target.value)}
               ></textarea>
@@ -219,7 +218,7 @@ const CreatePost = (props: Theme) => {
               </label>
               <select
                 name="community"
-                className="w-full italic p-4 text-dark dark:text-light bg-light dark:bg-dark bg-light dark:bg-dark border border-light-green rounded-md"
+                className="w-full italic phone:p-3 p-1 text-dark dark:text-light bg-light dark:bg-dark bg-light dark:bg-dark border border-light-green rounded-md"
                 value={selectedCommunity}
                 onChange={(e) => setSelectedCommunity(e.target.value)}
               >
@@ -245,7 +244,7 @@ const CreatePost = (props: Theme) => {
                     type="button"
                     className="createPostBtn small-button text-light bg-dirty-light-green"
                     id="createPostBtn1"
-                  // onClick={handleCreatePost}
+                    // onClick={handleCreatePost}
                   >
                     Post
                   </button>
@@ -254,8 +253,9 @@ const CreatePost = (props: Theme) => {
             </section>
 
             <section
-              className={`big_tablet:w-1/2 w-full big_tablet:h-full phone:h-[60dvh] h-[40dvh] tablet:text-base text-sm bg-dirty-light-green bg-opacity-25 flex-col-center rounded-lg ${fileURL == "" ? "justify-center py-8" : "justify-between p-4"
-                }`}
+              className={`big_tablet:w-1/2 w-full big_tablet:h-full phone:h-[60dvh] h-[40dvh] tablet:text-base text-sm bg-dirty-light-green bg-opacity-25 flex-col-center rounded-lg ${
+                fileURL == "" ? "justify-center py-8" : "justify-between phone:p-4 p-2"
+              }`}
             >
               {/* <input type="file" name="image" /> */}
               {fileURL == "" ? (
@@ -289,7 +289,7 @@ const CreatePost = (props: Theme) => {
                   />
                   <button
                     onClick={handleFileRemove}
-                    className="p-4 w-full text-3xl hover:text-red flex justify-center items-center cursor-pointer"
+                    className="p-4 w-full tablet:text-3xl text-lg hover:text-red flex justify-center items-center cursor-pointer"
                   >
                     <RiDeleteBin7Line />
                   </button>
@@ -309,7 +309,7 @@ const CreatePost = (props: Theme) => {
                   type="button"
                   className="createPostBtn px-4 py-2 font-semibold text-sm text-light rounded-[2rem] bg-dirty-light-green"
                   id="createPostBtn2"
-                // onClick={handleCreatePost}
+                  // onClick={handleCreatePost}
                 >
                   Post
                 </button>

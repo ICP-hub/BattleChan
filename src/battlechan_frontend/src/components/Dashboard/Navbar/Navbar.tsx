@@ -35,16 +35,19 @@ const truncateString = (str: string, maxLength: number): string => {
 
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
-  const darkColor = document.documentElement.className;
-  const { getProfileData } = UserApiHanlder();
   const [fileURL, setFileURL] = React.useState(defaultImg);
   const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
+  
+  const { getProfileData } = UserApiHanlder();
+  const { principal, isConnected } = useConnect();
   const { getBalance } = TokensApiHanlder();
-
+  
+  // const { getTimeTokens } = TokensApiHanlder();
+  
+  const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
-  const { principal, isConnected } = useConnect();
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;

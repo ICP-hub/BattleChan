@@ -10,6 +10,7 @@ import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
 import CommentsApiHanlder from "../../../API_Handlers/comments";
 import Constant from "../../../utils/constants";
+import WithdrawOverlay from "../WithdrawOverlay/WithdrawOverlay";
 // import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 interface PostProps {
@@ -63,19 +64,30 @@ const Post: React.FC<PostProps> = ({
   const [time, setTime] = useState("0:00");
   const [commentsCount, setCommentsCount] = useState(0);
   const [vote, setVote] = React.useState(true);
-  const className = "Dashboard__MainPosts__Post";
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [showOverlay, setShowOverlay] = React.useState(false);
   const { upvotePost, archivePost, downvotePost } = PostApiHanlder();
   const { getAllComments } = CommentsApiHanlder();
-  const navigate = useNavigate();
-  let { isConnected, principal } = useConnect();
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
   const { convertInt8ToBase64 } = Constant();
+  let { isConnected, principal } = useConnect();
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+  const navigate = useNavigate();
+
+  const className = "Dashboard__MainPosts__Post";
   // const { icrc2_approve } = TokensApiHanlder();
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
   }, [isUserAuthenticated]);
+
+  useEffect(() => {
+    const body = document.querySelector("body")?.style;
+    if (body && showOverlay == true) {
+      body.overflow = "hidden";
+    } else if (body) {
+      body.overflow = "auto";
+    }
+  }, [showOverlay]);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -176,62 +188,74 @@ const Post: React.FC<PostProps> = ({
       className={
         className +
         " " +
-        `flex flex-col gap-4 xl:p-5 p-3 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
+        `flex flex-col gap-4 xl:p-5 p-3 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${
+          type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
         }`
       }
     >
       {/* Top section with image, user image and more info */}
       {type === "archive" ? (
-        <>
-          <Link
-            key={id}
-            to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
-          >
-            <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
+        <React.Fragment>
+          <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
+            <Link
+              key={id}
+              to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+            >
               <img
                 alt="post image"
                 className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
                 src={convertInt8ToBase64(imageUrl)}
               />
+            </Link>
 
-              <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
-                {/* User and post data on top */}
-                <section className="flex tablet:gap-8 items-start justify-between">
-                  <div className="w-full flex items-center gap-2">
-                    <img
-                      className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                      src={convertInt8ToBase64(userProfile)}
-                      alt="user avatar"
-                    />
+            <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
+              {/* User and post data on top */}
+              <section className="flex tablet:gap-8 items-start justify-between">
+                <div className="w-full flex items-center gap-2">
+                  <img
+                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    src={convertInt8ToBase64(userProfile)}
+                    alt="user avatar"
+                  />
 
-                    <div className="w-full flex flex-col">
-                      <div className="w-full flex-row-center justify-between">
-                        <h1 className="tablet:text-lg text-1xl">{userName}</h1>
-                        {/* Time */}
-                        <div className="flex items-center gap-2">
-                          <div className="text-1xl tablet:text-lg text-nowrap">
-                            <span
-                              className={`${type === "archive"
-                                  ? "text-red"
-                                  : "text-light-green"
-                                }`}
-                            >
-                              {type === "archive" ? "0:00 " : `${time} `}
-                            </span>
-                            left
-                          </div>
-                        </div>
-                      </div>
+                  <div className="w-full flex flex-col">
+                    <div className="w-full flex-row-center justify-between">
+                      <h1 className="tablet:text-lg text-1xl">{userName}</h1>
 
+                      {/* Time */}
+                      <button
+                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap hover:bg-dirty-light-green cursor-pointer"
+                        onClick={() => setShowOverlay(true)}
+                      >
+                        <span
+                          className={`${
+                            type === "archive" ? "text-red" : "text-light-green"
+                          }`}
+                        >
+                          {type === "archive" ? "0:00 " : `${time} `}
+                        </span>
+                        left
+                      </button>
+                    </div>
+
+                    <Link
+                      key={id}
+                      to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+                    >
                       <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
                         {timestamp} ; {id}
                       </div>
-                    </div>
+                    </Link>
                   </div>
-                </section>
+                </div>
+              </section>
 
-                {/* Content on bottom */}
-                <section className="mt-1">
+              {/* Content on bottom */}
+              <section className="mt-1">
+                <Link
+                  key={id}
+                  to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+                >
                   <p className="tablet:text-lg text-sm font-semibold">
                     {postName}
                   </p>
@@ -240,62 +264,73 @@ const Post: React.FC<PostProps> = ({
                       ? `${content.slice(0, 70)}...`
                       : content}
                   </p>
-                </section>
-              </div>
-            </section>
-          </Link>
-        </>
+                </Link>
+              </section>
+            </div>
+          </section>
+        </React.Fragment>
       ) : (
-        <>
-          <Link
-            key={id}
-            to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
-          >
-            <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
+        <React.Fragment>
+          <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
+            <Link
+              key={id}
+              to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+            >
               <img
                 alt="post image"
                 className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
                 src={convertInt8ToBase64(imageUrl)}
               />
+            </Link>
 
-              <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
-                {/* User and post data on top */}
-                <section className="flex tablet:gap-8 items-start justify-between">
-                  <div className="w-full flex items-center gap-2">
-                    <img
-                      className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                      src={convertInt8ToBase64(userProfile)}
-                      alt="user avatar"
-                    />
+            <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
+              {/* User and post data on top */}
+              <section className="flex tablet:gap-8 items-start justify-between">
+                <div className="w-full flex items-center gap-2">
+                  <img
+                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    src={convertInt8ToBase64(userProfile)}
+                    alt="user avatar"
+                  />
 
-                    <div className="w-full flex flex-col">
-                      <div className="w-full flex-row-center justify-between">
-                        <h1 className="tablet:text-lg text-1xl">{userName}</h1>
-                        {/* Time */}
-                        <div className="flex items-center gap-2">
-                          <div className="text-1xl tablet:text-lg text-nowrap">
-                            <span
-                              className={`${type === "archive"
-                                  ? "text-red"
-                                  : "text-light-green"
-                                }`}
-                            >
-                              {type === "archive" ? "0:00 " : `${time} `}
-                            </span>
-                            left
-                          </div>
-                        </div>
-                      </div>
+                  <div className="w-full flex flex-col">
+                    <div className="w-full flex-row-center justify-between">
+                      <h1 className="tablet:text-lg text-1xl">{userName}</h1>
 
+                      {/* Time */}
+                      <button
+                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap hover:bg-dirty-light-green hover:text-darkcursor-pointer"
+                        onClick={() => setShowOverlay(true)}
+                      >
+                        <span
+                          className={`${
+                            type === "archive" ? "text-red" : "text-light-green"
+                          }`}
+                        >
+                          {type === "archive" ? "0:00 " : `${time} `}
+                        </span>
+                        left
+                      </button>
+                    </div>
+
+                    <Link
+                      key={id}
+                      to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+                    >
                       <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
                         {timestamp} ; {id}
                       </div>
-                    </div>
+                    </Link>
                   </div>
-                </section>
+                </div>
+              </section>
 
-                {/* Content on bottom */}
-                <section className="mt-1">
+              {/* Content on bottom */}
+              <section className="mt-1">
+                <Link
+                  key={id}
+                  to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+                >
                   <p className="tablet:text-lg text-sm font-semibold">
                     {postName}
                   </p>
@@ -304,11 +339,11 @@ const Post: React.FC<PostProps> = ({
                       ? `${content.slice(0, 70)}...`
                       : content}
                   </p>
-                </section>
-              </div>
-            </section>
-          </Link>
-        </>
+                </Link>
+              </section>
+            </div>
+          </section>
+        </React.Fragment>
       )}
 
       {/* Bottom section with upvote, downvote and comments,likes */}
@@ -317,15 +352,17 @@ const Post: React.FC<PostProps> = ({
 
         <div className="buttons flex-row-center gap-2 ml-3 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
+            className={`${
+              vote ? "text-dirty-light-green" : "text-[#878787]"
+            } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
+            className={`${
+              !vote ? "text-dirty-light-green" : "text-[#878787]"
+            } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />
@@ -343,6 +380,8 @@ const Post: React.FC<PostProps> = ({
           </div>
         </div>
       </section>
+
+      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} />
     </div>
   );
 };
