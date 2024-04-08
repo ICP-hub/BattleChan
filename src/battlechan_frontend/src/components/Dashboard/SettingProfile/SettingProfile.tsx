@@ -268,7 +268,7 @@ const SettingProfile = (props: Theme) => {
       <div
         className={`h-full w-full laptop:py-10 py-5 laptop:px-40 tablet:px-20 px-8 text-dark dark:text-light`}
       >
-        <h1 className="laptop:text-4xl text-laptop:text-4xl phone:text-3xl text-2xl font-bold text-center mb-8">
+        <h1 className="laptop:text-4xl text-laptop:text-4xl tablet:text-3xl small_phone:text-2xl text-lg font-bold text-center mb-8">
           Customize Profile
         </h1>
 

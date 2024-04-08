@@ -4,7 +4,7 @@ import Comments from "./Comments";
 import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 import { useMediaQuery } from "@mui/material";
-import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -12,10 +12,11 @@ type Theme = {
 
 const DashboardPage = (props: Theme) => {
   const className = "dashboard__dashboardPage";
-  const is550px = useMediaQuery("(max-width: 550px)");
+  const is430px = useMediaQuery("(max-width: 430px)");
 
   const cardContainer =
-    "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] w-[150px] laptop:m-4 m-3 laptop:font-base text-sm text-light";
+    "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] small_phone:w-[150px] w-[130px] laptop:m-4 m-3 laptop:font-base phone:text-sm text-xs";
+
   const cardStyle =
     "bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md phone:p-8 p-4";
 
@@ -38,7 +39,7 @@ const DashboardPage = (props: Theme) => {
           `h-full w-full laptop:py-10 py-5 text-dark dark:text-light`
         }
       >
-        <h1 className="laptop:text-4xl phone:text-3xl text-2xl font-bold text-center tablet:mb-8 mb-4">
+        <h1 className="laptop:text-4xl text-laptop:text-4xl tablet:text-3xl small_phone:text-2xl text-lg font-bold text-center tablet:mb-8 mb-4">
           Dashboard
         </h1>
 
@@ -46,42 +47,43 @@ const DashboardPage = (props: Theme) => {
           className={
             className +
             "__cardSection " +
-            "w-full laptop:py-8 py-4 laptop:gap-8 gap-2 laptop:px-0 px-4 big_tablet:flex-row-center flex-col-center flex-col-reverse justify-center"
+            "w-full laptop:py-8 py-4 laptop:gap-8 gap-2 laptop:px-0 phone:px-4 big_tablet:flex-row-center flex-col-center flex-col-reverse justify-center"
           }
         >
           <div
             className={
               className +
               "__leftSection " +
-              " self-center grid grid-cols-[50%_minmax(0px,_1fr)] row-span-2"
+              " self-center grid grid-cols-[50%_minmax(0px,_1fr)] row-span-2 text-[#fff]"
             }
           >
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Live Post</div>
-                <div className="font-bold text-xl mt-2">15</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">15</div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Archive Post</div>
-                <div className="font-bold text-xl mt-2">7</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">7</div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Total Comments</div>
-                <div className="font-bold text-xl mt-2">205</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">205</div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Your Tokens</div>
-                <div className="font-bold text-xl mt-2">190.00</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">
+                  190.00
+                </div>
               </div>
             </div>
           </div>
-
 
           <div
             className={
@@ -90,19 +92,19 @@ const DashboardPage = (props: Theme) => {
           >
             <div
               id="chart"
-              className="big_tablet:w-auto w-full bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md laptop:p-8 big_tablet:p-2 py-4 small_phone:px-12 px-8"
+              className="big_tablet:w-auto w-full bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md tablet:p-7 p-4"
             >
               <PieChart
-                width={is550px ? 250 : 350}
-                height={is550px ? 250 : 350}
+                width={is430px ? 250 : 280}
+                height={is430px ? 180 : 220}
               >
                 <Pie
                   dataKey="value"
                   isAnimationActive={false}
                   data={data01}
-                  cx={is550px ? 120 : 170}
-                  cy={is550px ? 120 : 170}
-                  outerRadius={is550px ? 80 : 120}
+                  cx={is430px ? 120 : 140}
+                  cy={is430px ? 90 : 110}
+                  outerRadius={is430px ? 60 : 80}
                   fill="#8884d8"
                   label
                 />

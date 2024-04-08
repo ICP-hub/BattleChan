@@ -62,9 +62,25 @@ const PostGrid: React.FC<PostGridProps> = ({ type }) => {
           setPostData(posts);
         }
       } else {
-        // const data = await getUsersMainPosts();
-        // console.log(data);
-      }
+        const response = (await getUsersMainPosts()) as PostResponse;
+        if (response.status == true && response.data.length > 0) {
+          console.log(response);
+          // const posts = response.data
+          //   .flatMap((nestedArray) => nestedArray)
+          //   .flatMap((element) => {
+          //     if (
+          //       Array.isArray(element) &&
+          //       element.length === 2 &&
+          //       typeof element[1] === "object"
+          //     ) {
+          //       return [element[1]]; // Include only the object part
+          //     }
+          //     return [];
+          //   });
+          const posts = response.data.flat();
+          setPostData(posts);
+        }
+      };
     };
 
     fetchData();
