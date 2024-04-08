@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import UserApiHanlder from "../../../API_Handlers/user";
 import defaultPostImg from "/src/images/post-basketball.jpg";
 import Constant from "../../../utils/constants";
+import PostApiHanlder from "../../../API_Handlers/post";
+import { Link } from "react-router-dom";
 
 interface PostGridProps {
   type: string;
-  userInfo: UserInfo[];
 }
 
 interface UserInfo {
@@ -23,51 +24,51 @@ interface UserInfo {
 }
 
 interface PostData {
-  createdAt: string;
-  createdBy: {
-    userName: string;
-    ownerId: any;
-    userProfile: string;
-  };
-  downvotedBy: any[];
-  downvotes: BigInt;
-  expireAt: BigInt;
-  postDes: string;
   postId: string;
   postMetaData: Int8Array;
   postName: string;
-  updatedAt: any[];
-  upvotedBy: any[];
-  upvotes: BigInt;
 }
 
-const PostGrid: React.FC<PostGridProps> = ({ type, userInfo }) => {
+interface PostResponse {
+  status: boolean;
+  data: PostData[][];
+  error: string[];
+}
+
+const PostGrid: React.FC<PostGridProps> = ({ type }) => {
   const [postData, setPostData] = useState<PostData[]>([]);
   const { getPostInfo } = UserApiHanlder();
-  const { convertInt8ToBase64 } = Constant();
+  const { getUsersMainPosts, getUsersArchivePosts } = PostApiHanlder();
+  const { convertInt8ToBase64, convertNanosecondsToTimestamp } = Constant();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (
-        userInfo &&
-        userInfo.length > 0 &&
-        userInfo[0].postIds &&
-        userInfo[0].postIds.length > 0
-      ) {
-        for (let i = 0; i < userInfo[0].postIds.length; i++) {
-          const string = userInfo[0].postIds[i];
-          const postId = string.match(/#(\d+)/)?.[0] ?? undefined;
-          const data = await getPostInfo(postId ?? "");
-          if (data && data.length > 0) {
-            // console.log("post data here: ", data);
-            setPostData(data);
-          }
+      if (type == "Archive") {
+        const response = (await getUsersArchivePosts()) as PostResponse;
+        if (response.status == true && response.data.length > 0) {
+          console.log(response);
+          const posts = response.data
+            .flatMap((nestedArray) => nestedArray)
+            .flatMap((element) => {
+              if (
+                Array.isArray(element) &&
+                element.length === 2 &&
+                typeof element[1] === "object"
+              ) {
+                return [element[1]]; // Include only the object part
+              }
+              return [];
+            });
+          setPostData(posts);
         }
+      } else {
+        // const data = await getUsersMainPosts();
+        // console.log(data);
       }
     };
 
     fetchData();
-  }, [userInfo]);
+  }, []);
 
   // const posts = [
   //   { id: 1, imageUrl: "/src/images/post-basketball.jpg" },
@@ -88,17 +89,21 @@ const PostGrid: React.FC<PostGridProps> = ({ type, userInfo }) => {
                 key={index}
                 className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2"
               >
-                <article className="overflow-hidden h-56 rounded-lg shadow-lg">
-                  <a href="">
-                    <img
-                      alt="Placeholder"
-                      className={`block h-full w-full object-cover ${
-                        type === "Archive" ? "grayscale" : ""
-                      }`}
-                      src={convertInt8ToBase64(post.postMetaData)}
-                    />
-                  </a>
-                </article>
+                <Link
+                  key={post.postId}
+                  to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}?type=archive`}
+                >
+                  <article className="overflow-hidden h-56 rounded-lg shadow-lg">
+                    <a href="">
+                      <img
+                        alt="Placeholder"
+                        className={`block h-full w-full object-cover ${type === "Archive" ? "grayscale" : ""
+                          }`}
+                        src={convertInt8ToBase64(post.postMetaData)}
+                      />
+                    </a>
+                  </article>
+                </Link>
               </div>
             ))}
         </div>
@@ -111,22 +116,26 @@ const PostGrid: React.FC<PostGridProps> = ({ type, userInfo }) => {
       <div className="flex flex-wrap -mx-1 laptop:-mx-3">
         {postData.length > 0 &&
           postData.map((post, index) => (
-            <div
-              key={index}
-              className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2"
+            <Link
+              key={post.postId}
+              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
             >
-              <article className="overflow-hidden h-56 rounded-lg shadow-lg">
-                <a href="">
-                  <img
-                    alt="Placeholder"
-                    className={`block h-full w-full object-cover ${
-                      type === "Archive" ? "grayscale" : ""
-                    }`}
-                    src={convertInt8ToBase64(post.postMetaData)}
-                  />
-                </a>
-              </article>
-            </div>
+              <div
+                key={index}
+                className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2"
+              >
+                <article className="overflow-hidden h-56 rounded-lg shadow-lg">
+                  <a href="">
+                    <img
+                      alt="Placeholder"
+                      className={`block h-full w-full object-cover ${type === "Archive" ? "grayscale" : ""
+                        }`}
+                      src={convertInt8ToBase64(post.postMetaData)}
+                    />
+                  </a>
+                </article>
+              </div>
+            </Link>
           ))}
       </div>
     </>
