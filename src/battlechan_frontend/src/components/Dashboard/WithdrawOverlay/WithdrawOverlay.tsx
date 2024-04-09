@@ -36,13 +36,17 @@ const WithdrawOverlay = (props: Props) => {
         <input
           type="number"
           name="amount"
+          min={1}
           placeholder="Enter Amount"
           className="rounded-[3rem] p-2 text-dark"
         />
 
         {/* Buttons */}
         <div className="buttons gap-4 flex-row-center justify-center">
-          <button className="small-button bg-transparent border hover:bg-grey">
+          <button
+            className="small-button bg-transparent border hover:bg-grey"
+            onClick={handleClosePopup}
+          >
             Cancel
           </button>
           <button className="small-button bg-dirty-light-green  border hover:bg-dark-green">
@@ -51,7 +55,8 @@ const WithdrawOverlay = (props: Props) => {
         </div>
 
         <p className="phone:text-sm text-xs italic text-center">
-          NOTE: You have to leave at least 5 $TIME tokens in a post when you withdraw
+          NOTE: You have to leave at least 5 $TIME tokens in a post when you
+          withdraw
         </p>
       </div>
     </div>

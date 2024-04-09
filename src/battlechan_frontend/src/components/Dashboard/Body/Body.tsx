@@ -2,24 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import Steps from "./Steps";
-import DataNumbers from "./DataNumbers";
 import CreatePostBtn from "./CreatePostBtn";
-
-import { FiBox } from "react-icons/fi";
-import { FaRunning } from "react-icons/fa";
-import { BiMoviePlay } from "react-icons/bi";
-import { LuPlusCircle } from "react-icons/lu";
-import { GiPublicSpeaker } from "react-icons/gi";
-import { MdOutlineAddBusiness } from "react-icons/md";
-import { IoHardwareChipOutline } from "react-icons/io5";
-import { IoGameControllerOutline } from "react-icons/io5";
+import CatalogSVG from "../../../pages/MainPosts/CatalogSVG";
 
 import bg from "../../../images/dashboard_bg.png";
 import NavButtons from "../NavButtons/NavButtons";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
 
-import CatalogSVG from "../../../pages/MainPosts/CatalogSVG";
 
 interface Board {
   [x: string]: any;
