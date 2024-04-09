@@ -474,11 +474,11 @@ const PostDetails = (props: Theme) => {
               <div className="mt-8">
                 {type === "archive" ? (
                   <>
-                    <Comment currentComment={commentsData} type="archive" />
+                    <Comment currentComment={commentsData} getComments={getComments} type="archive" />
                   </>
                 ) : (
                   <>
-                    <Comment currentComment={commentsData} />
+                    <Comment currentComment={commentsData} getComments={getComments} />
                   </>
                 )}
               </div>
