@@ -74,9 +74,8 @@ const DashboardPage = (props: Theme) => {
 
   const cardContainer =
     "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] small_phone:w-[150px] w-[130px] laptop:m-4 m-3 laptop:font-base phone:text-sm text-xs";
-
   const cardStyle =
-    "bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md phone:p-8 p-4";
+    "bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md phone:p-8 p-4 text-light";
 
   const data01 = [
     { name: "Upvote", value: likedPostRef.current },
@@ -90,14 +89,8 @@ const DashboardPage = (props: Theme) => {
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <NavButtons />
 
-      <div
-        className={
-          className +
-          " " +
-          `h-full w-full laptop:py-10 py-5 text-dark dark:text-light`
-        }
-      >
-        <h1 className="laptop:text-4xl text-laptop:text-4xl tablet:text-3xl small_phone:text-2xl text-lg font-bold text-center tablet:mb-8 mb-4">
+      <div className={className + " " + `h-full w-full laptop:py-10 py-5`}>
+        <h1 className="laptop:text-4xl text-laptop:text-4xl tablet:text-3xl small_phone:text-2xl text-lg text-dark dark:text-light font-bold text-center tablet:mb-8 mb-4">
           Dashboard
         </h1>
 

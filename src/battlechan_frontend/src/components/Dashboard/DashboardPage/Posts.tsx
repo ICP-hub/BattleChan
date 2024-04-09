@@ -18,7 +18,7 @@ const Posts = () => {
           " " +
           padding +
           " " +
-          "flex items-center justify-between mb-3 font-sans text-base"
+          "flex items-center justify-between font-sans text-base"
         }
       >
         <h1 className="tablet:text-2xl text-lg font-bold dark:text-[#fff]">
@@ -58,7 +58,7 @@ const Posts = () => {
           " " +
           fontSize +
           " " +
-          "w-full mb-8"
+          "w-full phone:mb-8 mb-4"
         }
       >
         <table className="w-full bg-dirty-light-green text-light rounded-lg">

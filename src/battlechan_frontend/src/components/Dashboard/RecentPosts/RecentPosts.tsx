@@ -6,7 +6,9 @@ const RecentPosts = () => {
 
   return (
     <div className={className + " " + `text-dark dark:text-light`}>
-      <div className="font-[800] text-center text-[30px]">Recent Post </div>
+      <div className="font-[800] text-center laptop:text-4xl text-laptop:text-4xl tablet:text-3xl small_phone:text-2xl text-lg ">
+        Recent Post{" "}
+      </div>
       <Posts />
     </div>
   );
