@@ -247,7 +247,7 @@ const SettingProfile = (props: Theme) => {
 
     // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
-  }, [isRegistered, userName, fileData]);
+  }, [isRegistered]);
 
   return (
     <div

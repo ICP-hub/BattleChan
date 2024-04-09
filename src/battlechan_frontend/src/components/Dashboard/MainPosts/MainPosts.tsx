@@ -214,7 +214,7 @@ const MainPosts = (props: Theme) => {
         response = (await getAllArchivePostFilter(
           activeSelection.toLocaleLowerCase(),
           postsPerPage,
-          currentPage - 1,
+          currentPage,
           selectedBoard
         )) as PostResponse;
       } else {
