@@ -19,7 +19,7 @@ export default {
       "dark-green": "#0C150D",
       "dirty-light-green": "#345D3A",
       "light-green": "#18AF00",
-      transparent: "#00000000",
+      "transparent": "#00000000",
     },
     screens: {
       small_phone: "430px",
