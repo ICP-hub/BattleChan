@@ -99,32 +99,33 @@ const Body = () => {
         className={
           className +
           "__tagLines" +
-          " w-full flex flex-col big_tablet:flex-row my-12 items-center justify-center container px-2 gap-2 mx-auto"
+          " w-full small_phone:my-12 tablet:my-16 my-6 gap-4 laptop:px-[6vw] phone:px-[8vw] px-2 flex flex-col big_tablet:items-start items-center big_tablet:flex-row justify-between"
         }
       >
         <h1
-          className={`text-4xl tablet:text-5xl text-center big_tablet:text-left font-bold ${
+          className={`big_tablet:w-2/3 w-full xl:text-5xl phone:text-4xl text-3xl big_tablet:text-start text-center font-bold ${
             darkColor == "dark" ? "text-[#6DE580]" : "text-dirty-light-green"
-          } leading-relaxed`}
+          } leading-normal`}
         >
-          BattleChan: Decentralized Discussion Battlefield
+          BattleChan: <br className="block phone:hidden" /> Decentralized
+          <br />
+          Discussion Battlefield
         </h1>
+
         <p
-          className={`text-dark dark:text-light font-normal tablet:font-semibold text-lg text-center big_tablet:text-start`}
+          className={`big_tablet:w-1/3 w-full text-dark dark:text-light font-normal xl:text-lg big_tablet:text-sm tablet:text-base phone:text-sm text-xs text-center big_tablet:text-start`}
         >
           Welcome to BattleChan, where every post battles for supremacy
         </p>
       </div>
 
-      <div className="tablet:h-48">
-        <Steps />
-      </div>
+      <Steps />
 
       <div
         className={
           className +
           "__postsNumber" +
-          ` tablet:hidden tablet:px-30 flex flex-col tablet:block gap-2 p-4 tablet:py-6 tablet:px-10 mx-4 tablet:mx-auto my-24 border border-dark dark:border-light rounded-md`
+          ` tablet:hidden tablet:px-30 flex flex-col tablet:block gap-2 p-4 tablet:py-6 tablet:px-10 mx-4 tablet:mx-auto tablet:my-24 my-10 border border-dark dark:border-light rounded-md`
         }
       >
         <div className="data__headings tablet:px-4 flex-row-center tablet:flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green gap-2">

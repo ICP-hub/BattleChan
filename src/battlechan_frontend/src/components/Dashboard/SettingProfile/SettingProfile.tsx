@@ -42,6 +42,7 @@ interface ProfileData {
   userName: string;
   profileImg: string;
   status: boolean;
+  profileImg_int8arr: Int8Array;
 }
 
 const SettingProfile = (props: Theme) => {
@@ -237,6 +238,7 @@ const SettingProfile = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
+        setFileData({base64: response?.profileImg || "", int8Array: response?.profileImg_int8arr })
         setIsRegistered(true);
       } else {
         setIsRegistered(false);

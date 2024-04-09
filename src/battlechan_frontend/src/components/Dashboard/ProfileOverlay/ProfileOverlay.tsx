@@ -123,7 +123,7 @@ const ProfileOverlay = (props: Props) => {
           <hr />
 
 
-          <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 p-3 my-2">
+          <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 my-2">
             {/* <div className="ICP_Balance flex-row-center justify-between">
               <p className="flex-row-center gap-2">
                 <SiInternetcomputer />

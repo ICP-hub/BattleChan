@@ -13,6 +13,9 @@ import { backend } from "../../../../../declarations/backend";
 import { IoEllipse } from "react-icons/io5";
 import trendingPost_coverImg from "../../../images/trendingPost_coverImg.png";
 import mybalance_Img from "../../../images/my-balance-img.png";
+import UserApiHanlder from "../../../API_Handlers/user";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
+import { useConnect } from "@connect2ic/react";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -26,6 +29,15 @@ interface DataItem {
   tokenChange: number;
   imageUrl: string;
 }
+
+interface UserAnalytics {
+  likedPost: number;
+  postData: number;
+  comments: number;
+  userArchivedPost: number;
+  dislikedPost: number;
+  status: boolean;
+};
 
 const data: DataItem[] = [
   {
@@ -52,6 +64,41 @@ const data: DataItem[] = [
 ];
 
 const Analytics = (props: Theme) => {
+  const [likedPost, setLikedPost] = React.useState(0);
+  const [dislikedPost, setDislikedPost] = React.useState(0);
+  const [tokenBalance, setTokenBalance] = React.useState(0);
+
+  const { getBalance } = TokensApiHanlder();
+  const { getUserAnalytics } = UserApiHanlder();
+  const { principal, isConnected } = useConnect();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (principal) {
+        const data = await getBalance(principal || "");
+        setTokenBalance(Number(data));
+      }
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [principal]);
+
+  // Get Total Post's Counts
+  useEffect(() => {
+    async function getAnalytics() {
+      try {
+        const response = (await getUserAnalytics()) as UserAnalytics;
+        // console.log(response);
+        setLikedPost(response?.likedPost);
+        setDislikedPost(response?.dislikedPost);
+      } catch (error) {
+        console.error("Error fetching total posts:", error);
+      }
+    }
+    getAnalytics();
+  }, []);
+
   return (
     <>
       <div
@@ -106,7 +153,7 @@ const Analytics = (props: Theme) => {
               </div>
               <div>
                 <h3 className="">My Balance</h3>
-                <div className="font-bold text-xl tablet:text-3xl">195.00</div>
+                <div className="font-bold text-xl tablet:text-3xl">{tokenBalance}</div>
               </div>
             </div>
             <svg
@@ -290,13 +337,13 @@ const Analytics = (props: Theme) => {
             <div className="p-2 w-1/2 tablet:w-1/4">
               <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
                 <div>Upvote</div>
-                <div className="font-bold text-xl mt-2">75</div>
+                <div className="font-bold text-xl mt-2">{likedPost}</div>
               </div>
             </div>
             <div className="p-2 w-1/2 tablet:w-1/4">
               <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
                 <div>Downvote</div>
-                <div className="font-bold text-xl mt-2">18</div>
+                <div className="font-bold text-xl mt-2">{dislikedPost}</div>
               </div>
             </div>
             <div className="p-2 w-1/2 tablet:w-1/4">

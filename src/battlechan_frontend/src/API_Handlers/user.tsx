@@ -33,6 +33,28 @@ interface UserInfo {
   userName: string;
 }
 
+interface Profile {
+  userName: string;
+  profileImg: string;
+  profileImg_int8arr: Int8Array;
+  status: boolean;
+}
+
+interface UserAnalytics {
+  likedPost: number;
+  postData: number;
+  comments: number;
+  userArchivedPost: number;
+  dislikedPost: number;
+  status: boolean;
+}
+
+interface UserAnalyticsBackendRes {
+  status: boolean;
+  data: UserAnalytics[];
+  error: string[];
+}
+
 const UserApiHanlder = () => {
   // Init backend
   const [backend] = useBackend();
@@ -105,18 +127,39 @@ const UserApiHanlder = () => {
 
   const getProfileData = async () => {
     try {
-      let userName = "";
-      let profileImg = "";
-      let status = false;
+      let res = { userName: "", profileImg: "", profileImg_int8arr: new Int8Array(), status: false } as Profile;
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
       if (response && response.status !== false) {
         const userDataArray: UserInfo[] = response.data;
-        userName = userDataArray[0]?.userName;
-        profileImg = convertInt8ToBase64(userDataArray[0]?.profileImg);
-        status = true;
+        res.userName = userDataArray[0]?.userName;
+        res.profileImg = convertInt8ToBase64(userDataArray[0]?.profileImg);
+        res.profileImg_int8arr = userDataArray[0]?.profileImg;
+        res.status = true;
       }
       // console.log("getUserInfo res.data: ", response.data)
-      return {userName, profileImg, status};
+      return res;
+    } catch (err) {
+      console.error("Error getting user info: ", err);
+      return undefined;
+    }
+  }
+
+  // Get User Analytics for Dashboard Page
+  const getUserAnalytics = async () => {
+    try {
+      let res = { postData:0, userArchivedPost:0, comments:0, likedPost:0, dislikedPost:0, status: false } as UserAnalytics;
+      const response = (await backend.getUserTotalCounts()) as UserAnalyticsBackendRes;
+      if (response && response.status !== false) {
+        console.log(response);
+        res.postData = Number(response?.data[0]?.postData);
+        res.userArchivedPost = Number(response?.data[0]?.userArchivedPost);
+        res.comments = Number(response?.data[0]?.comments);
+        res.likedPost = Number(response?.data[0]?.likedPost);
+        res.dislikedPost = Number(response?.data[0]?.dislikedPost);
+        res.status = true;
+      }
+      // console.log("getUserInfo res.data: ", response.data)
+      return res;
     } catch (err) {
       console.error("Error getting user info: ", err);
       return undefined;
@@ -131,7 +174,8 @@ const UserApiHanlder = () => {
     updateUser,
     getUserInfo,
     getPostInfo,
-    getProfileData
+    getProfileData,
+    getUserAnalytics
   };
 };
 
