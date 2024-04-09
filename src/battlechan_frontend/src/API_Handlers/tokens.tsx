@@ -29,26 +29,26 @@ const TokensApiHanlder = () => {
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
             if (Number(is_sufficient_balance) >= amnt) {
                 console.log("Approve");
+                let data = {
+                    fee: [fees],
+                    memo: [],
+                    from_subaccount: [],
+                    created_at_time: [],
+                    amount: amnt,
+                    expected_allowance: [],
+                    expires_at: [],
+                    spender: {
+                        owner: owner,
+                        subaccount: []
+                    }
+                }
+                console.log(data);
+                const res = await ledger.icrc2_approve(data);
+                console.log("icrc2_approve: ", res);
+                return res;
             } else {
                 console.log("Reject");
             }
-            let data = {
-                fee: [fees],
-                memo: [],
-                from_subaccount: [],
-                created_at_time: [],
-                amount: amnt,
-                expected_allowance: [],
-                expires_at: [],
-                spender: {
-                    owner: owner,
-                    subaccount: []
-                }
-            }
-            console.log(data);
-            const res = await ledger.icrc2_approve(data);
-            console.log("icrc2_approve: ", res);
-            return res;
         } catch (err) {
             console.error("Error: ", err);
         }
