@@ -5,9 +5,9 @@ import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import Replies from "./Replies";
-import Constant from "../../../utils/constants";
+import Constant from "../../utils/constants";
 import toast from "react-hot-toast";
-import CommentsApiHanlder from "../../../API_Handlers/comments";
+import CommentsApiHanlder from "../../API_Handlers/comments";
 
 interface User {
   userName: string;

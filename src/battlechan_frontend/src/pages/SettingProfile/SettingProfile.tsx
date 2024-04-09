@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
-import bg from "../../../images/dashboard_bg.png";
-import defaultImg from "../../../images/User.png";
+import bg from "../../images/dashboard_bg.png";
+import defaultImg from "../../images/User.png";
+
 import { useCanister, useConnect } from "@connect2ic/react";
-import UserApiHanlder from "../../../API_Handlers/user";
+import UserApiHanlder from "../../API_Handlers/user";
 import toast from "react-hot-toast";
-import Constant from "../../../utils/constants";
+import Constant from "../../utils/constants";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {

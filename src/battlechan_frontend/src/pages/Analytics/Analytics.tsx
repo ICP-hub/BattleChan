@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-import { LuPlusCircle } from "react-icons/lu";
-import { CgSortAz } from "react-icons/cg";
-import { FaAngleDown } from "react-icons/fa6";
-import { MdOutlineAddBusiness } from "react-icons/md";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
-import CreatePostBtn from "../Body/CreatePostBtn";
+import { backend } from "../../../../declarations/backend";
 
-import { backend } from "../../../../../declarations/backend";
-import { IoEllipse } from "react-icons/io5";
-import trendingPost_coverImg from "../../../images/trendingPost_coverImg.png";
-import mybalance_Img from "../../../images/my-balance-img.png";
-import UserApiHanlder from "../../../API_Handlers/user";
-import TokensApiHanlder from "../../../API_Handlers/tokens";
+import trendingPost_coverImg from "../../images/trendingPost_coverImg.png";
+import mybalance_Img from "../../images/my-balance-img.png";
+
+import UserApiHanlder from "../../API_Handlers/user";
+import TokensApiHanlder from "../../API_Handlers/tokens";
 import { useConnect } from "@connect2ic/react";
 
 type Theme = {
