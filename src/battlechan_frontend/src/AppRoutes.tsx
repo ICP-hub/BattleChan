@@ -23,6 +23,9 @@ const ArchivePosts = React.lazy(
 const Analytics = React.lazy(
   () => import("../src/components/Dashboard/Analytics/Analytics")
 );
+const DashboardPage = React.lazy(
+  () => import("../src/components/Dashboard/DashboardPage/DashboardPage")
+);
 
 interface AppRoutesProps {
   handleThemeSwitch: () => void; // Adjust based on the actual implementation
@@ -71,25 +74,25 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
       <Route
         path="/dashboard/settingProfile/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <UserSetting handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
       <Route
         path="/dashboard/UserProfile/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <UserProfile handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
       <Route
@@ -111,13 +114,25 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
       <Route
         path="/dashboard/analytics/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <Analytics handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
+        }
+      />
+      <Route
+        path="/dashboard/dashboard/*"
+        element={
+          allow == true ? (
+            <Suspense fallback={<Loader />}>
+              <DashboardPage handleThemeSwitch={handleThemeSwitch} />
+            </Suspense>
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
     </Routes>
