@@ -137,52 +137,99 @@ actor BattleChan {
     await icrc2_transferFrom(userId, backendCanisterId, timeToken * decimal);
   };
 
-  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Token.Result_2 {
+  public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
+    try {
+      let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
 
-    let { updatedUserInfo; updatedPostInfo } = await updateVoteStatus(userId, voteTime, voteStatus, postId, postTrieMap, userTrieMap);
-    var paymentStatus : Token.Result_2 = #Ok(0);
-    switch (voteStatus) {
-      case (#upvote) {
-        paymentStatus := await ledger.icrc2_transfer_from({
-          spender_subaccount = null;
-          from = { owner = userId; subaccount = null };
-          to = { owner = backendCanisterId; subaccount = null };
-          amount = (voteTime * decimal) + transactionFee;
-          fee = ?transactionFee;
-          memo = null;
-          created_at_time = null;
-        });
+      switch (voteStatus) {
+        case (#upvote) {
+          let paymentStatus = await ledger.icrc2_transfer_from({
+            spender_subaccount = null;
+            from = { owner = userId; subaccount = null };
+            to = { owner = backendCanisterId; subaccount = null };
+            amount = (voteTime * decimal) + transactionFee;
+            fee = ?transactionFee;
+            memo = null;
+            created_at_time = null;
+          });
+          switch (paymentStatus) {
+            case (#Ok(index)) {};
+            case (#Err(userId)) {
+              throw Error.reject("Internal Error!");
+            };
+          };
+        };
+        case (#downvote) {};
       };
-      case (#downvote) {
-      };
+      userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
+      postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
+      #ok(successMessage.update);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
     };
-    userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
-    postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-    paymentStatus;
-
   };
 
-  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Int) : async Token.Result_2 {
-    let { updatedPostTrie; updatedWithDrawPostTrie; ownerReward } = withdraw(postId, amount, userId, postTrieMap, withdrawPostTrie);
-    postTrieMap := updatedPostTrie;
-    withdrawPostTrie := updatedWithDrawPostTrie;
-    let paymentRes = await ledger.icrc1_transfer({
-      to = {
-        owner = userId;
-        subaccount = null;
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Int) : async Types.Result {
+    try {
+      let { updatedPostTrie; updatedWithDrawPostTrie; ownerReward } = withdraw(postId, amount, userId, postTrieMap, withdrawPostTrie);
+      postTrieMap := updatedPostTrie;
+      withdrawPostTrie := updatedWithDrawPostTrie;
+      let paymentRes = await ledger.icrc1_transfer({
+        to = {
+          owner = userId;
+          subaccount = null;
+        };
+        fee = null;
+        memo = null;
+        from_subaccount = null;
+        created_at_time = null;
+        amount = ownerReward;
+      });
+      switch (paymentRes) {
+        case (#Ok(index)) {};
+        case (#Err(userId)) {
+          throw Error.reject("Internal Error!");
+        };
       };
-      fee = null;
-      memo = null;
-      from_subaccount = null;
-      created_at_time = null;
-      amount = ownerReward;
-    });
-    paymentRes;
+      // paymentRes;
+      #ok(successMessage.insert);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+    };
   };
 
-  public shared ({ caller = userId }) func claimReward(index : Nat, postId : Types.PostId) {
-    let { updatedWithDrawPostTrie; amount } = claim(index, userId, postId, userTrieMap, withdrawPostTrie);
-    withdrawPostTrie := updatedWithDrawPostTrie;
+  public shared ({ caller = userId }) func claimReward(index : Nat, postId : Types.PostId) : async Types.Result {
+    try {
+      let { updatedWithDrawPostTrie; amount } = claim(index, userId, postId, userTrieMap, withdrawPostTrie);
+      let paymentRes = await ledger.icrc1_transfer({
+        to = {
+          owner = userId;
+          subaccount = null;
+        };
+        fee = null;
+        memo = null;
+        from_subaccount = null;
+        created_at_time = null;
+        amount;
+      });
+      switch (paymentRes) {
+        case (#Ok(index)) {};
+        case (#Err(userId)) {
+          throw Error.reject("Internal Error!");
+        };
+      };
+      withdrawPostTrie := updatedWithDrawPostTrie;
+
+      #ok(successMessage.update);
+    } catch (e) {
+      let code = Error.code(e);
+      let message = Error.message(e);
+      #err(code, message);
+    };
   };
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
@@ -398,32 +445,29 @@ actor BattleChan {
 
   public query func archivePostFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostRes]> {
 
-    // let archivedPost : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
-    //   case (?v) { List.toArray(v) };
-    //   case (null) {
-    //     return { data = null; status = true; error = ?notFound.noPageExist };
-    //   };
-    // };
     let archivedPostsList = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
     var archivedPost = List.nil<(Types.PostId, Types.PostInfo)>();
     for (list in archivedPostsList.vals()) {
       archivedPost := List.append<(Types.PostId, Types.PostInfo)>(archivedPost, list);
     };
+
     var listPost = List.nil<Types.PostInfo>();
+
     for (post in List.toArray(archivedPost).vals()) {
       if (post.1.board == boardName) {
         listPost := List.push(post.1, listPost);
       };
     };
+
     let sortedData : [var Types.PostRes] = bubbleSortPost(Array.thaw<Types.PostRes>(List.toArray(listPost)), filterOptions);
 
     let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData), chunk_size);
 
-    if (paginatedPostInfo.size() < pageNo) {
+    if (paginatedPostInfo.size() < pageNo or pageNo < 1) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
 
-    let page = paginatedPostInfo[pageNo];
+    let page = paginatedPostInfo[pageNo - 1];
     return { data = ?page; status = true; error = null };
 
   };
@@ -477,11 +521,11 @@ actor BattleChan {
 
     let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData), chunk_size);
 
-    if (paginatedPostInfo.size() < pageNo) {
+    if (paginatedPostInfo.size() < pageNo or pageNo < 1) {
       return { data = null; status = false; error = ?notFound.noPageExist };
     };
 
-    let page = paginatedPostInfo[pageNo];
+    let page = paginatedPostInfo[pageNo -1];
     return { data = ?page; status = true; error = null };
   };
 
@@ -504,7 +548,16 @@ actor BattleChan {
       };
     };
   };
-
+  public shared ({ caller = userId }) func getAllUserComments(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
+    let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?notFound.noUser };
+      };
+    };
+    
+    userInfo.createdComments;
+  };
   public query func getAllCommentOfPost(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
@@ -639,19 +692,19 @@ actor BattleChan {
     };
   };
 
-  public func burnToken(amount : Nat) : async Token.Result_2 {
-    await ledger.icrc1_transfer({
-      to = {
-        owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
-        subaccount = null;
-      };
-      fee = null;
-      memo = null;
-      from_subaccount = null;
-      created_at_time = null;
-      amount;
-    });
-  };
+  // public func burnToken(amount : Nat) : async Token.Result_2 {
+  //   await ledger.icrc1_transfer({
+  //     to = {
+  //       owner = Principal.fromText("m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe");
+  //       subaccount = null;
+  //     };
+  //     fee = null;
+  //     memo = null;
+  //     from_subaccount = null;
+  //     created_at_time = null;
+  //     amount;
+  //   });
+  // };
 
   public func icrc2_approve(amount : Nat) : async Token.Result_1 {
     await ledger.icrc2_approve {
@@ -681,7 +734,7 @@ actor BattleChan {
     });
   };
 
-  public query func getPostsByBoard() : async Types.Result_1<[Types.PostInfo]> {
+  public query func getAllPosts() : async Types.Result_1<[Types.PostInfo]> {
     // let postDataAll = Trie.toArray<Text, Types.PostInfo, { <Types.PostInfo> }>(postTrieMap, func(k, v) = v);
     let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
 
