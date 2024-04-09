@@ -7,6 +7,8 @@ import Principal "mo:base/Principal";
 import Int "mo:base/Int";
 import Nat32 "mo:base/Nat32";
 import List "mo:base/List";
+import Array "mo:base/Array";
+import Debug "mo:base/Debug";
 
 import { reject } "../utils/message";
 import { checkText } "../utils/validations";
@@ -113,6 +115,15 @@ module {
         let replyInfo : Types.ReplyInfo = switch (Trie.get(commentInfo.replies, textKey replyId, Text.equal)) {
             case (?value) { value };
             case (null) { trap(reject.noReply) };
+        };
+        switch (Array.find<Types.UserId>(replyInfo.likedBy, func x = x == userId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
+        };
+
+        switch (Array.find<Types.UserId>(replyInfo.dislikedBy, func x = x == userId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
         };
 
         let newReply : Types.ReplyInfo = switch (voteStatus) {
