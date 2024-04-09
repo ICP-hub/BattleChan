@@ -5,14 +5,14 @@ import { CgSortAz } from "react-icons/cg";
 import { FaAngleDown } from "react-icons/fa6";
 import { MdOutlineAddBusiness } from "react-icons/md";
 
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
-import CreatePostBtn from "../Body/CreatePostBtn";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
+import CreatePostBtn from "../../components/Dashboard/Body/CreatePostBtn";
 
-import { backend } from "../../../../../declarations/backend";
+import { backend } from "../../../../declarations/backend";
 import { IoEllipse } from "react-icons/io5";
-import trendingPost_coverImg from "../../../images/trendingPost_coverImg.png";
-import mybalance_Img from "../../../images/my-balance-img.png";
+import trendingPost_coverImg from "../../images/trendingPost_coverImg.png";
+import mybalance_Img from "../../images/my-balance-img.png";
 
 type Theme = {
   handleThemeSwitch: Function;

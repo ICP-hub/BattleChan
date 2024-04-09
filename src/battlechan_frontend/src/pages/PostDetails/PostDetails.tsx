@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from "react";
 
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
-
 import Comment from "./Comment";
-import { useParams } from "react-router-dom";
-import Cover_Image from "../../../images/trendingPost_coverImg.png";
-import Profile_Pic from "../../../images/trendingPost_profile.png";
-import postImage from "../../../images/trendingPost_coverImg.png";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
-import { PiShareFatBold } from "react-icons/pi";
+import toast from "react-hot-toast";
+import { useMediaQuery } from "@mui/material";
+import { useConnect } from "@connect2ic/react";
+import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+
+import Cover_Image from "../../images/trendingPost_coverImg.png";
+import Profile_Pic from "../../images/trendingPost_profile.png";
+
 import { LiaCommentSolid } from "react-icons/lia";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
-import { useMediaQuery } from "@mui/material";
-import PostApiHanlder from "../../../API_Handlers/post";
-import CommentsApiHanlder from "../../../API_Handlers/comments";
-import Constant from "../../../utils/constants";
-import { useConnect } from "@connect2ic/react";
-import toast from "react-hot-toast";
-import UserApiHanlder from "../../../API_Handlers/user";
+
+import Constant from "../../utils/constants";
+import PostApiHanlder from "../..//API_Handlers/post";
+import CommentsApiHanlder from "../../API_Handlers/comments";
+
+import UserApiHanlder from "../../API_Handlers/user";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
 
 type Theme = {
   handleThemeSwitch: Function;

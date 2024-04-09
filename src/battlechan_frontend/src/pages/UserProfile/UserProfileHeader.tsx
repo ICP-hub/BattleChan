@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { useConnect } from "@connect2ic/react";
-import UserApiHanlder from "../../../API_Handlers/user";
+import UserApiHanlder from "../../API_Handlers/user";
 
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {

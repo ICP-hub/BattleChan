@@ -4,8 +4,8 @@ import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import { PiArrowBendUpRightBold } from "react-icons/pi";
 import { MdOutlineVerifiedUser } from "react-icons/md";
-import CommentsApiHanlder from "../../../API_Handlers/comments";
-import Constant from "../../../utils/constants";
+import CommentsApiHanlder from "../../API_Handlers/comments";
+import Constant from "../../utils/constants";
 
 interface User {
   userName: string;

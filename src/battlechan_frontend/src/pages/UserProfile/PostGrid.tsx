@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import UserApiHanlder from "../../../API_Handlers/user";
+
+import Constant from "../../utils/constants";
+import UserApiHanlder from "../../API_Handlers/user";
 import defaultPostImg from "/src/images/post-basketball.jpg";
-import Constant from "../../../utils/constants";
 
 interface PostGridProps {
   type: string;

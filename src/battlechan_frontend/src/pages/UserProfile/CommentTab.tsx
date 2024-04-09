@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import defaultCommentImage from "../../../images/comment-tab-post-image.jpg";
-import CommentsApiHanlder from "../../../API_Handlers/comments";
-import Constant from "../../../utils/constants";
-import { Link } from "react-router-dom";
-import PostApiHanlder from "../../../API_Handlers/post";
+
+import Constant from "../../utils/constants";
+import CommentsApiHanlder from "../../API_Handlers/comments";
+import PostApiHanlder from "../../API_Handlers/post";
 
 interface UserInfo {
   createdAt: string;
@@ -18,6 +17,7 @@ interface UserInfo {
   userId: string;
   userName: string;
 }
+
 interface CommentTabProps {
   userInfo: UserInfo[];
 }

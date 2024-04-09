@@ -19,7 +19,7 @@ import NavButtons from "../NavButtons/NavButtons";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
 
-import CatalogSVG from "../MainPosts/CatalogSVG";
+import CatalogSVG from "../../../pages/MainPosts/CatalogSVG";
 
 interface Board {
   [x: string]: any;

@@ -4,13 +4,13 @@ import { LiaCommentSolid } from "react-icons/lia";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
-import PostApiHanlder from "../../../API_Handlers/post";
+import PostApiHanlder from "../../API_Handlers/post";
 import { Link, useNavigate } from "react-router-dom";
 import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
-import CommentsApiHanlder from "../../../API_Handlers/comments";
-import Constant from "../../../utils/constants";
-import WithdrawOverlay from "../WithdrawOverlay/WithdrawOverlay";
+import CommentsApiHanlder from "../../API_Handlers/comments";
+import Constant from "../../utils/constants";
+import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
 // import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 interface PostProps {

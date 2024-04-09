@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import KnowMore from "./KnowMore";
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import { FiUpload } from "react-icons/fi";
 import { RiDeleteBin7Line } from "react-icons/ri";
-import bg from "../../../images/dashboard_bg.png";
+import bg from "../../images/dashboard_bg.png";
 
-import PostApiHanlder from "../../../API_Handlers/post";
+import PostApiHanlder from "../../API_Handlers/post";
 import toast from "react-hot-toast";
-import Constant from "../../../utils/constants";
+import Constant from "../../utils/constants";
 import { useMediaQuery } from "@mui/material";
 
 interface Board {
