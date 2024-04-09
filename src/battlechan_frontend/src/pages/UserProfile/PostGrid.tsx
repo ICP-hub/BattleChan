@@ -82,7 +82,7 @@ const PostGrid: React.FC<PostGridProps> = ({ type }) => {
           const posts = response.data.flat();
           setPostData(posts);
         }
-      };
+      }
     };
 
     fetchData();
@@ -107,21 +107,22 @@ const PostGrid: React.FC<PostGridProps> = ({ type }) => {
                 key={index}
                 className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2"
               >
-                <Link
-                  key={post.postId}
-                  to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}?type=archive`}
-                >
-                  <article className="overflow-hidden h-56 rounded-lg shadow-lg">
-                    <a href="">
-                      <img
-                        alt="Placeholder"
-                        className={`block h-full w-full object-cover ${type === "Archive" ? "grayscale" : ""
-                          }`}
-                        src={convertInt8ToBase64(post.postMetaData)}
-                      />
-                    </a>
-                  </article>
-                </Link>
+                <article className="overflow-hidden h-56 rounded-lg shadow-lg">
+                  <Link
+                    key={post.postId}
+                    to={`/dashboard/postDetails/${encodeURIComponent(
+                      post.postId
+                    )}?type=archive`}
+                  >
+                    <img
+                      alt="Placeholder"
+                      className={`block h-full w-full object-cover ${
+                        type === "Archive" ? "grayscale" : ""
+                      }`}
+                      src={convertInt8ToBase64(post.postMetaData)}
+                    />
+                  </Link>
+                </article>
               </div>
             ))}
         </div>
@@ -134,26 +135,26 @@ const PostGrid: React.FC<PostGridProps> = ({ type }) => {
       <div className="flex flex-wrap -mx-1 laptop:-mx-3">
         {postData.length > 0 &&
           postData.map((post, index) => (
-            <Link
+            <div
               key={post.postId}
-              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
+              className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2"
             >
-              <div
-                key={index}
-                className="my-1 px-1 w-1/3 laptop:my-2 laptop:px-2"
-              >
-                <article className="overflow-hidden h-56 rounded-lg shadow-lg">
-                  <a href="">
-                    <img
-                      alt="Placeholder"
-                      className={`block h-full w-full object-cover ${type === "Archive" ? "grayscale" : ""
-                        }`}
-                      src={convertInt8ToBase64(post.postMetaData)}
-                    />
-                  </a>
-                </article>
-              </div>
-            </Link>
+              <article className="overflow-hidden h-56 rounded-lg shadow-lg">
+                <Link
+                  to={`/dashboard/postDetails/${encodeURIComponent(
+                    post.postId
+                  )}`}
+                >
+                  <img
+                    alt="Placeholder"
+                    className={`block h-full w-full object-cover ${
+                      type === "Archive" ? "grayscale" : ""
+                    }`}
+                    src={convertInt8ToBase64(post.postMetaData)}
+                  />
+                </Link>
+              </article>
+            </div>
           ))}
       </div>
     </>
