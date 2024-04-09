@@ -5,14 +5,72 @@ import Navbar from "../Navbar/Navbar";
 import NavButtons from "../NavButtons/NavButtons";
 import { useMediaQuery } from "@mui/material";
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
+import TokensApiHanlder from "../../../API_Handlers/tokens";
+import { useConnect } from "@connect2ic/react";
+import UserApiHanlder from "../../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: Function;
 };
 
+interface UserAnalytics {
+  likedPost: number;
+  postData: number;
+  comments: number;
+  userArchivedPost: number;
+  dislikedPost: number;
+  status: boolean;
+};
+
 const DashboardPage = (props: Theme) => {
   const className = "dashboard__dashboardPage";
   const is430px = useMediaQuery("(max-width: 430px)");
+  const [livePost, setLivePost] = useState(0);
+  const [archivePost, setArchivePost] = useState(0);
+  const [totalComments, setTotalComments] = useState(0);
+  const [tokenBalance, setTokenBalance] = React.useState(0);
+  const [likedPost, setLikedPost] = React.useState(0);
+  const likedPostRef = React.useRef(likedPost);
+  const [dislikedPost, setDislikedPost] = React.useState(0);
+  const dislikedPostRef = React.useRef(dislikedPost);
+  const { getBalance } = TokensApiHanlder();
+  const { getUserAnalytics } = UserApiHanlder();
+  const { principal, isConnected } = useConnect();
+
+  useEffect(() => {
+    likedPostRef.current = likedPost;
+    dislikedPostRef.current = dislikedPost;
+  }, [likedPost, dislikedPost]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (principal) {
+        const data = await getBalance(principal || "");
+        setTokenBalance(Number(data));
+      }
+    };
+
+    // Add dependencies to the dependency array to avoid infinite loop
+    fetchData();
+  }, [principal]);
+
+  // Get Total Post's Counts
+  useEffect(() => {
+    async function getAnalytics() {
+      try {
+        const response = (await getUserAnalytics()) as UserAnalytics;
+        // console.log(response);
+        setLivePost(response?.postData);
+        setArchivePost(response?.userArchivedPost);
+        setTotalComments(response?.comments);
+        setLikedPost(response?.likedPost);
+        setDislikedPost(response?.dislikedPost);
+      } catch (error) {
+        console.error("Error fetching total posts:", error);
+      }
+    }
+    getAnalytics();
+  }, []);
 
   const cardContainer =
     "laptop:w-[200px] big_tablet:w-[180px] phone:w-[30vw] small_phone:w-[150px] w-[130px] laptop:m-4 m-3 laptop:font-base phone:text-sm text-xs";
@@ -21,14 +79,14 @@ const DashboardPage = (props: Theme) => {
     "bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md phone:p-8 p-4";
 
   const data01 = [
-    { name: "Upvote", value: 125 },
-    { name: "Downvote", value: 15 },
+    { name: "Upvote", value: likedPostRef.current },
+    { name: "Downvote", value: dislikedPostRef.current },
     { name: "Earned", value: 120 },
     { name: "Buy", value: 100 },
   ];
 
   return (
-    <div className="min-h-screen bg-light dark:bg-dark dark:bg-green-gradient bg-center-top bg-cover bg-no-repeat">
+    <div className="min-h-screen dark:bg-dark dark:bg-green-gradient bg-[#ECECEC] bg-center-top bg-cover bg-no-repeat">
       <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <NavButtons />
 
@@ -60,26 +118,26 @@ const DashboardPage = (props: Theme) => {
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Live Post</div>
-                <div className="font-bold phone:text-xl text-lg mt-2">15</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">{livePost}</div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Archive Post</div>
-                <div className="font-bold phone:text-xl text-lg mt-2">7</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">{archivePost}</div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Total Comments</div>
-                <div className="font-bold phone:text-xl text-lg mt-2">205</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">{totalComments}</div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Your Tokens</div>
                 <div className="font-bold phone:text-xl text-lg mt-2">
-                  190.00
+                  {tokenBalance}
                 </div>
               </div>
             </div>
@@ -105,7 +163,7 @@ const DashboardPage = (props: Theme) => {
                   cx={is430px ? 120 : 140}
                   cy={is430px ? 90 : 110}
                   outerRadius={is430px ? 60 : 80}
-                  fill="#8884d8"
+                  fill="#AFD198"
                   label
                 />
                 <Tooltip />

@@ -31,7 +31,7 @@ const WithdrawOverlay = (props: Props) => {
         }
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="text-center">Withdraw $Time</header>
+        <header className="text-center">Withdraw $TIME</header>
 
         <input
           type="number"
@@ -51,7 +51,7 @@ const WithdrawOverlay = (props: Props) => {
         </div>
 
         <p className="phone:text-sm text-xs italic text-center">
-          NOTE: You have to leave at least 5 $TIME in a post when you withdraw
+          NOTE: You have to leave at least 5 $TIME tokens in a post when you withdraw
         </p>
       </div>
     </div>

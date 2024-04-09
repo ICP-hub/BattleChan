@@ -71,25 +71,25 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
       <Route
         path="/dashboard/settingProfile/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <UserSetting handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
       <Route
         path="/dashboard/UserProfile/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <UserProfile handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
       <Route
@@ -111,13 +111,13 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
       <Route
         path="/dashboard/analytics/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <Analytics handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
     </Routes>

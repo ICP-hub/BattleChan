@@ -338,16 +338,14 @@ const PostDetails = (props: Theme) => {
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
               <div className="flex items-center gap-4">
                 <div
-                  className={`${type === "archive" ? "hidden" : "flex"
-                    } flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  className={`flex flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                 >
                   <MdOutlineVerifiedUser />
                   <span>{postsData?.upvotes}</span>
                 </div>
 
                 <div
-                  className={`${type === "archive" ? "hidden" : "flex"
-                    } tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  className={`flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                 >
                   <LiaCommentSolid />
                   <span>{commentsCount} Comments</span>
