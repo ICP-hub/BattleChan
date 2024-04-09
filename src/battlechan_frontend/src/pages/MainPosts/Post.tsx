@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Link, useNavigate } from "react-router-dom";
 
+import { useConnect } from "@connect2ic/react";
 import { LiaCommentSolid } from "react-icons/lia";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
-import PostApiHanlder from "../../API_Handlers/post";
-import { Link, useNavigate } from "react-router-dom";
-import { useConnect } from "@connect2ic/react";
-import { toast } from "react-hot-toast";
-import CommentsApiHanlder from "../../API_Handlers/comments";
+
 import Constant from "../../utils/constants";
+import PostApiHanlder from "../../API_Handlers/post";
+import CommentsApiHanlder from "../../API_Handlers/comments";
+
 import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
 // import TokensApiHanlder from "../../../API_Handlers/tokens";
 
@@ -199,40 +203,54 @@ const Post: React.FC<PostProps> = ({
           <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
             <Link
               key={id}
-              to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
+              to={`/dashboard/postDetails/${encodeURIComponent(
+                id
+              )}?type=archive`}
             >
-              <img
-                alt="post image"
-                className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
-                src={convertInt8ToBase64(imageUrl)}
-              />
+              {(
+                <img
+                  alt="post image"
+                  className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
+                  src={convertInt8ToBase64(imageUrl)}
+                />
+              ) || <Skeleton />}
             </Link>
 
             <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
               {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
-                  <img
-                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                    src={convertInt8ToBase64(userProfile)}
-                    alt="user avatar"
-                  />
+                  {(
+                    <img
+                      className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                      src={convertInt8ToBase64(userProfile)}
+                      alt="user avatar"
+                    />
+                  ) || <Skeleton />}
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-lg text-1xl">{userName}</h1>
+                      <h1 className="tablet:text-lg text-1xl">
+                        {userName || <Skeleton />}
+                      </h1>
 
                       {/* Time */}
                       <button
-                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap hover:bg-dirty-light-green cursor-pointer"
-                        onClick={type === "archive" ? undefined : () => setShowOverlay(true)}
+                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green cursor-pointer"
+                        onClick={
+                          type === "archive"
+                            ? undefined
+                            : () => setShowOverlay(true)
+                        }
                       >
                         <span
                           className={`${
                             type === "archive" ? "text-red" : "text-light-green"
                           }`}
                         >
-                          {type === "archive" ? "0:00 " : `${time} `}
+                          {type === "archive"
+                            ? "0:00 "
+                            : `${time || <Skeleton />} `}
                         </span>
                         left
                       </button>
@@ -240,10 +258,12 @@ const Post: React.FC<PostProps> = ({
 
                     <Link
                       key={id}
-                      to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
+                      to={`/dashboard/postDetails/${encodeURIComponent(
+                        id
+                      )}?type=archive`}
                     >
                       <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
-                        {timestamp} ; {id}
+                        {timestamp || <Skeleton />} ; {id || <Skeleton />}
                       </div>
                     </Link>
                   </div>
@@ -254,15 +274,17 @@ const Post: React.FC<PostProps> = ({
               <section className="mt-1">
                 <Link
                   key={id}
-                  to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
+                  to={`/dashboard/postDetails/${encodeURIComponent(
+                    id
+                  )}?type=archive`}
                 >
                   <p className="tablet:text-lg text-sm font-semibold">
-                    {postName}
+                    {postName || <Skeleton />}
                   </p>
                   <p className="tablet:text-lg text-sm text-gray-800">
-                    {content.length > 70
+                    {(content.length > 70
                       ? `${content.slice(0, 70)}...`
-                      : content}
+                      : content) || <Skeleton count={2} />}
                   </p>
                 </Link>
               </section>
@@ -287,19 +309,23 @@ const Post: React.FC<PostProps> = ({
               {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
-                  <img
-                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                    src={convertInt8ToBase64(userProfile)}
-                    alt="user avatar"
-                  />
+                  {(
+                    <img
+                      className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                      src={convertInt8ToBase64(userProfile)}
+                      alt="user avatar"
+                    />
+                  ) || <Skeleton />}
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-lg text-1xl">{userName}</h1>
+                      <h1 className="tablet:text-lg text-1xl">
+                        {userName || <Skeleton />}
+                      </h1>
 
                       {/* Time */}
                       <button
-                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap hover:bg-dirty-light-green hover:text-darkcursor-pointer"
+                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green hover:text-darkcursor-pointer"
                         onClick={() => setShowOverlay(true)}
                       >
                         <span
@@ -307,7 +333,9 @@ const Post: React.FC<PostProps> = ({
                             type === "archive" ? "text-red" : "text-light-green"
                           }`}
                         >
-                          {type === "archive" ? "0:00 " : `${time} `}
+                          {type === "archive"
+                            ? "0:00 "
+                            : `${time || <Skeleton />} `}
                         </span>
                         left
                       </button>
@@ -318,7 +346,7 @@ const Post: React.FC<PostProps> = ({
                       to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                     >
                       <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
-                        {timestamp} ; {id}
+                        {timestamp || <Skeleton />} ; {id || <Skeleton />}
                       </div>
                     </Link>
                   </div>
@@ -332,12 +360,12 @@ const Post: React.FC<PostProps> = ({
                   to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                 >
                   <p className="tablet:text-lg text-sm font-semibold">
-                    {postName}
+                    {postName || <Skeleton />}
                   </p>
                   <p className="tablet:text-lg text-sm text-gray-800">
-                    {content.length > 70
+                    {(content.length > 70
                       ? `${content.slice(0, 70)}...`
-                      : content}
+                      : content) || <Skeleton />}
                   </p>
                 </Link>
               </section>
