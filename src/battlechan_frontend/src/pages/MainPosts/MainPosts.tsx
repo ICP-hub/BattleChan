@@ -3,23 +3,20 @@ import React, { useState, useEffect } from "react";
 import { LuPlusCircle } from "react-icons/lu";
 import { CgSortAz } from "react-icons/cg";
 import { FaAngleDown } from "react-icons/fa6";
-import { MdOutlineAddBusiness } from "react-icons/md";
 
-import Post from "./Post";
 import Posts from "./Posts";
 import Catalog from "./Catalog";
 import Pagination from "./Pagination";
 
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
-import CreatePostBtn from "../Body/CreatePostBtn";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
+import CreatePostBtn from "../../components/Dashboard/Body/CreatePostBtn";
 
-import { backend } from "../../../../../declarations/backend";
+import { backend } from "../../../../declarations/backend";
 import { useCanister, useConnect } from "@connect2ic/react";
-import PostApiHanlder from "../../../API_Handlers/post";
-import Constant from "../../../utils/constants";
+import PostApiHanlder from "../../API_Handlers/post";
+import Constant from "../../utils/constants";
 import { Link } from "react-router-dom";
-import WithdrawOverlay from "../WithdrawOverlay/WithdrawOverlay";
 
 // Custom hook : initialize the backend Canister
 const useBackend = () => {

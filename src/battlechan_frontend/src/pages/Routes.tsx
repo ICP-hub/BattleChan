@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
-import SettingProfile from "../components/Dashboard/SettingProfile/SettingProfile";
-import UserProfile from "../components/Dashboard/UserProfile/UserProfile";
-import MainPosts from "../components/Dashboard/MainPosts/MainPosts";
-import PostDetails from "../components/Dashboard/PostDetails/PostDetails";
-import CreatePost from "../components/Dashboard/CreatePost/CreatePost";
-import ArchivePosts from "../components/Dashboard/ArchivePosts/ArchivePosts";
-import Analytics from "../components/Dashboard/Analytics/Analytics";
-import DashboardPage from "../components/Dashboard/DashboardPage/DashboardPage";
+import SettingProfile from "./SettingProfile/SettingProfile";
+import UserProfile from "./UserProfile/UserProfile";
+import MainPosts from "./MainPosts/MainPosts";
+import PostDetails from "./PostDetails/PostDetails";
+import CreatePost from "./CreatePost/CreatePost";
+import ArchivePosts from "./ArchivePosts/ArchivePosts";
+import Analytics from "./Analytics/Analytics";
+import DashboardPage from "./DashboardPage/DashboardPage";
 
 type Theme = {
   handleThemeSwitch: Function;

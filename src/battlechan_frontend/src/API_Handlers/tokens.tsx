@@ -35,7 +35,7 @@ const TokensApiHanlder = () => {
 
     const getBalance = async (principal: string) => {
         try {
-            console.log(principal);
+            // console.log(principal);
             const argument = {
                 owner: Principal.fromText(principal),
                 subaccount: []
