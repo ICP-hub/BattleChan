@@ -6,17 +6,13 @@ import Loader from "./components/Loader/Loader";
 import { useConnect } from "@connect2ic/react";
 
 // Lazy load pages
-const DashboardRoutes = React.lazy(() => import("./pages/Routes"));
-const Landing = React.lazy(() => import("./pages/Landing/Landing"));
-const MainPosts = React.lazy(() => import("./pages/MainPosts/MainPosts"));
-const Analytics = React.lazy(() => import("./pages/Analytics/Analytics"));
-const UserProfile = React.lazy(() => import("./pages/UserProfile/UserProfile"));
-const ArchivePosts = React.lazy(
-  () => import("./pages/ArchivePosts/ArchivePosts")
-);
-const UserSetting = React.lazy(
-  () => import("./pages/SettingProfile/SettingProfile")
-);
+const DashboardRoutes = lazy(() => import("./pages/Routes"));
+const Landing = lazy(() => import("./pages/Landing/Landing"));
+const MainPosts = lazy(() => import("./pages/MainPosts/MainPosts"));
+const Analytics = lazy(() => import("./pages/Analytics/Analytics"));
+const UserProfile = lazy(() => import("./pages/UserProfile/UserProfile"));
+const ArchivePosts = lazy(() => import("./pages/ArchivePosts/ArchivePosts"));
+const UserSetting = lazy(() => import("./pages/SettingProfile/SettingProfile"));
 
 interface AppRoutesProps {
   handleThemeSwitch: () => void; // Adjust based on the actual implementation

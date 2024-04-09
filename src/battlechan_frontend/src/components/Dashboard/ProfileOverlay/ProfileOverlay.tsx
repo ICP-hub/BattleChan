@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
-import { FaRegBell } from "react-icons/fa";
 import UserImg from "../../../images/User.png";
 import { useConnect } from "@connect2ic/react";
 
@@ -10,9 +10,7 @@ import { BiMoon } from "react-icons/bi";
 import { RxLapTimer } from "react-icons/rx";
 import { TbSettings } from "react-icons/tb";
 import { BsPersonCircle } from "react-icons/bs";
-import { SiInternetcomputer } from "react-icons/si";
-import { useMediaQuery } from "@mui/material";
-import toast from "react-hot-toast";
+
 import UserApiHanlder from "../../../API_Handlers/user";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 
@@ -121,7 +119,6 @@ const ProfileOverlay = (props: Props) => {
           <legend className="p-2 text-lg">Personal</legend>
 
           <hr />
-
 
           <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 my-2">
             {/* <div className="ICP_Balance flex-row-center justify-between">
