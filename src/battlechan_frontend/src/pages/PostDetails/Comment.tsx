@@ -22,8 +22,17 @@ interface CommentInfo {
   likedBy: [];
 }
 
+interface ReplyInfo {
+  createdBy: User;
+  reply: string;
+  replyId: string;
+  createdAt: string;
+  likes: bigint;
+}
+
 interface CommentProps {
   currentComment: CommentInfo[];
+  getComments: ()=>void;
   type?: string;
 }
 
@@ -35,7 +44,13 @@ interface LikeResponse {
   ok: string;
 }
 
-const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
+interface BackendResponse {
+  status: boolean;
+  data: [][];
+  error: string[];
+}
+
+const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) => {
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [activeReplyButton, setActiveReplyButton] = useState<string | null>(
     null
@@ -47,12 +62,33 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   // const handleVote = (vote: boolean) => {
   //   setVote(vote);
   // };
-  const { convertInt8ToBase64 } = Constant();
-  const { createCommentReply, likeComment, dislikeComment } = CommentsApiHanlder();
+  const { convertInt8ToBase64, convertNanosecondsToTimestamp } = Constant();
+  const { createCommentReply, likeComment, dislikeComment,getAllReplies } = CommentsApiHanlder();
+  const [repliesData, setRepliesData] = React.useState<ReplyInfo[]>([]);
 
   function showMoreComments() {
     setVisibleComments((prevValue) => prevValue + 5);
   }
+
+  const getReplies = async (commentId: string) => {
+    const response = (await getAllReplies(commentId)) as BackendResponse;
+    console.log("replies reponse: ", response)
+    if (response && response.status == true) {
+      const comments = response.data[0];
+      if (comments && comments.length > 0) {
+        comments.forEach((element: any) => {
+          const timestamp: string = convertNanosecondsToTimestamp(
+            BigInt(element.createdAt)
+          );
+          console.log(timestamp);
+          element.createdAt = timestamp;
+          element.likes = element.likedBy.length;
+        });
+        console.log("comment replies: ", comments)
+        setRepliesData(comments);
+      }
+    }
+  };
 
   async function handleAddReply(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -68,7 +104,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
 
     if (response && response?.ok) {
       toast.success(response.ok);
-      
+      getReplies(commentId)
       setReply("")
       setLoading(false);
       // window.location.href = "/dashboard/mainPosts";
@@ -94,6 +130,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
 
       if (response && response?.ok) {
         toast.success("You liked the comment!");
+        getComments()
         // window.location.href = "/dashboard/mainPosts";
       } else {
         toast.error(
@@ -243,7 +280,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
             <div className="flex mt-2">
               <div className="w-14 h-[1px] bg-[#000] dark:bg-[#fff] mt-8 tablet:mt-9"></div>
               <div className="">
-                <Replies commentId={comment.commentId} />
+                <Replies commentId={comment.commentId} repliesData={repliesData} getReplies={()=>getReplies(comment.commentId)}  />
               </div>
             </div>
           )}

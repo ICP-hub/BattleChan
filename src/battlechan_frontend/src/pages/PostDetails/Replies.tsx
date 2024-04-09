@@ -13,7 +13,7 @@ interface User {
   userProfile: Int8Array;
 }
 
-interface CommentInfo {
+interface ReplyInfo {
   createdBy: User;
   reply: string;
   replyId: string;
@@ -23,6 +23,8 @@ interface CommentInfo {
 
 interface RepliesProps {
   commentId: string;
+  repliesData: ReplyInfo[];
+  getReplies: () => void;
 }
 
 interface BackendResponse {
@@ -35,34 +37,34 @@ interface LikeResponse {
   ok: string;
 }
 
-const Replies: React.FC<RepliesProps> = ({ commentId }) => {
+const Replies: React.FC<RepliesProps> = ({ commentId, repliesData, getReplies }) => {
   const [vote, setVote] = React.useState(true);
   const handleVote = (vote: boolean) => {
     setVote(vote);
   };
-  const { getAllReplies, likeCommentReply } = CommentsApiHanlder();
-  const [repliesData, setRepliesData] = React.useState<CommentInfo[]>([]);
-  const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
+  const { likeCommentReply } = CommentsApiHanlder();
+  // const [repliesData, setRepliesData] = React.useState<CommentInfo[]>([]);
+  const { convertInt8ToBase64 } = Constant();
 
-  const getReplies = async () => {
-    const response = (await getAllReplies(commentId)) as BackendResponse;
-    console.log("replies reponse: ", response)
-    if (response && response.status == true) {
-      const comments = response.data[0];
-      if (comments && comments.length > 0) {
-        comments.forEach((element: any) => {
-          const timestamp: string = convertNanosecondsToTimestamp(
-            BigInt(element.createdAt)
-          );
-          console.log(timestamp);
-          element.createdAt = timestamp;
-          element.likes = element.likedBy.length;
-        });
-        console.log("comment replies: ", comments)
-        setRepliesData(comments);
-      }
-    }
-  };
+  // const getReplies = async () => {
+  //   const response = (await getAllReplies(commentId)) as BackendResponse;
+  //   console.log("replies reponse: ", response)
+  //   if (response && response.status == true) {
+  //     const comments = response.data[0];
+  //     if (comments && comments.length > 0) {
+  //       comments.forEach((element: any) => {
+  //         const timestamp: string = convertNanosecondsToTimestamp(
+  //           BigInt(element.createdAt)
+  //         );
+  //         console.log(timestamp);
+  //         element.createdAt = timestamp;
+  //         element.likes = element.likedBy.length;
+  //       });
+  //       console.log("comment replies: ", comments)
+  //       setRepliesData(comments);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     getReplies();
@@ -80,6 +82,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId }) => {
 
       if (response && response?.ok) {
         toast.success("You liked the comment reply!");
+        getReplies()
         // window.location.href = "/dashboard/mainPosts";
       } else {
         toast.error(
