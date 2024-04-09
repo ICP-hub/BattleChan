@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Posts from "./Posts";
 import Comments from "./Comments";
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 import { useMediaQuery } from "@mui/material";
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
-import TokensApiHanlder from "../../../API_Handlers/tokens";
+import TokensApiHanlder from "../../API_Handlers/tokens";
 import { useConnect } from "@connect2ic/react";
-import UserApiHanlder from "../../../API_Handlers/user";
+import UserApiHanlder from "../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: Function;

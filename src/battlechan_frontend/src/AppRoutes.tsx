@@ -1,30 +1,21 @@
 // AppRoutes.tsx
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import Loader from "./components/Loader/Loader";
 import { useConnect } from "@connect2ic/react";
 
 // Lazy load pages
-const Landing = React.lazy(() => import("./pages/Landing/Landing"));
 const DashboardRoutes = React.lazy(() => import("./pages/Routes"));
-const UserSetting = React.lazy(
-  () => import("../src/components/Dashboard/SettingProfile/SettingProfile")
-);
-const UserProfile = React.lazy(
-  () => import("../src/components/Dashboard/UserProfile/UserProfile")
-);
-const MainPosts = React.lazy(
-  () => import("../src/components/Dashboard/MainPosts/MainPosts")
-);
+const Landing = React.lazy(() => import("./pages/Landing/Landing"));
+const MainPosts = React.lazy(() => import("./pages/MainPosts/MainPosts"));
+const Analytics = React.lazy(() => import("./pages/Analytics/Analytics"));
+const UserProfile = React.lazy(() => import("./pages/UserProfile/UserProfile"));
 const ArchivePosts = React.lazy(
-  () => import("../src/components/Dashboard/ArchivePosts/ArchivePosts")
+  () => import("./pages/ArchivePosts/ArchivePosts")
 );
-const Analytics = React.lazy(
-  () => import("../src/components/Dashboard/Analytics/Analytics")
-);
-const DashboardPage = React.lazy(
-  () => import("../src/components/Dashboard/DashboardPage/DashboardPage")
+const UserSetting = React.lazy(
+  () => import("./pages/SettingProfile/SettingProfile")
 );
 
 interface AppRoutesProps {
@@ -117,18 +108,6 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
           allow == true ? (
             <Suspense fallback={<Loader />}>
               <Analytics handleThemeSwitch={handleThemeSwitch} />
-            </Suspense>
-          ) : allow == false ? (
-            <Navigate to="/" />
-          ) : null
-        }
-      />
-      <Route
-        path="/dashboard/dashboard/*"
-        element={
-          allow == true ? (
-            <Suspense fallback={<Loader />}>
-              <DashboardPage handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
           ) : allow == false ? (
             <Navigate to="/" />

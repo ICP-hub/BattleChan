@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
 import bg from "../../../images/dashboard_bg.png";
 import defaultImg from "../../../images/User.png";
 import UserProfileHeader from "./UserProfileHeader";
 import ProfileTabs from "./ProfileTabs";
 import PostGrid from "./PostGrid";
-import UserApiHanlder from "../../../API_Handlers/user";
+import UserApiHanlder from "../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -30,7 +30,7 @@ interface UserInfo {
 const UserProfile = (props: Theme) => {
   const [userInfo, setUserInfo] = useState<UserInfo[]>([]);
   const { getUserInfo } = UserApiHanlder();
-  const className = "UserProfile";
+  const className = "dashboard__UserProfile";
 
   useEffect(() => {
     const fetchData = async () => {

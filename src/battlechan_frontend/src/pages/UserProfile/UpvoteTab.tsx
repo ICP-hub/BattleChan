@@ -1,7 +1,7 @@
 import React from "react";
 import { IoEllipse } from "react-icons/io5";
 import { MdArrowOutward } from "react-icons/md";
-import postImage from "../../../images/comment-tab-post-image.jpg";
+import postImage from "../../images/comment-tab-post-image.jpg";
 
 interface Comment {
   username: string;
