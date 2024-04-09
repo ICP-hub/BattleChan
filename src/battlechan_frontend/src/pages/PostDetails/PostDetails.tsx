@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from "react";
 
-import Navbar from "../Navbar/Navbar";
-import NavButtons from "../NavButtons/NavButtons";
-
 import Comment from "./Comment";
-import { useParams } from "react-router-dom";
-import Cover_Image from "../../../images/trendingPost_coverImg.png";
-import Profile_Pic from "../../../images/trendingPost_profile.png";
-import postImage from "../../../images/trendingPost_coverImg.png";
+import Navbar from "../../components/Dashboard/Navbar/Navbar";
+import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
-import { PiShareFatBold } from "react-icons/pi";
+import toast from "react-hot-toast";
+import { useMediaQuery } from "@mui/material";
+import { useConnect } from "@connect2ic/react";
+import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+
+import Cover_Image from "../../images/trendingPost_coverImg.png";
+import Profile_Pic from "../../images/trendingPost_profile.png";
+
 import { LiaCommentSolid } from "react-icons/lia";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
-import { useMediaQuery } from "@mui/material";
-import PostApiHanlder from "../../../API_Handlers/post";
-import CommentsApiHanlder from "../../../API_Handlers/comments";
-import Constant from "../../../utils/constants";
-import { useConnect } from "@connect2ic/react";
-import toast from "react-hot-toast";
-import UserApiHanlder from "../../../API_Handlers/user";
+
+import Constant from "../../utils/constants";
+import PostApiHanlder from "../..//API_Handlers/post";
+import CommentsApiHanlder from "../../API_Handlers/comments";
+
+import UserApiHanlder from "../../API_Handlers/user";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -297,6 +298,8 @@ const PostDetails = (props: Theme) => {
 
     if (response && response?.ok) {
       toast.success(response.ok);
+      getComments();
+      setNewComment("");
       setLoading(false);
       // window.location.href = "/dashboard/mainPosts";
     } else {
@@ -338,7 +341,7 @@ const PostDetails = (props: Theme) => {
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
               <div className="flex items-center gap-4">
                 <div
-                  className={`flex flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  className={`flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                 >
                   <MdOutlineVerifiedUser />
                   <span>{postsData?.upvotes}</span>
@@ -439,20 +442,21 @@ const PostDetails = (props: Theme) => {
                       className="border-b border-opacity-50 border-[#000] dark:border-[#fff] w-full bg-transparent p-2"
                       type="text"
                       placeholder="Add a comment"
+                      value={newComment}
                       onChange={(e) => {
                         setNewComment(e.target.value);
                       }}
                     />
                     <div className="flex items-center justify-end mt-4">
                       <div className="flex justify-center items-center gap-4">
-                        <button
+                        {/* <button
                           onClick={() => {
                             setLoading(false);
                           }}
                           className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
                         >
                           Cancel
-                        </button>
+                        </button> */}
                         <button
                           onClick={handleAddComment}
                           className={
@@ -470,11 +474,11 @@ const PostDetails = (props: Theme) => {
               <div className="mt-8">
                 {type === "archive" ? (
                   <>
-                    <Comment currentComment={commentsData} type="archive" />
+                    <Comment currentComment={commentsData} getComments={getComments} type="archive" />
                   </>
                 ) : (
                   <>
-                    <Comment currentComment={commentsData} />
+                    <Comment currentComment={commentsData} getComments={getComments} />
                   </>
                 )}
               </div>

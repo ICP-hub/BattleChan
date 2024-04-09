@@ -547,7 +547,8 @@ actor BattleChan {
       };
     };
   };
-  // public shared({caller = userId}) func getUserCommentsData
+
+// public shared({caller = userId}) func getUserCommentsData
   public shared ({ caller = userId }) func getAllUserComments(postId : Types.PostId) : async Types.Result_1<[(Types.CommentId, Types.CommentInfo)]> {
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (?value) { value };

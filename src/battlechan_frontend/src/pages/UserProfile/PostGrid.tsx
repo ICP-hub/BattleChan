@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import UserApiHanlder from "../../../API_Handlers/user";
-import defaultPostImg from "/src/images/post-basketball.jpg";
-import Constant from "../../../utils/constants";
-import PostApiHanlder from "../../../API_Handlers/post";
 import { Link } from "react-router-dom";
+
+import Constant from "../../utils/constants";
+import UserApiHanlder from "../../API_Handlers/user";
+import PostApiHanlder from "../../API_Handlers/post";
+
+import defaultPostImg from "/src/images/post-basketball.jpg";
 
 interface PostGridProps {
   type: string;
