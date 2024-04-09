@@ -263,7 +263,7 @@ module {
             createdAt = boardInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
-        let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x != boardId # "-" # postId);
+        let updatedPostIds = Array.filter<Types.PostId>(userInfo.postIds, func x = x != postId);
         let updateUserInfo : Types.UserInfo = {
             userId = userInfo.userId;
             userName = userInfo.userName;

@@ -1,14 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import Constant from "../../utils/constants";
+import UserApiHanlder from "../../API_Handlers/user";
+import PostApiHanlder from "../../API_Handlers/post";
 
 type TdTagProps = {
-  para: string;
+  para: any;
 };
+
+interface PostData {
+  postId: string;
+  postMetaData: Int8Array;
+  postName: string;
+  upvotedBy: [];
+  expireAt: BigInt;
+  createdAt: string;
+}
+
+interface PostResponse {
+  status: boolean;
+  data: PostData[][];
+  error: string[];
+}
 
 const Posts = () => {
   const className = "dashboard__postData";
   const padding =
     "tablet:py-4 py-2 xl:px-52 laptop:px-40 big_tablet:px-32 tablet:px-12 phone:px-8 px-4";
+
+  const [postData, setPostData] = useState<PostData[]>([]);
+  const { getPostInfo } = UserApiHanlder();
+  const { getUsersMainPosts, getUsersArchivePosts } = PostApiHanlder();
+  const { convertInt8ToBase64, convertNanosecondsToTimestamp } = Constant();
   const fontSize = "tablet:text-base phone:text-sm text-xs";
+  const currentTime = BigInt(Date.now()) * BigInt(1000000);
+
+  console.log("postData: ", postData);
+  const formatTime = (remainingTime: bigint) => {
+    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
+    const minutes = Math.floor(seconds / 60); // Get remaining minutes
+    const remainingSeconds = seconds % 60; // Get remaining seconds
+    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await getUsersMainPosts()) as PostResponse;
+      if (response.status == true && response.data.length > 0) {
+        console.log(response);
+        const posts = response.data.flat();
+        setPostData(posts);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <React.Fragment>
@@ -72,12 +120,22 @@ const Posts = () => {
           ))}
 
           <tbody>
-            {tableData.map((data, i) => (
-              <tr key={i}>
-                <TdTag para={data.id} />
-                <TdTag para={data.date_time} />
-                <TdTag para={data.votes} />
-                <TdTag para={data.timeLeft} />
+            {postData.map((post, i) => (
+              <tr key={post.postId}>
+                <TdTag para={post.postId} />
+                <TdTag
+                  para={convertNanosecondsToTimestamp(BigInt(post.createdAt))}
+                />
+                <TdTag para={post.upvotedBy.length} />
+                <TdTag
+                  para={
+                    Number(post.expireAt) - Number(currentTime) <= 0
+                      ? "0:00"
+                      : formatTime(
+                          BigInt(Number(post.expireAt) - Number(currentTime))
+                        )
+                  }
+                />
               </tr>
             ))}
           </tbody>
