@@ -548,16 +548,16 @@ actor BattleChan {
       };
     };
   };
-  public shared ({ caller = userId }) func getAllUserComments(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
-    let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
-      case (?value) { value };
-      case (null) {
-        return { data = null; status = false; error = ?notFound.noUser };
-      };
-    };
+  // public shared ({ caller = userId }) func getAllUserComments(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
+  //   let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+  //     case (?value) { value };
+  //     case (null) {
+  //       return { data = null; status = false; error = ?notFound.noUser };
+  //     };
+  //   };
     
-    userInfo.createdComments;
-  };
+  //   userInfo.createdComments;
+  // };
   public query func getAllCommentOfPost(postId : Types.PostId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.CommentInfo]> {
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };

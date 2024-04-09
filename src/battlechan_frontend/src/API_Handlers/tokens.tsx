@@ -11,27 +11,48 @@ const useLedger = () => {
     return useCanister("ledger");
 };
 
-
 const TokensApiHanlder = () => {
     // Init backend
-    // const [backend, canisterId] = useBackend();
+    const [backend, canisterId] = useBackend();
     // let backend_canister_id = canisterId.canisterDefinition.canisterId;
     const [ledger] = useLedger();
     const { principal, isConnected } = useConnect();
     // console.log(ledger);
     // // ICRC2 APPROVE
-    // const icrc2_approve = async (amount: number = 1) => {
-    //     try {
-    //         // Convert the amount to the desired format
-    //         const formattedAmount: number = amount * Math.pow(10, 8);
-    //         console.log(formattedAmount);
-    //         const res = await backend.icrc2_approve(formattedAmount);
-    //         console.log("balance: ", res);
-    //         return res;
-    //     } catch (err) {
-    //         console.error("Error: ", err);
-    //     }
-    // };
+    const icrc2_approve = async (amount: number = 1) => {
+        try {
+            const is_sufficient_balance = await getBalance(principal || "");
+            const balance = 100000100n as bigint;
+            console.log(Number(balance));
+            let fees = 100;
+            let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
+            let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
+            if (Number(is_sufficient_balance) >= amnt) {
+                console.log("Approve");
+            } else {
+                console.log("Reject");
+            }
+            let data = {
+                fee: [fees],
+                memo: [],
+                from_subaccount: [],
+                created_at_time: [],
+                amount: amnt,
+                expected_allowance: [],
+                expires_at: [],
+                spender: {
+                    owner: owner,
+                    subaccount: []
+                }
+            }
+            console.log(data);
+            const res = await ledger.icrc2_approve(data);
+            console.log("icrc2_approve: ", res);
+            return res;
+        } catch (err) {
+            console.error("Error: ", err);
+        }
+    };
 
     const getBalance = async (principal: string) => {
         try {
@@ -49,7 +70,7 @@ const TokensApiHanlder = () => {
     };
 
     // Returns
-    return { getBalance };
+    return { getBalance, icrc2_approve };
 };
 
 export default TokensApiHanlder;
