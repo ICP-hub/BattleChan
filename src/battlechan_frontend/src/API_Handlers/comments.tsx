@@ -44,8 +44,8 @@ type PostInfo = {
   expireAt: BigInt;
   createdAt: string;
   createdBy: {
-      userName: string;
-      userProfile: Int8Array;
+    userName: string;
+    userProfile: Int8Array;
   };
   upvotes: number;
 };
@@ -125,7 +125,9 @@ const CommentsApiHanlder = () => {
   const getUserCommentInfo = async (commentId: string) => {
     try {
       // console.log("HIT", commentId);
-      const res = await backend.getSingleComment(commentId) as BackendResponse;
+      const res = (await backend.getSingleComment(
+        commentId
+      )) as BackendResponse;
       // console.log("commentResponse: ", res);
       return res.data;
     } catch (err) {
@@ -137,7 +139,11 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(backend);
       // console.log("like comment data: ", postId, commentId)
-      const res = await backend.likeComment(postId, { upvote: null }, commentId);
+      const res = await backend.likeComment(
+        postId,
+        { upvote: null },
+        commentId
+      );
       console.log(res);
       return res;
     } catch (err) {
@@ -145,11 +151,31 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  const likeCommentReply = async (commentId: string, replyId: string) => {
+    try {
+      // console.log(backend);
+      // console.log("like comment reply data: ", commentId, replyId)
+      const res = await backend.likeCommentReply(
+        commentId,
+        { upvote: null },
+        replyId
+      );
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.error("Error liking comment reply : ", err);
+    }
+  };
+
   const dislikeComment = async (postId: string, commentId: string) => {
     try {
       // console.log(backend);
       // console.log("dislike comment data: ", postId, commentId)
-      const res = await backend.likeComment(postId, { downvote: null }, commentId);
+      const res = await backend.likeComment(
+        postId,
+        { downvote: null },
+        commentId
+      );
       console.log(res);
       return res;
     } catch (err) {
@@ -162,7 +188,9 @@ const CommentsApiHanlder = () => {
     try {
       // console.log(commentId)
       const fetchedComments: UserComment[] = [];
-      const fetchedCommentInfo = await getUserCommentInfo(commentId) as UserComment[];
+      const fetchedCommentInfo = (await getUserCommentInfo(
+        commentId
+      )) as UserComment[];
       // console.log(fetchedCommentInfo);
       if (fetchedCommentInfo && fetchedCommentInfo.length > 0) {
         const postId = commentId.split("_")[0];
@@ -185,7 +213,18 @@ const CommentsApiHanlder = () => {
   };
 
   // Returns
-  return { getAllComments, getAllReplies, getUserCommentInfo, createComment, getAllCommentsOfArchivedPost, createCommentReply, likeComment, dislikeComment, getUserSingleComment};
+  return {
+    getAllComments,
+    getAllReplies,
+    getUserCommentInfo,
+    createComment,
+    getAllCommentsOfArchivedPost,
+    createCommentReply,
+    likeComment,
+    dislikeComment,
+    getUserSingleComment,
+    likeCommentReply,
+  };
 };
 
 export default CommentsApiHanlder;

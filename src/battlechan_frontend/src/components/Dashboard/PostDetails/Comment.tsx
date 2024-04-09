@@ -43,7 +43,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   const [loading, setLoading] = useState(false);
   const [reply, setReply] = useState("");
   const [vote, setVote] = React.useState(true);
-  const [visibleComments, setVisibleComments] = useState(1);
+  const [visibleComments, setVisibleComments] = useState(5);
   // const handleVote = (vote: boolean) => {
   //   setVote(vote);
   // };
@@ -68,6 +68,8 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
 
     if (response && response?.ok) {
       toast.success(response.ok);
+      
+      setReply("")
       setLoading(false);
       // window.location.href = "/dashboard/mainPosts";
     } else {
@@ -204,20 +206,21 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
                     className="border-b border-opacity-50 border-[#000] dark:border-[#fff] w-full bg-transparent p-2"
                     type="text"
                     placeholder="Add a reply"
+                    value={reply}
                     onChange={(e) => {
                       setReply(e.target.value);
                     }}
                   />
                   <div className="flex items-center justify-end mt-4">
                     <div className="flex justify-center items-center gap-4">
-                      <button
+                      {/* <button
                         onClick={() => {
                           setActiveReplyButton(null);
                         }}
                         className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
                       >
                         Cancel
-                      </button>
+                      </button> */}
                       <button
                         onClick={(e) => {
                           handleAddReply(e, comment.commentId);

@@ -297,6 +297,8 @@ const PostDetails = (props: Theme) => {
 
     if (response && response?.ok) {
       toast.success(response.ok);
+      getComments();
+      setNewComment("");
       setLoading(false);
       // window.location.href = "/dashboard/mainPosts";
     } else {
@@ -338,7 +340,7 @@ const PostDetails = (props: Theme) => {
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
               <div className="flex items-center gap-4">
                 <div
-                  className={`flex flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  className={`flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                 >
                   <MdOutlineVerifiedUser />
                   <span>{postsData?.upvotes}</span>
@@ -439,20 +441,21 @@ const PostDetails = (props: Theme) => {
                       className="border-b border-opacity-50 border-[#000] dark:border-[#fff] w-full bg-transparent p-2"
                       type="text"
                       placeholder="Add a comment"
+                      value={newComment}
                       onChange={(e) => {
                         setNewComment(e.target.value);
                       }}
                     />
                     <div className="flex items-center justify-end mt-4">
                       <div className="flex justify-center items-center gap-4">
-                        <button
+                        {/* <button
                           onClick={() => {
                             setLoading(false);
                           }}
                           className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
                         >
                           Cancel
-                        </button>
+                        </button> */}
                         <button
                           onClick={handleAddComment}
                           className={
