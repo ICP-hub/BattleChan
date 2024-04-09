@@ -132,7 +132,6 @@ const MainPosts = (props: Theme) => {
         if (boards && boards.length > 0) {
           const names = boards.map((board) => board.boardName);
           setBoardsData(names);
-          // console.log(names) output=> ['Cinema', 'Crypto', 'Technology', 'Games', 'Sports', 'Politics', 'Business', 'sdf']
         } else {
           console.log("No boards found.");
         }

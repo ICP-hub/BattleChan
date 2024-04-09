@@ -109,7 +109,7 @@ const Post: React.FC<PostProps> = ({
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
-        // archive();
+        archive();
         // console.log("Post archived");
       } else {
         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
@@ -199,7 +199,7 @@ const Post: React.FC<PostProps> = ({
           <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
             <Link
               key={id}
-              to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+              to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
             >
               <img
                 alt="post image"
@@ -225,7 +225,7 @@ const Post: React.FC<PostProps> = ({
                       {/* Time */}
                       <button
                         className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap hover:bg-dirty-light-green cursor-pointer"
-                        onClick={() => setShowOverlay(true)}
+                        onClick={type === "archive" ? undefined : () => setShowOverlay(true)}
                       >
                         <span
                           className={`${
@@ -240,7 +240,7 @@ const Post: React.FC<PostProps> = ({
 
                     <Link
                       key={id}
-                      to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+                      to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
                     >
                       <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
                         {timestamp} ; {id}
@@ -254,7 +254,7 @@ const Post: React.FC<PostProps> = ({
               <section className="mt-1">
                 <Link
                   key={id}
-                  to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
+                  to={`/dashboard/postDetails/${encodeURIComponent(id)}?type=archive`}
                 >
                   <p className="tablet:text-lg text-sm font-semibold">
                     {postName}

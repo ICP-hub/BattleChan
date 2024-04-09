@@ -33,7 +33,6 @@ const PostApiHanlder = () => {
     // Create a Post
     const createPost = async (boardName: string, { postName, postDes, postMetaData }: { postName: string, postDes: string, postMetaData: Int8Array | undefined }) => {
         try {
-            console.log(backend);
             const postData = {
                 postName: postName, // Add your postName data here
                 postDes: postDes, // Add your postDes data here
@@ -42,7 +41,7 @@ const PostApiHanlder = () => {
             // console.log(boardName)
             // console.log(postData)
             const res = await backend.createPost(boardName, postData);
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error creating post : ", err);
@@ -83,7 +82,7 @@ const PostApiHanlder = () => {
             // console.log(boardName);
             // const res = await backend.getPostsByBoard();
             const res = await backend.postFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
-            console.log(res);
+            // console.log(res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
@@ -198,9 +197,31 @@ const PostApiHanlder = () => {
         }
     };
 
+    // Get Users Main Posts
+    const getUsersMainPosts = async () => {
+        try {
+            const res = await backend.getUserPost();
+            return res;
+        } catch (err) {
+            console.error("Error: ", err);
+            return err;
+        }
+    };
+
+    // Get Users Archive Posts
+    const getUsersArchivePosts = async () => {
+        try {
+            const res = await backend.getArchivedPostOfUser(10, 1);
+            return res;
+        } catch (err) {
+            console.error("Error: ", err);
+            return err;
+        }
+    };
+
 
     // Returns
-    return { createPost, getRecentPosts, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost, getTotalCounts };
+    return { createPost, getRecentPosts, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost, getTotalCounts, getUsersMainPosts, getUsersArchivePosts };
 };
 
 export default PostApiHanlder;

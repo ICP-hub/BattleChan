@@ -79,7 +79,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, type }) => {
   }
 
   async function handleLikeComment(commentId: string, vote: boolean) {
-    setVote(vote);
+    // setVote(vote);
 
     const postId = commentId.split("_")[0];
 

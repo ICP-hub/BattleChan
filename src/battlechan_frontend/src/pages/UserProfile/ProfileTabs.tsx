@@ -109,7 +109,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userInfo }) => {
           >
             <div className="block font-sans text-base">
               {/* Content for each tab */}
-              {tab.id === "post" && <><PostTab userInfo={userInfo} /></>}
+              {tab.id === "post" && <><PostTab /></>}
               {tab.id === "comments" && <><CommentTab userInfo={userInfo} /></>}
               {tab.id === "upvote" && <><UpvoteTab /></>}
               {tab.id === "downvote" && <><UpvoteTab type="downvote" /></>}
