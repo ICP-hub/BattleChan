@@ -167,7 +167,6 @@ const PostDetails = (props: Theme) => {
       } else {
         response = (await getSingleMainPost(postId)) as BackendResponse;
       }
-      console.log(response);
       if (response.status === true && response.data) {
         console.log(response);
         const posts = response.data.flat(); // Flatten nested arrays if any
@@ -371,7 +370,7 @@ const PostDetails = (props: Theme) => {
               </div>
 
               <div className="text-lg">
-                <TimeComponent expireAt={postsData?.expireAt ?? 1n} id={postsData?.postId ?? ""} />{" "}
+                <TimeComponent expireAt={postsData?.expireAt ?? 0n} id={postsData?.postId ?? ""} />{" "}
                 min left
               </div>
             </div>

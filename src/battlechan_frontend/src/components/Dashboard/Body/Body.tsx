@@ -118,7 +118,7 @@ const Body = () => {
           ` tablet:hidden tablet:px-30 flex flex-col tablet:block gap-2 p-4 tablet:py-6 tablet:px-10 mx-4 tablet:mx-auto tablet:my-24 my-10 border border-dark dark:border-light rounded-md`
         }
       >
-        <div className="data__headings tablet:px-4 flex-row-center tablet:flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green gap-2">
+        <div className="data__headings tablet:px-4 flex-row-center tablet:flex-nowrap justify-between rounded-xl text-[#fff] bg-dirty-light-green gap-2">
           <div className="data__label py-4 tablet:py-4 pl-6 tablet:px-0 h-full tablet:text-lg font-semibold">
             Name of Subject
           </div>
@@ -161,7 +161,7 @@ const Body = () => {
       <div className="h-48 w-auto relative hidden tablet:flex items-center justify-center overflow-x-auto my-24 p-10 border border-dark dark:border-light rounded-xl mx-16 no-scrollbar">
         <table className="w-full text-left">
           <thead className="text-xs tablet:text-base">
-            <tr className="bg-dirty-light-green">
+            <tr className=" text-light bg-dirty-light-green">
               <th scope="col" className="px-6 py-3 rounded-s-xl">
                 Name of the Subject
               </th>

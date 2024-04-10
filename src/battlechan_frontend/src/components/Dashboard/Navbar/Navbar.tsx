@@ -149,11 +149,15 @@ const Navbar = (props: Theme) => {
 
         {!is1000px &&
           (isConnected ? (
+            <>
+            <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
             <img
               src={fileURL}
               onClick={() => setShowOverlay(!showOverlay)}
-              className="tablet:min-w-[50px] min-w-[30px] tablet:h-[57px] h-[40px] object-cover rounded-md tablet:max-w-[45px] max-w-[35px] cursor-pointer"
+              className="block h-full w-full object-cover rounded-md cursor-pointer"
             />
+            </div>
+            </>
           ) : (
             <button
               className={
@@ -176,12 +180,20 @@ const Navbar = (props: Theme) => {
                 </div>
               </div>
 
-              <img
+              <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
+            <img
+              src={fileURL}
+              onClick={() => setShowOverlay(!showOverlay)}
+              className="block h-full w-full object-cover rounded-md cursor-pointer"
+            />
+            </div>
+
+              {/* <img
                 src={fileURL}
                 alt="USER IMAGE"
                 className="min-w-[50px] h-[57px] object-cover rounded-md cursor-pointer"
                 onClick={() => setShowOverlay(!showOverlay)}
-              />
+              /> */}
             </React.Fragment>
           ) : (
             <button

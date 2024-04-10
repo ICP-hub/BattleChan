@@ -42,7 +42,7 @@ const TimeComponent: React.FC<TimeDisplayProps> = ({ id, expireAt }) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [expireAt]);
 
   return (
     <span className={`${time === "0:00" ? "text-red" : "text-light-green"}`}>
