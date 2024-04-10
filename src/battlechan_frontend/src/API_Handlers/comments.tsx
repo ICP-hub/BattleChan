@@ -12,6 +12,35 @@ interface BackendResponse {
   data: [];
   error: string[];
 }
+interface BackendResponseUserComment {
+  status: boolean;
+  data: DataItem[];
+  error: string[];
+}
+
+interface DataItem {
+  active: CommentItem[];
+  archived: CommentItem[];
+}
+
+interface CommentItem {
+  0: string;
+  1: UserComment;
+}
+
+interface AllUserComment {
+  commentId: string;
+  postMetaData: Int8Array;
+  userProfile: Int8Array;
+  likedBy: string[];
+  comment: string;
+}
+
+interface ProcessedResponse {
+  active: AllUserComment[];
+  archived: AllUserComment[];
+}
+
 interface Comment {
   commentId: string;
   createdAt: string;
@@ -59,7 +88,7 @@ interface PostResponse {
 const CommentsApiHanlder = () => {
   // Init backend
   const [backend] = useBackend();
-  const { getSingleMainPost } = PostApiHanlder();
+  const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
 
   // Get All COmments of post
   const getAllComments = async (postId: string) => {
@@ -212,6 +241,69 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  const getAllCommentOfUser = async () => {
+    try {
+      // console.log(commentId)
+      const response =
+        (await backend.getAllCommentOfUser()) as BackendResponseUserComment;
+
+      let activePostCommentData: CommentItem[] = [];
+      let archivedPostCommentData: CommentItem[] = [];
+      let userArchivedComments: AllUserComment[] = [];
+      let userActiveComments: AllUserComment[] = [];
+
+      if (response) {
+        console.log("response of all user Comments: ", response);
+        activePostCommentData = [...response.data[0].active];
+        archivedPostCommentData = [...response.data[0].archived];
+
+        if (archivedPostCommentData && archivedPostCommentData.length > 0) {
+          // console.log(archivedPostCommentData);
+          for (const comment of archivedPostCommentData) {
+            const postId = comment[0].split("_")[0];
+            const singlePost = (await getSingleArchivePost(
+              postId
+            )) as PostResponse;
+            // console.log("singlePost: ", singlePost.data[0].postMetaData)
+            // console.log("single Post: ", singlePost)
+
+            userArchivedComments.push({
+              commentId: comment[0],
+              postMetaData: singlePost.data[0].postMetaData,
+              comment: comment[1].comment,
+              userProfile: comment[1].createdBy.userProfile,
+              likedBy: comment[1].likedBy,
+            });
+          }
+        }
+        if (activePostCommentData && activePostCommentData.length > 0) {
+          // console.log(activePostCommentData);
+          for (const comment of activePostCommentData) {
+            const postId = comment[0].split("_")[0];
+            const singlePost = (await getSingleMainPost(
+              postId
+            )) as PostResponse;
+            // console.log("singlePost: ", singlePost.data[0].postMetaData)
+            userActiveComments.push({
+              commentId: comment[0],
+              postMetaData: singlePost.data[0].postMetaData,
+              comment: comment[1].comment,
+              userProfile: comment[1].createdBy.userProfile,
+              likedBy: comment[1].likedBy,
+            });
+          }
+        }
+
+        console.log("archiveComments : ", userArchivedComments);
+        console.log("archiveComments : ", userActiveComments);
+
+        return [...userActiveComments, ...userArchivedComments];
+      }
+    } catch (err) {
+      console.error("Error liking comment : ", err);
+    }
+  };
+
   // Returns
   return {
     getAllComments,
@@ -224,6 +316,7 @@ const CommentsApiHanlder = () => {
     dislikeComment,
     getUserSingleComment,
     likeCommentReply,
+    getAllCommentOfUser,
   };
 };
 

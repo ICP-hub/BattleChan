@@ -37,11 +37,26 @@ interface Comment {
   postId: string;
 }
 
+interface AllUserComment {
+  commentId: string;
+  postMetaData: Int8Array;
+  userProfile: Int8Array;
+  likedBy: string[];
+  comment: string;
+}
+
+interface BackendResponse {
+  status: boolean;
+  data: [];
+  error: string[];
+}
 const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
-  const { getUserCommentInfo, getUserSingleComment } = CommentsApiHanlder();
+  const { getAllCommentOfUser } = CommentsApiHanlder();
   const { convertInt8ToBase64 } = Constant();
-  const [commentData, setCommentData] = useState<Comment[]>([]);
-  const { getSingleMainPost } = PostApiHanlder();
+  const [commentData, setCommentData] = useState<AllUserComment[]>([]);
+  const { getSingleMainPost,  } = PostApiHanlder();
+
+  console.log("comment data: ", commentData)
 
   const multilineEllipsisStyle: React.CSSProperties = {
     overflow: "hidden",
@@ -50,19 +65,28 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
     WebkitBoxOrient: "vertical",
   };
 
+  // useEffect(() => {
+  //   const getUserComments = async () => {
+  //     if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
+  //       for (const commentId of userInfo[0].createdComments) {
+  //         let data = await getUserSingleComment(commentId);
+  //         if(data && data.length > 0){
+  //           setCommentData(data);
+  //         }
+  //       }
+  //     }
+  //   };
+  //   getUserComments();
+  // }, [userInfo, getUserSingleComment]);
+
   useEffect(() => {
-    const getUserComments = async () => {
-      if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
-        for (const commentId of userInfo[0].createdComments) {
-          let data = await getUserSingleComment(commentId);
-          if (data && data.length > 0) {
-            setCommentData(data);
-          }
-        }
-      }
-    };
-    getUserComments();
-  }, [userInfo, getUserSingleComment]);
+    const getUserComments = async () =>{
+      const userComments = await getAllCommentOfUser() as AllUserComment[];
+      setCommentData(userComments)
+    }
+    getUserComments()
+  }, [])
+  
 
   return (
     <div className="flex flex-col gap-4">
@@ -73,11 +97,11 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
           <>
             <div key={comment.commentId} className="flex items-start justify-between gap-4 mt-2">
               {/* user avatar  */}
-              <div className="min-w-8 min-h-8 tablet:min-w-12 tablet:min-h-12 bg-[#fff] text-[#fff] flex items-center justify-center rounded">
+              <div className="w-8 h-8 tablet:w-12 tablet:h-12 flex justify-center rounded-md aspect-square">
                 <img
-                  src={convertInt8ToBase64(comment.createdBy.userProfile)}
+                  src={convertInt8ToBase64(comment.userProfile)}
                   alt="USER IMAGE"
-                  className="min-w-[50px] h-[57px] object-cover rounded-md cursor-pointer"
+                  className="block h-full w-full object-cover rounded-md cursor-pointer"
                 />
               </div>
               {/* comment and likes  */}
@@ -113,10 +137,10 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
                 key={comment.postId}
                 to={`/dashboard/postDetails/${encodeURIComponent(comment.postId)}`}
               > */}
-              <div className="ml-4 max-w-16 tablet:max-w-32 rounded-sm">
+              <div className="ml-4 w-24 h-10 tablet:w-32 tablet:h-16 rounded-sm">
                 <img
-                  className="block h-auto w-full rounded"
-                  src={convertInt8ToBase64(comment.postImage)}
+                  className="block h-full w-full object-cover rounded-md cursor-pointer"
+                  src={convertInt8ToBase64(comment.postMetaData)}
                   alt="comment img"
                 />
               </div>
