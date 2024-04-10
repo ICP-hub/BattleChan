@@ -38,7 +38,7 @@ interface Comment {
 }
 
 const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
-  const { getUserCommentInfo, getUserSingleComment, getAllCommentOfUser } = CommentsApiHanlder();
+  const { getUserCommentInfo, getUserSingleComment } = CommentsApiHanlder();
   const { convertInt8ToBase64 } = Constant();
   const [commentData, setCommentData] = useState<Comment[]>([]);
   const { getSingleMainPost } = PostApiHanlder();
@@ -60,14 +60,6 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
           }
         }
       }
-    };
-    getUserComments();
-  }, [userInfo, getUserSingleComment]);
-
-  useEffect(() => {
-    const getUserComments = async () => {
-      let data = await getAllCommentOfUser();
-      console.log(data);
     };
     getUserComments();
   }, [userInfo, getUserSingleComment]);

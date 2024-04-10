@@ -417,7 +417,7 @@ const Post: React.FC<PostProps> = ({
         </div>
       </section>
 
-      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} />
+      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} postId={id} />
     </div>
   );
 };

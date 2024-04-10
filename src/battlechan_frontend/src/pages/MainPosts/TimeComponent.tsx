@@ -34,7 +34,7 @@ const TimeComponent: React.FC<TimeDisplayProps> = ({ id, expireAt }) => {
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
-        archive();
+        // archive();
         // console.log("Post archived");
       } else {
         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting

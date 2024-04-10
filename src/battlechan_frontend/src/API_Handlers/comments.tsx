@@ -183,16 +183,6 @@ const CommentsApiHanlder = () => {
     }
   };
 
-  const getAllCommentOfUser = async () => {
-    try {
-      const res = await backend.getAllCommentOfUser();
-      console.log(res);
-      return res;
-    } catch (err) {
-      console.error("Error disliking comment : ", err);
-    }
-  };
-
   // Get User Comments
   const getUserSingleComment = async (commentId: string) => {
     try {
@@ -234,7 +224,6 @@ const CommentsApiHanlder = () => {
     dislikeComment,
     getUserSingleComment,
     likeCommentReply,
-    getAllCommentOfUser,
   };
 };
 

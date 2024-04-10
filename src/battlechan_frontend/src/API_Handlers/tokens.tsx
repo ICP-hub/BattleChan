@@ -1,6 +1,4 @@
 import { useCanister } from "@connect2ic/react";
-import { useState } from "react";
-import { useConnect } from "@connect2ic/react";
 import { Principal } from "@dfinity/principal";
 
 // Custom hook : initialize the backend Canister
@@ -26,10 +24,8 @@ interface Response {
 const TokensApiHanlder = () => {
     // Init backend
     const [backend, canisterId] = useBackend();
-    // let backend_canister_id = canisterId.canisterDefinition.canisterId;
     const [ledger] = useLedger();
-    const { principal, isConnected } = useConnect();
-    // console.log(ledger);
+
     // // ICRC2 APPROVE
     const icrc2_approve = async (principal: string, amount: number = 1) => {
         let result = { status: false, err: "" } as Response;
@@ -63,7 +59,7 @@ const TokensApiHanlder = () => {
                 console.log(data);
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
                 // console.log("icrc2_approve: ", res);
-                if(res && res?.ok){
+                if (res && res?.ok) {
                     result.status = true;
                 } else {
                     result.status = false;
@@ -82,9 +78,11 @@ const TokensApiHanlder = () => {
             result.status = false;
             result.err = "Error: Something went wrong, Please try again later!";
             console.error("Error: ", err);
+            return result;
         }
     };
 
+    // Get Balance Of User Account
     const getBalance = async (principal: string) => {
         try {
             // console.log(principal);
@@ -101,8 +99,39 @@ const TokensApiHanlder = () => {
         }
     };
 
+    // Withdraw Time Tokens from a Post
+    const withdrawPost = async (postId: string, amount: number) => {
+        let result = { status: false, err: "" } as Response;
+        try {
+            const res = (await backend.withdrawPost(postId, amount)) as BackendResponse;
+            console.log("res: ", res);
+            if (res && res?.ok) {
+                result.status = true;
+            } else {
+                result.status = false;
+                const lastIndex = res?.err[1].lastIndexOf(":");
+                const errorMsg = res?.err[1].slice(lastIndex + 2);
+                result.err = errorMsg;
+            }
+            return result;
+        } catch (err) {
+            if (err instanceof Error) {
+                result.status = false;
+                const lastIndex = err.message.lastIndexOf(":");
+                const errorMsg = err.message.slice(lastIndex + 2);
+                result.err = errorMsg;
+                return result;
+            } else {
+                result.status = false;
+                result.err = "Error: Something went wrong, Please try again later!";
+                console.error("Error: ", err);
+                return result;
+            }
+        }
+    };
+
     // Returns
-    return { getBalance, icrc2_approve };
+    return { getBalance, icrc2_approve, withdrawPost };
 };
 
 export default TokensApiHanlder;

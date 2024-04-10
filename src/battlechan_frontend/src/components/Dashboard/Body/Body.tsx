@@ -119,10 +119,10 @@ const Body = () => {
         }
       >
         <div className="data__headings tablet:px-4 flex-row-center tablet:flex-nowrap justify-between rounded-xl text-[#fff] bg-dirty-light-green gap-2">
-          <div className="data__label py-4 tablet:py-4 pl-6 tablet:px-0 h-full tablet:text-lg font-semibold">
+          <div className="data__label py-4 tablet:py-4 pl-6 tablet:px-0 h-full tablet:text-lg small_phone:text-md text-sm font-semibold">
             Name of Subject
           </div>
-          <div className="data__label big_tablet:hidden py-4 tablet:py-6 pr-10 tablet:px-4 h-full tablet:text-lg font-semibold">
+          <div className="data__label big_tablet:hidden py-4 tablet:py-6 pr-10 tablet:px-4 h-full tablet:text-lg small_phone:text-md text-sm font-semibold">
             Total Posts
           </div>
         </div>
@@ -130,9 +130,9 @@ const Body = () => {
         <div className="flex justify-between">
           <div className="">
             {boardNames.map((boardName, index) => (
-              <div className={`flex ml-6`}>
+              <div className={`flex ml-4`}>
                 <button
-                  className="inline-flex flex-wrap items-center  cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
+                  className="inline-flex flex-wrap items-center small_phone:text-base text-xs cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
                   onClick={() => {
                     navigate(`/dashboard/mainPosts?boardName=${boardName}`);
                   }}
@@ -143,7 +143,7 @@ const Body = () => {
               </div>
             ))}
           </div>
-          <div className="">
+          <div className="small_phone:text-base text-xs">
             {boardSizes.map((boardSize, index) => (
               <div className={` text-center flex items-center p-2 gap-2`}>
                 <span className="font-semibold">

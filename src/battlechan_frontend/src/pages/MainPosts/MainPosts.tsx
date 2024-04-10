@@ -424,7 +424,7 @@ const MainPosts = (props: Theme) => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${
                       activeSelection === "Recent" ? "bg-[#295A31]" : ""
                     }`}
                     onClick={() => handleSelection("Recent")}
@@ -435,7 +435,7 @@ const MainPosts = (props: Theme) => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${
                       activeSelection === "Upvote" ? "bg-[#295A31]" : ""
                     }`}
                     onClick={() => handleSelection("Upvote")}
@@ -446,7 +446,7 @@ const MainPosts = (props: Theme) => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className={`block px-4 py-2 text-[10px] tablet:text-base ${
+                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${
                       activeSelection === "Downvote" ? "bg-[#295A31]" : ""
                     }`}
                     onClick={() => handleSelection("Downvote")}
