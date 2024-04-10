@@ -251,18 +251,18 @@ const PostDetails = (props: Theme) => {
     }
     console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
-      // const is_approved = await icrc2_approve();
-      // if(is_approved){
-      const data = (await upvotePost(postId)) as VoteResponse;
-      if (data && data?.ok) {
-        // toast.success(data?.ok);
-        toast.success("Successfully Upvoted Post!");
-      } else {
-        const lastIndex = data.err[1].lastIndexOf(":");
-        const errorMsg = data.err[1].slice(lastIndex + 2);
-        toast.error(errorMsg);
+      const is_approved = await icrc2_approve();
+      if (is_approved) {
+        const data = (await upvotePost(postId)) as VoteResponse;
+        if (data && data?.ok) {
+          // toast.success(data?.ok);
+          toast.success("Successfully Upvoted Post!");
+        } else {
+          const lastIndex = data.err[1].lastIndexOf(":");
+          const errorMsg = data.err[1].slice(lastIndex + 2);
+          toast.error(errorMsg);
+        }
       }
-      // }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
       // navigate("/");
