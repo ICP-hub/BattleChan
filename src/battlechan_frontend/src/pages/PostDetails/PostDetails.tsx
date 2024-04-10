@@ -397,7 +397,7 @@ const PostDetails = (props: Theme) => {
                   }`}
                 >
                   {time}
-                </span>
+                </span>{" "}
                 min left
               </div>
             </div>
