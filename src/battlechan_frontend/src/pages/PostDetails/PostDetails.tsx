@@ -357,7 +357,7 @@ const PostDetails = (props: Theme) => {
           {/* post image  */}
           <div className="max-w-2xl h-auto">
             {!dataFetched ? (
-              <Skeleton w_h_p={"w-full tablet:h-[60dvh] h-[400px]"} />
+              <Skeleton w_h_p={"w-full tablet:h-[220px] h-[400px]"} />
             ) : (
               <img
                 className="block h-auto w-full rounded-3xl"
