@@ -170,31 +170,16 @@ const PostDetails = (props: Theme) => {
       if (response.status === true && response.data) {
         console.log(response);
         const posts = response.data.flat(); // Flatten nested arrays if any
-        // posts.forEach((element: any) => {
-        //   const timestamp: string = convertNanosecondsToTimestamp(
-        //     BigInt(element.createdAt)
-        //   );
-        //   console.log(timestamp);
-        //   element.createdAt = timestamp;
-        //   element.upvotes = Number(element.upvotes);
-        //   // console.log("UPVOTE", element.upvotes);
-        //   const interval = setInterval(
-        //     (expireAt: BigInt) => {
-        //       const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-        //       const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+        posts.forEach((element: any) => {
+          const timestamp: string = convertNanosecondsToTimestamp(
+            BigInt(element.createdAt)
+          );
+          console.log(timestamp);
+          element.createdAt = timestamp;
+          element.upvotes = Number(element.upvotes);
+          // console.log("UPVOTE", element.upvotes);
 
-        //       if (remainingTime <= 0) {
-        //         clearInterval(interval);
-        //         setTime("0:00");
-        //         console.log("Post archived");
-        //       } else {
-        //         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-        //       }
-        //     },
-        //     1000,
-        //     BigInt(element.expireAt)
-        //   );
-        // });
+        });
         let data = posts[0];
         setPostsData(data);
         console.log(postsData);
