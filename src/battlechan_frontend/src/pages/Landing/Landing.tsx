@@ -12,15 +12,36 @@ import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlec
 import { useConnect } from "@connect2ic/react";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineArrowUp } from 'react-icons/hi';
+import UserApiHanlder from "../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: any;
+};
+
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
 };
 
 function Landing(props: Theme) {
   let { isConnected, principal, isIdle, isInitializing } = useConnect();
   const [allow, setAllow] = useState<null | boolean>(null);
   const navigate = useNavigate();
+  const { getProfileData, votesOfUser } = UserApiHanlder();
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = (await getProfileData()) as ProfileData;
+  //     if (response && response.status == false) {
+  //       if (principal) {
+  //         navigate("/dashboard/settingProfile");
+  //       }
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     if (isInitializing == false) {
@@ -36,7 +57,6 @@ function Landing(props: Theme) {
     if (principal) {
       console.log("Principalm eff of aepr :", principal);
       navigate("/dashboard/settingProfile");
-      // Perform any other actions that depend on the updated principal value
     }
   }, [principal]);
 

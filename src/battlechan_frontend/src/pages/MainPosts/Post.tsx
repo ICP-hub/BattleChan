@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { toast } from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
 
-import { useConnect } from "@connect2ic/react";
 import { LiaCommentSolid } from "react-icons/lia";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
-
-import Constant from "../../utils/constants";
 import PostApiHanlder from "../../API_Handlers/post";
+import { Link, useNavigate } from "react-router-dom";
+import { useConnect } from "@connect2ic/react";
+import { toast } from "react-hot-toast";
 import CommentsApiHanlder from "../../API_Handlers/comments";
 import TokensApiHanlder from "../../API_Handlers/tokens";
 
+import Constant from "../../utils/constants";
 import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
-import TimeComponent from "./TimeComponent";
 // import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 interface PostProps {
   id: string;
-  post: object;
   postName: string;
   imageUrl: Int8Array;
   userAvatarUrl: string;
@@ -58,7 +55,6 @@ interface Response {
 
 const Post: React.FC<PostProps> = ({
   id,
-  post,
   postName,
   imageUrl,
   userAvatarUrl,
@@ -118,21 +114,21 @@ const Post: React.FC<PostProps> = ({
   useEffect(() => {
     getCommentsCounts();
 
-    // const interval = setInterval(() => {
-    //   const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-    //   const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+    const interval = setInterval(() => {
+      const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
+      const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
 
-    //   if (remainingTime <= 0) {
-    //     clearInterval(interval);
-    //     setTime("0:00");
-    //     archive();
-    //     // console.log("Post archived");
-    //   } else {
-    //     setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-    //   }
-    // }, 1000);
+      if (remainingTime <= 0) {
+        clearInterval(interval);
+        setTime("0:00");
+        archive();
+        // console.log("Post archived");
+      } else {
+        setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+      }
+    }, 1000);
 
-    // return () => clearInterval(interval);
+    return () => clearInterval(interval);
   }, [expireAt]); // Run effect when expireAt changes
 
   const handleUpvote = async (postId: string) => {
@@ -182,12 +178,12 @@ const Post: React.FC<PostProps> = ({
     }
   };
 
-  // const archive = async () => {
-  //   const response = (await archivePost(id)) as Response;
-  //   if (response && response?.ok) {
-  //     console.log("POST ARCHIVED!");
-  //   }
-  // };
+  const archive = async () => {
+    const response = (await archivePost(id)) as Response;
+    if (response && response?.ok) {
+      console.log("POST ARCHIVED!");
+    }
+  };
 
   const getCommentsCounts = async () => {
     const response = (await getAllComments(id)) as CommentsResponse;
@@ -200,13 +196,13 @@ const Post: React.FC<PostProps> = ({
     }
   };
 
-  // const formatTime = (remainingTime: bigint) => {
-  //   const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-  //   const minutes = Math.floor(seconds / 60); // Get remaining minutes
-  //   const remainingSeconds = seconds % 60; // Get remaining seconds
-  //   // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
-  //   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  // };
+  const formatTime = (remainingTime: bigint) => {
+    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
+    const minutes = Math.floor(seconds / 60); // Get remaining minutes
+    const remainingSeconds = seconds % 60; // Get remaining seconds
+    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
 
   return (
     <div

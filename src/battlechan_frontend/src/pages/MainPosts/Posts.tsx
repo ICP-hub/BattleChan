@@ -43,7 +43,6 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             key={index}
           >
             <Post
-              post={post}
               key={post.postId}
               id={post.postId}
               postName={post.postName}
