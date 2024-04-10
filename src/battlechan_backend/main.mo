@@ -81,7 +81,7 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
+  public func createNewBoard(boardName : Text, boardDes : Text) : async Types.Result {
     try {
       let newBoard : Types.BoardInfo = createBoardInfo(boardName, boardDes);
       let boardId = Text.toLowercase(Text.replace(boardName, #char ' ', "_"));
@@ -132,10 +132,10 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func updatePostVisiblity(timeToken : Nat, postId : Types.PostId) : async Token.Result_2 {
-    postTrieMap := updatePostExpireTime(userId, timeToken, postId, postTrieMap);
-    await icrc2_transferFrom(userId, backendCanisterId, timeToken * decimal);
-  };
+  // public shared ({ caller = userId }) func updatePostVisiblity(timeToken : Nat, postId : Types.PostId) : async Token.Result_2 {
+  //   postTrieMap := updatePostExpireTime(userId, timeToken, postId, postTrieMap);
+  //   await icrc2_transferFrom(userId, backendCanisterId, timeToken * decimal);
+  // };
 
   public shared ({ caller = userId }) func upvoteOrDownvotePost(postId : Types.PostId, voteStatus : Types.VoteStatus) : async Types.Result {
     try {
@@ -231,6 +231,7 @@ actor BattleChan {
       #err(code, message);
     };
   };
+
   public func archivePost(postId : Types.PostId) : async Types.Result {
     try {
       let {
@@ -287,6 +288,7 @@ actor BattleChan {
       #err(code, message);
     };
   };
+
   public shared ({ caller = userId }) func createCommentReply(commentId : Types.CommentId, reply : Text) : async Types.Result {
     try {
       let postId = getPostIdFromCommentId(commentId);
@@ -548,7 +550,6 @@ actor BattleChan {
     };
   };
 
-  // public shared({caller = userId}) func getUserCommentsData
   public shared ({ caller = userId }) func getAllCommentOfUser() : async Types.Result_1<[(Types.CommentId, Types.CommentInfo)]> {
 
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
@@ -639,6 +640,7 @@ actor BattleChan {
     };
     return { data = ?allData; status = true; error = null };
   };
+  
   public query func getBoardData(boardName : Types.BoardName) : async ?Types.BoardInfo {
     Trie.get(boardTrieMap, textKey boardName, Text.equal);
   };
@@ -672,6 +674,7 @@ actor BattleChan {
       error = null;
     };
   };
+
   public shared query ({ caller = userId }) func getUserTotalCounts() : async Types.Result_1<{ postData : Nat; comments : Nat; userArchivedPost : Nat; likedPost : Nat; dislikedPost : Nat }> {
     let userInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (?value) { value };
@@ -698,6 +701,7 @@ actor BattleChan {
     };
 
   };
+
   public query func getTotalCommentsInPost(postId : Types.PostId) : async Types.Result_1<Nat> {
     let postInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
       case (?value) { value };
