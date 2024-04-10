@@ -520,7 +520,10 @@ const PostDetails = (props: Theme) => {
                         <button
                           onClick={handleAddComment}
                           className={
-                            "border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold cursor-pointer disabled:text-opacity-50 disabled:dark:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
+                            "border border-[#000] dark:border-[#fff]" +
+                            " text-[#000] dark:text-[#fff] hover:bg-dark hover:dark:bg-light hover:text-light hover:dark:text-dark transition disabled:dark:text-opacity-50" +
+                            " rounded-full px-6 py-2 font-semibold cursor-pointer" +
+                            " disabled:text-opacity-50 disabled:border-opacity-50 disabled:dark:border-opacity-50"
                           }
                           disabled={loading}
                         >
