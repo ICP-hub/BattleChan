@@ -381,14 +381,20 @@ actor BattleChan {
     };
     { data = ?postInfo; status = true; error = null };
   };
-
-  public query func getSingleArchivedPost(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
+  func createTrieMapOfArchivedPost() : [(Types.PostId, Types.PostInfo)] {
     let archivedPostList : [List.List<(Types.PostId, Types.PostInfo)>] = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
     var archivedPosts = List.nil<(Types.PostId, Types.PostInfo)>();
     for (item in archivedPostList.vals()) {
       archivedPosts := List.append<(Types.PostId, Types.PostInfo)>(archivedPosts, item);
     };
-    let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(List.toArray(archivedPosts).vals(), Text.equal, Text.hash);
+    List.toArray(archivedPosts);
+    // let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(List.toArray(archivedPosts).vals(), Text.equal, Text.hash);
+  };
+
+  public query func getSingleArchivedPost(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
+    let archivedPosts = createTrieMapOfArchivedPost();
+    let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPosts.vals(), Text.equal, Text.hash);
+
     switch (userArchivedPostsMap.get(postId)) {
       case (null) {
         return { data = null; status = false; error = ?notFound.noPost };
@@ -590,8 +596,8 @@ actor BattleChan {
     };
     return { data = ?userVotesData; status = false; error = ?notFound.noUser };
   };
-  public shared ({ caller = userId }) func getAllCommentOfUser() : async Types.Result_1<[(Types.CommentId, Types.CommentInfo)]> {
 
+  public shared ({ caller = userId }) func getAllCommentOfUser() : async Types.Result_1<{ active : [(Types.CommentId, Types.CommentInfo)]; archived : [(Types.CommentId, Types.CommentInfo)] }> {
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (?value) { value };
       case (null) {
@@ -599,24 +605,48 @@ actor BattleChan {
       };
     };
     var activeComment = List.nil<(Types.CommentId, Types.CommentInfo)>();
+    var archivedComment = List.nil<(Types.CommentId, Types.CommentInfo)>();
+
+    let archivedPost = createTrieMapOfArchivedPost();
+    let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPost.vals(), Text.equal, Text.hash);
 
     for (item in userInfo.createdComments.vals()) {
       let postId = getPostIdFromCommentId(item);
       switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
-        case (null) {};
+        case (null) {
+
+          let postId = getPostIdFromCommentId(item);
+          switch (userArchivedPostsMap.get(postId)) {
+            case (null) {};
+            case (?post) {
+              switch (Trie.get(post.comments, textKey item, Text.equal)) {
+                case (null) {};
+                case (?comment) {
+                  archivedComment := List.push((item, comment), archivedComment);
+                };
+              };
+            };
+          };
+
+        };
         case (?value) {
+
           switch (Trie.get(value.comments, textKey item, Text.equal)) {
             case (?result) {
               activeComment := List.push((item, result), activeComment);
             };
             case (null) {};
+
           };
         };
       };
     };
 
     return {
-      data = ?List.toArray(activeComment);
+      data = ?{
+        active = List.toArray(activeComment);
+        archived = List.toArray(archivedComment);
+      };
       status = false;
       error = null;
     };
