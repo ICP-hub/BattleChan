@@ -8,6 +8,7 @@ import Posts from "./Posts";
 import Catalog from "./Catalog";
 import Pagination from "./Pagination";
 
+import Skeleton from "../../components/Skeleton/Skeleton";
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 import CreatePostBtn from "../../components/Dashboard/Body/CreatePostBtn";
@@ -64,18 +65,6 @@ interface TotalCountsResponse {
   archivePostCounts: number;
 }
 
-const post = [
-  {
-    postId: "#3109292588",
-    postName: "Test2",
-    postMetaData:
-      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-    postDes: "Test2",
-    expireAt: 1711625931614910010n,
-    createdAt: "Mar 28,2024; 17:03",
-  },
-];
-
 const MainPosts = (props: Theme) => {
   const [postsData, setPostsData] = useState<PostInfo[]>([]);
   const [boardsData, setBoardsData] = useState<string[]>([]);
@@ -86,6 +75,7 @@ const MainPosts = (props: Theme) => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
   const [currentPosts, setCurrentPosts] = useState<PostInfo[]>([])
+  const [dataFetched, setDataFetched] = useState<boolean>(false);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -243,9 +233,11 @@ const MainPosts = (props: Theme) => {
         setPostsData(posts);
       } else {
         setPostsData([])
+        setDataFetched(true);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
+      setDataFetched(false);
     }
   }
 
@@ -292,7 +284,7 @@ const MainPosts = (props: Theme) => {
         className={
           className +
           " " +
-          " max-w-7xl mx-auto px-4 tablet:px-12 pb-12 dark:text-[#fff] overflow-hidden"
+          "max-w-7xl mx-auto pb-12 dark:text-[#fff] overflow-hidden"
         }
       >
         {/* create post button for desktop  */}
@@ -301,7 +293,7 @@ const MainPosts = (props: Theme) => {
         </div>
 
         {/* most popular heading & create post button  */}
-        <div className="flex justify-between tablet:justify-center items-center">
+        <div className="flex justify-between tablet:justify-center items-center px-4 tablet:px-12">
           <h1 className="font-bold tablet:text-3xl tablet:p-8">
             {props.type === "archive" ? "Archive" : "Most Popular"}
           </h1>
@@ -314,15 +306,13 @@ const MainPosts = (props: Theme) => {
         </div>
 
         {/* catalog for desktop  */}
-        <div className=" -mr-2 overflow-hidden">
-          <Catalog
-            handleBoardChange={handleBoardChange}
-            boardsData={boardsData}
-          />
-        </div>
+        <Catalog
+          handleBoardChange={handleBoardChange}
+          boardsData={boardsData}
+        />
 
         {/* catalog and pagination and sort for desktop  */}
-        <div className="flex justify-between items-center tablet:px-10 py-2">
+        <div className="flex justify-between items-center py-2 px-4 tablet:px-12">
           {/* catalog and filter button  */}
           {/* <div className="tablet:hidden flex items-center">
               <button className="flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-full font-semibold text-xs">
@@ -470,11 +460,28 @@ const MainPosts = (props: Theme) => {
         </div>
 
         {/* posts  */}
-        <div className="xl:px-10 mt-8 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
-          <Posts currentPosts={currentPosts} type={props.type} />
+        <div className="xl:px-10 small_phone:mt-8 mt-4 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
+          {!dataFetched ? (
+            <CardSkeleton />
+          ) : (
+            <Posts currentPosts={currentPosts} type={props.type} />
+          )}
         </div>
       </div>
     </div>
+  );
+};
+
+const CardSkeleton = () => {
+  return (
+    <React.Fragment>
+      <Skeleton
+        w_h_p={"laptop:w-1/2 w-full tablet:h-[180px] h-[160px] my-2 px-8"}
+      />
+      <Skeleton
+        w_h_p={"laptop:w-1/2 w-full tablet:h-[180px] h-[160px] mt-6 my-2 px-8"}
+      />
+    </React.Fragment>
   );
 };
 

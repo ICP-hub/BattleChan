@@ -25,7 +25,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
   const className = "Dashboard__MainPosts__Posts";
 
   if(currentPosts.length <= 0){
-    return <><h1 className="text-center my-4">No Posts Exists</h1></>
+    return <><h1 className="text-center p-8">No Posts Exists</h1></>
   }
 
   return (
@@ -35,10 +35,14 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
           className={
             className +
             " " +
-            `laptop:w-1/2 w-full p-2 ${index % 2 !== 0 ? "tablet:mt-6" : ""}`
+            `laptop:w-1/2 w-full phone:px-8 px-4 py-2 ${
+              index % 2 !== 0 ? "tablet:mt-6" : ""
+            }`
           }
+          key={index}
         >
           <Post
+            post={post}
             key={post.postId}
             id={post.postId}
             postName={post.postName}
