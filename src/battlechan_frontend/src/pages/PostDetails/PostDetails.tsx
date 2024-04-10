@@ -25,6 +25,7 @@ import CommentsApiHanlder from "../../API_Handlers/comments";
 import UserApiHanlder from "../../API_Handlers/user";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import TokensApiHanlder from "../../API_Handlers/tokens";
+import TimeComponent from "../MainPosts/TimeComponent";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -96,7 +97,7 @@ interface commentResponse {
 const PostDetails = (props: Theme) => {
   const postId: string = useParams().postId ?? "";
   const decodedPostId = decodeURIComponent(postId);
-  const [time, setTime] = useState("0:00");
+  // const [time, setTime] = useState("0:00");
   const [postsData, setPostsData] = useState<PostInfo>();
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
@@ -146,13 +147,13 @@ const PostDetails = (props: Theme) => {
     getPostDetail(decodedPostId);
   }, [is700px]);
 
-  const formatTime = (remainingTime: bigint) => {
-    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-    const minutes = Math.floor(seconds / 60); // Get remaining minutes
-    const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
+  // const formatTime = (remainingTime: bigint) => {
+  //   const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
+  //   const minutes = Math.floor(seconds / 60); // Get remaining minutes
+  //   const remainingSeconds = seconds % 60; // Get remaining seconds
+  //   // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+  //   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  // };
 
   async function getPostDetail(postId: string) {
     try {
@@ -166,31 +167,31 @@ const PostDetails = (props: Theme) => {
       if (response.status === true && response.data) {
         console.log(response);
         const posts = response.data.flat(); // Flatten nested arrays if any
-        posts.forEach((element: any) => {
-          const timestamp: string = convertNanosecondsToTimestamp(
-            BigInt(element.createdAt)
-          );
-          console.log(timestamp);
-          element.createdAt = timestamp;
-          element.upvotes = Number(element.upvotes);
-          // console.log("UPVOTE", element.upvotes);
-          const interval = setInterval(
-            (expireAt: BigInt) => {
-              const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-              const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+        // posts.forEach((element: any) => {
+        //   const timestamp: string = convertNanosecondsToTimestamp(
+        //     BigInt(element.createdAt)
+        //   );
+        //   console.log(timestamp);
+        //   element.createdAt = timestamp;
+        //   element.upvotes = Number(element.upvotes);
+        //   // console.log("UPVOTE", element.upvotes);
+        //   const interval = setInterval(
+        //     (expireAt: BigInt) => {
+        //       const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
+        //       const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
 
-              if (remainingTime <= 0) {
-                clearInterval(interval);
-                setTime("0:00");
-                console.log("Post archived");
-              } else {
-                setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-              }
-            },
-            1000,
-            BigInt(element.expireAt)
-          );
-        });
+        //       if (remainingTime <= 0) {
+        //         clearInterval(interval);
+        //         setTime("0:00");
+        //         console.log("Post archived");
+        //       } else {
+        //         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+        //       }
+        //     },
+        //     1000,
+        //     BigInt(element.expireAt)
+        //   );
+        // });
         let data = posts[0];
         setPostsData(data);
         console.log(postsData);
@@ -366,12 +367,7 @@ const PostDetails = (props: Theme) => {
               </div>
 
               <div className="text-lg">
-                <span
-                  className={` ${type === "archive" ? "text-red" : "text-[#18AF00]"
-                    }`}
-                >
-                  {time}
-                </span>{" "}
+                <TimeComponent expireAt={postsData?.expireAt ?? 1n} id={postsData?.postId ?? ""} />{" "}
                 min left
               </div>
             </div>
