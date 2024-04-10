@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Constant from "../../utils/constants";
 import UserApiHanlder from "../../API_Handlers/user";
 import PostApiHanlder from "../../API_Handlers/post";
+import TimeComponent from "../MainPosts/TimeComponent";
 
 type TdTagProps = {
   para: any;
@@ -129,11 +130,7 @@ const Posts = () => {
                 <TdTag para={post.upvotedBy.length} />
                 <TdTag
                   para={
-                    Number(post.expireAt) - Number(currentTime) <= 0
-                      ? "0:00"
-                      : formatTime(
-                          BigInt(Number(post.expireAt) - Number(currentTime))
-                        )
+                    <TimeComponent expireAt={post.expireAt} id={post.postId} />
                   }
                 />
               </tr>
