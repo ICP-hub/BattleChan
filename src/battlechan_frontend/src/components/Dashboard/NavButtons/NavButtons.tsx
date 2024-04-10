@@ -5,11 +5,11 @@ const NavButtons = () => {
   const location = useLocation();
   const [active, setActive] = React.useState("Dashboard");
   const className = "Home__NavButtons";
-  console.log("active: ", active)
+  // console.log("active: ", active)
 
   useEffect(() => {
     const path = location.pathname.split("/").pop();
-    console.log("path:", path)
+    // console.log("path:", path)
     setActive(path || "Dashboard");
   }, [location]);
 

@@ -25,7 +25,7 @@ const NavConnectButton = () => {
 
   return (
     <ConnectButton>
-      <span className="flex-row-center">
+      <span className="flex-row-center text-light">
         {is820px && "Connect Wallet "}
         <MdArrowOutward className="tablet:text-2xl text-lg" />
       </span>

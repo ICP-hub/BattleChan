@@ -344,13 +344,13 @@ const Analytics = (props: Theme) => {
             <div className="p-2 w-1/2 tablet:w-1/4">
               <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
                 <div>Buy</div>
-                <div className="font-bold text-xl mt-2">100</div>
+                <div className="font-bold text-xl mt-2">0</div>
               </div>
             </div>
             <div className="p-2 w-1/2 tablet:w-1/4">
               <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
                 <div>Earn From Others</div>
-                <div className="font-bold text-xl mt-2">33</div>
+                <div className="font-bold text-xl mt-2">0</div>
               </div>
             </div>
           </div>
