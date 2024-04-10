@@ -14,6 +14,7 @@ const UserProfile = lazy(() => import("./pages/UserProfile/UserProfile"));
 const ArchivePosts = lazy(() => import("./pages/ArchivePosts/ArchivePosts"));
 const UserSetting = lazy(() => import("./pages/SettingProfile/SettingProfile"));
 const CreatePost = lazy(() => import("./pages/CreatePost/CreatePost"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage/DashboardPage"));
 
 interface AppRoutesProps {
   handleThemeSwitch: () => void; // Adjust based on the actual implementation
@@ -117,6 +118,18 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
           allow == true ? (
             <Suspense fallback={<Loader />}>
               <CreatePost handleThemeSwitch={handleThemeSwitch} />
+            </Suspense>
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
+        }
+      />
+      <Route
+        path="/dashboard/dashboard/*"
+        element={
+          allow == true ? (
+            <Suspense fallback={<Loader />}>
+              <DashboardPage handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
           ) : allow == false ? (
             <Navigate to="/" />
