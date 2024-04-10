@@ -94,6 +94,11 @@ interface commentResponse {
   ok: string;
 }
 
+interface Response {
+  status: boolean;
+  err: string;
+}
+
 const PostDetails = (props: Theme) => {
   const postId: string = useParams().postId ?? "";
   const decodedPostId = decodeURIComponent(postId);
@@ -151,14 +156,6 @@ const PostDetails = (props: Theme) => {
     getPostDetail(decodedPostId);
   }, [is700px]);
 
-  // const formatTime = (remainingTime: bigint) => {
-  //   const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-  //   const minutes = Math.floor(seconds / 60); // Get remaining minutes
-  //   const remainingSeconds = seconds % 60; // Get remaining seconds
-  //   // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
-  //   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  // };
-
   async function getPostDetail(postId: string) {
     try {
       let response;
@@ -170,34 +167,9 @@ const PostDetails = (props: Theme) => {
       if (response.status === true && response.data) {
         console.log(response);
         const posts = response.data.flat(); // Flatten nested arrays if any
-        // posts.forEach((element: any) => {
-        //   const timestamp: string = convertNanosecondsToTimestamp(
-        //     BigInt(element.createdAt)
-        //   );
-        //   console.log(timestamp);
-        //   element.createdAt = timestamp;
-        //   element.upvotes = Number(element.upvotes);
-        //   // console.log("UPVOTE", element.upvotes);
-        //   const interval = setInterval(
-        //     (expireAt: BigInt) => {
-        //       const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-        //       const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
-
-        //       if (remainingTime <= 0) {
-        //         clearInterval(interval);
-        //         setTime("0:00");
-        //         console.log("Post archived");
-        //       } else {
-        //         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-        //       }
-        //     },
-        //     1000,
-        //     BigInt(element.expireAt)
-        //   );
-        // });
         let data = posts[0];
         setPostsData(data);
-        console.log(postsData);
+        // console.log(postsData);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -238,8 +210,8 @@ const PostDetails = (props: Theme) => {
     }
     console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
-      const is_approved = await icrc2_approve(principal_idRef.current);
-      if (is_approved) {
+      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      if (is_approved.status == true) {
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
           // toast.success(data?.ok);
@@ -250,7 +222,7 @@ const PostDetails = (props: Theme) => {
           toast.error(errorMsg);
         }
       } else {
-        toast.error("Insufficient Balance!");
+        toast.error(is_approved.err);
       }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
@@ -265,13 +237,18 @@ const PostDetails = (props: Theme) => {
     // console.log(isConnected);
     // console.log(principal);
     if (isUserAuthenticatedRef.current) {
-      const data = (await downvotePost(postId)) as VoteResponse;
-      if (data && data?.ok) {
-        toast.success("Successfully Downvoted Post!");
+      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      if (is_approved.status == true) {
+        const data = (await downvotePost(postId)) as VoteResponse;
+        if (data && data?.ok) {
+          toast.success("Successfully Downvoted Post!");
+        } else {
+          const lastIndex = data.err[1].lastIndexOf(":");
+          const errorMsg = data.err[1].slice(lastIndex + 2);
+          toast.error(errorMsg);
+        }
       } else {
-        const lastIndex = data.err[1].lastIndexOf(":");
-        const errorMsg = data.err[1].slice(lastIndex + 2);
-        toast.error(errorMsg);
+        toast.error(is_approved.err);
       }
     } else {
       toast.error("Please first Connect your Wallet to Downvote this post!");

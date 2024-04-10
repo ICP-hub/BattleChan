@@ -1,9 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const NavButtons = () => {
+  const location = useLocation();
   const [active, setActive] = React.useState("Dashboard");
   const className = "Home__NavButtons";
+  // console.log("active: ", active)
+
+  useEffect(() => {
+    const path = location.pathname.split("/").pop();
+    // console.log("path:", path)
+    setActive(path || "Dashboard");
+  }, [location]);
 
   return (
     <div
@@ -16,9 +24,9 @@ const NavButtons = () => {
       <Link to="/dashboard/mainPosts">
         <button
           className={`${
-            active === "Home" ? `text-dark dark:text-light` : "text-grey"
-          }`}
-          onMouseEnter={() => setActive("Home")}
+            active === "mainPosts" ? `text-dark dark:text-light hover:text-opacity-100` : "text-grey"
+          } hover:text-opacity-50`}
+          
         >
           Home
         </button>
@@ -27,9 +35,9 @@ const NavButtons = () => {
       <Link to="/dashboard/archivePosts">
         <button
           className={`${
-            active === "Archive" ? `text-dark dark:text-light` : "text-grey"
-          }`}
-          onMouseEnter={() => setActive("Archive")}
+            active === "archivePosts" ? `text-dark dark:text-light hover:text-opacity-100` : "text-grey"
+          } hover:text-opacity-50`}
+          
         >
           Archive
         </button>
@@ -38,9 +46,9 @@ const NavButtons = () => {
       <Link to="/dashboard/dashboard">
         <button
           className={`${
-            active === "Dashboard" ? `text-dark dark:text-light` : "text-grey"
-          }`}
-          onMouseEnter={() => setActive("Dashboard")}
+            active === "dashboard" ? `text-dark dark:text-light hover:text-opacity-100` : "text-grey"
+          } hover:text-opacity-50`}
+          
         >
           Dashboard
         </button>

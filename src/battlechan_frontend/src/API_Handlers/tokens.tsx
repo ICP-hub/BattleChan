@@ -18,6 +18,11 @@ interface BackendResponse {
     };
 }
 
+interface Response {
+    status: boolean;
+    err: string;
+}
+
 const TokensApiHanlder = () => {
     // Init backend
     const [backend, canisterId] = useBackend();
@@ -27,11 +32,12 @@ const TokensApiHanlder = () => {
     // console.log(ledger);
     // // ICRC2 APPROVE
     const icrc2_approve = async (principal: string, amount: number = 1) => {
+        let result = { status: false, err: "" } as Response;
         try {
             // console.log(principal);
             const is_sufficient_balance = await getBalance(principal || "");
             // console.log(is_sufficient_balance);
-            const balance = is_sufficient_balance as bigint;
+            const balance = is_sufficient_balance;
             // console.log(Number(balance));
             let fees = 100;
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
@@ -57,11 +63,24 @@ const TokensApiHanlder = () => {
                 console.log(data);
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
                 // console.log("icrc2_approve: ", res);
-                return res;
+                if(res && res?.ok){
+                    result.status = true;
+                } else {
+                    result.status = false;
+                    const lastIndex = res?.err[1].lastIndexOf(":");
+                    const errorMsg = res?.err[1].slice(lastIndex + 2);
+                    result.err = errorMsg;
+                }
+                return result;
             } else {
+                result.status = false;
+                result.err = "Insufficient Balance!"
                 console.log("Reject");
+                return result;
             }
         } catch (err) {
+            result.status = false;
+            result.err = "Error: Something went wrong, Please try again later!";
             console.error("Error: ", err);
         }
     };
@@ -75,7 +94,8 @@ const TokensApiHanlder = () => {
             };
             const res = await ledger.icrc1_balance_of(argument);
             // console.log("balance: ", res);
-            return res;
+            let balance = (Number(res) / Math.pow(10, 8));
+            return balance;
         } catch (err) {
             console.error("Error: ", err);
         }
