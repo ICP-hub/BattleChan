@@ -36,7 +36,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
             className +
             " " +
             `laptop:w-1/2 w-full phone:px-8 px-4 py-2 ${
-              index % 2 !== 0 ? "tablet:mt-6" : ""
+              index % 2 !== 0 ? "laptop:mt-6" : ""
             }`
           }
           key={index}

@@ -345,7 +345,13 @@ const PostDetails = (props: Theme) => {
 
         <div className="w-full py-8 laptop:px-40 tablet:px-32 px-10 dark:text-[#fff] overflow-hidden">
           <h1 className="font-bold dark:text-[#fff] tablet:text-3xl mb-4 ">
-            {postsData?.postId}
+            {!dataFetched ? (
+              <Skeleton
+                w_h_p={"tablet:h-[20px] h-[10px] tablet:w-[170px] w-[120px]"}
+              />
+            ) : (
+              postsData?.postId
+            )}
           </h1>
 
           {/* post image  */}
@@ -528,11 +534,18 @@ const PostDetails = (props: Theme) => {
               <div className="mt-8">
                 {type === "archive" ? (
                   <>
-                    <Comment currentComment={commentsData} getComments={getComments} type="archive" />
+                    <Comment
+                      currentComment={commentsData}
+                      getComments={getComments}
+                      type="archive"
+                    />
                   </>
                 ) : (
                   <>
-                    <Comment currentComment={commentsData} getComments={getComments} />
+                    <Comment
+                      currentComment={commentsData}
+                      getComments={getComments}
+                    />
                   </>
                 )}
               </div>
