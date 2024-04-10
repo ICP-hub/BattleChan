@@ -229,7 +229,6 @@ const MainPosts = (props: Theme) => {
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
         });
-        console.log("fun posts: ", posts);
         setPostsData(posts);
       } else {
         setPostsData([])
