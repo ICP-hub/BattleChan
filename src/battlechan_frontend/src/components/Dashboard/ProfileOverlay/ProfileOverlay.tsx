@@ -107,11 +107,18 @@ const ProfileOverlay = (props: Props) => {
         onClick={(e) => e.stopPropagation()}
       >
         <section className="w-full flex-row-center justify-start tablet:gap-8 gap-4 px-2">
-          <img
+        <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
+            <img
+              src={fileURL}
+              
+              className="block h-full w-full object-cover rounded-md cursor-pointer"
+            />
+            </div>
+          {/* <img
             src={fileURL}
             alt="User Profile Image"
             className="tablet:w-[80px] w-[50px] rounded-lg"
-          />
+          /> */}
           <span className="text-lg">{userName} </span>
         </section>
 
