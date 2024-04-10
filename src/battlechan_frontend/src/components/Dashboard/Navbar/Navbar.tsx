@@ -80,7 +80,7 @@ const Navbar = (props: Theme) => {
     const fetchData = async () => {
       if (principal) {
         const data = await getBalance(principal || "");
-        setTokenBalance(Number(data));
+        setTokenBalance((Number(data) / Math.pow(10, 8)));
       }
     };
 

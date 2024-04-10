@@ -231,23 +231,6 @@ const PostDetails = (props: Theme) => {
     }
   };
 
-  useEffect(() => {
-    let upvoteBtn = document.getElementById("upvoteBtn");
-    let downvoteBtn = document.getElementById("downvoteBtn");
-
-    const handleUpvoteClick = () => handleUpvote(postId);
-    const handleDownvoteClick = () => handleDownvote(postId);
-
-    upvoteBtn?.addEventListener("click", handleUpvoteClick);
-    downvoteBtn?.addEventListener("click", handleDownvoteClick);
-
-    // Clean up the event listeners
-    return () => {
-      upvoteBtn?.removeEventListener("click", handleUpvoteClick);
-      downvoteBtn?.removeEventListener("click", handleDownvoteClick);
-    };
-  }, []);
-
   const handleUpvote = async (postId: string) => {
     // console.log(isConnected);
     // console.log(principal);
@@ -267,6 +250,8 @@ const PostDetails = (props: Theme) => {
           const errorMsg = data.err[1].slice(lastIndex + 2);
           toast.error(errorMsg);
         }
+      } else {
+        toast.error("Insufficient Balance!");
       }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");

@@ -11,6 +11,13 @@ const useLedger = () => {
     return useCanister("ledger");
 };
 
+interface BackendResponse {
+    ok: string;
+    err: {
+        [key: string]: string;
+    };
+}
+
 const TokensApiHanlder = () => {
     // Init backend
     const [backend, canisterId] = useBackend();
@@ -21,15 +28,17 @@ const TokensApiHanlder = () => {
     // // ICRC2 APPROVE
     const icrc2_approve = async (principal: string, amount: number = 1) => {
         try {
-            console.log(principal);
+            // console.log(principal);
             const is_sufficient_balance = await getBalance(principal || "");
-            console.log(is_sufficient_balance);
+            // console.log(is_sufficient_balance);
             const balance = is_sufficient_balance as bigint;
-            console.log(Number(balance));
+            // console.log(Number(balance));
             let fees = 100;
-            console.log(canisterId.canisterDefinition.canisterId);
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
+            const expirationTime = Date.now() + (5 * 60 * 1000); // Add 5 minutes in milliseconds
+            const expiresAt: bigint = BigInt(expirationTime);
+
             if (Number(balance) >= amnt) {
                 console.log("Approve");
                 let data = {
@@ -39,15 +48,15 @@ const TokensApiHanlder = () => {
                     created_at_time: [],
                     amount: amnt,
                     expected_allowance: [],
-                    expires_at: [],
+                    expires_at: [expiresAt],
                     spender: {
                         owner: owner,
                         subaccount: []
                     }
                 }
                 console.log(data);
-                const res = await ledger.icrc2_approve(data);
-                console.log("icrc2_approve: ", res);
+                const res = (await ledger.icrc2_approve(data)) as BackendResponse;
+                // console.log("icrc2_approve: ", res);
                 return res;
             } else {
                 console.log("Reject");
@@ -65,7 +74,7 @@ const TokensApiHanlder = () => {
                 subaccount: []
             };
             const res = await ledger.icrc1_balance_of(argument);
-            console.log("balance: ", res);
+            // console.log("balance: ", res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
