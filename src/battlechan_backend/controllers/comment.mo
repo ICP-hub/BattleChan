@@ -7,6 +7,7 @@ import Int "mo:base/Int";
 import { now } "mo:base/Time";
 import Debug "mo:base/Debug";
 import List "mo:base/List";
+import Array "mo:base/Array";
 
 import Types "../utils/types";
 
@@ -106,21 +107,45 @@ module {
             case (?value) { value };
             case (null) { Debug.trap(reject.noPost) };
         };
-        let updatedUserInfo : Types.UserInfo = {
+        switch (Array.find<Types.UserId>(commentInfo.likedBy, func x = x == userId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
+        };
+
+        switch (Array.find<Types.UserId>(commentInfo.dislikedBy, func x = x == userId)) {
+            case (?value) { Debug.trap(reject.alreadyVoted) };
+            case (null) {};
+        };
+        var updatedUserInfo : Types.UserInfo = {
             userId = userInfo.userId;
             userName = userInfo.userName;
             profileImg = userInfo.profileImg;
             upvotedTo = userInfo.upvotedTo;
             downvotedTo = userInfo.downvotedTo;
-            likedComments = List.toArray(List.push(commentId, List.fromArray(userInfo.likedComments)));
+            likedComments = userInfo.likedComments;
             createdComments = userInfo.createdComments;
             replyIds = userInfo.replyIds;
             postIds = userInfo.postIds;
             createdAt = userInfo.createdAt;
             updatedAt = ?Int.toText(now());
         };
+
         let updatedCommentInfo : Types.CommentInfo = switch (voteStatus) {
             case (#upvote) {
+
+                updatedUserInfo := {
+                    userId = userInfo.userId;
+                    userName = userInfo.userName;
+                    profileImg = userInfo.profileImg;
+                    upvotedTo = userInfo.upvotedTo;
+                    downvotedTo = userInfo.downvotedTo;
+                    likedComments = List.toArray(List.push(commentId, List.fromArray(userInfo.likedComments)));
+                    createdComments = userInfo.createdComments;
+                    replyIds = userInfo.replyIds;
+                    postIds = userInfo.postIds;
+                    createdAt = userInfo.createdAt;
+                    updatedAt = ?Int.toText(now());
+                };
                 {
                     commentId = commentInfo.commentId;
                     comment = commentInfo.comment;
