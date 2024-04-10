@@ -276,7 +276,7 @@ const Post: React.FC<PostProps> = ({
                         id
                       )}?type=archive`}
                     >
-                      <div className="small_phone:text-xs text-[10px] text-dark dark:text-light text-opacity-50">
+                      <div className="small_phone:text-xs text-[10px] text-dark dark:text-grey">
                         {timestamp} ; {id}
                       </div>
                     </Link>
@@ -331,7 +331,7 @@ const Post: React.FC<PostProps> = ({
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-md small_phone:text-1xl text-sm">
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold">
                         {userName}
                       </h1>
 
@@ -355,7 +355,7 @@ const Post: React.FC<PostProps> = ({
                       key={id}
                       to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                     >
-                      <div className="small_phone:text-xs text-[10px] text-dark dark:text-light text-opacity-50">
+                      <div className="small_phone:text-xs text-[10px] text-dark dark:text-grey">
                         {timestamp} ; {id}
                       </div>
                     </Link>

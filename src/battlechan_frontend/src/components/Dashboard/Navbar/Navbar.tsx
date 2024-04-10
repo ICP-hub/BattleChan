@@ -60,7 +60,6 @@ const Navbar = (props: Theme) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const d = await votesOfUser();
       const response = (await getProfileData()) as ProfileData;
       if (response && response.status !== false) {
         setUserName(response?.userName);

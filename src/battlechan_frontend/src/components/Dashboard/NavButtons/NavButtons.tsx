@@ -24,8 +24,8 @@ const NavButtons = () => {
       <Link to="/dashboard/mainPosts">
         <button
           className={`${
-            active === "mainPosts" ? `text-dark dark:text-light hover:text-opacity-100` : "text-grey"
-          } hover:text-opacity-50`}
+            active === "mainPosts" ? `font-semibold text-dark dark:text-light` : "text-grey"
+          } hover:text-dark hover:dark:text-light`}
           
         >
           Home
@@ -35,8 +35,8 @@ const NavButtons = () => {
       <Link to="/dashboard/archivePosts">
         <button
           className={`${
-            active === "archivePosts" ? `text-dark dark:text-light hover:text-opacity-100` : "text-grey"
-          } hover:text-opacity-50`}
+            active === "archivePosts" ? `font-semibold text-dark dark:text-light` : "text-grey"
+          } hover:text-dark hover:dark:text-light`}
           
         >
           Archive
@@ -46,8 +46,8 @@ const NavButtons = () => {
       <Link to="/dashboard/dashboard">
         <button
           className={`${
-            active === "dashboard" ? `text-dark dark:text-light hover:text-opacity-100` : "text-grey"
-          } hover:text-opacity-50`}
+            active === "dashboard" ? `font-semibold text-dark dark:text-light` : "text-grey"
+          } hover:text-dark hover:dark:text-light`}
           
         >
           Dashboard

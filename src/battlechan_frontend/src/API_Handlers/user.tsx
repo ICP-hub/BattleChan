@@ -169,7 +169,6 @@ const UserApiHanlder = () => {
   const votesOfUser  = async () => {
     try {
       const response = (await backend.votesOfUser ()) as BackendResponse;
-      console.log("votesofuser", response);
       if (response && response.status !== false) {
         console.log(response);
         
