@@ -165,6 +165,21 @@ const UserApiHanlder = () => {
       return undefined;
     }
   }
+  
+  const votesOfUser  = async () => {
+    try {
+      const response = (await backend.votesOfUser ()) as BackendResponse;
+      console.log("votesofuser", response);
+      if (response && response.status !== false) {
+        console.log(response);
+        
+      }
+      // console.log("votes of user res.data: ", response.data)
+    } catch (err) {
+      console.error("Error getting user info: ", err);
+      return undefined;
+    }
+  }
 
 
   // Returns
@@ -175,7 +190,8 @@ const UserApiHanlder = () => {
     getUserInfo,
     getPostInfo,
     getProfileData,
-    getUserAnalytics
+    getUserAnalytics,
+    votesOfUser
   };
 };
 

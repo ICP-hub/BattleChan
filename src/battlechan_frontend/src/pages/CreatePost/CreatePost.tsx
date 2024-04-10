@@ -183,7 +183,7 @@ const CreatePost = (props: Theme) => {
           </h1>
 
           <div className="big_tablet:h-[80vh] border border-light-green rounded-lg big_tablet:gap-8 gap-6 laptop:p-8 tablet:p-6 p-4 laptop:mx-20 tablet:mx-10 mx-6 bg-transparent big_tablet:flex-row-center flex flex-col">
-            <section className="big_tablet:w-1/2 w-full h-full tablet:text-base phone:text-sm text-xs flex flex-col items-start big_tablet:gap-0 gap-3">
+            <section className="big_tablet:w-1/2 w-full h-full tablet:text-base small_phone:text-sm text-xs flex flex-col items-start big_tablet:gap-0 gap-3">
               <label className="font-semibold tablet:py-4 py-0" htmlFor="title">
                 Your Title *
               </label>

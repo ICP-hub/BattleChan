@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useConnect } from "@connect2ic/react";
@@ -21,6 +19,7 @@ import TimeComponent from "./TimeComponent";
 
 interface PostProps {
   id: string;
+  post: object;
   postName: string;
   imageUrl: Int8Array;
   userAvatarUrl: string;
@@ -59,6 +58,7 @@ interface Response {
 
 const Post: React.FC<PostProps> = ({
   id,
+  post,
   postName,
   imageUrl,
   userAvatarUrl,
@@ -213,7 +213,8 @@ const Post: React.FC<PostProps> = ({
       className={
         className +
         " " +
-        `flex flex-col gap-4 xl:p-5 p-3 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
+        `flex flex-col small_phone:gap-4 gap-2 xl:p-5 small_phone:p-3 p-2 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${
+          type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
         }`
       }
     >
@@ -227,31 +228,27 @@ const Post: React.FC<PostProps> = ({
                 id
               )}?type=archive`}
             >
-              {(
-                <img
-                  alt="post image"
-                  className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
-                  src={convertInt8ToBase64(imageUrl)}
-                />
-              ) || <Skeleton />}
+              <img
+                alt="post image"
+                className={`block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover`}
+                src={convertInt8ToBase64(imageUrl)}
+              />
             </Link>
 
             <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
               {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
-                  {(
-                    <img
-                      className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                      src={convertInt8ToBase64(userProfile)}
-                      alt="user avatar"
-                    />
-                  ) || <Skeleton />}
+                  <img
+                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    src={convertInt8ToBase64(userProfile)}
+                    alt="user avatar"
+                  />
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-lg text-1xl">
-                        {userName || <Skeleton />}
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm">
+                        {userName}
                       </h1>
 
                       {/* Time */}
@@ -267,9 +264,7 @@ const Post: React.FC<PostProps> = ({
                           className={`${type === "archive" ? "text-red" : "text-light-green"
                             }`}
                         >
-                          {type === "archive"
-                            ? "0:00 "
-                            : `${time || <Skeleton />} `}
+                          {type === "archive" ? "0:00 " : `${time} `}
                         </span>
                         left
                       </button>
@@ -281,8 +276,8 @@ const Post: React.FC<PostProps> = ({
                         id
                       )}?type=archive`}
                     >
-                      <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
-                        {timestamp || <Skeleton />} ; {id || <Skeleton />}
+                      <div className="small_phone:text-xs text-[10px] text-dark dark:text-light text-opacity-50">
+                        {timestamp} ; {id}
                       </div>
                     </Link>
                   </div>
@@ -298,12 +293,12 @@ const Post: React.FC<PostProps> = ({
                   )}?type=archive`}
                 >
                   <p className="tablet:text-lg text-sm font-semibold">
-                    {postName || <Skeleton />}
+                    {postName}
                   </p>
-                  <p className="tablet:text-lg text-sm text-gray-800">
-                    {(content.length > 70
+                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
+                    {content.length > 70
                       ? `${content.slice(0, 70)}...`
-                      : content) || <Skeleton count={2} />}
+                      : content}
                   </p>
                 </Link>
               </section>
@@ -319,27 +314,25 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className={`block xl:w-28 phone:w-24 w-20 rounded-lg aspect-square object-cover`}
+                className={`block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover`}
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
 
-            <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
+            <div className="laptop:w-4/5 w-5/6 flex flex-col small_phone:gap-2 gap-1">
               {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
-                  {(
-                    <img
-                      className={`block rounded-full aspect-square w-8 tablet:w-10`}
-                      src={convertInt8ToBase64(userProfile)}
-                      alt="user avatar"
-                    />
-                  ) || <Skeleton />}
+                  <img
+                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    src={convertInt8ToBase64(userProfile)}
+                    alt="user avatar"
+                  />
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-lg text-1xl">
-                        {userName || <Skeleton />}
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm">
+                        {userName}
                       </h1>
 
                       {/* Time */}
@@ -347,7 +340,13 @@ const Post: React.FC<PostProps> = ({
                         className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green hover:text-darkcursor-pointer"
                         onClick={() => setShowOverlay(true)}
                       >
-                        <TimeComponent expireAt={expireAt} id={id} />
+                        <span
+                          className={`${
+                            type === "archive" ? "text-red" : "text-light-green"
+                          }`}
+                        >
+                          {type === "archive" ? "0:00 " : `${time} `}
+                        </span>
                         left
                       </button>
                     </div>
@@ -356,8 +355,8 @@ const Post: React.FC<PostProps> = ({
                       key={id}
                       to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                     >
-                      <div className="tablet:text-sm text-xs text-dark dark:text-light text-opacity-50">
-                        {timestamp || <Skeleton />} ; {id || <Skeleton />}
+                      <div className="small_phone:text-xs text-[10px] text-dark dark:text-light text-opacity-50">
+                        {timestamp} ; {id}
                       </div>
                     </Link>
                   </div>
@@ -371,12 +370,12 @@ const Post: React.FC<PostProps> = ({
                   to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                 >
                   <p className="tablet:text-lg text-sm font-semibold">
-                    {postName || <Skeleton />}
+                    {postName}
                   </p>
-                  <p className="tablet:text-lg text-sm text-gray-800">
-                    {(content.length > 70
+                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
+                    {content.length > 70
                       ? `${content.slice(0, 70)}...`
-                      : content) || <Skeleton />}
+                      : content}
                   </p>
                 </Link>
               </section>
@@ -389,7 +388,7 @@ const Post: React.FC<PostProps> = ({
       <section className="flex-row-center justify-between">
         {/* upvote and downvote button  */}
 
-        <div className="buttons flex-row-center gap-2 ml-3 phone:text-4xl text-2xl">
+        <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
             className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
               } cursor-pointer`}
@@ -406,7 +405,7 @@ const Post: React.FC<PostProps> = ({
         </div>
 
         {/* likes and comments  */}
-        <div className="flex-row-center tablet:text-lg text-sm gap-2 justify-end">
+        <div className="flex-row-center tablet:text-lg small_phone:text-sm text-xs gap-2 justify-end">
           <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
             <MdOutlineVerifiedUser />
             <span>{likes}</span>
