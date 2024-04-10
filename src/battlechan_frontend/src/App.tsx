@@ -7,7 +7,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./AppRoutes"; // Make sure the path is correct
 import { Toaster } from "react-hot-toast";
 import ClientSetup from "./ClientSetup"; // Import the ClientSetup component
-import { SkeletonTheme } from "react-loading-skeleton";
 
 type Theme = "dark" | "light";
 
@@ -35,14 +34,10 @@ function App() {
 
   return (
     // <Provider store={store}>
-
-    <SkeletonTheme baseColor="#313131" highlightColor="#525252">
-      <Router>
-        <Toaster />
-        <AppRoutes handleThemeSwitch={handleThemeSwitch} />
-      </Router>
-    </SkeletonTheme>
-
+    <Router>
+      <Toaster />
+      <AppRoutes handleThemeSwitch={handleThemeSwitch} />
+    </Router>
     // </Provider>
   );
 }

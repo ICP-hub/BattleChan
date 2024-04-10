@@ -21,10 +21,10 @@ import { TbSquareChevronDownFilled } from "react-icons/tb";
 import Constant from "../../utils/constants";
 import PostApiHanlder from "../..//API_Handlers/post";
 import CommentsApiHanlder from "../../API_Handlers/comments";
-
-import UserApiHanlder from "../../API_Handlers/user";
-import { MdOutlineEmojiEmotions } from "react-icons/md";
 import TokensApiHanlder from "../../API_Handlers/tokens";
+import UserApiHanlder from "../../API_Handlers/user";
+
+import Skeleton from "../../components/Skeleton/Skeleton";
 import TimeComponent from "../MainPosts/TimeComponent";
 
 type Theme = {
@@ -95,9 +95,7 @@ interface commentResponse {
 }
 
 const PostDetails = (props: Theme) => {
-  const postId: string = useParams().postId ?? "";
-  const decodedPostId = decodeURIComponent(postId);
-  // const [time, setTime] = useState("0:00");
+  const [time, setTime] = useState("0:00");
   const [postsData, setPostsData] = useState<PostInfo>();
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
@@ -107,7 +105,10 @@ const PostDetails = (props: Theme) => {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
+  const [dataFetched, setDataFetched] = useState<boolean>(false);
   const type = searchParams.get("type");
+  const postId: string = useParams().postId ?? "";
+  const decodedPostId = decodeURIComponent(postId);
 
   const {
     getSingleMainPost,
@@ -167,24 +168,47 @@ const PostDetails = (props: Theme) => {
       } else {
         response = (await getSingleMainPost(postId)) as BackendResponse;
       }
+
+      // console.log(response);
+
       if (response.status === true && response.data) {
-        console.log(response);
+        // console.log(response);
+
         const posts = response.data.flat(); // Flatten nested arrays if any
         posts.forEach((element: any) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          console.log(timestamp);
+          // console.log(timestamp);
+
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
           // console.log("UPVOTE", element.upvotes);
 
+          const interval = setInterval(
+            (expireAt: BigInt) => {
+              const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
+              const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+
+              if (remainingTime <= 0) {
+                clearInterval(interval);
+                setTime("0:00");
+                console.log("Post archived");
+              } else {
+                setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+              }
+            },
+            1000,
+            BigInt(element.expireAt)
+          );
         });
         let data = posts[0];
         setPostsData(data);
+        setDataFetched(true);
         console.log(postsData);
       }
     } catch (error) {
+      setDataFetched(false);
       console.error("Error fetching posts:", error);
     }
   }
@@ -319,60 +343,80 @@ const PostDetails = (props: Theme) => {
           <NavButtons />
         </div>
 
-        <div className="w-full py-11 laptop:px-40 tablet:px-32 px-10 dark:text-[#fff] overflow-hidden">
-          <h1 className="font-bold dark:text-[#fff] mb-2 tablet:text-3xl tablet:mb-8">
-            {postsData?.postId}
+        <div className="w-full py-8 laptop:px-40 tablet:px-32 px-10 dark:text-[#fff] overflow-hidden">
+          <h1 className="font-bold dark:text-[#fff] tablet:text-3xl mb-4 ">
+            {!dataFetched ? (
+              <Skeleton
+                w_h_p={"tablet:h-[20px] h-[10px] tablet:w-[170px] w-[120px]"}
+              />
+            ) : (
+              postsData?.postId
+            )}
           </h1>
 
           {/* post image  */}
-          <div className="max-w-3xl">
-            <img
-              className="block h-auto w-full"
-              src={convertInt8ToBase64(postsData?.postMetaData || undefined)}
-              alt="post image"
-              loading="lazy" />
+          <div className="max-w-2xl h-auto">
+            {!dataFetched ? (
+              <Skeleton w_h_p={"w-full tablet:h-[60dvh] h-[400px]"} />
+            ) : (
+              <img
+                className="block h-auto w-full rounded-3xl"
+                src={convertInt8ToBase64(postsData?.postMetaData || undefined)}
+                alt="post image"
+                loading="lazy"
+              />
+            )}
 
             <div className="mt-4 flex items-center text-[9px] tablet:px-2 tablet:text-sm justify-between">
-              <div className="flex items-center gap-4">
-                <div
-                  className={`flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
-                >
-                  <MdOutlineVerifiedUser />
-                  <span>{postsData?.upvotes}</span>
-                </div>
+              {!dataFetched ? (
+                <Skeleton
+                  w_h_p={"tablet:h-[20px] h-[10px] tablet:w-[160px] w-[120px]"}
+                />
+              ) : (
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`flex flex phone:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  >
+                    <MdOutlineVerifiedUser />
+                    <span>{postsData?.upvotes}</span>
+                  </div>
 
-                <div
-                  className={`flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
-                >
-                  <LiaCommentSolid />
-                  <span>{commentsCount} Comments</span>
+                  <div
+                    className={`flex phone:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                  >
+                    <LiaCommentSolid />
+                    <span>{commentsCount} Comments</span>
+                  </div>
                 </div>
-
-                {/* <div className="hidden tablet:flex tablet:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1">
-                  <PiShareFatBold />
-                  <span>{135} Share</span>
-                </div> */}
-              </div>
+              )}
 
               <div className="text-lg">
-                <TimeComponent expireAt={postsData?.expireAt ?? 0n} id={postsData?.postId ?? ""} />{" "}
+                <span
+                  className={` ${
+                    type === "archive" ? "text-red" : "text-[#18AF00]"
+                  }`}
+                >
+                  {time}
+                </span>{" "}
                 min left
               </div>
             </div>
           </div>
 
           {/* upvote and downvote button  */}
-          <div className="flex gap-2 text-3xl mt-4 tablet:mt-11">
+          <div className="flex gap-2 phone:text-5xl text-3xl mt-4 tablet:mt-11">
             <TbSquareChevronUpFilled
-              className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${
+                vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
-              className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${
+                !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />
@@ -382,28 +426,55 @@ const PostDetails = (props: Theme) => {
           <div className="flex justify-between items-center mt-5 tablet:justify-start tablet:gap-8 tablet:mt-14">
             <div className="flex gap-2 items-center justify-center">
               {/* <div className="w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded"> */}
-              <div className="w-9 h-9 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex justify-center rounded">
-                <img
-                  src={convertInt8ToBase64(postsData?.createdBy.userProfile)}
-                  alt="Profile Image"
-                  className="block h-full w-full object-cover rounded"
-                />
+              <div className="w-9 h-9 phone:w-20 phone:h-20 bg-[#686868] text-[#fff] flex justify-center rounded">
+                {!dataFetched ? (
+                  <Skeleton w_h_p={"w-full h-full"} />
+                ) : (
+                  <img
+                    src={convertInt8ToBase64(postsData?.createdBy.userProfile)}
+                    alt="Profile Image"
+                    className="block h-full w-full object-cover rounded"
+                  />
+                )}
               </div>
-              <h1 className="font-semibold tablet:text-lg text-sm">
-                {postsData?.createdBy.userName}
-              </h1>
-            </div>
 
-            <div className="tablet:text-xs text-[10px] text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50">
-              {postsData?.createdAt}; {postsData?.postId}
+              {!dataFetched ? (
+                <Skeleton
+                  w_h_p={"tablet:h-[20px] h-[10px] tablet:w-[250px] w-[200px]"}
+                />
+              ) : (
+                <React.Fragment>
+                  <h1 className="font-semibold phone:text-2xl text-sm">
+                    {postsData?.createdBy.userName}
+                  </h1>
+
+                  <div className="phone:text-xs text-[10px] text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50">
+                    {postsData?.createdAt}; {postsData?.postId}
+                  </div>
+                </React.Fragment>
+              )}
             </div>
           </div>
 
           {/* post catalog name and post content and comment */}
           <div className="mt-8 tablet:text-lg tablet:mt-10">
-            <h1 className="font-bold mb-3">{postsData?.postName}</h1>
+            <h1 className="font-bold mb-3">
+              {!dataFetched ? (
+                <Skeleton w_h_p={"h-[20px] w-[100%]"} />
+              ) : (
+                postsData?.postName
+              )}
+            </h1>
+
             <div className="dark:text-[#fff] dark:text-opacity-50 text-sm tablet:text-base">
-              {postsData?.postDes}
+              {!dataFetched ? (
+                <React.Fragment>
+                  <Skeleton w_h_p={"h-[10px] w-[100%] my-1"} />
+                  <Skeleton w_h_p={"h-[10px] w-[100%]"} />
+                </React.Fragment>
+              ) : (
+                postsData?.postDes
+              )}
             </div>
           </div>
 
@@ -412,7 +483,7 @@ const PostDetails = (props: Theme) => {
             <div className="tablet:hidden my-8">
               <button
                 onClick={() => setShowComments(true)}
-                className={`small-button bg-transparent dark:text-light cursor-pointer font-semibold`}
+                className={`small-button bg-dark dark:bg-light text-light dark:text-dark cursor-pointer font-semibold`}
               >
                 See Comments
               </button>
@@ -463,11 +534,18 @@ const PostDetails = (props: Theme) => {
               <div className="mt-8">
                 {type === "archive" ? (
                   <>
-                    <Comment currentComment={commentsData} getComments={getComments} type="archive" />
+                    <Comment
+                      currentComment={commentsData}
+                      getComments={getComments}
+                      type="archive"
+                    />
                   </>
                 ) : (
                   <>
-                    <Comment currentComment={commentsData} getComments={getComments} />
+                    <Comment
+                      currentComment={commentsData}
+                      getComments={getComments}
+                    />
                   </>
                 )}
               </div>

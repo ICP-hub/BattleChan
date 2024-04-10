@@ -1,0 +1,13 @@
+.skeleton {
+  animation: loading 1s ease infinite alternate;
+  border-radius: 10px;
+}
+
+@keyframes loading {
+  from {
+    background-color: #181818;
+  }
+  to {
+    background-color: rgb(44, 55, 41);
+  }
+}

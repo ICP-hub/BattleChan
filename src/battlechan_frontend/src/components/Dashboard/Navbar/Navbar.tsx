@@ -162,7 +162,7 @@ const Navbar = (props: Theme) => {
             <button
               className={
                 className +
-                "__connectWalletBtn flex-row-center bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
+                "__connectWalletBtn flex-row-center text-light bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
               }
             >
               <NavConnectButton />
@@ -199,7 +199,7 @@ const Navbar = (props: Theme) => {
             <button
               className={
                 className +
-                "__connectWalletBtn flex-row-center bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
+                "__connectWalletBtn text-light flex-row-center bg-dirty-light-green rounded-[3rem] tablet:px-6 px-3 tablet:py-4 py-2.5"
               }
             >
               <NavConnectButton />
