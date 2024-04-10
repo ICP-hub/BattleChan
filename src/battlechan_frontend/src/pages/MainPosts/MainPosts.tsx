@@ -85,6 +85,12 @@ const MainPosts = (props: Theme) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
+  const [currentPosts, setCurrentPosts] = useState<PostInfo[]>([])
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // const currentPosts = postsData.slice(indexOfFirstPost, indexOfLastPost);
+  // console.log(currentPosts);
 
   const { convertNanosecondsToTimestamp } = Constant();
   const {
@@ -233,18 +239,22 @@ const MainPosts = (props: Theme) => {
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
         });
-        // console.log(posts);
+        console.log("fun posts: ", posts);
         setPostsData(posts);
+      } else {
+        setPostsData([])
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
   }
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = postsData.slice(indexOfFirstPost, indexOfLastPost);
-  // console.log(currentPosts);
+  useEffect(() => {
+    setCurrentPosts(postsData.slice(indexOfFirstPost, indexOfLastPost))
+  }, [postsData, selectedBoard, currentPage])
+  
+
+
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
