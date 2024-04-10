@@ -122,16 +122,20 @@ const PostDetails = (props: Theme) => {
   const { icrc2_approve } = TokensApiHanlder();
   let { isConnected, principal } = useConnect();
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [principal_id, setPrincipal_id] = useState("");
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+  const principal_idRef = React.useRef(principal_id);
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
-  }, [isUserAuthenticated]);
+    principal_idRef.current = principal_id;
+  }, [isUserAuthenticated, principal_id]);
 
   useEffect(() => {
     const checkAuthentication = async () => {
       if (isConnected && principal) {
         setIsUserAuthenticated(true);
+        setPrincipal_id(principal);
       }
     };
 
@@ -252,18 +256,18 @@ const PostDetails = (props: Theme) => {
     }
     console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
-      // const is_approved = await icrc2_approve();
-      // if(is_approved){
-      const data = (await upvotePost(postId)) as VoteResponse;
-      if (data && data?.ok) {
-        // toast.success(data?.ok);
-        toast.success("Successfully Upvoted Post!");
-      } else {
-        const lastIndex = data.err[1].lastIndexOf(":");
-        const errorMsg = data.err[1].slice(lastIndex + 2);
-        toast.error(errorMsg);
+      const is_approved = await icrc2_approve(principal_idRef.current);
+      if (is_approved) {
+        const data = (await upvotePost(postId)) as VoteResponse;
+        if (data && data?.ok) {
+          // toast.success(data?.ok);
+          toast.success("Successfully Upvoted Post!");
+        } else {
+          const lastIndex = data.err[1].lastIndexOf(":");
+          const errorMsg = data.err[1].slice(lastIndex + 2);
+          toast.error(errorMsg);
+        }
       }
-      // }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
       // navigate("/");

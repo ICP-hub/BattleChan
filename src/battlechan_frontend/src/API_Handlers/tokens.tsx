@@ -19,15 +19,18 @@ const TokensApiHanlder = () => {
     const { principal, isConnected } = useConnect();
     // console.log(ledger);
     // // ICRC2 APPROVE
-    const icrc2_approve = async (amount: number = 1) => {
+    const icrc2_approve = async (principal: string, amount: number = 1) => {
         try {
+            console.log(principal);
             const is_sufficient_balance = await getBalance(principal || "");
-            const balance = 100000100n as bigint;
+            console.log(is_sufficient_balance);
+            const balance = is_sufficient_balance as bigint;
             console.log(Number(balance));
             let fees = 100;
+            console.log(canisterId.canisterDefinition.canisterId);
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
-            if (Number(is_sufficient_balance) >= amnt) {
+            if (Number(balance) >= amnt) {
                 console.log("Approve");
                 let data = {
                     fee: [fees],
@@ -62,7 +65,7 @@ const TokensApiHanlder = () => {
                 subaccount: []
             };
             const res = await ledger.icrc1_balance_of(argument);
-            // console.log("balance: ", res);
+            console.log("balance: ", res);
             return res;
         } catch (err) {
             console.error("Error: ", err);
