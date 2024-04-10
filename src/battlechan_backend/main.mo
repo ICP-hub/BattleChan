@@ -22,7 +22,7 @@ import {
   postArchive;
   updateVoteStatus;
   bubbleSortPost;
-  updatePostExpireTime;
+  // updatePostExpireTime;
   withdraw;
   claim;
 } "controllers/post";
@@ -147,7 +147,7 @@ actor BattleChan {
             spender_subaccount = null;
             from = { owner = userId; subaccount = null };
             to = { owner = backendCanisterId; subaccount = null };
-            amount = (voteTime * decimal) + transactionFee;
+            amount = voteTime * decimal;
             fee = ?transactionFee;
             memo = null;
             created_at_time = null;
@@ -155,7 +155,7 @@ actor BattleChan {
           switch (paymentStatus) {
             case (#Ok(index)) {};
             case (#Err(userId)) {
-              throw Error.reject("Internal Error!");
+              throw Error.reject(debug_show (userId));
             };
           };
         };
@@ -549,7 +549,47 @@ actor BattleChan {
       };
     };
   };
+  public shared query ({ caller = userId }) func votesOfUser() : async Types.Result_1<{ active : { upvotes : [Types.PostId]; downvotes : [Types.PostId] }; archived : { upvotes : [Types.PostId]; downvotes : [Types.PostId] } }> {
 
+    let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?notFound.noUser };
+      };
+    };
+    var activeUpvotes = List.nil<Types.PostId>();
+    var activeDownvotes = List.nil<Types.PostId>();
+
+    var archivedUpvotes = List.nil<Types.PostId>();
+    var archivedDownvotes = List.nil<Types.PostId>();
+    for (item in userInfo.upvotedTo.vals()) {
+      switch (Trie.get(postTrieMap, textKey item, Text.equal)) {
+        case (null) { archivedUpvotes := List.push(item, archivedUpvotes) };
+        case (?value) {
+          activeUpvotes := List.push(item, activeUpvotes);
+        };
+      };
+    };
+    for (item in userInfo.downvotedTo.vals()) {
+      switch (Trie.get(postTrieMap, textKey item, Text.equal)) {
+        case (null) { archivedDownvotes := List.push(item, archivedDownvotes) };
+        case (?value) {
+          activeDownvotes := List.push(item, activeDownvotes);
+        };
+      };
+    };
+    let userVotesData = {
+      active = {
+        upvotes = List.toArray(activeUpvotes);
+        downvotes = List.toArray(activeDownvotes);
+      };
+      archived = {
+        upvotes = List.toArray(archivedUpvotes);
+        downvotes = List.toArray(archivedDownvotes);
+      };
+    };
+    return { data = ?userVotesData; status = false; error = ?notFound.noUser };
+  };
   public shared ({ caller = userId }) func getAllCommentOfUser() : async Types.Result_1<[(Types.CommentId, Types.CommentInfo)]> {
 
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
@@ -640,7 +680,7 @@ actor BattleChan {
     };
     return { data = ?allData; status = true; error = null };
   };
-  
+
   public query func getBoardData(boardName : Types.BoardName) : async ?Types.BoardInfo {
     Trie.get(boardTrieMap, textKey boardName, Text.equal);
   };
