@@ -24,9 +24,13 @@ let comments = 0;
 const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
   const className = "Dashboard__MainPosts__Posts";
 
+  if(currentPosts.length <= 0){
+    return <><h1 className="text-center my-4">No Posts Exists</h1></>
+  }
+
   return (
     <React.Fragment>
-      {currentPosts.map((post, index) => (
+      {currentPosts.length > 0 && currentPosts.map((post, index) => (
         <div
           className={
             className +
