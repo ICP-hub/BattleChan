@@ -460,7 +460,7 @@ const MainPosts = (props: Theme) => {
         </div>
 
         {/* posts  */}
-        <div className="xl:px-10 small_phone:mt-8 mt-4 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
+        <div className="xl:px-10 small_phone:mt-8 mt-4 px-4 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
           {!dataFetched ? (
             <CardSkeleton />
           ) : (
@@ -476,10 +476,10 @@ const CardSkeleton = () => {
   return (
     <React.Fragment>
       <Skeleton
-        w_h_p={"laptop:w-1/2 w-full tablet:h-[180px] h-[160px] my-2 px-8"}
+        w_h_p={"laptop:w-1/2 w-full tablet:h-[180px] h-[160px] my-2 px-2"}
       />
       <Skeleton
-        w_h_p={"laptop:w-1/2 w-full tablet:h-[180px] h-[160px] mt-6 my-2 px-8"}
+        w_h_p={"laptop:w-1/2 w-full tablet:h-[180px] h-[160px] my-2 px-2"}
       />
     </React.Fragment>
   );
