@@ -10,6 +10,7 @@ import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
+import Option "mo:base/Option";
 
 import Types "utils/types";
 
@@ -23,6 +24,7 @@ import {
   updateVoteStatus;
   bubbleSortPost;
   // updatePostExpireTime;
+  createTrieMapOfArchivedPost;
   withdraw;
   claim;
 } "controllers/post";
@@ -119,6 +121,7 @@ actor BattleChan {
       let postId : Types.PostId = "#" # Nat32.toText(getUniqueId());
       insertNameNode(postData.postName, postId);
       let { updatedBoardInfo; updatedUserInfo; newPost } = createPostInfo(boardId, freePostTime, postId, userId, postData, userTrieMap, boardTrieMap);
+
       boardTrieMap := Trie.put(boardTrieMap, textKey boardId, Text.equal, updatedBoardInfo).0;
       userTrieMap := Trie.put(userTrieMap, principalKey userId, Principal.equal, updatedUserInfo).0;
       postTrieMap := Trie.put(postTrieMap, textKey postId, Text.equal, newPost).0;
@@ -358,7 +361,7 @@ actor BattleChan {
     return { data = ?List.toArray(allPosts); status = true; error = null };
   };
 
-  public query func searchPost(postName : Text) : async [Text] {
+  public query func searchPost(postName : Text, postType : { #active; #archived }) : async [Any] {
     var node = postNameRootNode;
     var result : [Text] = [];
     for (char in Text.toIter(postName)) {
@@ -369,7 +372,32 @@ actor BattleChan {
       };
     };
     result := Search.collectUsers(node, result);
-    return result;
+    let archivedPostArray = createTrieMapOfArchivedPost(userAchivedPostTrie);
+    let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPostArray.vals(), Text.equal, Text.hash);
+
+    switch (postType) {
+      case (#active) {
+        var data = List.nil<Any>();
+        for (item in result.vals()) {
+          let post = Trie.get(postTrieMap, textKey item, Text.equal);
+          if (Option.isSome(post) == true) {
+            data := List.push(post, data);
+          };
+        };
+        return List.toArray(data);
+      };
+
+      case (#archived) {
+        var data = List.nil<Any>();
+        for (item in result.vals()) {
+          let post = userArchivedPostsMap.get(item);
+          if (Option.isSome(post) == true) {
+            data := List.push(post, data);
+          };
+        };
+        return List.toArray(data);
+      };
+    };
   };
 
   public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
@@ -381,18 +409,9 @@ actor BattleChan {
     };
     { data = ?postInfo; status = true; error = null };
   };
-  func createTrieMapOfArchivedPost() : [(Types.PostId, Types.PostInfo)] {
-    let archivedPostList : [List.List<(Types.PostId, Types.PostInfo)>] = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
-    var archivedPosts = List.nil<(Types.PostId, Types.PostInfo)>();
-    for (item in archivedPostList.vals()) {
-      archivedPosts := List.append<(Types.PostId, Types.PostInfo)>(archivedPosts, item);
-    };
-    List.toArray(archivedPosts);
-    // let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(List.toArray(archivedPosts).vals(), Text.equal, Text.hash);
-  };
 
   public query func getSingleArchivedPost(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
-    let archivedPosts = createTrieMapOfArchivedPost();
+    let archivedPosts = createTrieMapOfArchivedPost(userAchivedPostTrie);
     let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPosts.vals(), Text.equal, Text.hash);
 
     switch (userArchivedPostsMap.get(postId)) {
@@ -467,8 +486,8 @@ actor BattleChan {
     };
 
     let sortedData : [var Types.PostRes] = bubbleSortPost(Array.thaw<Types.PostRes>(List.toArray(listPost)), filterOptions);
-
-    let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData), chunk_size);
+    let reverseData : [Types.PostRes] = Array.reverse<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData));
+    let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(reverseData, chunk_size);
 
     if (paginatedPostInfo.size() < pageNo or pageNo < 1) {
       return { data = null; status = false; error = ?notFound.noPageExist };
@@ -525,8 +544,9 @@ actor BattleChan {
       return { data = ?postArray; status = true; error = null };
     };
     let sortedData : [var Types.PostRes] = bubbleSortPost(Array.thaw<Types.PostRes>(postArray), filterOptions);
+    let reverseData : [Types.PostRes] = Array.reverse<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData));
 
-    let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(Array.freeze<Types.PostRes>(sortedData), chunk_size);
+    let paginatedPostInfo : [[Types.PostRes]] = paginate<Types.PostRes>(reverseData, chunk_size);
 
     if (paginatedPostInfo.size() < pageNo or pageNo < 1) {
       return { data = null; status = false; error = ?notFound.noPageExist };
@@ -607,7 +627,7 @@ actor BattleChan {
     var activeComment = List.nil<(Types.CommentId, Types.CommentInfo)>();
     var archivedComment = List.nil<(Types.CommentId, Types.CommentInfo)>();
 
-    let archivedPost = createTrieMapOfArchivedPost();
+    let archivedPost = createTrieMapOfArchivedPost(userAchivedPostTrie);
     let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPost.vals(), Text.equal, Text.hash);
 
     for (item in userInfo.createdComments.vals()) {

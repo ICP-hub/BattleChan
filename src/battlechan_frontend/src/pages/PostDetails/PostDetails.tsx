@@ -152,13 +152,13 @@ const PostDetails = (props: Theme) => {
     getPostDetail(decodedPostId);
   }, [is700px]);
 
-  // const formatTime = (remainingTime: bigint) => {
-  //   const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-  //   const minutes = Math.floor(seconds / 60); // Get remaining minutes
-  //   const remainingSeconds = seconds % 60; // Get remaining seconds
-  //   // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
-  //   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  // };
+  const formatTime = (remainingTime: bigint) => {
+    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
+    const minutes = Math.floor(seconds / 60); // Get remaining minutes
+    const remainingSeconds = seconds % 60; // Get remaining seconds
+    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
 
   async function getPostDetail(postId: string) {
     try {
@@ -392,9 +392,8 @@ const PostDetails = (props: Theme) => {
 
               <div className="text-lg">
                 <span
-                  className={` ${
-                    type === "archive" ? "text-red" : "text-[#18AF00]"
-                  }`}
+                  className={` ${type === "archive" ? "text-red" : "text-[#18AF00]"
+                    }`}
                 >
                   {time}
                 </span>{" "}
@@ -406,17 +405,15 @@ const PostDetails = (props: Theme) => {
           {/* upvote and downvote button  */}
           <div className="flex gap-2 phone:text-5xl text-3xl mt-4 tablet:mt-11">
             <TbSquareChevronUpFilled
-              className={`${
-                vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
-              className={`${
-                !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />

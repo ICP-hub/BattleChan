@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
 import CommentsApiHanlder from "../../API_Handlers/comments";
+import TokensApiHanlder from "../../API_Handlers/tokens";
+
 import Constant from "../../utils/constants";
 import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
 // import TokensApiHanlder from "../../../API_Handlers/tokens";
@@ -46,6 +48,11 @@ interface CommentsResponse {
   error: string[];
 }
 
+interface Response {
+  status: boolean;
+  err: string;
+}
+
 const Post: React.FC<PostProps> = ({
   id,
   postName,
@@ -69,7 +76,10 @@ const Post: React.FC<PostProps> = ({
   const { upvotePost, archivePost, downvotePost } = PostApiHanlder();
   const { getAllComments } = CommentsApiHanlder();
   const { convertInt8ToBase64 } = Constant();
+  const { icrc2_approve } = TokensApiHanlder();
   let { isConnected, principal } = useConnect();
+  const [principal_id, setPrincipal_id] = useState("");
+  const principal_idRef = React.useRef(principal_id);
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
   const navigate = useNavigate();
 
@@ -78,7 +88,8 @@ const Post: React.FC<PostProps> = ({
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
-  }, [isUserAuthenticated]);
+    principal_idRef.current = principal_id;
+  }, [isUserAuthenticated, principal_id]);
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -93,6 +104,7 @@ const Post: React.FC<PostProps> = ({
     const checkAuthentication = async () => {
       if (isConnected && principal) {
         setIsUserAuthenticated(true);
+        setPrincipal_id(principal);
       }
     };
 
@@ -120,20 +132,23 @@ const Post: React.FC<PostProps> = ({
   }, [expireAt]); // Run effect when expireAt changes
 
   const handleUpvote = async (postId: string) => {
-    // console.log(isConnected);
-    // console.log(principal);
-    // console.log(isUserAuthenticatedRef.current);
-    // const data = await icrc2_approve();
-    // console.log(data);
+    if (type === "archive") {
+      return;
+    }
     if (isUserAuthenticatedRef.current) {
-      const data = (await upvotePost(postId)) as VoteResponse;
-      if (data && data?.ok) {
-        // toast.success(data?.ok);
-        toast.success("Successfully Upvoted Post!");
+      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      if (is_approved.status == true) {
+        const data = (await upvotePost(postId)) as VoteResponse;
+        if (data && data?.ok) {
+          // toast.success(data?.ok);
+          toast.success("Successfully Upvoted Post!");
+        } else {
+          const lastIndex = data.err[1].lastIndexOf(":");
+          const errorMsg = data.err[1].slice(lastIndex + 2);
+          toast.error(errorMsg);
+        }
       } else {
-        const lastIndex = data.err[1].lastIndexOf(":");
-        const errorMsg = data.err[1].slice(lastIndex + 2);
-        toast.error(errorMsg);
+        toast.error(is_approved.err);
       }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
@@ -141,16 +156,22 @@ const Post: React.FC<PostProps> = ({
   };
 
   const handleDownvote = async (postId: string) => {
-    // console.log(isConnected);
-    // console.log(principal);
+    if (type === "archive") {
+      return;
+    }
     if (isUserAuthenticatedRef.current) {
-      const data = (await downvotePost(postId)) as VoteResponse;
-      if (data && data?.ok) {
-        toast.success("Successfully Downvoted Post!");
+      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      if (is_approved.status == true) {
+        const data = (await downvotePost(postId)) as VoteResponse;
+        if (data && data?.ok) {
+          toast.success("Successfully Downvoted Post!");
+        } else {
+          const lastIndex = data.err[1].lastIndexOf(":");
+          const errorMsg = data.err[1].slice(lastIndex + 2);
+          toast.error(errorMsg);
+        }
       } else {
-        const lastIndex = data.err[1].lastIndexOf(":");
-        const errorMsg = data.err[1].slice(lastIndex + 2);
-        toast.error(errorMsg);
+        toast.error(is_approved.err);
       }
     } else {
       toast.error("Please first Connect your Wallet to Downvote this post!");
@@ -236,9 +257,8 @@ const Post: React.FC<PostProps> = ({
                         }
                       >
                         <span
-                          className={`${
-                            type === "archive" ? "text-red" : "text-light-green"
-                          }`}
+                          className={`${type === "archive" ? "text-red" : "text-light-green"
+                            }`}
                         >
                           {type === "archive" ? "0:00 " : `${time} `}
                         </span>
@@ -366,17 +386,15 @@ const Post: React.FC<PostProps> = ({
 
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${
-              vote ? "text-dirty-light-green" : "text-[#878787]"
-            } cursor-pointer`}
+            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
+              } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${
-              !vote ? "text-dirty-light-green" : "text-[#878787]"
-            } cursor-pointer`}
+            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
+              } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />
@@ -395,7 +413,7 @@ const Post: React.FC<PostProps> = ({
         </div>
       </section>
 
-      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} />
+      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} postId={id} />
     </div>
   );
 };

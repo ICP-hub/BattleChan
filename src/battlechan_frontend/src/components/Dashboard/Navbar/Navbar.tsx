@@ -39,7 +39,7 @@ const Navbar = (props: Theme) => {
   const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
   
-  const { getProfileData } = UserApiHanlder();
+  const { getProfileData, votesOfUser } = UserApiHanlder();
   const { principal, isConnected } = useConnect();
   const { getBalance } = TokensApiHanlder();
   
