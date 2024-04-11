@@ -104,14 +104,14 @@ const UserApiHanlder = () => {
     profileImg: Int8Array | undefined
   ) => {
     try {
-      // console.log(backend);
+      // 
       const data = {
         userName: userName,
         profileImg: profileImg,
       };
-      // console.log(data);
+      // 
       const res = await backend.createUserAccount(data);
-      // console.log(res);
+      // 
       return res;
     } catch (err) {
       console.error("Error registering user: ", err);
@@ -128,9 +128,9 @@ const UserApiHanlder = () => {
         userName: userName,
         profileImg: profileImg,
       };
-      // console.log(data);
+      // 
       const res = await backend.updatedUserAccount(data);
-      // console.log("res", res);
+      // 
       // const response = (await backend.getUserInfo()) as BackendResponse;
       return res;
     } catch (err) {
@@ -142,7 +142,7 @@ const UserApiHanlder = () => {
   const isUserRegistered = async () => {
     try {
       const response = (await backend.getUserInfo()) as BackendResponse;
-      // console.log("data", response);
+      // 
       return response;
     } catch (err) {
       console.error("Error creating contact : ", err);
@@ -152,7 +152,7 @@ const UserApiHanlder = () => {
   const getUserInfo = async () => {
     try {
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
-      // console.log("getUserInfo res.data: ", response.data)
+      // 
       return response.data;
     } catch (err) {
       console.error("Error getting user info: ", err);
@@ -162,7 +162,7 @@ const UserApiHanlder = () => {
   const getPostInfo = async (postId: string) => {
     try {
       const response = (await backend.getPostInfo(postId)) as BackendResponse;
-      // console.log("post response: ", response.data)
+      // 
       return response.data;
     } catch (err) {
       console.error("Error getting user info: ", err);
@@ -185,7 +185,7 @@ const UserApiHanlder = () => {
         res.profileImg_int8arr = userDataArray[0]?.profileImg;
         res.status = true;
       }
-      // console.log("getUserInfo res.data: ", response.data)
+      // 
       return res;
     } catch (err) {
       console.error("Error getting user info: ", err);
@@ -207,7 +207,7 @@ const UserApiHanlder = () => {
       const response =
         (await backend.getUserTotalCounts()) as UserAnalyticsBackendRes;
       if (response && response.status !== false) {
-        console.log(response);
+        
         res.postData = Number(response?.data[0]?.postData);
         res.userArchivedPost = Number(response?.data[0]?.userArchivedPost);
         res.comments = Number(response?.data[0]?.comments);
@@ -215,7 +215,7 @@ const UserApiHanlder = () => {
         res.dislikedPost = Number(response?.data[0]?.dislikedPost);
         res.status = true;
       }
-      // console.log("getUserInfo res.data: ", response.data)
+      // 
       return res;
     } catch (err) {
       console.error("Error getting user info: ", err);
@@ -237,20 +237,20 @@ const UserApiHanlder = () => {
       let userActivePostDownvote: PostUpvoteData[] = [];
 
       if (response) {
-        console.log("votes response: ", response)
+        
         activePostUpvoteData = [...response.data[0].active.upvotes];
         archivedPostUpvoteData = [...response.data[0].archived.upvotes];
         activePostDownvoteData = [...response.data[0].active.downvotes];
         archivedPostDownvoteData = [...response.data[0].archived.downvotes];
 
         if (archivedPostDownvoteData && archivedPostDownvoteData.length > 0) {
-          // console.log(archivedPostCommentData);
+          // 
           for (const postId of archivedPostDownvoteData) {
             const singlePost = (await getSingleArchivePost(
               postId
             )) as PostResponse;
-            // console.log("singlePost: ", singlePost.data[0].postMetaData)
-            // console.log("single Post: ", singlePost)
+            // 
+            // 
 
             userArchivedPostDownvote.push({
               postId: postId,
@@ -260,13 +260,13 @@ const UserApiHanlder = () => {
           }
         }
         if (activePostDownvoteData && activePostDownvoteData.length > 0) {
-          // console.log(activePostCommentData);
+          // 
           for (const postId of activePostDownvoteData) {
             // const postId = comment[0].split("_")[0];
             const singlePost = (await getSingleMainPost(
               postId
             )) as PostResponse;
-            // console.log("singlePost: ", singlePost.data[0].postMetaData)
+            // 
             userActivePostDownvote.push({
               postId: postId,
               postMetaData: singlePost.data[0].postMetaData,
@@ -275,13 +275,13 @@ const UserApiHanlder = () => {
           }
         }
         if (archivedPostUpvoteData && archivedPostUpvoteData.length > 0) {
-          // console.log(archivedPostCommentData);
+          // 
           for (const postId of archivedPostUpvoteData) {
             const singlePost = (await getSingleArchivePost(
               postId
             )) as PostResponse;
-            // console.log("singlePost: ", singlePost.data[0].postMetaData)
-            // console.log("single Post: ", singlePost)
+            // 
+            // 
 
             userArchivedPostUpvote.push({
               postId: postId,
@@ -291,13 +291,13 @@ const UserApiHanlder = () => {
           }
         }
         if (activePostUpvoteData && activePostUpvoteData.length > 0) {
-          // console.log(activePostCommentData);
+          // 
           for (const postId of activePostUpvoteData) {
             // const postId = comment[0].split("_")[0];
             const singlePost = (await getSingleMainPost(
               postId
             )) as PostResponse;
-            // console.log("singlePost: ", singlePost.data[0].postMetaData)
+            // 
             userActivePostUpvote.push({
               postId: postId,
               postMetaData: singlePost.data[0].postMetaData,
@@ -308,7 +308,7 @@ const UserApiHanlder = () => {
 
         return {upvotes: [...userActivePostUpvote, ...userArchivedPostUpvote], downvotes: [...userActivePostDownvote, ...userArchivedPostDownvote]};
       }
-      // console.log("votes of user res.data: ", response.data)
+      // 
     } catch (err) {
       console.error("Error getting user info: ", err);
       return undefined;

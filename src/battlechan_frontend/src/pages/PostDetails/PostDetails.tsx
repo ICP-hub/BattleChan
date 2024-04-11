@@ -156,7 +156,7 @@ const PostDetails = (props: Theme) => {
     const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
     const minutes = Math.floor(seconds / 60); // Get remaining minutes
     const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    // 
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
@@ -169,21 +169,21 @@ const PostDetails = (props: Theme) => {
         response = (await getSingleMainPost(postId)) as BackendResponse;
       }
 
-      // console.log(response);
+      // 
 
       if (response.status === true && response.data) {
-        // console.log(response);
+        // 
 
         const posts = response.data.flat(); // Flatten nested arrays if any
         posts.forEach((element: any) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          // console.log(timestamp);
+          // 
 
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
-          // console.log("UPVOTE", element.upvotes);
+          // 
 
           // const interval = setInterval(
           //   (expireAt: BigInt) => {
@@ -193,7 +193,7 @@ const PostDetails = (props: Theme) => {
           //     if (remainingTime <= 0) {
           //       clearInterval(interval);
           //       setTime("0:00");
-          //       // console.log("Post archived");
+          //       // 
           //     } else {
           //       setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
           //     }
@@ -205,7 +205,7 @@ const PostDetails = (props: Theme) => {
         let data = posts[0];
         setPostsData(data);
         setDataFetched(true);
-        // console.log(postsData);
+        // 
       }
     } catch (error) {
       setDataFetched(false);
@@ -229,10 +229,10 @@ const PostDetails = (props: Theme) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          // console.log(timestamp);
+          // 
           element.createdAt = timestamp;
         });
-        // console.log(comments);
+        // 
         setcommentsData(comments);
         setCommentsCount(comments.length);
       }
@@ -257,12 +257,12 @@ const PostDetails = (props: Theme) => {
   }, []);
 
   const handleUpvote = async (postId: string) => {
-    // console.log(isConnected);
-    // console.log(principal);
+    // 
+    // 
     if (type === "archive") {
       return;
     }
-    // console.log(isUserAuthenticatedRef.current);
+    // 
     if (isUserAuthenticatedRef.current) {
       const is_approved = await icrc2_approve(principal_idRef.current);
       if (is_approved) {
@@ -286,8 +286,8 @@ const PostDetails = (props: Theme) => {
     if (type === "archive") {
       return;
     }
-    // console.log(isConnected);
-    // console.log(principal);
+    // 
+    // 
     if (isUserAuthenticatedRef.current) {
       const data = (await downvotePost(postId)) as VoteResponse;
       if (data && data?.ok) {
@@ -312,7 +312,7 @@ const PostDetails = (props: Theme) => {
       postsData?.postId ?? "",
       newComment
     )) as commentResponse;
-    // console.log(response);
+    // 
 
     if (response && response?.ok) {
       toast.success(response.ok);

@@ -59,7 +59,7 @@ const DashboardPage = (props: Theme) => {
     async function getAnalytics() {
       try {
         const response = (await getUserAnalytics()) as UserAnalytics;
-        // console.log(response);
+        // 
         setLivePost(response?.postData);
         setArchivePost(response?.userArchivedPost);
         setTotalComments(response?.comments);

@@ -20,7 +20,7 @@ const client = createClient({
     },
     providers: [new InternetIdentity(), new PlugWallet()],
 });
-// console.log("client", client);
+// 
 const ClientSetup = ({ children }) => (
     <Connect2ICProvider client={client}>
         {children}

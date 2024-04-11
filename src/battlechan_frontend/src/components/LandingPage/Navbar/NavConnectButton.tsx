@@ -11,7 +11,7 @@ const NavConnectButton = () => {
   // const { open } = useDialog();
 
   // const loginHandler = () => {
-  //   console.log("LOGIN");
+  //   
   //   open();
   // }
 

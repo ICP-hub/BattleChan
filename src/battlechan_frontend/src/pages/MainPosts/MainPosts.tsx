@@ -80,7 +80,7 @@ const MainPosts = (props: Theme) => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   // const currentPosts = postsData.slice(indexOfFirstPost, indexOfLastPost);
-  // console.log(currentPosts);
+  // 
 
   const { convertNanosecondsToTimestamp } = Constant();
   const {
@@ -102,7 +102,7 @@ const MainPosts = (props: Theme) => {
     async function getTotalPosts() {
       try {
         const response = (await getTotalCounts()) as TotalCountsResponse;
-        // console.log(response);
+        // 
         if (props.type == "archive") {
           setTotalPosts(response?.archivePostCounts);
         } else {
@@ -129,7 +129,7 @@ const MainPosts = (props: Theme) => {
           const names = boards.map((board) => board.boardName);
           setBoardsData(names);
         } else {
-          // console.log("No boards found.");
+          // 
         }
       } catch (error) {
         console.error("Error fetching communities:", error);
@@ -144,7 +144,7 @@ const MainPosts = (props: Theme) => {
     if (boardsData.length > 0) {
       setSelectedBoard(boardsData[0]);
 
-      // console.log("selectedboard", selectedBoard)
+      // 
     }
   }, [boardsData]);
 
@@ -162,7 +162,7 @@ const MainPosts = (props: Theme) => {
         pageNumber,
         boardName
       );
-      // console.log(res);
+      // 
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -183,7 +183,7 @@ const MainPosts = (props: Theme) => {
         pageNumber,
         boardName
       );
-      // console.log(res);
+      // 
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -218,14 +218,14 @@ const MainPosts = (props: Theme) => {
           selectedBoard
         )) as PostResponse;
       }
-      // console.log("Main Posts Response: ", response);
+      // 
       if (response.status === true && response.data) {
         const posts = response.data.flat();
         posts.forEach((element) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          // console.log(timestamp);
+          // 
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
         });

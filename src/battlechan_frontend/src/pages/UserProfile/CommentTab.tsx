@@ -56,7 +56,7 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
   const [commentData, setCommentData] = useState<AllUserComment[]>([]);
   const { getSingleMainPost,  } = PostApiHanlder();
 
-  // console.log("comment data: ", commentData)
+  // 
 
   const multilineEllipsisStyle: React.CSSProperties = {
     overflow: "hidden",

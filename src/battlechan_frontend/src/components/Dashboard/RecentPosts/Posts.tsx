@@ -70,7 +70,7 @@ const Post = () => {
         postsPerPage,
         currentPage,
         selectedBoard);
-      // console.log(res);
+      // 
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -90,7 +90,7 @@ const Post = () => {
           setBoardsData(boards[0]?.boardName);
           setSelectedBoard(boards[0]?.boardName);
         } else {
-          console.log("No boards found.");
+          
         }
       } catch (error) {
         console.error("Error fetching communities:", error);
@@ -108,16 +108,16 @@ const Post = () => {
     try {
       const response = (await getAllPostFilter(selectedBoard)) as PostResponse;
       if (response.status === true && response.data) {
-        // console.log(response);
+        // 
         const posts = response.data.flat(); // Flatten nested arrays if any
         // Create an array to store promises for comments count retrieval
         const commentsCountPromises = posts.map(element => getCommentsCounts(element.postId));
         // Wait for all comments count retrieval promises to resolve
         const commentsCounts = await Promise.all(commentsCountPromises);
         posts.forEach((element, index) => {
-          // console.log("ele.createdAt", element.createdAt);
+          // 
           const timestamp = convertNanosecondsToTimestamp(BigInt(element.createdAt));
-          // console.log(timestamp);
+          // 
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
           // Assign comments count to each post
@@ -135,7 +135,7 @@ const Post = () => {
     if (response && response.status == true) {
       let data = response.data[0];
       if (data && data.length > 0) {
-        console.log(length);
+        
         return data.length;
       }
     }

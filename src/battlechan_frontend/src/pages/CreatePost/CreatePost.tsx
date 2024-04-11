@@ -121,20 +121,20 @@ const CreatePost = (props: Theme) => {
     try {
       // Make a fetch call to your backend API
       // const board = await addBoard("Games");
-      // console.log(board);
+      // 
       const response = (await getBoards()) as BackendResponse;
       if (response.status == false) {
         throw new Error("Failed to fetch communities");
       }
 
       const boards = response.data[0];
-      // console.log(boards);
+      // 
 
       if (boards && boards.length > 0) {
         const names = boards.map((board) => board.boardName);
         setCommunities(names); // Update the state with all board names.
       } else {
-        // console.log("No boards found.");
+        // 
       }
     } catch (error) {
       console.error("Error fetching communities:", error);
@@ -149,9 +149,6 @@ const CreatePost = (props: Theme) => {
   }, [selectedCommunity, postDes, postName]);
 
   const handleCreatePost = async () => {
-    let createPostBtn = document.getElementById("createPostBtn");
-    console.log(createPostBtn);
-
     const postData = {
       postName: postNameRef.current,
       postDes: postDesRef.current,
@@ -161,7 +158,7 @@ const CreatePost = (props: Theme) => {
       selectedCommunityRef.current,
       postData
     )) as postResponse;
-    // console.log(response);
+    // 
 
     if (response && response?.ok) {
       navigate("/dashboard/mainPosts");
