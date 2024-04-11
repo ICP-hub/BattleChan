@@ -17,9 +17,10 @@ export default {
       green: "#3A6841",
       grey: "#9a9a9a",
       "dark-green": "#0C150D",
+      "fresh-green": "rgb(70 166 85)",
       "dirty-light-green": "#345D3A",
       "light-green": "#18AF00",
-      "transparent": "#00000000",
+      transparent: "#00000000",
     },
     screens: {
       small_phone: "430px",

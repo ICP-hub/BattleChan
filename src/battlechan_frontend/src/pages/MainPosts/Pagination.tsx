@@ -60,7 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({
               pageNumber === currentPage
                 ? "bg-green text-[#fff]"
                 : "bg-[#3a684133] bg-opacity-20"
-            } relative h-7 w-7 tablet:h-12 tablet:w-12 select-none rounded-md text-center align-middle text-[10px] tablet:text-base font-medium uppercase text-[#000] dark:text-[#fff] transition-all`}
+            } relative h-7 w-7 tablet:h-12 tablet:w-12 select-none rounded-md text-center align-middle text-[10px] tablet:text-base font-medium uppercase text-[#000] dark:text-[#fff] hover:dark:bg-fresh-green transition-all`}
             onClick={() => goToPage(pageNumber)}
           >
             <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">

@@ -297,7 +297,7 @@ const MainPosts = (props: Theme) => {
             {props.type === "archive" ? "Archive" : "Most Popular"}
           </h1>
           <Link to="/dashboard/createPost">
-            <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green text-[#fff] rounded-full font-semibold text-xs">
+            <button className="tablet:hidden flex items-center justify-center px-4 py-2 bg-[#000] dark:bg-green hover:dark:bg-fresh-green text-[#fff] rounded-full font-semibold text-xs">
               <LuPlusCircle />
               <span className="ml-1 leading-5">Create Post</span>
             </button>
