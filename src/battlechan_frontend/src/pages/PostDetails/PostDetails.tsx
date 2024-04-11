@@ -391,12 +391,13 @@ const PostDetails = (props: Theme) => {
               )}
 
               <div className="text-lg">
-                <span
+                {/* <span
                   className={` ${type === "archive" ? "text-red" : "text-[#18AF00]"
                     }`}
                 >
                   {time}
-                </span>{" "}
+                </span>{" "} */}
+                <TimeComponent expireAt={postsData?.expireAt ?? 1n} id={postsData?.postId ?? ""} />{" "}
                 min left
               </div>
             </div>
