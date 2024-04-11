@@ -47,15 +47,15 @@ function Landing(props: Theme) {
     if (isInitializing == false) {
       setAllow(principal ? true : false);
     }
-    console.log("intitilizing is ", isInitializing);
+    
   }, [principal, isInitializing]);
 
-  console.log("allow is ", allow);
-  console.log("principal is ", principal);
+  
+  
 
   React.useEffect(() => {
     if (principal) {
-      console.log("Principalm eff of aepr :", principal);
+      
       navigate("/dashboard/settingProfile");
     }
   }, [principal]);

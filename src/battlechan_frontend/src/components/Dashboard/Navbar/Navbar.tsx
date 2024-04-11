@@ -64,7 +64,7 @@ const Navbar = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
-        // console.log("balance", data);
+        // 
       } else {
         if (principal) {
           setUserName(truncateString(principal, 17));

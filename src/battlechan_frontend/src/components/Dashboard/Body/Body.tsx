@@ -49,21 +49,21 @@ const Body = () => {
             convertNanosecondsToTimeAgo(board?.updatedAt[0]) || undefined
         );
         const cleanedCreatedAt = createdAt.map((date) => date || "");
-        // console.log("names is ", names);
-        // console.log("size is ", sizes);
-        // console.log("createdAt is ", cleanedCreatedAt);
+        // 
+        // 
+        // 
 
         setBoardNames(names);
         setBoardSizes(sizes);
         setCreatedAt(cleanedCreatedAt);
       } else {
-        // console.log("No boards found.");
+        // 
       }
-      // console.log(boardSizes[0]);
+      // 
     }
 
     fetchBoardNames();
-    // console.log("boards", boardNames);
+    // 
   }, []);
   const className = "Home";
 

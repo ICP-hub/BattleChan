@@ -48,7 +48,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId, repliesData, getReplies })
 
   // const getReplies = async () => {
   //   const response = (await getAllReplies(commentId)) as BackendResponse;
-  //   console.log("replies reponse: ", response)
+  //   
   //   if (response && response.status == true) {
   //     const comments = response.data[0];
   //     if (comments && comments.length > 0) {
@@ -56,11 +56,11 @@ const Replies: React.FC<RepliesProps> = ({ commentId, repliesData, getReplies })
   //         const timestamp: string = convertNanosecondsToTimestamp(
   //           BigInt(element.createdAt)
   //         );
-  //         console.log(timestamp);
+  //         
   //         element.createdAt = timestamp;
   //         element.likes = element.likedBy.length;
   //       });
-  //       console.log("comment replies: ", comments)
+  //       
   //       setRepliesData(comments);
   //     }
   //   }
@@ -78,7 +78,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId, repliesData, getReplies })
         commentId ?? "",
         replyId ?? ""
       )) as LikeResponse;
-      // console.log(response);
+      // 
 
       if (response && response?.ok) {
         toast.success("You liked the comment reply!");
@@ -94,7 +94,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId, repliesData, getReplies })
       //   postId ?? "",
       //   commentId ?? ""
       // )) as LikeResponse;
-      // console.log(response);
+      // 
 
       // if (response && response?.ok) {
       //   toast.success("You disliked the comment!");
