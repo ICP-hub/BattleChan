@@ -49,8 +49,8 @@ function Landing(props: Theme) {
     checkAuthentication();
   }, [isConnected, principal]);
 
-  console.log(isUserAuthenticatedRef.current)
-  console.log(principal_idRef.current)
+  // console.log(isUserAuthenticatedRef.current)
+  // console.log(principal_idRef.current)
 
   useEffect(() => {
     const fetchData = async () => {
