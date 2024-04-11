@@ -8,6 +8,7 @@ import Text "mo:base/Text";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
+import TrieMap "mo:base/TrieMap";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
@@ -432,6 +433,16 @@ module {
         };
 
     };
+
+    public func createTrieMapOfArchivedPost(userAchivedPostTrie : Trie.Trie<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>) : [(Types.PostId, Types.PostInfo)] {
+        let archivedPostList : [List.List<(Types.PostId, Types.PostInfo)>] = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
+        var archivedPosts = List.nil<(Types.PostId, Types.PostInfo)>();
+        for (item in archivedPostList.vals()) {
+            archivedPosts := List.append<(Types.PostId, Types.PostInfo)>(archivedPosts, item);
+        };
+        List.toArray(archivedPosts);
+    };
+
     public func bubbleSortPost(arr : [var Types.PostRes], filterOptions : Types.FilterOptions) : [var Types.PostRes] {
         var n = arr.size();
         var temp : Types.PostRes = {
