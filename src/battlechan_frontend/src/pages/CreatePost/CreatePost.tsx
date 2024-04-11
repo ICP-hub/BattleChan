@@ -108,6 +108,7 @@ const CreatePost = (props: Theme) => {
         console.error("Error creating post:", error);
       } finally {
         // Re-enable the button in the finally block to ensure it gets re-enabled
+        button.style.opacity = "1";
         button.removeAttribute("disabled");
       }
     }
