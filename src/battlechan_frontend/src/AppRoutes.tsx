@@ -29,14 +29,14 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
     if (isInitializing == false) {
       setAllow(principal ? true : false);
     }
-    console.log("intitilizing is ", isInitializing);
+    // console.log("intitilizing is ", isInitializing);
   }, [principal, isInitializing]);
 
-  console.log("allow is: ", allow, "and principal is: ", principal);
+  // console.log("allow is: ", allow, "and principal is: ", principal);
 
   React.useEffect(() => {
     if (principal) {
-      console.log("Principalm eff of aepr :", principal);
+      // console.log("Principalm eff of aepr :", principal);
       // Perform any other actions that depend on the updated principal value
     }
   }, [principal]);

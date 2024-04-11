@@ -1,14 +1,20 @@
 import React, { useEffect } from "react";
 import "./HeroSection.scss";
 
-import { ConnectButton, ConnectDialog } from "@connect2ic/react";
-
+import { ConnectButton, ConnectDialog, useConnect, useDialog } from "@connect2ic/react";
+import { Link } from "react-router-dom";
 import desktops from "../../../images/desktops.png";
 // import backImage from "../../../images/background_img.png";
 import backImage from "../../../images/bg.svg";
 
 const HeroSection = () => {
   const className = "LandingPage__HeroSection";
+  const { open } = useDialog();
+  const { isConnected } = useConnect();
+
+  const loginHandler = () => {
+    open();
+  }
 
   useEffect(() => {
     const div = document.querySelector(
@@ -48,21 +54,33 @@ const HeroSection = () => {
             " tablet:text-base phone:text-sm text-xs"
           }
         >
-          Unleash Your Voice , Join the Battle for Visibility and
+          Unleash Your Voice, Join the Battle for Visibility and
           <br />
           compete for the top position
         </p>
 
-        <button
-          className={
-            className + "__startPostingBtn flex-row-center green-button"
-          }
-        >
-          {/* Start Posting */}
-          <ConnectButton />
-        </button>
+        {!isConnected && (
+          <button
+            className={
+              className + "__startPostingBtn flex-row-center green-button"
+            }
+            onClick={loginHandler}
+          >
+            Start Posting
+          </button>
+        )}
 
-        <ConnectDialog />
+        {isConnected && (
+          <Link to="/dashboard/createPost">
+            <button
+              className={
+                className + "__startPostingBtn flex-row-center green-button"
+              }
+            >
+              Start Posting
+            </button>
+          </Link>
+        )}
       </div>
 
       <div

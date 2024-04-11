@@ -29,7 +29,29 @@ function Landing(props: Theme) {
   const [allow, setAllow] = useState<null | boolean>(null);
   const navigate = useNavigate();
   const { getProfileData, votesOfUser } = UserApiHanlder();
+  const [principal_id, setPrincipal_id] = useState("");
+  const principal_idRef = React.useRef(principal_id);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
 
+  useEffect(() => {
+    isUserAuthenticatedRef.current = isUserAuthenticated;
+    principal_idRef.current = principal_id;
+  }, [isUserAuthenticated, principal_id]);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (isConnected && principal) {
+        setIsUserAuthenticated(true);
+        setPrincipal_id(principal);
+      }
+    };
+
+    checkAuthentication();
+  }, [isConnected, principal]);
+
+  console.log(isUserAuthenticatedRef.current)
+  console.log(principal_idRef.current)
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const response = (await getProfileData()) as ProfileData;
@@ -47,16 +69,16 @@ function Landing(props: Theme) {
     if (isInitializing == false) {
       setAllow(principal ? true : false);
     }
-    console.log("intitilizing is ", isInitializing);
+    // console.log("intitilizing is ", isInitializing);
   }, [principal, isInitializing]);
 
-  console.log("allow is ", allow);
-  console.log("principal is ", principal);
+  // console.log("allow is ", allow);
+  // console.log("principal is ", principal);
 
   React.useEffect(() => {
     if (principal) {
-      console.log("Principalm eff of aepr :", principal);
-      navigate("/dashboard/settingProfile");
+      // console.log("Principalm eff of aepr :", principal);
+      // navigate("/dashboard/settingProfile");
     }
   }, [principal]);
 
