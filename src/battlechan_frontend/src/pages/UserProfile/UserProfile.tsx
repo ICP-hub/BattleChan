@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
-import bg from "../../../images/dashboard_bg.png";
-import defaultImg from "../../../images/User.png";
 import UserProfileHeader from "./UserProfileHeader";
 import ProfileTabs from "./ProfileTabs";
-import PostGrid from "./PostGrid";
 import UserApiHanlder from "../../API_Handlers/user";
 
 type Theme = {
@@ -34,9 +31,9 @@ const UserProfile = (props: Theme) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // 
+      
       const data = await getUserInfo();
-      // 
+      
       if (data && data.length > 0) {
         setUserInfo(data);
       }

@@ -11,51 +11,25 @@ import AttractiveCompo from "../../components/LandingPage/AttractiveCompo/Attrac
 import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlechan";
 import { useConnect } from "@connect2ic/react";
 import { useNavigate } from "react-router-dom";
-import { HiOutlineArrowUp } from 'react-icons/hi';
-import UserApiHanlder from "../../API_Handlers/user";
+import { HiOutlineArrowUp } from "react-icons/hi";
 
 type Theme = {
   handleThemeSwitch: any;
 };
 
-interface ProfileData {
-  userName: string;
-  profileImg: string;
-  status: boolean;
-};
-
 function Landing(props: Theme) {
-  let { isConnected, principal, isIdle, isInitializing } = useConnect();
+  let {  principal, isInitializing } = useConnect();
   const [allow, setAllow] = useState<null | boolean>(null);
   const navigate = useNavigate();
-  const { getProfileData, votesOfUser } = UserApiHanlder();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = (await getProfileData()) as ProfileData;
-  //     if (response && response.status == false) {
-  //       if (principal) {
-  //         navigate("/dashboard/settingProfile");
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     if (isInitializing == false) {
       setAllow(principal ? true : false);
     }
-    
   }, [principal, isInitializing]);
-
-  
-  
 
   React.useEffect(() => {
     if (principal) {
-      
       navigate("/dashboard/settingProfile");
     }
   }, [principal]);
@@ -78,15 +52,14 @@ function Landing(props: Theme) {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
   React.useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
 
   return (
     <main
@@ -97,8 +70,9 @@ function Landing(props: Theme) {
     >
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 ${isVisible ? 'opacity-100' : 'opacity-0'
-          } transition-opacity duration-500 ease-in-out bg-blue-500 hover:bg-blue-600 text-light dark:text-dark bg-dark dark:bg-light font-bold py-2 px-4 rounded-full shadow-lg z-10`}
+        className={`fixed bottom-6 right-6 ${
+          isVisible ? "opacity-100" : "opacity-0"
+        } transition-opacity duration-500 ease-in-out bg-blue-500 hover:bg-blue-600 text-light dark:text-dark bg-dark dark:bg-light font-bold py-2 px-4 rounded-full shadow-lg z-10`}
       >
         <HiOutlineArrowUp className="text-xl" />
       </button>

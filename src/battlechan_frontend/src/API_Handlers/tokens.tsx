@@ -1,7 +1,7 @@
 import { useCanister } from "@connect2ic/react";
 import { Principal } from "@dfinity/principal";
 
-// Custom hook : initialize the backend Canister
+
 const useBackend = () => {
     return useCanister("backend");
 };
@@ -22,23 +22,23 @@ interface Response {
 }
 
 const TokensApiHanlder = () => {
-    // Init backend
+    
     const [backend, canisterId] = useBackend();
     const [ledger] = useLedger();
 
-    // // ICRC2 APPROVE
+    
     const icrc2_approve = async (principal: string, amount: number = 1) => {
         let result = { status: false, err: "" } as Response;
         try {
-            // 
+            
             const is_sufficient_balance = await getBalance(principal || "");
-            // 
+            
             const balance = is_sufficient_balance;
-            // 
+            
             let fees = 100;
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
-            const expirationTime = Date.now() + (5 * 60 * 1000); // Add 5 minutes in milliseconds
+            const expirationTime = Date.now() + (5 * 60 * 1000); 
             const expiresAt: bigint = BigInt(expirationTime);
 
             if (Number(balance) >= amnt) {
@@ -58,7 +58,7 @@ const TokensApiHanlder = () => {
                 }
                 
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
-                // 
+                
                 if (res && res?.ok) {
                     result.status = true;
                 } else {
@@ -82,16 +82,16 @@ const TokensApiHanlder = () => {
         }
     };
 
-    // Get Balance Of User Account
+    
     const getBalance = async (principal: string) => {
         try {
-            // 
+            
             const argument = {
                 owner: Principal.fromText(principal),
                 subaccount: []
             };
             const res = await ledger.icrc1_balance_of(argument);
-            // 
+            
             let balance = (Number(res) / Math.pow(10, 8));
             return balance;
         } catch (err) {
@@ -99,7 +99,7 @@ const TokensApiHanlder = () => {
         }
     };
 
-    // Withdraw Time Tokens from a Post
+    
     const withdrawPost = async (postId: string, amount: number) => {
         let result = { status: false, err: "" } as Response;
         try {
@@ -130,7 +130,7 @@ const TokensApiHanlder = () => {
         }
     };
 
-    // Returns
+    
     return { getBalance, icrc2_approve, withdrawPost };
 };
 

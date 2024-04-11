@@ -16,11 +16,10 @@ import { useMediaQuery } from "@mui/material";
 interface Board {
   boardName: string;
   boardSize: string;
-  // Include other properties as needed, such as 'size'.
 }
 interface BackendResponse {
   status: boolean;
-  data: Board[][]; // Assuming 'data' is an array of arrays of Board objects.
+  data: Board[][];
   error: string[];
 }
 interface postResponse {
@@ -37,7 +36,7 @@ const CreatePost = (props: Theme) => {
   const [postMetaData, setPostMetaData] = useState("");
   const [postName, setPostName] = useState("");
   const [postDes, setPostDes] = useState("");
-  //this is to show the image on the screen or set it in server
+
   const [fileURL, setFileURL] = React.useState("");
 
   const [fileData, setFileData] = React.useState<{
@@ -47,9 +46,9 @@ const CreatePost = (props: Theme) => {
 
   const { createPost, getBoards } = PostApiHanlder();
   const { handleFileUpload } = Constant();
-  const selectedCommunityRef = React.useRef(selectedCommunity); // Ref to store latest selected community
+  const selectedCommunityRef = React.useRef(selectedCommunity);
   const postNameRef = React.useRef(postName);
-  const postDesRef = React.useRef(postDes); // Ref to store latest selected community
+  const postDesRef = React.useRef(postDes);
   const fileDataRef = React.useRef(fileData);
 
   const is870px = useMediaQuery("(min-width: 870px)");
@@ -60,12 +59,12 @@ const CreatePost = (props: Theme) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     try {
-      const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
+      const { base64, int8Array } = await handleFileUpload(event);
       setFileData({ base64, int8Array });
       setFileURL(base64 || "");
     } catch (error) {
       if (typeof error === "string") {
-        toast.error(error); // Display the error message
+        toast.error(error);
         console.error("Error:", error);
       } else {
         console.error("Error:", error);
@@ -74,7 +73,6 @@ const CreatePost = (props: Theme) => {
   };
 
   function handleFileChange() {
-    // const imageUrl = URL.createObjectURL(inputfile.files[0]);
     setFileURL(fileData?.base64 || "");
   }
 
@@ -114,34 +112,28 @@ const CreatePost = (props: Theme) => {
       }
     }
 
-    fetchData(); // Call fetchData function when component mounts
+    fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      // Make a fetch call to your backend API
-      // const board = await addBoard("Games");
-      // 
       const response = (await getBoards()) as BackendResponse;
       if (response.status == false) {
         throw new Error("Failed to fetch communities");
       }
 
       const boards = response.data[0];
-      // 
 
       if (boards && boards.length > 0) {
         const names = boards.map((board) => board.boardName);
-        setCommunities(names); // Update the state with all board names.
+        setCommunities(names);
       } else {
-        // 
       }
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
   };
 
-  // Update ref when selectedCommunity changes
   useEffect(() => {
     selectedCommunityRef.current = selectedCommunity;
     postDesRef.current = postDes;
@@ -158,12 +150,10 @@ const CreatePost = (props: Theme) => {
       selectedCommunityRef.current,
       postData
     )) as postResponse;
-    // 
 
     if (response && response?.ok) {
       navigate("/dashboard/mainPosts");
       toast.success("Post Created Successfully!");
-      // window.location.href = "/dashboard/mainPosts";
     } else {
       toast.error(
         "Error Creating your Post, Please verify and provide valid data!"

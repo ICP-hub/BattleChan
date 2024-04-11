@@ -1,4 +1,3 @@
-import React from "react";
 
 import Card from "./Card";
 
@@ -20,7 +19,6 @@ const TrendingPost = () => {
       }
       style={darkColor == "dark" ? { backgroundImage: `url(${bg})` } : {}}
     >
-      {/* Trending data counts */}
       <section
         className={className + "__numbers flex-row-center justify-center px-4"}
       >
@@ -49,11 +47,9 @@ const TrendingPost = () => {
           About
         </p>
 
-        {/* Cards block */}
         <div className={className + "__postCards my-20 w-full"}>
           <div className="w-full xl:px-20 tablet:px-16 phone:px-12 px-6 xl:overflow-hidden no-scrollbar overflow-auto phone:gap-12 gap-6 xl:justify-center xl:flex-row-center flex flex-row">
             {postList.slice(0, 3).map((post, index) => (
-              // Card
               <Card post={post} key={index} index={index} postList={postList} />
             ))}
           </div>

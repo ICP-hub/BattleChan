@@ -1,4 +1,3 @@
-import React from "react";
 import "./AttractiveCompo.scss";
 
 import { MdArrowOutward } from "react-icons/md";

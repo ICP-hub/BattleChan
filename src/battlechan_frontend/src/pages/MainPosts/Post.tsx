@@ -13,7 +13,7 @@ import TokensApiHanlder from "../../API_Handlers/tokens";
 
 import Constant from "../../utils/constants";
 import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
-// import TokensApiHanlder from "../../../API_Handlers/tokens";
+
 
 interface PostProps {
   id: string;
@@ -84,7 +84,7 @@ const Post: React.FC<PostProps> = ({
   const navigate = useNavigate();
 
   const className = "Dashboard__MainPosts__Post";
-  // const { icrc2_approve } = TokensApiHanlder();
+  
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
@@ -115,21 +115,21 @@ const Post: React.FC<PostProps> = ({
     getCommentsCounts();
 
     const interval = setInterval(() => {
-      const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-      const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+      const currentTime = BigInt(Date.now()) * BigInt(1000000); 
+      const remainingTime = Number(expireAt) - Number(currentTime); 
 
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
         archive();
-        // 
+        
       } else {
-        setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+        setTime(formatTime(BigInt(remainingTime))); 
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [expireAt]); // Run effect when expireAt changes
+  }, [expireAt]); 
 
   const handleUpvote = async (postId: string) => {
     if (type === "archive") {
@@ -140,7 +140,7 @@ const Post: React.FC<PostProps> = ({
       if (is_approved.status == true) {
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
-          // toast.success(data?.ok);
+          
           toast.success("Successfully Upvoted Post!");
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
@@ -181,7 +181,7 @@ const Post: React.FC<PostProps> = ({
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
-      // 
+      
     }
   };
 
@@ -190,17 +190,17 @@ const Post: React.FC<PostProps> = ({
     if (response && response.status == true) {
       let data = response.data[0];
       if (data && data.length > 0) {
-        // 
+        
         setCommentsCount(data.length);
       }
     }
   };
 
   const formatTime = (remainingTime: bigint) => {
-    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-    const minutes = Math.floor(seconds / 60); // Get remaining minutes
-    const remainingSeconds = seconds % 60; // Get remaining seconds
-    // 
+    const seconds = Math.floor(Number(remainingTime) / 1e9); 
+    const minutes = Math.floor(seconds / 60); 
+    const remainingSeconds = seconds % 60; 
+    
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
@@ -214,7 +214,6 @@ const Post: React.FC<PostProps> = ({
         }`
       }
     >
-      {/* Top section with image, user image and more info */}
       {type === "archive" ? (
         <React.Fragment>
           <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
@@ -232,7 +231,6 @@ const Post: React.FC<PostProps> = ({
             </Link>
 
             <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
-              {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
@@ -247,7 +245,6 @@ const Post: React.FC<PostProps> = ({
                         {userName}
                       </h1>
 
-                      {/* Time */}
                       <button
                         className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green cursor-pointer"
                         onClick={
@@ -280,7 +277,6 @@ const Post: React.FC<PostProps> = ({
                 </div>
               </section>
 
-              {/* Content on bottom */}
               <section className="mt-1">
                 <Link
                   key={id}
@@ -316,7 +312,6 @@ const Post: React.FC<PostProps> = ({
             </Link>
 
             <div className="laptop:w-4/5 w-5/6 flex flex-col small_phone:gap-2 gap-1">
-              {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
@@ -331,7 +326,6 @@ const Post: React.FC<PostProps> = ({
                         {userName}
                       </h1>
 
-                      {/* Time */}
                       <button
                         className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green hover:text-darkcursor-pointer"
                         onClick={() => setShowOverlay(true)}
@@ -359,7 +353,6 @@ const Post: React.FC<PostProps> = ({
                 </div>
               </section>
 
-              {/* Content on bottom */}
               <section className="mt-1">
                 <Link
                   key={id}
@@ -380,9 +373,7 @@ const Post: React.FC<PostProps> = ({
         </React.Fragment>
       )}
 
-      {/* Bottom section with upvote, downvote and comments,likes */}
       <section className="flex-row-center justify-between">
-        {/* upvote and downvote button  */}
 
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
@@ -400,7 +391,6 @@ const Post: React.FC<PostProps> = ({
           />
         </div>
 
-        {/* likes and comments  */}
         <div className="flex-row-center tablet:text-lg small_phone:text-sm text-xs gap-2 justify-end">
           <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
             <MdOutlineVerifiedUser />
