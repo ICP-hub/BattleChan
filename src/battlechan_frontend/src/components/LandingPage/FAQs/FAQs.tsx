@@ -1,5 +1,4 @@
-import React from "react";
-import list from './FAQList'
+import list from './FAQList';
 import bg from "../../../images/faq_bg.png";
 
 const FAQs = () => {

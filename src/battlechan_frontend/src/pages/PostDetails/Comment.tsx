@@ -59,10 +59,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
   const [reply, setReply] = useState("");
   const [vote, setVote] = React.useState(true);
   const [visibleComments, setVisibleComments] = useState(5);
-  // const handleVote = (vote: boolean) => {
-  //   setVote(vote);
-  // };
-  const { convertInt8ToBase64, convertNanosecondsToTimestamp } = Constant();
+        const { convertInt8ToBase64, convertNanosecondsToTimestamp } = Constant();
   const { createCommentReply, likeComment, dislikeComment,getAllReplies } = CommentsApiHanlder();
   const [repliesData, setRepliesData] = React.useState<ReplyInfo[]>([]);
 
@@ -72,20 +69,17 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
 
   const getReplies = async (commentId: string) => {
     const response = (await getAllReplies(commentId)) as BackendResponse;
-    // console.log("replies reponse: ", response)
-    if (response && response.status == true) {
+        if (response && response.status == true) {
       const comments = response.data[0];
       if (comments && comments.length > 0) {
         comments.forEach((element: any) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          // console.log(timestamp);
-          element.createdAt = timestamp;
+                    element.createdAt = timestamp;
           element.likes = element.likedBy.length;
         });
-        // console.log("comment replies: ", comments)
-        setRepliesData(comments);
+                setRepliesData(comments);
       }
     }
   };
@@ -100,15 +94,13 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
       commentId ?? "",
       reply
     )) as ReplyResponse;
-    // console.log(response);
-
+    
     if (response && response?.ok) {
       toast.success(response.ok);
       getReplies(commentId)
       setReply("")
       setLoading(false);
-      // window.location.href = "/dashboard/mainPosts";
-    } else {
+          } else {
       toast.error(
         "Error Creating reply, Please verify and provide valid data!"
       );
@@ -117,8 +109,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
   }
 
   async function handleLikeComment(commentId: string, vote: boolean) {
-    // setVote(vote);
-
+    
     const postId = commentId.split("_")[0];
 
     if (vote) {
@@ -126,13 +117,11 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
         postId ?? "",
         commentId ?? ""
       )) as LikeResponse;
-      // console.log(response);
-
+      
       if (response && response?.ok) {
         toast.success("You liked the comment!");
         getComments()
-        // window.location.href = "/dashboard/mainPosts";
-      } else {
+              } else {
         toast.error(
           "Error liking comment, Please verify and provide valid data!"
         );
@@ -142,12 +131,10 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
         postId ?? "",
         commentId ?? ""
       )) as LikeResponse;
-      // console.log(response);
-
+      
       if (response && response?.ok) {
         toast.success("You disliked the comment!");
-        // window.location.href = "/dashboard/mainPosts";
-      } else {
+              } else {
         toast.error(
           "Error liking comment, Please verify and provide valid data!"
         );
@@ -157,13 +144,11 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
 
   return (
     <div className="ml-5">
-      {/* comment details */}
-      {/* <div key={index}> */}
-      {/* user details */}
+      
 
       {currentComment.slice(0, visibleComments).map((comment, index) => (
         <div key={index} className="flex flex-col gap-4 border-l relative mt-7">
-          {/* <div className={`absolute -left-6 top-0 w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded bg-[url(${convertInt8ToBase64(comment.createdBy.userProfile)})] bg-cover bg-no-repeat bg-center`}></div> */}
+          
           <div
             className={`absolute -left-4 tablet:-left-5 top-0 w-8 h-8 tablet:w-10 tablet:h-10 bg-[#686868] text-[#fff] flex justify-center rounded`}
           >
@@ -180,14 +165,14 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
             </div>
           </div>
 
-          {/* comment content */}
+
           <div className="dark:text-[#fff] tablet:text-base text-sm dark:text-opacity-50 ml-10">
             {comment.comment}
           </div>
 
-          {/* upvote downvote and reply button */}
+
           <div className="flex-row-center gap-10 ml-10">
-            {/* show likes of comment  */}
+
             <div
               className={`flex tablet:text-lg text-xs items-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
             >
@@ -250,14 +235,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
                   />
                   <div className="flex items-center justify-end mt-4">
                     <div className="flex justify-center items-center gap-4">
-                      {/* <button
-                        onClick={() => {
-                          setActiveReplyButton(null);
-                        }}
-                        className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
-                      >
-                        Cancel
-                      </button> */}
+                      
                       <button
                         onClick={(e) => {
                           handleAddReply(e, comment.commentId);

@@ -35,7 +35,7 @@ const CatalogSVG: React.FC<CatalogSVGProps> = ({ label }) => {
       case "cinema":
         return <BiMoviePlay className="big_tablet:text-2xl text-lg" />;
       default:
-        return <FaRandom  />;
+        return <FaRandom />;
     }
   };
 

@@ -20,7 +20,7 @@
   }
 
   .green-button {
-    @apply gap-2 font-semibold tablet:text-lg text-base rounded-[3rem] tablet:px-8 tablet:py-3.5 px-4 py-2.5 text-light bg-green;
+    @apply gap-2 font-semibold tablet:text-lg text-base rounded-[3rem] tablet:px-8 tablet:py-3.5 px-4 py-2.5 text-light bg-green hover:bg-fresh-green;
   }
 
   .white-button {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Steps from "./Steps";
 import CreatePostBtn from "./CreatePostBtn";
@@ -16,11 +16,11 @@ interface Board {
   boardName: string;
   boardSize: string;
   updatedAt: [bigint];
-  // Include other properties as needed, such as 'size'.
+  
 }
 interface BackendResponse {
   status: boolean;
-  data: Board[][]; // Assuming 'data' is an array of arrays of Board objects.
+  data: Board[][]; 
   error: string[];
 }
 
@@ -49,21 +49,21 @@ const Body = () => {
             convertNanosecondsToTimeAgo(board?.updatedAt[0]) || undefined
         );
         const cleanedCreatedAt = createdAt.map((date) => date || "");
-        // console.log("names is ", names);
-        // console.log("size is ", sizes);
-        // console.log("createdAt is ", cleanedCreatedAt);
+        
+        
+        
 
         setBoardNames(names);
         setBoardSizes(sizes);
         setCreatedAt(cleanedCreatedAt);
       } else {
-        // console.log("No boards found.");
+        
       }
-      // console.log(boardSizes[0]);
+      
     }
 
     fetchBoardNames();
-    // console.log("boards", boardNames);
+    
   }, []);
   const className = "Home";
 

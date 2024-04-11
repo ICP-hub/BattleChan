@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PostTab from "./PostTab";
 import CommentTab from "./CommentTab";
 import UpvoteTab from "./UpvoteTab";
@@ -48,7 +48,6 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userInfo }) => {
 
   return (
     <div className="container mt-2 mb-24 tablet:my-6 mx-auto px-4 tablet:px-12">
-      {/* tab navigation */}
       <div className="flex flex-col tablet:flex-row justify-between items-center mb-6">
         <ul
           className="w-full relative flex flex-wrap p-1 list-none justify-around tablet:justify-start"
@@ -97,7 +96,6 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userInfo }) => {
           <span className="ml-1 leading-5">CreatePost</span>
         </button>
       </div>
-      {/* tab content */}
       <div data-tab-content="">
         {tabs.map((tab) => (
           <div
@@ -108,7 +106,6 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userInfo }) => {
             role="tabpanel"
           >
             <div className="block font-sans text-base">
-              {/* Content for each tab */}
               {tab.id === "post" && <><PostTab /></>}
               {tab.id === "comments" && <><CommentTab userInfo={userInfo} /></>}
               {tab.id === "upvote" && <><UpvoteTab /></>}

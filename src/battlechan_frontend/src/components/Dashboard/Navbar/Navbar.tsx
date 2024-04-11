@@ -43,7 +43,7 @@ const Navbar = (props: Theme) => {
   const { principal, isConnected } = useConnect();
   const { getBalance } = TokensApiHanlder();
   
-  // const { getTimeTokens } = TokensApiHanlder();
+  
   
   const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
@@ -64,7 +64,7 @@ const Navbar = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
-        // console.log("balance", data);
+        
       } else {
         if (principal) {
           setUserName(truncateString(principal, 17));
@@ -72,7 +72,7 @@ const Navbar = (props: Theme) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
+    
     fetchData();
   }, [userName]);
 
@@ -84,7 +84,7 @@ const Navbar = (props: Theme) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
+    
     fetchData();
   }, [principal]);
 
@@ -188,12 +188,7 @@ const Navbar = (props: Theme) => {
             />
             </div>
 
-              {/* <img
-                src={fileURL}
-                alt="USER IMAGE"
-                className="min-w-[50px] h-[57px] object-cover rounded-md cursor-pointer"
-                onClick={() => setShowOverlay(!showOverlay)}
-              /> */}
+              
             </React.Fragment>
           ) : (
             <button

@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useMediaQuery } from "@mui/material";
-import { ConnectDialog } from "@connect2ic/react";
 
 import darkLogo from "../../../images/dark_logo.png";
 import lightLogo from "../../../images/light_logo.png";
@@ -71,8 +70,6 @@ const Navbar = (props: Theme) => {
         >
           <NavConnectButton />
         </button>
-
-        <ConnectDialog />
       </section>
     </nav>
   );

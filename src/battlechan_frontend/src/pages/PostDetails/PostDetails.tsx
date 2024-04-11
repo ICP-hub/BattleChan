@@ -22,7 +22,6 @@ import Constant from "../../utils/constants";
 import PostApiHanlder from "../..//API_Handlers/post";
 import CommentsApiHanlder from "../../API_Handlers/comments";
 import TokensApiHanlder from "../../API_Handlers/tokens";
-import UserApiHanlder from "../../API_Handlers/user";
 
 import Skeleton from "../../components/Skeleton/Skeleton";
 import TimeComponent from "../MainPosts/TimeComponent";
@@ -95,7 +94,6 @@ interface commentResponse {
 }
 
 const PostDetails = (props: Theme) => {
-  const [time, setTime] = useState("0:00");
   const [postsData, setPostsData] = useState<PostInfo>();
   const [vote, setVote] = React.useState(post.vote);
   const [showComments, setShowComments] = React.useState(true);
@@ -110,13 +108,8 @@ const PostDetails = (props: Theme) => {
   const postId: string = useParams().postId ?? "";
   const decodedPostId = decodeURIComponent(postId);
 
-  const {
-    getSingleMainPost,
-    getSingleArchivePost,
-    upvotePost,
-    archivePost,
-    downvotePost,
-  } = PostApiHanlder();
+  const { getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost } =
+    PostApiHanlder();
   const { getAllComments, createComment, getAllCommentsOfArchivedPost } =
     CommentsApiHanlder();
   const { convertNanosecondsToTimestamp, convertInt8ToBase64 } = Constant();
@@ -153,10 +146,10 @@ const PostDetails = (props: Theme) => {
   }, [is700px]);
 
   const formatTime = (remainingTime: bigint) => {
-    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-    const minutes = Math.floor(seconds / 60); // Get remaining minutes
-    const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    const seconds = Math.floor(Number(remainingTime) / 1e9);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
@@ -169,43 +162,19 @@ const PostDetails = (props: Theme) => {
         response = (await getSingleMainPost(postId)) as BackendResponse;
       }
 
-      // console.log(response);
-
       if (response.status === true && response.data) {
-        // console.log(response);
-
-        const posts = response.data.flat(); // Flatten nested arrays if any
+        const posts = response.data.flat();
         posts.forEach((element: any) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          // console.log(timestamp);
 
           element.createdAt = timestamp;
           element.upvotes = Number(element.upvotes);
-          // console.log("UPVOTE", element.upvotes);
-
-          // const interval = setInterval(
-          //   (expireAt: BigInt) => {
-          //     const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-          //     const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
-
-          //     if (remainingTime <= 0) {
-          //       clearInterval(interval);
-          //       setTime("0:00");
-          //       // console.log("Post archived");
-          //     } else {
-          //       setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-          //     }
-          //   },
-          //   1000,
-          //   BigInt(element.expireAt)
-          // );
         });
         let data = posts[0];
         setPostsData(data);
         setDataFetched(true);
-        // console.log(postsData);
       }
     } catch (error) {
       setDataFetched(false);
@@ -229,10 +198,10 @@ const PostDetails = (props: Theme) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          // console.log(timestamp);
+
           element.createdAt = timestamp;
         });
-        // console.log(comments);
+
         setcommentsData(comments);
         setCommentsCount(comments.length);
       }
@@ -249,7 +218,6 @@ const PostDetails = (props: Theme) => {
     upvoteBtn?.addEventListener("click", handleUpvoteClick);
     downvoteBtn?.addEventListener("click", handleDownvoteClick);
 
-    // Clean up the event listeners
     return () => {
       upvoteBtn?.removeEventListener("click", handleUpvoteClick);
       downvoteBtn?.removeEventListener("click", handleDownvoteClick);
@@ -257,18 +225,15 @@ const PostDetails = (props: Theme) => {
   }, []);
 
   const handleUpvote = async (postId: string) => {
-    // console.log(isConnected);
-    // console.log(principal);
     if (type === "archive") {
       return;
     }
-    // console.log(isUserAuthenticatedRef.current);
+
     if (isUserAuthenticatedRef.current) {
       const is_approved = await icrc2_approve(principal_idRef.current);
       if (is_approved) {
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
-          // toast.success(data?.ok);
           toast.success("Successfully Upvoted Post!");
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
@@ -278,7 +243,6 @@ const PostDetails = (props: Theme) => {
       }
     } else {
       toast.error("Please first Connect your Wallet to Upvote this post!");
-      // navigate("/");
     }
   };
 
@@ -286,8 +250,7 @@ const PostDetails = (props: Theme) => {
     if (type === "archive") {
       return;
     }
-    // console.log(isConnected);
-    // console.log(principal);
+
     if (isUserAuthenticatedRef.current) {
       const data = (await downvotePost(postId)) as VoteResponse;
       if (data && data?.ok) {
@@ -299,7 +262,6 @@ const PostDetails = (props: Theme) => {
       }
     } else {
       toast.error("Please first Connect your Wallet to Downvote this post!");
-      // navigate("/");
     }
   };
 
@@ -312,14 +274,12 @@ const PostDetails = (props: Theme) => {
       postsData?.postId ?? "",
       newComment
     )) as commentResponse;
-    // console.log(response);
 
     if (response && response?.ok) {
       toast.success(response.ok);
       getComments();
       setNewComment("");
       setLoading(false);
-      // window.location.href = "/dashboard/mainPosts";
     } else {
       toast.error(
         "Error Creating comment, Please verify and provide valid data!"
@@ -354,7 +314,6 @@ const PostDetails = (props: Theme) => {
             )}
           </h1>
 
-          {/* post image  */}
           <div className="max-w-2xl h-auto">
             {!dataFetched ? (
               <Skeleton w_h_p={"w-full tablet:h-[220px] h-[400px]"} />
@@ -391,39 +350,36 @@ const PostDetails = (props: Theme) => {
               )}
 
               <div className="text-lg">
-                {/* <span
-                  className={` ${type === "archive" ? "text-red" : "text-[#18AF00]"
-                    }`}
-                >
-                  {time}
-                </span>{" "} */}
-                <TimeComponent expireAt={postsData?.expireAt ?? 1n} id={postsData?.postId ?? ""} />{" "}
+                
+                <TimeComponent
+                  expireAt={postsData?.expireAt ?? 1n}
+                  id={postsData?.postId ?? ""}
+                />{" "}
                 min left
               </div>
             </div>
           </div>
 
-          {/* upvote and downvote button  */}
           <div className="flex gap-2 phone:text-5xl text-3xl mt-4 tablet:mt-11">
             <TbSquareChevronUpFilled
-              className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${
+                vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
-              className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${
+                !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />
           </div>
 
-          {/* user avatar and post details  */}
           <div className="flex justify-between items-center mt-5 tablet:justify-start tablet:gap-8 tablet:mt-14">
             <div className="flex gap-2 items-center justify-center">
-              {/* <div className="w-6 h-6 tablet:w-12 tablet:h-12 bg-[#686868] text-[#fff] flex items-center justify-center rounded"> */}
               <div className="w-9 h-9 phone:w-20 phone:h-20 bg-[#686868] text-[#fff] flex justify-center rounded">
                 {!dataFetched ? (
                   <Skeleton w_h_p={"w-full h-full"} />
@@ -454,7 +410,6 @@ const PostDetails = (props: Theme) => {
             </div>
           </div>
 
-          {/* post catalog name and post content and comment */}
           <div className="mt-8 tablet:text-lg tablet:mt-10">
             <h1 className="font-bold mb-3">
               {!dataFetched ? (
@@ -476,7 +431,6 @@ const PostDetails = (props: Theme) => {
             </div>
           </div>
 
-          {/* comment for mobile  */}
           {!showComments && (
             <div className="tablet:hidden my-8">
               <button
@@ -488,7 +442,6 @@ const PostDetails = (props: Theme) => {
             </div>
           )}
 
-          {/* Comment for desktop   */}
           {
             <div className={`mt-8 ${showComments ? "block" : "hidden"}`}>
               <h1 className={`font-bold tablet:text-lg`}>Comments</h1>
@@ -507,14 +460,7 @@ const PostDetails = (props: Theme) => {
                     />
                     <div className="flex items-center justify-end mt-4">
                       <div className="flex justify-center items-center gap-4">
-                        {/* <button
-                          onClick={() => {
-                            setLoading(false);
-                          }}
-                          className="text-[#000] dark:text-[#fff] rounded-full px-6 py-2 font-semibold"
-                        >
-                          Cancel
-                        </button> */}
+                        
                         <button
                           onClick={handleAddComment}
                           className={

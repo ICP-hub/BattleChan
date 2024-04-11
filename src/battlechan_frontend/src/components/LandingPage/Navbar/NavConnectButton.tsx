@@ -1,19 +1,24 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./NavConnectButton.scss";
 
 import { useMediaQuery } from "@mui/material";
 import { MdArrowOutward } from "react-icons/md";
-import { ConnectButton, useDialog } from "@connect2ic/react";
-// import { ConnectDialog, useConnect, useDialog } from "@connect2ic/react"
+import { useConnect, useDialog, ConnectDialog } from "@connect2ic/react";
+import toast from "react-hot-toast";
 
 const NavConnectButton = () => {
   const is820px = useMediaQuery("(min-width: 820px)");
-  // const { open } = useDialog();
+  const { open } = useDialog();
+  const { isConnected, disconnect } = useConnect();
 
-  // const loginHandler = () => {
-  //   console.log("LOGIN");
-  //   open();
-  // }
+  const loginHandler = () => {
+    open();
+  };
+
+  const logoutHandler = () => {
+    disconnect()
+    toast.success("Logout successfully.")
+  };
 
   useEffect(() => {
     const button = document.querySelector(".connect-button");
@@ -24,12 +29,23 @@ const NavConnectButton = () => {
   });
 
   return (
-    <ConnectButton>
-      <span className="flex-row-center text-light">
-        {is820px && "Connect Wallet "}
-        <MdArrowOutward className="tablet:text-2xl text-lg" />
-      </span>
-    </ConnectButton>
+    <div>
+      {!isConnected && (
+        <span className="flex-row-center text-light" onClick={loginHandler}>
+          {is820px && "Connect Wallet"}
+          <MdArrowOutward className="tablet:text-2xl text-lg" />
+        </span>
+      )}
+
+      {isConnected && (
+        <span className="flex-row-center text-light" onClick={logoutHandler}>
+          {is820px && "Disconnect"}
+          <MdArrowOutward className="tablet:text-2xl text-lg" />
+        </span>
+      )}
+
+      <ConnectDialog />
+    </div>
   );
 };
 

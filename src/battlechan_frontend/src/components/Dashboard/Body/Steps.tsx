@@ -1,5 +1,4 @@
 import { useConnect, useDialog } from "@connect2ic/react";
-import React from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 

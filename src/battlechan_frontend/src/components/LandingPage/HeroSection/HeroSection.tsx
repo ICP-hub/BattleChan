@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./HeroSection.scss";
 
 import { ConnectButton, ConnectDialog, useConnect, useDialog } from "@connect2ic/react";
 import { Link } from "react-router-dom";
 import desktops from "../../../images/desktops.png";
-// import backImage from "../../../images/background_img.png";
+
 import backImage from "../../../images/bg.svg";
 
 const HeroSection = () => {

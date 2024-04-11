@@ -19,7 +19,7 @@ const WithdrawOverlay = (props: Props) => {
   const { withdrawPost } = TokensApiHanlder();
 
   const handleClosePopup = () => {
-    props.setProfilePopUp(false); // Close the popup
+    props.setProfilePopUp(false); 
   };
 
   const handleWithdrawButton = (amount: number) => {
@@ -30,10 +30,10 @@ const WithdrawOverlay = (props: Props) => {
     const data = (await withdrawPost(props.postId, amount)) as Response;
     if (data.status == true) {
       toast.success(`Successfully Withdrawn $Time Tokens from Post: ${props.postId}`);
-      props.setProfilePopUp(false); // Close the popup
+      props.setProfilePopUp(false); 
     } else {
       toast.error(data.err);
-      props.setProfilePopUp(false); // Close the popup
+      props.setProfilePopUp(false); 
     }
   };
 
@@ -67,7 +67,6 @@ const WithdrawOverlay = (props: Props) => {
           onChange={(e) => setAmount(parseInt(e.target.value))}
         />
 
-        {/* Buttons */}
         <div className="buttons gap-4 flex-row-center justify-center">
           <button
             className="small-button bg-transparent border hover:bg-grey"

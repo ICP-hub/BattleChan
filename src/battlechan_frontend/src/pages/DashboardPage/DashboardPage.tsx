@@ -20,7 +20,7 @@ interface UserAnalytics {
   userArchivedPost: number;
   dislikedPost: number;
   status: boolean;
-};
+}
 
 const DashboardPage = (props: Theme) => {
   const className = "dashboard__dashboardPage";
@@ -50,16 +50,14 @@ const DashboardPage = (props: Theme) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
   }, [principal]);
 
-  // Get Total Post's Counts
   useEffect(() => {
     async function getAnalytics() {
       try {
         const response = (await getUserAnalytics()) as UserAnalytics;
-        // console.log(response);
+
         setLivePost(response?.postData);
         setArchivePost(response?.userArchivedPost);
         setTotalComments(response?.comments);
@@ -111,19 +109,25 @@ const DashboardPage = (props: Theme) => {
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Live Post</div>
-                <div className="font-bold phone:text-xl text-lg mt-2">{livePost}</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">
+                  {livePost}
+                </div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Archive Post</div>
-                <div className="font-bold phone:text-xl text-lg mt-2">{archivePost}</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">
+                  {archivePost}
+                </div>
               </div>
             </div>
             <div className={cardContainer}>
               <div className={cardStyle}>
                 <div>Total Comments</div>
-                <div className="font-bold phone:text-xl text-lg mt-2">{totalComments}</div>
+                <div className="font-bold phone:text-xl text-lg mt-2">
+                  {totalComments}
+                </div>
               </div>
             </div>
             <div className={cardContainer}>
@@ -168,27 +172,6 @@ const DashboardPage = (props: Theme) => {
         <Posts />
 
         <Comments />
-
-        {/* <div
-          className={
-            className +
-            "__bottom " +
-            "w-full gap-2 flex-row-center justify-between mb-3 py-8 xl:px-52 laptop:px-40 big_tablet:px-32 phone:px-12 px-4 font-sans text-base"
-          }
-        >
-          <div className="flex flex-col items-start font-bold tablet:text-lg phone:text-base text-sm">
-            <p>
-              $Time Balance : <span>{"5209"}</span>
-            </p>
-            <p>
-              $Time available for withdraw : <span>{"109"}</span>
-            </p>
-          </div>
-
-          <button className="small-button bg-dark text-light dark:bg-light dark:text-dark rounded-lg">
-            Withdraw
-          </button>
-        </div> */}
       </div>
     </div>
   );
