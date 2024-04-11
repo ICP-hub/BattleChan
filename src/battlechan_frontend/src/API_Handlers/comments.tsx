@@ -253,7 +253,7 @@ const CommentsApiHanlder = () => {
       let userActiveComments: AllUserComment[] = [];
 
       if (response) {
-        console.log("response of all user Comments: ", response);
+        // console.log("response of all user Comments: ", response);
         activePostCommentData = [...response.data[0].active];
         archivedPostCommentData = [...response.data[0].archived];
 
@@ -294,8 +294,8 @@ const CommentsApiHanlder = () => {
           }
         }
 
-        console.log("archiveComments : ", userArchivedComments);
-        console.log("archiveComments : ", userActiveComments);
+        // console.log("archiveComments : ", userArchivedComments);
+        // console.log("archiveComments : ", userActiveComments);
 
         return [...userActiveComments, ...userArchivedComments];
       }

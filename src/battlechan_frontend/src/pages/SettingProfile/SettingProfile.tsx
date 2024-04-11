@@ -109,7 +109,7 @@ const SettingProfile = (props: Theme) => {
       setShowInput(false);
       setInputUserName("");
     }
-    console.log("Input username:", inputUserName); // Add this line
+    // console.log("Input username:", inputUserName); // Add this line
   }
 
   // useEffect(() => {

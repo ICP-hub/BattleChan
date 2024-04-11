@@ -129,7 +129,7 @@ const MainPosts = (props: Theme) => {
           const names = boards.map((board) => board.boardName);
           setBoardsData(names);
         } else {
-          console.log("No boards found.");
+          // console.log("No boards found.");
         }
       } catch (error) {
         console.error("Error fetching communities:", error);
@@ -183,7 +183,7 @@ const MainPosts = (props: Theme) => {
         pageNumber,
         boardName
       );
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -218,7 +218,7 @@ const MainPosts = (props: Theme) => {
           selectedBoard
         )) as PostResponse;
       }
-      console.log("Main Posts Response: ", response);
+      // console.log("Main Posts Response: ", response);
       if (response.status === true && response.data) {
         const posts = response.data.flat();
         posts.forEach((element) => {
