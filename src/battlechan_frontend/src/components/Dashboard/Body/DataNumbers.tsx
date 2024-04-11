@@ -1,4 +1,3 @@
-import React from "react";
 
 import { FiBox } from "react-icons/fi";
 import { FaRunning } from "react-icons/fa";
@@ -20,7 +19,7 @@ const DataNumbers = () => {
       }
     >
       <div className="data__headings px-4 flex-row-center flex-nowrap justify-between rounded-xl text-light bg-dirty-light-green">
-        <div className="data__label py-6 px-2 px-4 h-full text-lg font-semibold">
+        <div className="data__label py-6 px-4 h-full text-lg font-semibold">
           Name of Subject
         </div>
 

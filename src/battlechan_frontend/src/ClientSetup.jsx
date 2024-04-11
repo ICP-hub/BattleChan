@@ -1,4 +1,4 @@
-// ClientSetup.jsx
+
 import React from 'react';
 import { createClient } from "@connect2ic/core";
 import { InternetIdentity } from "@connect2ic/core/providers";
@@ -20,7 +20,7 @@ const client = createClient({
     },
     providers: [new InternetIdentity(), new PlugWallet()],
 });
-// 
+
 const ClientSetup = ({ children }) => (
     <Connect2ICProvider client={client}>
         {children}

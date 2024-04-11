@@ -1,5 +1,3 @@
-import React from "react";
-
 const KnowMore = () => {
   return (
     <div className="KnowMoreAboutPosts pt-12 pb-40">

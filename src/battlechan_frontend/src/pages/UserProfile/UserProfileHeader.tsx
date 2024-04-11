@@ -14,7 +14,7 @@ const truncateString = (str: string, maxLength: number): string => {
 
 interface UserInfo {
   createdAt: string;
-  createdComments: any[]; // Define appropriate type for these arrays
+  createdComments: any[];
   downvotedTo: any[];
   likedComments: any[];
   postIds: string[];
@@ -28,16 +28,6 @@ interface UserInfo {
 
 interface UserProfileHeaderProps {
   userInfo: UserInfo[];
-}
-
-interface BackendResponse {
-  status: boolean;
-  data: [];
-  error: string[];
-}
-
-interface UserData {
-  userName: string;
 }
 
 interface ProfileData {
@@ -77,7 +67,6 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userInfo }) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
     fetchProfile();
   }, [userName]);
 

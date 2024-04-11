@@ -1,4 +1,3 @@
-import React from "react";
 
 import { HiLink } from "react-icons/hi";
 import { FaTelegramPlane } from "react-icons/fa";
@@ -58,27 +57,7 @@ const Footer = () => {
           </div>
         </section>
 
-        {/* Signup email input */}
-        {/* <section className="__right hidden big_tablet:w-1/2 w-full tablet:flex-direction-col big_tablet:items-start items-center gap-4">
-          <p className="font-semibold small_phone:text-base text-sm">
-            Signup for latest updates to keep up to date with us
-          </p>
-
-          <div className="emailInput w-full small_phone:gap-4 gap-1 flex-row-center laptop:justify-start justify-center">
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              className="emailInput w-[55%] rounded-[2rem] phone:text-lg text-base text-dark px-4 py-1"
-            />
-            <button
-              type="button"
-              className="font-semibold phone:text-base text-sm rounded-[3rem] px-6 py-2 bg-dark text-light"
-            >
-              Get Updates
-            </button>
-          </div>
-        </section> */}
+        
       </div>
 
       {/* Bottom */}

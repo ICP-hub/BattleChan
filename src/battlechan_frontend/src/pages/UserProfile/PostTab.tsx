@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PostGrid from "./PostGrid";
 
 const PostTab = () => {
@@ -15,34 +15,9 @@ const PostTab = () => {
   };
   return (
     <>
-      {/* post tabs for desktop */}
       <div className="hidden tablet:block">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold dark:text-[#fff]">Popular</h1>
-          {/* <div className="flex items-center justify-center gap-2">
-            <button className="border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-6 py-2 font-semibold">
-              Sports
-            </button>
-            <button className="flex items-center justify-center bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000] rounded-md px-6 py-2 font-semibold">
-              <svg
-                className="w-5 h-5 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"
-                />
-              </svg>
-              Filter
-            </button>
-          </div> */}
         </div>
         <PostGrid type="Popular" />
         <div className="flex items-center justify-between mt-4">
@@ -50,10 +25,8 @@ const PostTab = () => {
         </div>
         <PostGrid type="Archive" />
       </div>
-      {/* post tabs for mobile */}
       <div className="tablet:hidden">
         <div className="flex items-center justify-between">
-          {/* dropdown button*/}
           <div>
             <button
               id="dropdownDefaultButton"
@@ -80,7 +53,6 @@ const PostTab = () => {
               </svg>
             </button>
           </div>
-          {/* sports and filter button  */}
           <div className="flex items-center justify-between gap-1">
             <div className="flex items-center justify-center">
               <button className="border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-4 py-1 text-xs font-semibold">
@@ -127,7 +99,6 @@ const PostTab = () => {
             </button>
           </div>
         </div>
-        {/* dropdown list  */}
         <div>
           {isOpen && (
             <div

@@ -1,11 +1,11 @@
-// AppRoutes.tsx
+
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 import Loader from "./components/Loader/Loader";
 import { useConnect } from "@connect2ic/react";
 
-// Lazy load pages
+
 const DashboardRoutes = lazy(() => import("./pages/Routes"));
 const Landing = lazy(() => import("./pages/Landing/Landing"));
 const MainPosts = lazy(() => import("./pages/MainPosts/MainPosts"));
@@ -17,7 +17,7 @@ const CreatePost = lazy(() => import("./pages/CreatePost/CreatePost"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage/DashboardPage"));
 
 interface AppRoutesProps {
-  handleThemeSwitch: () => void; // Adjust based on the actual implementation
+  handleThemeSwitch: () => void; 
 }
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
@@ -37,7 +37,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
   React.useEffect(() => {
     if (principal) {
       
-      // Perform any other actions that depend on the updated principal value
+      
     }
   }, [principal]);
 

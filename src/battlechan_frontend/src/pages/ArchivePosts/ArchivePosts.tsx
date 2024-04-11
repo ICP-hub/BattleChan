@@ -1,4 +1,3 @@
-import React from "react";
 import MainPosts from "../MainPosts/MainPosts";
 type Theme = {
   handleThemeSwitch: Function;

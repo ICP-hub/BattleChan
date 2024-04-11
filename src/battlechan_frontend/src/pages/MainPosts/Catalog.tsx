@@ -15,7 +15,6 @@ const Catalog: React.FC<
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   useEffect(() => {
-    // Set the default selected board when the component mounts or when boardsData changes
     if (boardsData.length > 0 && activeItem === null) {
       setActiveItem(boardsData[0].toLowerCase());
     }
@@ -31,16 +30,6 @@ const Catalog: React.FC<
     setActiveItem(boardName.toLowerCase());
     handleBoardChange(boardName);
   };
-
-  // const items = [
-  //   { id: 1, label: "Business" },
-  //   { id: 2, label: "Politics" },
-  //   { id: 3, label: "Sports" },
-  //   { id: 4, label: "Games" },
-  //   { id: 5, label: "Technology" },
-  //   { id: 6, label: "Crypto" },
-  //   { id: 7, label: "Cinema" },
-  // ];
 
   return (
     <ul

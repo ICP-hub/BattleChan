@@ -64,6 +64,5 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
   );
 };
 
-const MemoizedPost = React.memo(Post);
 
 export default Posts;
