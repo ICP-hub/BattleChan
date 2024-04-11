@@ -56,7 +56,7 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
   const [commentData, setCommentData] = useState<AllUserComment[]>([]);
   const { getSingleMainPost,  } = PostApiHanlder();
 
-  console.log("comment data: ", commentData)
+  // console.log("comment data: ", commentData)
 
   const multilineEllipsisStyle: React.CSSProperties = {
     overflow: "hidden",
@@ -90,7 +90,7 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="dark:text-[#fff] font-bold tablet:text-lg">Today</h1>
+      {/* <h1 className="dark:text-[#fff] font-bold tablet:text-lg">Today</h1> */}
       {/* comment  */}
       {commentData.length > 0 &&
         commentData.map((comment) => (

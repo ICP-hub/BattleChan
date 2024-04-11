@@ -48,7 +48,7 @@ const PostGrid: React.FC<PostGridProps> = ({ type }) => {
       if (type == "Archive") {
         const response = (await getUsersArchivePosts()) as PostResponse;
         if (response.status == true && response.data.length > 0) {
-          console.log(response);
+          // console.log(response);
           const posts = response.data
             .flatMap((nestedArray) => nestedArray)
             .flatMap((element) => {
@@ -66,7 +66,7 @@ const PostGrid: React.FC<PostGridProps> = ({ type }) => {
       } else {
         const response = (await getUsersMainPosts()) as PostResponse;
         if (response.status == true && response.data.length > 0) {
-          console.log(response);
+          // console.log(response);
           // const posts = response.data
           //   .flatMap((nestedArray) => nestedArray)
           //   .flatMap((element) => {

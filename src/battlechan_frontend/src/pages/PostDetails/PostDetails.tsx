@@ -185,27 +185,27 @@ const PostDetails = (props: Theme) => {
           element.upvotes = Number(element.upvotes);
           // console.log("UPVOTE", element.upvotes);
 
-          const interval = setInterval(
-            (expireAt: BigInt) => {
-              const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-              const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+          // const interval = setInterval(
+          //   (expireAt: BigInt) => {
+          //     const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
+          //     const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
 
-              if (remainingTime <= 0) {
-                clearInterval(interval);
-                setTime("0:00");
-                console.log("Post archived");
-              } else {
-                setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
-              }
-            },
-            1000,
-            BigInt(element.expireAt)
-          );
+          //     if (remainingTime <= 0) {
+          //       clearInterval(interval);
+          //       setTime("0:00");
+          //       // console.log("Post archived");
+          //     } else {
+          //       setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+          //     }
+          //   },
+          //   1000,
+          //   BigInt(element.expireAt)
+          // );
         });
         let data = posts[0];
         setPostsData(data);
         setDataFetched(true);
-        console.log(postsData);
+        // console.log(postsData);
       }
     } catch (error) {
       setDataFetched(false);
@@ -229,7 +229,7 @@ const PostDetails = (props: Theme) => {
           const timestamp: string = convertNanosecondsToTimestamp(
             BigInt(element.createdAt)
           );
-          console.log(timestamp);
+          // console.log(timestamp);
           element.createdAt = timestamp;
         });
         // console.log(comments);
@@ -262,7 +262,7 @@ const PostDetails = (props: Theme) => {
     if (type === "archive") {
       return;
     }
-    console.log(isUserAuthenticatedRef.current);
+    // console.log(isUserAuthenticatedRef.current);
     if (isUserAuthenticatedRef.current) {
       const is_approved = await icrc2_approve(principal_idRef.current);
       if (is_approved) {
@@ -312,7 +312,7 @@ const PostDetails = (props: Theme) => {
       postsData?.postId ?? "",
       newComment
     )) as commentResponse;
-    console.log(response);
+    // console.log(response);
 
     if (response && response?.ok) {
       toast.success(response.ok);
@@ -375,7 +375,7 @@ const PostDetails = (props: Theme) => {
               ) : (
                 <div className="flex items-center gap-4">
                   <div
-                    className={`flex flex phone:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
+                    className={`flex phone:text-lg text-xs items-center justify-center text-[#000] dark:text-[#fff] text-opacity-50 dark:text-opacity-50 gap-1`}
                   >
                     <MdOutlineVerifiedUser />
                     <span>{postsData?.upvotes}</span>

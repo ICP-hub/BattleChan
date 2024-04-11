@@ -78,7 +78,7 @@ const Replies: React.FC<RepliesProps> = ({ commentId, repliesData, getReplies })
         commentId ?? "",
         replyId ?? ""
       )) as LikeResponse;
-      console.log(response);
+      // console.log(response);
 
       if (response && response?.ok) {
         toast.success("You liked the comment reply!");

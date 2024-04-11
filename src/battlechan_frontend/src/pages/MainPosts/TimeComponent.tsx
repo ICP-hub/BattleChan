@@ -22,7 +22,7 @@ const TimeComponent: React.FC<TimeDisplayProps> = ({ id, expireAt }) => {
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
-      console.log("POST ARCHIVED!");
+      // console.log("POST ARCHIVED!");
     }
   };
 

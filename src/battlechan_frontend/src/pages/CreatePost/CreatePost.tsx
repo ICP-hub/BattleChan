@@ -116,13 +116,13 @@ const CreatePost = (props: Theme) => {
       }
 
       const boards = response.data[0];
-      console.log(boards);
+      // console.log(boards);
 
       if (boards && boards.length > 0) {
         const names = boards.map((board) => board.boardName);
         setCommunities(names); // Update the state with all board names.
       } else {
-        console.log("No boards found.");
+        // console.log("No boards found.");
       }
     } catch (error) {
       console.error("Error fetching communities:", error);
@@ -147,7 +147,7 @@ const CreatePost = (props: Theme) => {
       selectedCommunityRef.current,
       postData
     )) as postResponse;
-    console.log(response);
+    // console.log(response);
 
     if (response && response?.ok) {
       navigate("/dashboard/mainPosts");

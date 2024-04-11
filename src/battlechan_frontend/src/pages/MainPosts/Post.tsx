@@ -181,7 +181,7 @@ const Post: React.FC<PostProps> = ({
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
-      console.log("POST ARCHIVED!");
+      // console.log("POST ARCHIVED!");
     }
   };
 
