@@ -14,7 +14,6 @@ import TokensApiHanlder from "../../API_Handlers/tokens";
 import Constant from "../../utils/constants";
 import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
 
-
 interface PostProps {
   id: string;
   postName: string;
@@ -84,7 +83,6 @@ const Post: React.FC<PostProps> = ({
   const navigate = useNavigate();
 
   const className = "Dashboard__MainPosts__Post";
-  
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
@@ -115,32 +113,32 @@ const Post: React.FC<PostProps> = ({
     getCommentsCounts();
 
     const interval = setInterval(() => {
-      const currentTime = BigInt(Date.now()) * BigInt(1000000); 
-      const remainingTime = Number(expireAt) - Number(currentTime); 
+      const currentTime = BigInt(Date.now()) * BigInt(1000000);
+      const remainingTime = Number(expireAt) - Number(currentTime);
 
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
         archive();
-        
       } else {
-        setTime(formatTime(BigInt(remainingTime))); 
+        setTime(formatTime(BigInt(remainingTime)));
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [expireAt]); 
+  }, [expireAt]);
 
   const handleUpvote = async (postId: string) => {
     if (type === "archive") {
       return;
     }
     if (isUserAuthenticatedRef.current) {
-      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      const is_approved = (await icrc2_approve(
+        principal_idRef.current
+      )) as Response;
       if (is_approved.status == true) {
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
-          
           toast.success("Successfully Upvoted Post!");
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
@@ -160,7 +158,9 @@ const Post: React.FC<PostProps> = ({
       return;
     }
     if (isUserAuthenticatedRef.current) {
-      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      const is_approved = (await icrc2_approve(
+        principal_idRef.current
+      )) as Response;
       if (is_approved.status == true) {
         const data = (await downvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
@@ -181,7 +181,6 @@ const Post: React.FC<PostProps> = ({
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
-      
     }
   };
 
@@ -190,17 +189,16 @@ const Post: React.FC<PostProps> = ({
     if (response && response.status == true) {
       let data = response.data[0];
       if (data && data.length > 0) {
-        
         setCommentsCount(data.length);
       }
     }
   };
 
   const formatTime = (remainingTime: bigint) => {
-    const seconds = Math.floor(Number(remainingTime) / 1e9); 
-    const minutes = Math.floor(seconds / 60); 
-    const remainingSeconds = seconds % 60; 
-    
+    const seconds = Math.floor(Number(remainingTime) / 1e9);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
@@ -241,21 +239,15 @@ const Post: React.FC<PostProps> = ({
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-md small_phone:text-1xl text-sm">
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold">
                         {userName}
                       </h1>
 
-                      <button
-                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green cursor-pointer"
-                        onClick={
-                          type === "archive"
-                            ? undefined
-                            : () => setShowOverlay(true)
-                        }
-                      >
+                      <button className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold">
                         <span
-                          className={`${type === "archive" ? "text-red" : "text-light-green"
-                            }`}
+                          className={`${
+                            type === "archive" ? "text-red" : "text-light-green"
+                          }`}
                         >
                           {type === "archive" ? "0:00 " : `${time} `}
                         </span>
@@ -374,36 +366,41 @@ const Post: React.FC<PostProps> = ({
       )}
 
       <section className="flex-row-center justify-between">
-
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
+            className={`${
+              vote ? "text-dirty-light-green" : "text-[#878787]"
+            } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
+            className={`${
+              !vote ? "text-dirty-light-green" : "text-[#878787]"
+            } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />
         </div>
 
         <div className="flex-row-center tablet:text-lg small_phone:text-sm text-xs gap-2 justify-end">
-          <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
+          <div className="flex-row-center justify-center text-dark dark:text-grey gap-1">
             <MdOutlineVerifiedUser />
             <span>{likes}</span>
           </div>
-          <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
+          <div className="flex-row-center justify-center text-dark dark:text-grey gap-1">
             <LiaCommentSolid />
             <span>{commentsCount} Comments</span>
           </div>
         </div>
       </section>
 
-      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} postId={id} />
+      <WithdrawOverlay
+        display={showOverlay}
+        setProfilePopUp={setShowOverlay}
+        postId={id}
+      />
     </div>
   );
 };
