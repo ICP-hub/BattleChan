@@ -241,7 +241,7 @@ const CreatePost = (props: Theme) => {
                 </button>
                 <button
                   type="button"
-                  className="createPostBtn small-button text-light dark:text-light dark:bg-dirty-light-green bg-dark hover:dark:bg-fresh-green hover:text-light transition rounded-[2rem]"
+                  className="createPostBtn small-button text-light bg-dirty-light-green hover:bg-fresh-green transition rounded-[2rem]"
                   id="createPostBtn1"
                   // onClick={handleCreatePost}
                 >
@@ -308,7 +308,7 @@ const CreatePost = (props: Theme) => {
               </button>
               <button
                 type="button"
-                className="createPostBtn px-4 py-2 font-semibold text-sm text-light bg-dirty-light-green hover:dark:bg-fresh-green transition rounded-[2rem]"
+                className="createPostBtn px-4 py-2 font-semibold text-sm text-light bg-dirty-light-green hover:bg-fresh-green transition rounded-[2rem]"
                 id="createPostBtn2"
                 // onClick={handleCreatePost}
               >
