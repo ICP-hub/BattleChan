@@ -109,14 +109,14 @@ const SettingProfile = (props: Theme) => {
       setShowInput(false);
       setInputUserName("");
     }
-    // console.log("Input username:", inputUserName); // Add this line
+    // 
   }
 
   // useEffect(() => {
   //   const fileInput = document.getElementById("profile");
 
   //   const handleFileInputChange = (event: any) => {
-  //     console.log("Here");
+  //     
   //     const file = event.target.files?.[0];
 
   //     if (!file) return;
@@ -129,11 +129,11 @@ const SettingProfile = (props: Theme) => {
   //     }
 
   //     if (file.type.startsWith("image")) {
-  //       console.log("Here1");
+  //       
   //       const reader = new FileReader();
 
   //       reader.onload = async (e) => {
-  //         console.log("Hello");
+  //         
   //         if (e.target && e.target.result) {
   //           const img = new Image();
   //           img.src = e.target.result.toString();
@@ -154,14 +154,14 @@ const SettingProfile = (props: Theme) => {
   //             // Convert data URL to Blob
   //             const blob = await fetch(dataURL).then((res) => res.blob());
 
-  //             console.log("blob:", blob);
+  //             
   //             // Convert Blob to ArrayBuffer
   //             const arrayBuffer = await blob.arrayBuffer();
 
-  //             console.log("array:", arrayBuffer);
+  //             
   //             // Convert ArrayBuffer to Int8Array
   //             const int8Array = new Int8Array(arrayBuffer);
-  //             console.log(int8Array);
+  //             
 
   //             // Base64
   //             const uint8Array = new Uint8Array(int8Array);
@@ -173,7 +173,7 @@ const SettingProfile = (props: Theme) => {
   //             });
   //             let base64 = btoa(binary);
 
-  //             console.log(base64);
+  //             
   //             // setFileURL(base64);
   //           };
   //         }

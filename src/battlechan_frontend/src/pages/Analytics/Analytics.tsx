@@ -84,7 +84,7 @@ const Analytics = (props: Theme) => {
     async function getAnalytics() {
       try {
         const response = (await getUserAnalytics()) as UserAnalytics;
-        // console.log(response);
+        // 
         setLikedPost(response?.likedPost);
         setDislikedPost(response?.dislikedPost);
       } catch (error) {

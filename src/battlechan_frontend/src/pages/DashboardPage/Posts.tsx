@@ -37,12 +37,12 @@ const Posts = () => {
   const fontSize = "tablet:text-base phone:text-sm text-xs";
   const currentTime = BigInt(Date.now()) * BigInt(1000000);
 
-  // console.log("postData: ", postData);
+  // 
   const formatTime = (remainingTime: bigint) => {
     const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
     const minutes = Math.floor(seconds / 60); // Get remaining minutes
     const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    // 
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
@@ -50,7 +50,7 @@ const Posts = () => {
     const fetchData = async () => {
       const response = (await getUsersMainPosts()) as PostResponse;
       if (response.status == true && response.data.length > 0) {
-        // console.log(response);
+        // 
         const posts = response.data.flat();
         setPostData(posts);
       }

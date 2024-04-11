@@ -122,7 +122,7 @@ const Post: React.FC<PostProps> = ({
         clearInterval(interval);
         setTime("0:00");
         archive();
-        // console.log("Post archived");
+        // 
       } else {
         setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
       }
@@ -181,7 +181,7 @@ const Post: React.FC<PostProps> = ({
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
-      // console.log("POST ARCHIVED!");
+      // 
     }
   };
 
@@ -190,7 +190,7 @@ const Post: React.FC<PostProps> = ({
     if (response && response.status == true) {
       let data = response.data[0];
       if (data && data.length > 0) {
-        // console.log(length);
+        // 
         setCommentsCount(data.length);
       }
     }
@@ -200,7 +200,7 @@ const Post: React.FC<PostProps> = ({
     const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
     const minutes = Math.floor(seconds / 60); // Get remaining minutes
     const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    // 
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
