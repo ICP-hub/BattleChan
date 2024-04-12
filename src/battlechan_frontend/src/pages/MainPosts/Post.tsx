@@ -279,7 +279,7 @@ const Post: React.FC<PostProps> = ({
                   <p className="tablet:text-lg text-sm font-semibold text-ellipsis overflow-hidden">
                     {postName}
                   </p>
-                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
+                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800 text-wrap break-all">
                     {content.length > 70
                       ? `${content.slice(0, 70)}...`
                       : content}
