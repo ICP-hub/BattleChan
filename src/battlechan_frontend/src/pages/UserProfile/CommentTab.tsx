@@ -22,20 +22,6 @@ interface CommentTabProps {
   userInfo: UserInfo[];
 }
 
-interface Comment {
-  commentId: string;
-  createdAt: string;
-  likedBy: string[];
-  comment: string;
-  updatedAt: string[];
-  replies: { empty: null } | null;
-  createdBy: {
-    userName: string;
-    userProfile: Int8Array;
-  };
-  postImage: Int8Array;
-  postId: string;
-}
 
 interface AllUserComment {
   commentId: string;
@@ -45,18 +31,11 @@ interface AllUserComment {
   comment: string;
 }
 
-interface BackendResponse {
-  status: boolean;
-  data: [];
-  error: string[];
-}
 const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
   const { getAllCommentOfUser } = CommentsApiHanlder();
   const { convertInt8ToBase64 } = Constant();
   const [commentData, setCommentData] = useState<AllUserComment[]>([]);
-  const { getSingleMainPost,  } = PostApiHanlder();
-
-  console.log("comment data: ", commentData)
+  const { getSingleMainPost } = PostApiHanlder();
 
   const multilineEllipsisStyle: React.CSSProperties = {
     overflow: "hidden",
@@ -65,38 +44,23 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
     WebkitBoxOrient: "vertical",
   };
 
-  // useEffect(() => {
-  //   const getUserComments = async () => {
-  //     if (userInfo.length > 0 && userInfo[0].createdComments.length > 0) {
-  //       for (const commentId of userInfo[0].createdComments) {
-  //         let data = await getUserSingleComment(commentId);
-  //         if(data && data.length > 0){
-  //           setCommentData(data);
-  //         }
-  //       }
-  //     }
-  //   };
-  //   getUserComments();
-  // }, [userInfo, getUserSingleComment]);
-
   useEffect(() => {
-    const getUserComments = async () =>{
-      const userComments = await getAllCommentOfUser() as AllUserComment[];
-      setCommentData(userComments)
-    }
-    getUserComments()
-  }, [])
-  
+    const getUserComments = async () => {
+      const userComments = (await getAllCommentOfUser()) as AllUserComment[];
+      setCommentData(userComments);
+    };
+    getUserComments();
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="dark:text-[#fff] font-bold tablet:text-lg">Today</h1>
-      {/* comment  */}
       {commentData.length > 0 &&
         commentData.map((comment) => (
           <>
-            <div key={comment.commentId} className="flex items-start justify-between gap-4 mt-2">
-              {/* user avatar  */}
+            <div
+              key={comment.commentId}
+              className="flex items-start justify-between gap-4 mt-2"
+            >
               <div className="w-8 h-8 tablet:w-12 tablet:h-12 flex justify-center rounded-md aspect-square">
                 <img
                   src={convertInt8ToBase64(comment.userProfile)}
@@ -104,7 +68,6 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
                   className="block h-full w-full object-cover rounded-md cursor-pointer"
                 />
               </div>
-              {/* comment and likes  */}
               <div className="w-full flex flex-col">
                 <div
                   className="max-w-full text-xs tablet:text-base text-[#000] dark:text-[#fff] text-opacity-70 dark:text-opacity-50"
@@ -126,17 +89,8 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
                   </svg>
                   <span>{comment.likedBy.length}</span>
                 </div>
-                {/* <div className="hidden tablet:block mt-2">
-                  <button className="text-[10px] tablet:text-sm dark:text-[#fff]">
-                    View replies
-                  </button>
-                </div> */}
               </div>
-              {/* comment post image  */}
-              {/* <Link
-                key={comment.postId}
-                to={`/dashboard/postDetails/${encodeURIComponent(comment.postId)}`}
-              > */}
+
               <div className="ml-4 w-24 h-10 tablet:w-32 tablet:h-16 rounded-sm">
                 <img
                   className="block h-full w-full object-cover rounded-md cursor-pointer"
@@ -144,7 +98,6 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
                   alt="comment img"
                 />
               </div>
-              {/* </Link> */}
             </div>
           </>
         ))}

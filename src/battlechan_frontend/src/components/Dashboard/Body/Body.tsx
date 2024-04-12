@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Steps from "./Steps";
 import CreatePostBtn from "./CreatePostBtn";
@@ -16,11 +16,11 @@ interface Board {
   boardName: string;
   boardSize: string;
   updatedAt: [bigint];
-  // Include other properties as needed, such as 'size'.
+  
 }
 interface BackendResponse {
   status: boolean;
-  data: Board[][]; // Assuming 'data' is an array of arrays of Board objects.
+  data: Board[][]; 
   error: string[];
 }
 
@@ -49,21 +49,21 @@ const Body = () => {
             convertNanosecondsToTimeAgo(board?.updatedAt[0]) || undefined
         );
         const cleanedCreatedAt = createdAt.map((date) => date || "");
-        console.log("names is ", names);
-        console.log("size is ", sizes);
-        console.log("createdAt is ", cleanedCreatedAt);
+        
+        
+        
 
         setBoardNames(names);
         setBoardSizes(sizes);
         setCreatedAt(cleanedCreatedAt);
       } else {
-        console.log("No boards found.");
+        
       }
-      // console.log(boardSizes[0]);
+      
     }
 
     fetchBoardNames();
-    console.log("boards", boardNames);
+    
   }, []);
   const className = "Home";
 
@@ -115,19 +115,19 @@ const Body = () => {
         className={
           className +
           "__postsNumber" +
-          ` tablet:hidden tablet:px-30 flex flex-col tablet:block gap-2 p-4 tablet:py-6 tablet:px-10 mx-4 tablet:mx-auto tablet:my-24 my-10 border border-dark dark:border-light rounded-md`
+          ` big_tablet:hidden big_tablet:px-30 flex flex-col big_tablet:block gap-2 p-4 big_tablet:py-6 big_tablet:px-10 mx-4 big_tablet:mx-auto big_tablet:my-24 my-10 border border-dark dark:border-light rounded-md`
         }
       >
-        <div className="data__headings tablet:px-4 flex-row-center tablet:flex-nowrap justify-between rounded-xl text-[#fff] bg-dirty-light-green gap-2">
-          <div className="data__label py-4 tablet:py-4 pl-6 tablet:px-0 h-full tablet:text-lg small_phone:text-md text-sm font-semibold">
+        <div className="data__headings big_tablet:px-4 flex-row-center big_tablet:flex-nowrap small_phone:justify-around justify-between rounded-xl text-[#fff] bg-dirty-light-green gap-2">
+          <div className="data__label py-4 big_tablet:py-4 small_phone:pl-6 pl-4 big_tablet:px-0 h-full big_tablet:text-lg small_phone:text-md text-sm font-semibold">
             Name of Subject
           </div>
-          <div className="data__label big_tablet:hidden py-4 tablet:py-6 pr-10 tablet:px-4 h-full tablet:text-lg small_phone:text-md text-sm font-semibold">
+          <div className="data__label big_big_tablet:hidden py-4 big_tablet:py-6 small_phone:pr-10 pr-6 big_tablet:px-4 h-full big_tablet:text-lg small_phone:text-md text-sm font-semibold">
             Total Posts
           </div>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex small_phone:justify-around justify-between">
           <div className="">
             {boardNames.map((boardName, index) => (
               <div className={`flex ml-4`}>
@@ -158,9 +158,9 @@ const Body = () => {
         </div>
       </div>
 
-      <div className="h-48 w-auto relative hidden tablet:flex items-center justify-center overflow-x-auto my-24 p-10 border border-dark dark:border-light rounded-xl mx-16 no-scrollbar">
+      <div className="w-auto relative hidden big_tablet:flex items-center justify-center overflow-x-auto xl:my-20 my-10 p-10 border border-dark dark:border-light rounded-xl mx-16 no-scrollbar">
         <table className="w-full text-left">
-          <thead className="text-xs tablet:text-base">
+          <thead className="text-xs big_tablet:text-base">
             <tr className=" text-light bg-dirty-light-green">
               <th scope="col" className="px-6 py-3 rounded-s-xl">
                 Name of the Subject

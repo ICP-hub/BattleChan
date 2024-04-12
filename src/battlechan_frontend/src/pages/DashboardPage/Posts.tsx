@@ -31,26 +31,14 @@ const Posts = () => {
     "tablet:py-4 py-2 xl:px-52 laptop:px-40 big_tablet:px-32 tablet:px-12 phone:px-8 px-4";
 
   const [postData, setPostData] = useState<PostData[]>([]);
-  const { getPostInfo } = UserApiHanlder();
-  const { getUsersMainPosts, getUsersArchivePosts } = PostApiHanlder();
-  const { convertInt8ToBase64, convertNanosecondsToTimestamp } = Constant();
+  const { getUsersMainPosts } = PostApiHanlder();
+  const { convertNanosecondsToTimestamp } = Constant();
   const fontSize = "tablet:text-base phone:text-sm text-xs";
-  const currentTime = BigInt(Date.now()) * BigInt(1000000);
-
-  console.log("postData: ", postData);
-  const formatTime = (remainingTime: bigint) => {
-    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-    const minutes = Math.floor(seconds / 60); // Get remaining minutes
-    const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       const response = (await getUsersMainPosts()) as PostResponse;
       if (response.status == true && response.data.length > 0) {
-        console.log(response);
         const posts = response.data.flat();
         setPostData(posts);
       }
@@ -73,30 +61,6 @@ const Posts = () => {
         <h1 className="tablet:text-2xl text-lg font-bold dark:text-[#fff]">
           Popular
         </h1>
-        {/* <div className="flex items-center justify-center gap-2">
-          <button className="tablet:text-base text-xs border border-[#000] dark:border-[#fff] text-[#000] dark:text-[#fff] rounded-md px-6 py-2 font-semibold">
-            Sports
-          </button>
-          <button className="flex items-center justify-center tablet:text-base text-xs bg-[#000] dark:bg-[#fff] text-[#fff] dark:text-[#000]  rounded-md px-6 py-2 font-semibold">
-            <svg
-              className="w-5 h-5 text-gray-800 dark:text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="2"
-                d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"
-              />
-            </svg>
-            Filter
-          </button>
-        </div> */}
       </header>
 
       <div

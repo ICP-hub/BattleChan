@@ -50,7 +50,7 @@ const ProfileOverlay = (props: Props) => {
   const className = "ProfileOverlay";
 
   const handleClosePopup = () => {
-    setProfilePopUp(false); // Close the popup
+    setProfilePopUp(false); 
   };
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const ProfileOverlay = (props: Props) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
+    
     fetchData();
   }, [userName]);
 
@@ -78,7 +78,7 @@ const ProfileOverlay = (props: Props) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
+    
     fetchData();
   }, [principal]);
 
@@ -102,7 +102,7 @@ const ProfileOverlay = (props: Props) => {
         className={
           className +
           "__container" +
-          " tablet:w-[400px] phone:w-[60vw] w-[70vw] p-4 flex flex-col justify-between tablet:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
+          " tablet:w-[400px] phone:w-[60vw] small_phone:w-[70vw] w-[85vw] p-4 flex flex-col justify-between tablet:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
         }
         onClick={(e) => e.stopPropagation()}
       >
@@ -114,11 +114,7 @@ const ProfileOverlay = (props: Props) => {
               className="block h-full w-full object-cover rounded-md cursor-pointer"
             />
             </div>
-          {/* <img
-            src={fileURL}
-            alt="User Profile Image"
-            className="tablet:w-[80px] w-[50px] rounded-lg"
-          /> */}
+          
           <span className="text-lg">{userName} </span>
         </section>
 
@@ -128,14 +124,7 @@ const ProfileOverlay = (props: Props) => {
           <hr />
 
           <section className="flex flex-col bg-light tablet:text-lg text-sm text-dark gap-4 my-2">
-            {/* <div className="ICP_Balance flex-row-center justify-between">
-              <p className="flex-row-center gap-2">
-                <SiInternetcomputer />
-                <span>ICP Balance</span>
-              </p>
-
-              <p className="p-3">XYZ</p>
-            </div> */}
+            
 
             <div className="Time_Balance flex-row-center justify-between hover:bg-dirty-light-green hover:text-light transition">
               <Link to="/dashboard/analytics">
@@ -163,14 +152,7 @@ const ProfileOverlay = (props: Props) => {
             </button>
           </Link>
 
-          {/* {!is1000px && (
-            // <Link to="/dashboard">
-            //   <button className="flex-row-center gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm">
-            //     <FaRegBell />
-            //     Notifications
-            //   </button>
-            // </Link>
-          )} */}
+          
         </fieldset>
 
         <fieldset>

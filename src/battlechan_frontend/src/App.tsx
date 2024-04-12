@@ -4,9 +4,9 @@ import "./App.css";
 import "./Connect2ic/Connect2ic.scss";
 
 import { BrowserRouter as Router } from "react-router-dom";
-import AppRoutes from "./AppRoutes"; // Make sure the path is correct
+import AppRoutes from "./AppRoutes"; 
 import { Toaster } from "react-hot-toast";
-import ClientSetup from "./ClientSetup"; // Import the ClientSetup component
+import ClientSetup from "./ClientSetup"; 
 
 type Theme = "dark" | "light";
 
@@ -33,12 +33,12 @@ function App() {
   }
 
   return (
-    // <Provider store={store}>
+    
     <Router>
       <Toaster />
       <AppRoutes handleThemeSwitch={handleThemeSwitch} />
     </Router>
-    // </Provider>
+    
   );
 }
 

@@ -13,7 +13,6 @@ import TokensApiHanlder from "../../API_Handlers/tokens";
 
 import Constant from "../../utils/constants";
 import WithdrawOverlay from "../../components/Dashboard/WithdrawOverlay/WithdrawOverlay";
-// import TokensApiHanlder from "../../../API_Handlers/tokens";
 
 interface PostProps {
   id: string;
@@ -84,7 +83,6 @@ const Post: React.FC<PostProps> = ({
   const navigate = useNavigate();
 
   const className = "Dashboard__MainPosts__Post";
-  // const { icrc2_approve } = TokensApiHanlder();
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
@@ -115,32 +113,32 @@ const Post: React.FC<PostProps> = ({
     getCommentsCounts();
 
     const interval = setInterval(() => {
-      const currentTime = BigInt(Date.now()) * BigInt(1000000); // Current time in nanoseconds
-      const remainingTime = Number(expireAt) - Number(currentTime); // Convert BigInt to bigint for arithmetic
+      const currentTime = BigInt(Date.now()) * BigInt(1000000);
+      const remainingTime = Number(expireAt) - Number(currentTime);
 
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
         archive();
-        // console.log("Post archived");
       } else {
-        setTime(formatTime(BigInt(remainingTime))); // Convert back to BigInt for formatting
+        setTime(formatTime(BigInt(remainingTime)));
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [expireAt]); // Run effect when expireAt changes
+  }, [expireAt]);
 
   const handleUpvote = async (postId: string) => {
     if (type === "archive") {
       return;
     }
     if (isUserAuthenticatedRef.current) {
-      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      const is_approved = (await icrc2_approve(
+        principal_idRef.current
+      )) as Response;
       if (is_approved.status == true) {
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
-          // toast.success(data?.ok);
           toast.success("Successfully Upvoted Post!");
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
@@ -160,7 +158,9 @@ const Post: React.FC<PostProps> = ({
       return;
     }
     if (isUserAuthenticatedRef.current) {
-      const is_approved = (await icrc2_approve(principal_idRef.current)) as Response;
+      const is_approved = (await icrc2_approve(
+        principal_idRef.current
+      )) as Response;
       if (is_approved.status == true) {
         const data = (await downvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
@@ -181,7 +181,6 @@ const Post: React.FC<PostProps> = ({
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
-      console.log("POST ARCHIVED!");
     }
   };
 
@@ -190,17 +189,16 @@ const Post: React.FC<PostProps> = ({
     if (response && response.status == true) {
       let data = response.data[0];
       if (data && data.length > 0) {
-        // console.log(length);
         setCommentsCount(data.length);
       }
     }
   };
 
   const formatTime = (remainingTime: bigint) => {
-    const seconds = Math.floor(Number(remainingTime) / 1e9); // Convert remaining time from nanoseconds to seconds
-    const minutes = Math.floor(seconds / 60); // Get remaining minutes
-    const remainingSeconds = seconds % 60; // Get remaining seconds
-    // console.log(`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+    const seconds = Math.floor(Number(remainingTime) / 1e9);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
@@ -214,10 +212,9 @@ const Post: React.FC<PostProps> = ({
         }`
       }
     >
-      {/* Top section with image, user image and more info */}
       {type === "archive" ? (
         <React.Fragment>
-          <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
+          <section className="w-full flex flex-row phone:gap-4 gap-2 items-start justify-between">
             <Link
               key={id}
               to={`/dashboard/postDetails/${encodeURIComponent(
@@ -226,39 +223,31 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className={`block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover`}
+                className="block xl:max-w-28 laptop:max-w-20 tablet:max-w-28 phone:max-w-20 max-w-16 rounded-lg aspect-square object-cover pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
 
-            <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
-              {/* User and post data on top */}
+            <div className="laptop:w-4/5 phone:w-5/6 w-3/4 flex flex-col gap-2">
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
-                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    className="block rounded-full aspect-square w-8 tablet:w-10 pointer-events-none"
                     src={convertInt8ToBase64(userProfile)}
                     alt="user avatar"
                   />
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-md small_phone:text-1xl text-sm">
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold text-ellipsis overflow-hidden">
                         {userName}
                       </h1>
 
-                      {/* Time */}
-                      <button
-                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green cursor-pointer"
-                        onClick={
-                          type === "archive"
-                            ? undefined
-                            : () => setShowOverlay(true)
-                        }
-                      >
+                      <button className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold">
                         <span
-                          className={`${type === "archive" ? "text-red" : "text-light-green"
-                            }`}
+                          className={`${
+                            type === "archive" ? "text-red" : "text-light-green"
+                          }`}
                         >
                           {type === "archive" ? "0:00 " : `${time} `}
                         </span>
@@ -280,7 +269,6 @@ const Post: React.FC<PostProps> = ({
                 </div>
               </section>
 
-              {/* Content on bottom */}
               <section className="mt-1">
                 <Link
                   key={id}
@@ -288,10 +276,10 @@ const Post: React.FC<PostProps> = ({
                     id
                   )}?type=archive`}
                 >
-                  <p className="tablet:text-lg text-sm font-semibold">
+                  <p className="tablet:text-lg text-sm font-semibold text-ellipsis overflow-hidden">
                     {postName}
                   </p>
-                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
+                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800 text-wrap break-all">
                     {content.length > 70
                       ? `${content.slice(0, 70)}...`
                       : content}
@@ -310,28 +298,26 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className={`block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover`}
+                className="block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
 
             <div className="laptop:w-4/5 w-5/6 flex flex-col small_phone:gap-2 gap-1">
-              {/* User and post data on top */}
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
-                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    className="block rounded-full aspect-square w-8 tablet:w-10 pointer-events-none"
                     src={convertInt8ToBase64(userProfile)}
                     alt="user avatar"
                   />
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold">
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold text-ellipsis overflow-hidden">
                         {userName}
                       </h1>
 
-                      {/* Time */}
                       <button
                         className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green hover:text-darkcursor-pointer"
                         onClick={() => setShowOverlay(true)}
@@ -359,13 +345,12 @@ const Post: React.FC<PostProps> = ({
                 </div>
               </section>
 
-              {/* Content on bottom */}
-              <section className="mt-1">
+              <section className="w-full mt-1">
                 <Link
                   key={id}
                   to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                 >
-                  <p className="tablet:text-lg text-sm font-semibold">
+                  <p className="tablet:text-lg text-sm font-semibold text-ellipsis overflow-hidden">
                     {postName}
                   </p>
                   <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
@@ -380,40 +365,42 @@ const Post: React.FC<PostProps> = ({
         </React.Fragment>
       )}
 
-      {/* Bottom section with upvote, downvote and comments,likes */}
       <section className="flex-row-center justify-between">
-        {/* upvote and downvote button  */}
-
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
+            className={`${
+              vote ? "text-dirty-light-green" : "text-[#878787]"
+            } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
+            className={`${
+              !vote ? "text-dirty-light-green" : "text-[#878787]"
+            } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />
         </div>
 
-        {/* likes and comments  */}
         <div className="flex-row-center tablet:text-lg small_phone:text-sm text-xs gap-2 justify-end">
-          <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
+          <div className="flex-row-center justify-center text-dark dark:text-grey gap-1">
             <MdOutlineVerifiedUser />
             <span>{likes}</span>
           </div>
-          <div className="flex-row-center justify-center text-dark dark:text-light text-opacity-50 gap-1">
+          <div className="flex-row-center justify-center text-dark dark:text-grey gap-1">
             <LiaCommentSolid />
             <span>{commentsCount} Comments</span>
           </div>
         </div>
       </section>
 
-      <WithdrawOverlay display={showOverlay} setProfilePopUp={setShowOverlay} postId={id} />
+      <WithdrawOverlay
+        display={showOverlay}
+        setProfilePopUp={setShowOverlay}
+        postId={id}
+      />
     </div>
   );
 };

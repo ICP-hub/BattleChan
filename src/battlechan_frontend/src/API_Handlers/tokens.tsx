@@ -1,7 +1,7 @@
 import { useCanister } from "@connect2ic/react";
 import { Principal } from "@dfinity/principal";
 
-// Custom hook : initialize the backend Canister
+
 const useBackend = () => {
     return useCanister("backend");
 };
@@ -22,27 +22,27 @@ interface Response {
 }
 
 const TokensApiHanlder = () => {
-    // Init backend
+    
     const [backend, canisterId] = useBackend();
     const [ledger] = useLedger();
 
-    // // ICRC2 APPROVE
+    
     const icrc2_approve = async (principal: string, amount: number = 1) => {
         let result = { status: false, err: "" } as Response;
         try {
-            // console.log(principal);
+            
             const is_sufficient_balance = await getBalance(principal || "");
-            // console.log(is_sufficient_balance);
+            
             const balance = is_sufficient_balance;
-            // console.log(Number(balance));
+            
             let fees = 100;
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
-            const expirationTime = Date.now() + (5 * 60 * 1000); // Add 5 minutes in milliseconds
+            const expirationTime = Date.now() + (5 * 60 * 1000); 
             const expiresAt: bigint = BigInt(expirationTime);
 
             if (Number(balance) >= amnt) {
-                console.log("Approve");
+                
                 let data = {
                     fee: [fees],
                     memo: [],
@@ -56,9 +56,9 @@ const TokensApiHanlder = () => {
                         subaccount: []
                     }
                 }
-                console.log(data);
+                
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
-                // console.log("icrc2_approve: ", res);
+                
                 if (res && res?.ok) {
                     result.status = true;
                 } else {
@@ -71,7 +71,7 @@ const TokensApiHanlder = () => {
             } else {
                 result.status = false;
                 result.err = "Insufficient Balance!"
-                console.log("Reject");
+                
                 return result;
             }
         } catch (err) {
@@ -82,16 +82,16 @@ const TokensApiHanlder = () => {
         }
     };
 
-    // Get Balance Of User Account
+    
     const getBalance = async (principal: string) => {
         try {
-            // console.log(principal);
+            
             const argument = {
                 owner: Principal.fromText(principal),
                 subaccount: []
             };
             const res = await ledger.icrc1_balance_of(argument);
-            // console.log("balance: ", res);
+            
             let balance = (Number(res) / Math.pow(10, 8));
             return balance;
         } catch (err) {
@@ -99,12 +99,12 @@ const TokensApiHanlder = () => {
         }
     };
 
-    // Withdraw Time Tokens from a Post
+    
     const withdrawPost = async (postId: string, amount: number) => {
         let result = { status: false, err: "" } as Response;
         try {
             const res = (await backend.withdrawPost(postId, amount)) as BackendResponse;
-            console.log("res: ", res);
+            
             if (res && res?.ok) {
                 result.status = true;
             } else {
@@ -130,7 +130,7 @@ const TokensApiHanlder = () => {
         }
     };
 
-    // Returns
+    
     return { getBalance, icrc2_approve, withdrawPost };
 };
 

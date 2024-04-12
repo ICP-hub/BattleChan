@@ -1,24 +1,24 @@
 
 const Constant = () => {
 
-  // Convert Nano Seconds To TimeStamp
+  
   const convertNanosecondsToTimestamp = (nanoseconds: bigint | undefined) => {
     try {
       if (nanoseconds === undefined) {
         return "";
       }
 
-      const milliseconds = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
-      const date = new Date(milliseconds); // Convert milliseconds to a Date object
+      const milliseconds = Number(nanoseconds) / 1000000; 
+      const date = new Date(milliseconds); 
 
-      // Get the month, day, year, hour, and minute from the Date object
-      const month = date.toLocaleString("default", { month: "short" }); // Short month name (e.g., Jan)
-      const day = date.getDate(); // Day of the month (1-31)
-      const year = date.getFullYear(); // Full year (e.g., 2023)
-      const hour = date.getHours(); // Hour (0-23)
-      const minute = date.getMinutes(); // Minute (0-59)
+      
+      const month = date.toLocaleString("default", { month: "short" }); 
+      const day = date.getDate(); 
+      const year = date.getFullYear(); 
+      const hour = date.getHours(); 
+      const minute = date.getMinutes(); 
 
-      // Format the timestamp string
+      
       const timestamp = `${month} ${day},${year}; ${hour}:${minute < 10 ? "0" + minute : minute
         }`;
 
@@ -29,17 +29,17 @@ const Constant = () => {
     }
   };
 
-  // Convert Nano Seconds To Time Ago Format
+  
   const convertNanosecondsToTimeAgo = (nanoseconds: bigint | undefined): string => {
     if (nanoseconds === undefined) {
       return "";
     }
 
     const currentTime = Date.now();
-    const timeInMillis = Number(nanoseconds) / 1000000; // Convert nanoseconds to milliseconds
+    const timeInMillis = Number(nanoseconds) / 1000000; 
     const timeDifference = currentTime - timeInMillis;
 
-    // Convert milliseconds to seconds, minutes, hours, or days
+    
     const seconds = Math.floor(timeDifference / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -56,13 +56,13 @@ const Constant = () => {
     }
   };
 
-  // Convert Int8Array to base64
+  
   const convertInt8ToBase64 = (int8Array: Int8Array | undefined) => {
     try {
       if (int8Array == undefined) {
         return "";
       }
-      // Convert Uint8Array to base64
+      
       const base64 = "data:image/jpeg;base64," + btoa(String.fromCharCode(...new Uint8Array(int8Array)));
 
       return base64;
@@ -78,7 +78,7 @@ const Constant = () => {
 
       if (!file) return reject('No file selected');
 
-      const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
+      const maxSize = 1.7 * 1024 * 1024; 
 
       if (file.size > maxSize) {
         return reject('File size exceeds the limit of 1.7MB');
@@ -105,23 +105,23 @@ const Constant = () => {
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0, img.width, img.height);
 
-            const quality = 0.7; // Adjust image quality here
+            const quality = 0.7; 
             const dataURL = canvas.toDataURL('image/jpeg', quality);
 
-            // Convert data URL to Blob
+            
             fetch(dataURL)
               .then((res) => res.blob())
               .then(async (blob) => {
-                // Convert Blob to ArrayBuffer
+                
                 const arrayBuffer = await blob.arrayBuffer();
 
-                // Convert ArrayBuffer to Int8Array
+                
                 const int8Array = new Int8Array(arrayBuffer);
 
-                // Convert Uint8Array to base64
+                
                 const base64 = "data:image/jpeg;base64," + btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
 
-                // Resolve with the response
+                
                 resolve({ int8Array, base64 });
               })
               .catch((error) => reject(error));
@@ -135,7 +135,7 @@ const Constant = () => {
     });
   };
 
-  // Returns
+  
   return { convertNanosecondsToTimestamp, handleFileUpload, convertInt8ToBase64, convertNanosecondsToTimeAgo };
 };
 

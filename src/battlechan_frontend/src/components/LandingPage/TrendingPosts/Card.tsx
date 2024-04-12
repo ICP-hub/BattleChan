@@ -24,17 +24,14 @@ const Card = ({ post, index, postList }: PostType) => {
 
   return (
     <div className="trendingPostCard phone:min-w-[380px] min-w-[360px] my-2 rounded-lg bg-light text-dark shadow-md shadow-dark">
-      {/* Cover Image */}
       <img
         src={post.coverImg}
         alt="Post Cover Image"
         className="postImage w-full pointer-events-none"
       />
 
-      {/* Details */}
       <div className="postData w-full phone:p-6 p-4 flex-direction-col gap-4">
         <div className="top flex-row-center justify-between">
-          {/* Owner Profile Photo and Name */}
           <section className="owner flex-row-center gap-1">
             <img
               src={post.ownerImage}
@@ -44,7 +41,6 @@ const Card = ({ post, index, postList }: PostType) => {
             <span className="text-md font-semibold">{post.ownerName}</span>
           </section>
 
-          {/* Date, Time and ID  */}
           <section className="flex-direction-row gap-1">
             <span className="text-xs">{post.date_and_time}</span>
             <span className="text-xs">{post.postId}</span>
@@ -56,7 +52,6 @@ const Card = ({ post, index, postList }: PostType) => {
         </p>
 
         <div className="bottom flex-row-center justify-between">
-          {/* Upvote and Downvote buttons */}
           <section className="buttons flex-row-center gap-2 text-3xl">
             <TbSquareChevronUpFilled
               className={`${
@@ -73,7 +68,6 @@ const Card = ({ post, index, postList }: PostType) => {
             />
           </section>
 
-          {/* Total tokens and comments count */}
           <section className="counts gap-4 flex-direction-row phone:text-base text-xs">
             <span className="timeToken flex-row-center gap-1">
               <MdOutlineVerifiedUser />

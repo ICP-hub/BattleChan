@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React from "react";
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 
 import bg from "../../images/dashboard_bg.png";
 import defaultImg from "../../images/User.png";
 
-import { useCanister, useConnect } from "@connect2ic/react";
+import { useCanister } from "@connect2ic/react";
 import UserApiHanlder from "../../API_Handlers/user";
 import toast from "react-hot-toast";
 import Constant from "../../utils/constants";
 
-// Custom hook : initialize the backend Canister
 const useBackend = () => {
   return useCanister("backend");
 };
@@ -21,7 +20,7 @@ type Theme = {
 
 interface BackendResponse {
   status: boolean;
-  data: []; // Assuming 'data' is an array of arrays of Board objects.
+  data: [];
   error: string[];
 }
 
@@ -55,15 +54,12 @@ const SettingProfile = (props: Theme) => {
   const [isRegistered, setIsRegistered] = React.useState(false);
   const isRegisteredRef = React.useRef(isRegistered);
 
-  //this is to show the image on the screen or set it in server
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
 
-  //this is to show the name on the screen or set it in server
   const [userName, setUserName] = React.useState("Please Update your Username");
-  //this is to maintain the name typed by the user
+
   const [inputUserName, setInputUserName] = React.useState("");
 
-  // selected image file
   const [fileData, setFileData] = React.useState<{
     base64: string;
     int8Array: Int8Array;
@@ -79,12 +75,12 @@ const SettingProfile = (props: Theme) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     try {
-      const { base64, int8Array } = await handleFileUpload(event); // Calling the handleFileUpload function
+      const { base64, int8Array } = await handleFileUpload(event);
       setFileData({ base64, int8Array });
       setFileURL(base64 || defaultImg);
     } catch (error) {
       if (typeof error === "string") {
-        toast.error(error); // Display the error message
+        toast.error(error);
         console.error("Error:", error);
       } else {
         console.error("Error:", error);
@@ -93,7 +89,6 @@ const SettingProfile = (props: Theme) => {
   };
 
   function handleFileChange() {
-    // const imageUrl = URL.createObjectURL(inputfile.files[0]);
     setFileURL(fileData?.base64 || fileURL || defaultImg);
   }
 
@@ -109,86 +104,7 @@ const SettingProfile = (props: Theme) => {
       setShowInput(false);
       setInputUserName("");
     }
-    console.log("Input username:", inputUserName); // Add this line
   }
-
-  // useEffect(() => {
-  //   const fileInput = document.getElementById("profile");
-
-  //   const handleFileInputChange = (event: any) => {
-  //     console.log("Here");
-  //     const file = event.target.files?.[0];
-
-  //     if (!file) return;
-
-  //     const maxSize = 1.7 * 1024 * 1024; // 1.7 MB in bytes
-
-  //     if (file.size > maxSize) {
-  //       toast.success("File size exceeds the limit of 1.7MB");
-  //       return;
-  //     }
-
-  //     if (file.type.startsWith("image")) {
-  //       console.log("Here1");
-  //       const reader = new FileReader();
-
-  //       reader.onload = async (e) => {
-  //         console.log("Hello");
-  //         if (e.target && e.target.result) {
-  //           const img = new Image();
-  //           img.src = e.target.result.toString();
-
-  //           img.onload = async () => {
-  //             const canvas = document.createElement("canvas");
-  //             const ctx = canvas.getContext("2d");
-
-  //             if (!ctx) return;
-
-  //             canvas.width = img.width;
-  //             canvas.height = img.height;
-  //             ctx.drawImage(img, 0, 0, img.width, img.height);
-
-  //             const quality = 0.7; // Adjust image quality here
-  //             const dataURL = canvas.toDataURL("image/jpeg", quality);
-
-  //             // Convert data URL to Blob
-  //             const blob = await fetch(dataURL).then((res) => res.blob());
-
-  //             console.log("blob:", blob);
-  //             // Convert Blob to ArrayBuffer
-  //             const arrayBuffer = await blob.arrayBuffer();
-
-  //             console.log("array:", arrayBuffer);
-  //             // Convert ArrayBuffer to Int8Array
-  //             const int8Array = new Int8Array(arrayBuffer);
-  //             console.log(int8Array);
-
-  //             // Base64
-  //             const uint8Array = new Uint8Array(int8Array);
-
-  //             // Convert Uint8Array to base64
-  //             let binary = "";
-  //             uint8Array.forEach((byte) => {
-  //               binary += String.fromCharCode(byte);
-  //             });
-  //             let base64 = btoa(binary);
-
-  //             console.log(base64);
-  //             // setFileURL(base64);
-  //           };
-  //         }
-  //       };
-
-  //       reader.readAsDataURL(file);
-  //     } else {
-  //       alert("Please upload an image file");
-  //     }
-  //   };
-
-  //   if (fileInput) {
-  //     fileInput.addEventListener("change", handleFileInputChange);
-  //   }
-  // }, [fileData]);
 
   React.useEffect(() => {
     const registerBtn = document.getElementById("registerBtn");
@@ -239,14 +155,16 @@ const SettingProfile = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
-        setFileData({base64: response?.profileImg || "", int8Array: response?.profileImg_int8arr })
+        setFileData({
+          base64: response?.profileImg || "",
+          int8Array: response?.profileImg_int8arr,
+        });
         setIsRegistered(true);
       } else {
         setIsRegistered(false);
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
   }, [isRegistered]);
 

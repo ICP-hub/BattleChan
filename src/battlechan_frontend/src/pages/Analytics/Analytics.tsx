@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
-
-import { backend } from "../../../../declarations/backend";
 
 import trendingPost_coverImg from "../../images/trendingPost_coverImg.png";
 import mybalance_Img from "../../images/my-balance-img.png";
@@ -32,7 +30,7 @@ interface UserAnalytics {
   userArchivedPost: number;
   dislikedPost: number;
   status: boolean;
-};
+}
 
 const data: DataItem[] = [
   {
@@ -43,8 +41,7 @@ const data: DataItem[] = [
     imageUrl: trendingPost_coverImg,
   },
   {
-    message:
-      "Downvote: Kd_1129 with post Id #1256320000",
+    message: "Downvote: Kd_1129 with post Id #1256320000",
     username: "Kd_1129",
     time: "3hrs ago",
     tokenChange: -1,
@@ -75,16 +72,13 @@ const Analytics = (props: Theme) => {
       }
     };
 
-    // Add dependencies to the dependency array to avoid infinite loop
     fetchData();
   }, [principal]);
 
-  // Get Total Post's Counts
   useEffect(() => {
     async function getAnalytics() {
       try {
         const response = (await getUserAnalytics()) as UserAnalytics;
-        // console.log(response);
         setLikedPost(response?.likedPost);
         setDislikedPost(response?.dislikedPost);
       } catch (error) {
@@ -107,9 +101,7 @@ const Analytics = (props: Theme) => {
             Time Balance
           </h1>
 
-          {/* balance check  */}
           <div className="bg-green rounded-[10px] p-4 relative overflow-hidden">
-            {/* balance check and sports/filter button */}
             <div className="flex justify-between items-center text-[#fff]">
               <h2 className="font-bold tablet:text-3xl tablet:ml-11">
                 Balance Check
@@ -118,26 +110,8 @@ const Analytics = (props: Theme) => {
                 <button className="border border-[#fff] dark:border-[#fff] text-[#fff] dark:text-[#fff] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
                   Today
                 </button>
-                {/* <button className="flex items-center justify-center bg-[#fff] dark:bg-[#fff] text-[#000] dark:text-[#000] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
-                  <svg
-                    className="w-3 h-3 tablet:w-5 tablet:h-5 text-gray-800 dark:text-white mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeWidth="2"
-                      d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"
-                    />
-                  </svg>
-                  Filter
-                </button> */}
               </div>
             </div>
-            {/* my balance  */}
             <div className="bg-[#2A4B2F] rounded-[10px] flex gap-2 tablet:gap-7 items-center mt-6 p-3 text-[#fff]">
               <div className="bg-[#fff] rounded-md w-32 tablet:w-48">
                 <img
@@ -148,7 +122,9 @@ const Analytics = (props: Theme) => {
               </div>
               <div>
                 <h3 className="">My Balance</h3>
-                <div className="font-bold text-xl tablet:text-3xl">{tokenBalance}</div>
+                <div className="font-bold text-xl tablet:text-3xl">
+                  {tokenBalance}
+                </div>
               </div>
             </div>
             <svg
@@ -327,7 +303,6 @@ const Analytics = (props: Theme) => {
             </svg>
           </div>
 
-          {/* upvote downvote buy earn from others cards  */}
           <div className="flex items-center flex-wrap justify-center text-[#fff]">
             <div className="p-2 w-1/2 tablet:w-1/4">
               <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
@@ -355,7 +330,6 @@ const Analytics = (props: Theme) => {
             </div>
           </div>
 
-          {/* transaction overview  */}
           <div className="pb-28">
             <h1 className="font-semibold text-lg text-center mb-8 tablet:text-2xl">
               Transaction Overview
@@ -367,7 +341,6 @@ const Analytics = (props: Theme) => {
                   key={index}
                   className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6"
                 >
-                  {/* message  */}
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
                       {item.message.split(" ").map((word, index) => {
@@ -394,14 +367,11 @@ const Analytics = (props: Theme) => {
                       })}
                     </div>
 
-                    {/* time  */}
                     <div className="mt-2 dark:text-[#fff] dark:text-opacity-50">
                       <i>{item.time}</i>
                     </div>
                   </div>
-                  {/* image  */}
                   <div className="flex items-center pl-2">
-                    {/* number of token loss/gain */}
                     <div
                       className={
                         item.tokenChange > 0
@@ -424,49 +394,6 @@ const Analytics = (props: Theme) => {
                 </div>
               ))}
             </div>
-
-            {/* <div className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6">
-              <div className="text-sm max-w-60 tablet:max-w-none items-center">
-                <div>
-                  You loss one token by{" "}
-                  <span className="text-[#18AF00]">Upvoting</span>{" "}
-                  <strong>{"Kd_1129"}</strong> with post Id #{"1256320000"}
-                </div>
-
-                <div className="mt-2 dark:text-[#fff] dark:text-opacity-50">
-                  <i>3hrs ago</i>
-                </div>
-              </div>
-              <div className="flex items-center pl-2">
-                <div className="text-red mr-2">-1</div>
-                <div className="w-24">
-                  <img
-                    className="block h-auto w-full rounded"
-                    src="/src/images/trendingPost_coverImg.png"
-                    alt="post image"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6">
-              <div className="text-sm max-w-60 tablet:max-w-none items-center">
-                <div>You Earn 100$ Time token on Buying.</div>
-
-                <div className="mt-2 dark:text-[#fff] dark:text-opacity-50">
-                  <i>3hrs ago</i>
-                </div>
-              </div>
-              <div className="flex items-center pl-2">
-                <div className="text-[#18AF00] font-semibold mr-2">+100</div>
-                <div className="w-24">
-                  <img
-                    className="block h-auto w-full rounded"
-                    src="/src/images/trendingPost_coverImg.png"
-                    alt="post image"
-                  />
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

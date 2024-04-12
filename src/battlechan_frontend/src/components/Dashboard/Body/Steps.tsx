@@ -1,5 +1,4 @@
 import { ConnectButton } from "@connect2ic/react";
-import React from "react";
 import { Link } from "react-router-dom";
 
 const Steps = () => {
@@ -14,33 +13,39 @@ const Steps = () => {
     >
       <div className="w-1/3 flex flex-col gap-4 items-center">
         <p
-          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 cursor-default text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           1
         </p>
         <ConnectButton>
-          <p className="font-semibold text-center">Connect your Wallet.</p>
+          <p className="font-semibold text-center hover:text-light-green">
+            Connect your Wallet.
+          </p>
         </ConnectButton>
       </div>
 
       <div className="w-1/3 flex flex-col gap-4 items-center">
         <p
-          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 cursor-default text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           2
         </p>
         <Link to="/dashboard/createPost">
-          <p className="font-semibold text-center">Make Post : Earn Time.</p>
+          <p className="font-semibold text-center hover:text-light-green">
+            Make Post : Earn Time.
+          </p>
         </Link>
       </div>
       <div className="w-1/3 flex flex-col gap-4 items-center">
         <p
-          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 cursor-default text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           3
         </p>
         <Link to="/dashboard/mainPosts">
-          <p className="font-semibold text-center">Cast your vote.</p>
+          <p className="font-semibold text-center hover:text-light-green">
+            Cast your vote.
+          </p>
         </Link>
       </div>
     </div>
