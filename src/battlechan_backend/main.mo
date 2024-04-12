@@ -361,42 +361,72 @@ actor BattleChan {
     return { data = ?List.toArray(allPosts); status = true; error = null };
   };
 
-  public query func searchPost(postName : Text, postType : { #active; #archived }) : async [Any] {
+  public query func searchPost(postName : Text) : async {
+    activePost : [Types.PostRes];
+    archivedPost : [Types.PostRes];
+  } {
     var node = postNameRootNode;
-    var result : [Text] = [];
-    for (char in Text.toIter(postName)) {
-      let data = Char.toText(char);
-      switch (Trie.get(node.children, Search.textKey data, Text.equal)) {
-        case (null) return result;
-        case (?childNode) node := childNode;
-      };
-    };
-    result := Search.collectUsers(node, result);
+    let { updatedResult; updatedNode } = Search.searchHelper(postName, node);
+    var result = updatedResult;
+
+    node := updatedNode;
+    result := Search.collectUsers(node, updatedResult);
+
     let archivedPostArray = createTrieMapOfArchivedPost(userAchivedPostTrie);
     let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPostArray.vals(), Text.equal, Text.hash);
 
-    switch (postType) {
-      case (#active) {
-        var data = List.nil<Any>();
-        for (item in result.vals()) {
-          let post = Trie.get(postTrieMap, textKey item, Text.equal);
-          if (Option.isSome(post) == true) {
-            data := List.push(post, data);
-          };
-        };
-        return List.toArray(data);
-      };
+    var activePostList = List.nil<Types.PostRes>();
+    var archivedPostList = List.nil<Types.PostRes>();
 
-      case (#archived) {
-        var data = List.nil<Any>();
-        for (item in result.vals()) {
-          let post = userArchivedPostsMap.get(item);
-          if (Option.isSome(post) == true) {
-            data := List.push(post, data);
+    for (i in result.vals()) {
+      switch (Trie.get(postTrieMap, textKey i, Text.equal)) {
+        case (?r) {
+          let postRes : Types.PostRes = {
+            postId = r.postId;
+            postName = r.postName;
+            postDes = r.postDes;
+            board = r.board;
+            upvotedBy = r.upvotedBy;
+            downvotedBy = r.downvotedBy;
+            upvotes = r.upvotes;
+            downvotes = r.downvotes;
+            postMetaData = r.postMetaData;
+            createdBy = r.createdBy;
+            createdAt = r.createdAt;
+            expireAt = r.expireAt;
+            updatedAt = r.updatedAt;
+          };
+          activePostList := List.push(postRes, activePostList);
+        };
+        case (null) {
+          switch (userArchivedPostsMap.get(i)) {
+
+            case (?value) {
+              let archivedPostRes : Types.PostRes = {
+                postId = value.postId;
+                postName = value.postName;
+                postDes = value.postDes;
+                board = value.board;
+                upvotedBy = value.upvotedBy;
+                downvotedBy = value.downvotedBy;
+                upvotes = value.upvotes;
+                downvotes = value.downvotes;
+                postMetaData = value.postMetaData;
+                createdBy = value.createdBy;
+                createdAt = value.createdAt;
+                expireAt = value.expireAt;
+                updatedAt = value.updatedAt;
+              };
+              archivedPostList := List.push(archivedPostRes, archivedPostList);
+            };
+            case (null) {};
           };
         };
-        return List.toArray(data);
       };
+    };
+    return {
+      activePost = List.toArray(activePostList);
+      archivedPost = List.toArray(archivedPostList);
     };
   };
 

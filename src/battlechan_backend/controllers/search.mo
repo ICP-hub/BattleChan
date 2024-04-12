@@ -2,10 +2,11 @@ import Array "mo:base/Array";
 import Text "mo:base/Text";
 import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
+import Char "mo:base/Char";
 
 module {
     public type Node = {
-       var  children : Trie.Trie<Text, Node>;
+        var children : Trie.Trie<Text, Node>;
         var isEndOfWord : Bool;
         var user : [Text];
     };
@@ -37,5 +38,20 @@ module {
             };
         };
         return arrResult;
+    };
+    public func searchHelper(postName : Text, node : Node) : {
+        updatedResult : [Text];
+        updatedNode : Node;
+    } {
+        var updatedNode : Node = node;
+        var updatedResult : [Text] = [];
+        for (char in Text.toIter(postName)) {
+            let data = Char.toText(char);
+            switch (Trie.get(node.children, textKey data, Text.equal)) {
+                case (null) { return { updatedResult; updatedNode } };
+                case (?childNode) { updatedNode := childNode };
+            };
+        };
+        return { updatedResult; updatedNode };
     };
 };
