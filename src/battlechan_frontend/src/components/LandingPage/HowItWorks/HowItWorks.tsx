@@ -3,10 +3,24 @@ import React from "react";
 import Wallet from "../../../images/wallet.png";
 import Voting from "../../../images/voting.png";
 import newPost from "../../../images/createPost.png";
+import { useConnect, useDialog } from "@connect2ic/react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const HowItWorks = () => {
   const [hoveredIndex, setHoveredIndex] = React.useState(5);
   const className = "LandingPage__HowItWorks";
+  const { open } = useDialog();
+  const { isConnected } = useConnect();
+  const navigate = useNavigate();
+
+  const loginHandler = () => {
+    open();
+  };
+
+  const connectedHnadler = () => {
+    toast.success("You're all set! Update your profile and then move on to the next step to create engaging posts and dive into the battle!")
+  };
 
   return (
     <div
@@ -69,10 +83,48 @@ const HowItWorks = () => {
                 <p className="font-normal xl:text-lg big_tablet:text-base phone:text-lg text-base">{data.text2}</p>
               </div>
 
-              {/* Button */}
-              <button type="button" className="white-button absolute bottom-8">
-                {data.buttonText}
-              </button>
+              {/* ICP Wallet Button */}
+              {!isConnected && data.buttonText == "ICP Wallet" && (
+                <button type="button" className="white-button absolute bottom-8" onClick={loginHandler}>
+                  {data.buttonText}
+                </button>
+              )}
+
+              {isConnected && data.buttonText == "ICP Wallet" && (
+                <button type="button" className="white-button absolute bottom-8" onClick={connectedHnadler}>
+                  {data.buttonText}
+                </button>
+              )}
+
+              {/* Create Post Button */}
+              {!isConnected && data.buttonText == "Create Post" && (
+                <button
+                  className="white-button absolute bottom-8"
+                  onClick={loginHandler}
+                >
+                  Create Post
+                </button>
+              )}
+
+              {isConnected && data.buttonText == "Create Post" && (
+                <button
+                  className="white-button absolute bottom-8"
+                  onClick={() => navigate("/dashboard/createPost")}
+                >
+                  Create Post
+                </button>
+              )}
+
+              {/* Visit App Button */}
+              {data.buttonText == "Visit App" && (
+                <button
+                  type="button"
+                  className="white-button absolute bottom-8"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  {data.buttonText}
+                </button>
+              )}
             </div>
           ))}
       </div>
@@ -87,7 +139,7 @@ const cardsData = [
     index: 1,
     text1: "Setup and connect your wallet.",
     text2:
-      "Use Trust Wallet, Metamask or any wallet to connect to multiple chains the app.",
+      "Use Internet Identity or Plug Wallet to connect to multiple chains the app.",
     buttonText: "ICP Wallet",
     backImage: Wallet,
   },

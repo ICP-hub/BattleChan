@@ -4,10 +4,22 @@ import { MdArrowOutward } from "react-icons/md";
 
 import frame_1 from "../../../images/frame1.png";
 import frame_2 from "../../../images/frame2.png";
-import { ConnectButton, ConnectDialog } from "@connect2ic/react";
+import { useConnect, useDialog, ConnectDialog } from "@connect2ic/react";
+import toast from "react-hot-toast";
 
 const AttractiveCompo = () => {
   const className = "LandingPage__AttractivePage";
+  const { open } = useDialog();
+  const { isConnected, disconnect } = useConnect();
+
+  const loginHandler = () => {
+    open();
+  };
+
+  const logoutHandler = () => {
+    disconnect()
+    toast.success("Logout successfully.")
+  };
 
   return (
     <div
@@ -47,10 +59,19 @@ const AttractiveCompo = () => {
           Shape Contents and Earn Rewards
         </p>
 
-        <button type="button" className="white-button flex-row-center">
-          <ConnectButton />
-          <MdArrowOutward />
-        </button>
+        {!isConnected && (
+          <button type="button" className="white-button flex-row-center" onClick={loginHandler}>
+            Connect Wallet
+            <MdArrowOutward />
+          </button>
+        )}
+
+        {isConnected && (
+          <button type="button" className="white-button flex-row-center" onClick={logoutHandler}>
+            Disconnect
+            <MdArrowOutward />
+          </button>
+        )}
 
         <ConnectDialog />
       </div>

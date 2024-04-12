@@ -3,11 +3,13 @@ import KnowMore from "./KnowMore";
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useConnect } from "@connect2ic/react";
 
 import { FiUpload } from "react-icons/fi";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import bg from "../../images/dashboard_bg.png";
 
+import UserApiHanlder from "../../API_Handlers/user";
 import PostApiHanlder from "../../API_Handlers/post";
 import toast from "react-hot-toast";
 import Constant from "../../utils/constants";
@@ -30,6 +32,12 @@ type Theme = {
   handleThemeSwitch: Function;
 };
 
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
+};
+
 const CreatePost = (props: Theme) => {
   const [communities, setCommunities] = useState<string[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
@@ -46,10 +54,47 @@ const CreatePost = (props: Theme) => {
 
   const { createPost, getBoards } = PostApiHanlder();
   const { handleFileUpload } = Constant();
+  const { getProfileData } = UserApiHanlder();
   const selectedCommunityRef = React.useRef(selectedCommunity);
   const postNameRef = React.useRef(postName);
   const postDesRef = React.useRef(postDes);
   const fileDataRef = React.useRef(fileData);
+  const { isConnected, principal } = useConnect();
+  const [principal_id, setPrincipal_id] = useState("");
+  const principal_idRef = React.useRef(principal_id);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+
+  useEffect(() => {
+    isUserAuthenticatedRef.current = isUserAuthenticated;
+    principal_idRef.current = principal_id;
+  }, [isUserAuthenticated, principal_id]);
+
+  // Check if User is Authenticated or not
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (isConnected && principal) {
+        setIsUserAuthenticated(true);
+        setPrincipal_id(principal);
+      }
+    };
+
+    checkAuthentication();
+  }, [isConnected, principal]);
+
+  // If user is not Authenticated or not Registered navigate it to profile page
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await getProfileData()) as ProfileData;
+      if (response && response.status == false) {
+        if (isUserAuthenticatedRef.current && principal_idRef.current) {
+          navigate("/dashboard/settingProfile");
+        }
+      }
+    };
+
+    fetchData();
+  }, [isUserAuthenticatedRef, principal_idRef]);
 
   const is870px = useMediaQuery("(min-width: 870px)");
   const navigate = useNavigate();
@@ -243,7 +288,7 @@ const CreatePost = (props: Theme) => {
                   type="button"
                   className="createPostBtn small-button text-light bg-dirty-light-green hover:bg-fresh-green transition rounded-[2rem]"
                   id="createPostBtn1"
-                  // onClick={handleCreatePost}
+                // onClick={handleCreatePost}
                 >
                   Post
                 </button>
@@ -252,11 +297,10 @@ const CreatePost = (props: Theme) => {
           </section>
 
           <section
-            className={`big_tablet:w-1/2 w-full big_tablet:h-full phone:h-[60dvh] h-[40dvh] tablet:text-base text-sm bg-dirty-light-green bg-opacity-25 flex-col-center rounded-lg ${
-              fileURL == ""
-                ? "justify-center py-8"
-                : "justify-between phone:p-4 p-2"
-            }`}
+            className={`big_tablet:w-1/2 w-full big_tablet:h-full phone:h-[60dvh] h-[40dvh] tablet:text-base text-sm bg-dirty-light-green bg-opacity-25 flex-col-center rounded-lg ${fileURL == ""
+              ? "justify-center py-8"
+              : "justify-between phone:p-4 p-2"
+              }`}
           >
             {/* <input type="file" name="image" /> */}
             {fileURL == "" ? (
@@ -310,7 +354,7 @@ const CreatePost = (props: Theme) => {
                 type="button"
                 className="createPostBtn px-4 py-2 font-semibold text-sm text-light bg-dirty-light-green hover:bg-fresh-green transition rounded-[2rem]"
                 id="createPostBtn2"
-                // onClick={handleCreatePost}
+              // onClick={handleCreatePost}
               >
                 Post
               </button>

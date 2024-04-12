@@ -12,27 +12,58 @@ import WhyBattlechan from "../../components/LandingPage/WhyBattlechan/WhyBattlec
 import { useConnect } from "@connect2ic/react";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineArrowUp } from "react-icons/hi";
+import UserApiHanlder from "../../API_Handlers/user";
 
 type Theme = {
   handleThemeSwitch: any;
 };
 
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
+};
+
 function Landing(props: Theme) {
-  let {  principal, isInitializing } = useConnect();
-  const [allow, setAllow] = useState<null | boolean>(null);
   const navigate = useNavigate();
+  const { isConnected, principal } = useConnect();
+  const { getProfileData } = UserApiHanlder();
+  const [principal_id, setPrincipal_id] = useState("");
+  const principal_idRef = React.useRef(principal_id);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
 
   useEffect(() => {
-    if (isInitializing == false) {
-      setAllow(principal ? true : false);
-    }
-  }, [principal, isInitializing]);
+    isUserAuthenticatedRef.current = isUserAuthenticated;
+    principal_idRef.current = principal_id;
+  }, [isUserAuthenticated, principal_id]);
 
-  React.useEffect(() => {
-    if (principal) {
-      navigate("/dashboard/settingProfile");
-    }
-  }, [principal]);
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (isConnected && principal) {
+        setIsUserAuthenticated(true);
+        setPrincipal_id(principal);
+      }
+    };
+
+    checkAuthentication();
+  }, [isConnected, principal]);
+
+  // console.log(isUserAuthenticatedRef.current)
+  // console.log(principal_idRef.current)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await getProfileData()) as ProfileData;
+      if (response && response.status == false) {
+        if (isUserAuthenticatedRef.current && principal_idRef.current) {
+          navigate("/dashboard/settingProfile");
+        }
+      }
+    };
+
+    fetchData();
+  }, [isUserAuthenticatedRef, principal_idRef]);
 
   const handleThemeSwitch = props.handleThemeSwitch;
   const className = "LandingPage";
@@ -70,9 +101,8 @@ function Landing(props: Theme) {
     >
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-500 ease-in-out bg-blue-500 hover:bg-blue-600 text-light dark:text-dark bg-dark dark:bg-light font-bold py-2 px-4 rounded-full shadow-lg z-10`}
+        className={`fixed bottom-6 right-6 ${isVisible ? "opacity-100" : "opacity-0"
+          } transition-opacity duration-500 ease-in-out bg-blue-500 hover:bg-blue-600 text-light dark:text-dark bg-dark dark:bg-light font-bold py-2 px-4 rounded-full shadow-lg z-10`}
       >
         <HiOutlineArrowUp className="text-xl" />
       </button>

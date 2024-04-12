@@ -1,6 +1,6 @@
 
 import React, { Suspense, lazy, useEffect, useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Loader from "./components/Loader/Loader";
 import { useConnect } from "@connect2ic/react";
@@ -23,23 +23,12 @@ interface AppRoutesProps {
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
   let { isConnected, principal, isIdle, isInitializing } = useConnect();
   const [allow, setAllow] = useState<null | boolean>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (isInitializing == false) {
       setAllow(principal ? true : false);
     }
-    
   }, [principal, isInitializing]);
-
-  
-
-  React.useEffect(() => {
-    if (principal) {
-      
-      
-    }
-  }, [principal]);
 
   return (
     <Routes>
