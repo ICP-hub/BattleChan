@@ -102,7 +102,7 @@ const ProfileOverlay = (props: Props) => {
         className={
           className +
           "__container" +
-          " tablet:w-[400px] phone:w-[60vw] w-[70vw] p-4 flex flex-col justify-between tablet:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
+          " tablet:w-[400px] phone:w-[60vw] small_phone:w-[70vw] w-[85vw] p-4 flex flex-col justify-between tablet:gap-4 gap-2 bg-dirty-light-green text-light rounded-lg"
         }
         onClick={(e) => e.stopPropagation()}
       >

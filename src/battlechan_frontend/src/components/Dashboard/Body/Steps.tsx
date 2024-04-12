@@ -25,41 +25,43 @@ const Steps = () => {
     >
       <div className="w-1/3 flex flex-col gap-4 items-center">
         <p
-          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 cursor-default text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           1
         </p>
         {!isConnected && (
-          <p className="font-semibold text-center" onClick={loginHandler}>Connect your Wallet.</p>
+          <p className="font-semibold text-center hover:text-light-green hover:cursor-pointer" onClick={loginHandler}>Connect your Wallet.</p>
         )}
         {isConnected && (
-          <p className="font-semibold text-center" onClick={connectedHnadler}>Connect your Wallet.</p>
+          <p className="font-semibold text-center hover:text-light-green hover:cursor-pointer" onClick={connectedHnadler}>Connect your Wallet.</p>
         )}
       </div>
 
       <div className="w-1/3 flex flex-col gap-4 items-center">
         <p
-          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 cursor-default text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           2
         </p>
         {!isConnected && (
-          <p className="font-semibold text-center" onClick={loginHandler}>Make Post : Earn Time.</p>
+          <p className="font-semibold text-center hover:text-light-green hover:cursor-pointer" onClick={loginHandler}>Make Post : Earn Time.</p>
         )}
         {isConnected && (
           <Link to="/dashboard/createPost">
-            <p className="font-semibold text-center">Make Post : Earn Time.</p>
+            <p className="font-semibold text-center hover:text-light-green hover:cursor-pointer">Make Post : Earn Time.</p>
           </Link>
         )}
       </div>
       <div className="w-1/3 flex flex-col gap-4 items-center">
         <p
-          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
+          className={`small_phone:py-2 py-1 small_phone:px-4 px-2 cursor-default text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
         >
           3
         </p>
         <Link to="/dashboard/mainPosts">
-          <p className="font-semibold text-center">Cast your vote.</p>
+          <p className="font-semibold text-center hover:text-light-green">
+            Cast your vote.
+          </p>
         </Link>
       </div>
     </div>

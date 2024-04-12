@@ -367,7 +367,7 @@ const MainPosts = (props: Theme) => {
           )}
         </div>
 
-        <div className="xl:px-10 small_phone:mt-8 mt-4 px-4 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
+        <div className="xl:px-10 small_phone:mt-8 mt-4 mx-4 flex flex-col flex-wrap laptop:flex-row items-center laptop:justify-start justify-center">
           {!dataFetched ? (
             <CardSkeleton />
           ) : (

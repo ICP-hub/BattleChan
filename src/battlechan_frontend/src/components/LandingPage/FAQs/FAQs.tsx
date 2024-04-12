@@ -1,4 +1,4 @@
-import list from './FAQList';
+import list from "./FAQList";
 import bg from "../../../images/faq_bg.png";
 
 const FAQs = () => {
@@ -23,19 +23,26 @@ const FAQs = () => {
           " h-full laptop:pl-32 tablet:px-16 small_phone:px-10 px-8 py-20 xl:w-[55%] w-full tablet:gap-20 small_phone:gap-16 gap-12 flex flex-col"
         }
       >
-        <h1 className="font-bold laptop:text-5xl text-4xl text-center">Frequently Asked Questions</h1>
+        <h1 className="font-bold laptop:text-5xl text-4xl text-center">
+          Frequently Asked Questions
+        </h1>
 
         <div className="questions gap-4 flex-direction-col items-start">
           {list &&
-            list.map((item) => (
-              <p className="questionPara flex-row-center tablet:p-2 p-1 border border-green rounded-[2rem]">
+            list.map((item, i) => (
+              <p
+                key={i}
+                className="questionPara flex-row-center tablet:p-2 p-1 border border-green rounded-[2rem]"
+              >
                 <span
                   className={`py-1 px-3 font-semibold tablet:text-base text-sm text-light dark:text-dark bg-dark dark:bg-light rounded-[50%]`}
                 >
                   {item.index}
                 </span>
 
-                <span className="tablet:mx-8 mx-4 small_phone:text-base text-sm">{item.question}</span>
+                <span className="tablet:mx-8 mx-4 small_phone:text-base text-sm">
+                  {item.question}
+                </span>
               </p>
             ))}
         </div>
