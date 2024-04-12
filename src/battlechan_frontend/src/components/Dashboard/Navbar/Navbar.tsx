@@ -100,7 +100,7 @@ const Navbar = (props: Theme) => {
           src={darkColor == "dark" ? dark_logo : light_logo}
           className={
             className +
-            "__logo tablet:w-28 small_phone:w-20 max-w-16 min-w-16 object-contain pointer-events-none"
+            "__logo tablet:w-28 small_phone:w-20 w-16 object-contain pointer-events-none"
           }
           alt="BATTLE CHAN"
         />
