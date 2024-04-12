@@ -8,7 +8,6 @@ import Text "mo:base/Text";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
-import TrieMap "mo:base/TrieMap";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
