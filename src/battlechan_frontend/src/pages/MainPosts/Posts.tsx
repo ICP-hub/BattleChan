@@ -26,9 +26,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
 
   if (currentPosts.length <= 0) {
     return (
-      <>
         <h1 className="text-center p-8">No Posts Exists</h1>
-      </>
     );
   }
 
@@ -38,7 +36,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
         currentPosts.map((post, index) => (
           <div
             className={
-              className + " " + `laptop:w-1/2 w-full px-2 py-2`
+              className + " " + `laptop:w-1/2 w-full small_phone:px-2 py-2`
             }
             key={index}
           >

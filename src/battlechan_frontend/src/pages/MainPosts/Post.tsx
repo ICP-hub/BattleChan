@@ -214,7 +214,7 @@ const Post: React.FC<PostProps> = ({
     >
       {type === "archive" ? (
         <React.Fragment>
-          <section className="flex flex-row phone:gap-4 gap-2 items-start justify-between">
+          <section className="w-full flex flex-row phone:gap-4 gap-2 items-start justify-between">
             <Link
               key={id}
               to={`/dashboard/postDetails/${encodeURIComponent(
@@ -223,12 +223,12 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className="block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover pointer-events-none"
+                className="block xl:max-w-28 laptop:max-w-20 tablet:max-w-28 phone:max-w-20 max-w-16 rounded-lg aspect-square object-cover pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
 
-            <div className="laptop:w-4/5 w-5/6 flex flex-col gap-2">
+            <div className="laptop:w-4/5 phone:w-5/6 w-3/4 flex flex-col gap-2">
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
@@ -345,7 +345,7 @@ const Post: React.FC<PostProps> = ({
                 </div>
               </section>
 
-              <section className="mt-1">
+              <section className="w-full mt-1">
                 <Link
                   key={id}
                   to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
