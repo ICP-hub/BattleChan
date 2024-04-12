@@ -11,6 +11,7 @@ import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
 import Option "mo:base/Option";
+import Iter "mo:base/Iter";
 
 import Types "utils/types";
 
@@ -820,6 +821,18 @@ actor BattleChan {
       error = null;
     };
 
+  };
+  public query func getRecentPost() : async [Types.PostInfo] {
+    let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
+    var recentPostList = List.nil<Types.PostInfo>();
+
+    if (postDataAll.size() > 10) {
+      for (i in Iter.range(0, 10 - 1)) {
+        recentPostList := List.push(postDataAll[i], recentPostList);
+      };
+      return List.toArray(recentPostList);
+    };
+    return postDataAll;
   };
 
   public query func getTotalCommentsInPost(postId : Types.PostId) : async Types.Result_1<Nat> {
