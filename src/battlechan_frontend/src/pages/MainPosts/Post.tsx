@@ -223,7 +223,7 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className={`block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover`}
+                className="block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
@@ -232,14 +232,14 @@ const Post: React.FC<PostProps> = ({
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
-                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    className="block rounded-full aspect-square w-8 tablet:w-10 pointer-events-none"
                     src={convertInt8ToBase64(userProfile)}
                     alt="user avatar"
                   />
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold">
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold text-ellipsis overflow-hidden">
                         {userName}
                       </h1>
 
@@ -276,7 +276,7 @@ const Post: React.FC<PostProps> = ({
                     id
                   )}?type=archive`}
                 >
-                  <p className="tablet:text-lg text-sm font-semibold">
+                  <p className="tablet:text-lg text-sm font-semibold text-ellipsis overflow-hidden">
                     {postName}
                   </p>
                   <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
@@ -298,7 +298,7 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className={`block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover`}
+                className="block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
@@ -307,14 +307,14 @@ const Post: React.FC<PostProps> = ({
               <section className="flex tablet:gap-8 items-start justify-between">
                 <div className="w-full flex items-center gap-2">
                   <img
-                    className={`block rounded-full aspect-square w-8 tablet:w-10`}
+                    className="block rounded-full aspect-square w-8 tablet:w-10 pointer-events-none"
                     src={convertInt8ToBase64(userProfile)}
                     alt="user avatar"
                   />
 
                   <div className="w-full flex flex-col">
                     <div className="w-full flex-row-center justify-between">
-                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold">
+                      <h1 className="tablet:text-md small_phone:text-1xl text-sm font-semibold text-ellipsis overflow-hidden">
                         {userName}
                       </h1>
 
@@ -350,7 +350,7 @@ const Post: React.FC<PostProps> = ({
                   key={id}
                   to={`/dashboard/postDetails/${encodeURIComponent(id)}`}
                 >
-                  <p className="tablet:text-lg text-sm font-semibold">
+                  <p className="tablet:text-lg text-sm font-semibold text-ellipsis overflow-hidden">
                     {postName}
                   </p>
                   <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800">
