@@ -115,7 +115,7 @@ const Body = () => {
         className={
           className +
           "__postsNumber" +
-          ` big_tablet:hidden big_tablet:px-30 flex flex-col big_tablet:block gap-2 p-4 big_tablet:py-6 big_tablet:px-10 mx-4 big_tablet:mx-auto big_tablet:my-24 my-10 border border-dark dark:border-light rounded-md`
+          `flex flex-col gap-2 p-4 big_tablet:p-10 big_tablet:px-10 mx-4 big_tablet:mx-16 big_tablet:my-24 my-10 border border-dark dark:border-light rounded-xl`
         }
       >
         <div className="data__headings big_tablet:px-4 flex-row-center big_tablet:flex-nowrap small_phone:justify-around justify-between rounded-xl text-[#fff] bg-dirty-light-green gap-2">
@@ -146,7 +146,7 @@ const Body = () => {
           <div className="small_phone:text-base text-xs">
             {boardSizes.map((boardSize, index) => (
               <div className={` text-center flex items-center p-2 gap-2`}>
-                <span className="font-semibold">
+                <span className="font-semibold big_tablet:mb-1">
                   {boardSize !== undefined ? boardSize.toString() : ""}
                 </span>
                 <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
@@ -158,69 +158,7 @@ const Body = () => {
         </div>
       </div>
 
-      <div className="w-auto relative hidden big_tablet:flex items-center justify-center overflow-x-auto xl:my-20 my-10 p-10 border border-dark dark:border-light rounded-xl mx-16 no-scrollbar">
-        <table className="w-full text-left">
-          <thead className="text-xs big_tablet:text-base">
-            <tr className=" text-light bg-dirty-light-green">
-              <th scope="col" className="px-6 py-3 rounded-s-xl">
-                Name of the Subject
-              </th>
-              {boardNames.map((boardName, index) => (
-                <th
-                  key={index}
-                  scope="col"
-                  className={`${
-                    index === boardNames.length - 1 ? "rounded-e-xl" : ""
-                  }`}
-                >
-                  {boardName && (
-                    <div
-                      className={`flex justify-center border-r ${
-                        index === boardNames.length - 1 ? "border-r-0" : ""
-                      }`}
-                    >
-                      <button
-                        className="inline-flex flex-wrap items-center justify-center cursor-pointer hover:bg-green hover:bg-opacity-50 rounded-lg p-2 gap-1 font-normal"
-                        onClick={() => {
-                          navigate(
-                            `/dashboard/mainPosts?boardName=${boardName}`
-                          );
-                        }}
-                      >
-                        <CatalogSVG label={boardName} />
-                        {boardName}
-                      </button>
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="tablet:text-base">
-            <tr className="">
-              <th scope="row" className="px-6 font-medium whitespace-nowrap">
-                Total Posts
-              </th>
-              {boardSizes.map((boardSize, index) => (
-                <td key={index} className="">
-                  <div
-                    className={` border-r text-center flex flex-col flex-wrap items-center justify-center p-2 ${
-                      index === boardNames.length - 1 ? "border-r-0" : ""
-                    }`}
-                  >
-                    <span className="">
-                      {boardSize !== undefined ? boardSize.toString() : ""}
-                    </span>
-                    <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
-                      {createdAt[index] !== "" ? createdAt[index] : "No Posts"}
-                    </span>
-                  </div>
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      
     </div>
   );
 };
