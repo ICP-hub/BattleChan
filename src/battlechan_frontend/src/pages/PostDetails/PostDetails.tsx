@@ -319,7 +319,7 @@ const PostDetails = (props: Theme) => {
               <Skeleton w_h_p={"w-full tablet:h-[220px] h-[400px]"} />
             ) : (
               <img
-                className="block h-auto w-full rounded-3xl"
+                className="block h-auto w-full rounded-3xl pointer-events-none"
                 src={convertInt8ToBase64(postsData?.postMetaData || undefined)}
                 alt="post image"
                 loading="lazy"
@@ -387,7 +387,7 @@ const PostDetails = (props: Theme) => {
                   <img
                     src={convertInt8ToBase64(postsData?.createdBy.userProfile)}
                     alt="Profile Image"
-                    className="block h-full w-full object-cover rounded"
+                    className="block h-full w-full object-cover rounded pointer-events-none"
                   />
                 )}
               </div>
@@ -410,8 +410,8 @@ const PostDetails = (props: Theme) => {
             </div>
           </div>
 
-          <div className="mt-8 tablet:text-lg tablet:mt-10">
-            <h1 className="font-bold mb-3">
+          <div className="w-full mt-8 tablet:text-lg tablet:mt-10">
+            <h1 className="w-full font-bold mb-3 text-ellipsis overflow-hidden">
               {!dataFetched ? (
                 <Skeleton w_h_p={"h-[20px] w-[100%]"} />
               ) : (
