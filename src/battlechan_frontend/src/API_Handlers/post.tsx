@@ -18,6 +18,21 @@ interface TotalCountsResponse {
     archivePostCounts: number;
 }
 
+type PostInfo = {
+    postId: string;
+    postName: string;
+    postMetaData: Int8Array;
+    postDes: string;
+    expireAt: BigInt;
+    createdAt: string;
+    createdBy: {
+      userName: string;
+      userProfile: Int8Array;
+    };
+    upvotedBy: string[];
+    comments:any;
+  };
+
 const PostApiHanlder = () => {
     
     const [backend] = useCanister("backend");
@@ -60,9 +75,18 @@ const PostApiHanlder = () => {
     };
 
     
-    const getRecentPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
+    // const getRecentPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
+    //     try {
+    //         const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
+    //         return res;
+    //     } catch (err) {
+    //         console.error("Error: ", err);
+    //     }
+    // };
+    const getRecentPosts = async () => {
         try {
-            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
+            const res = await backend.getRecentPost() as PostInfo[];
+            console.log("res recent: ", res)
             return res;
         } catch (err) {
             console.error("Error: ", err);
