@@ -25,7 +25,27 @@ const useBackend = () => {
 type Theme = {
   handleThemeSwitch: Function;
   type?: string;
+  searchPosts?: PostInfo[];
 };
+
+interface SearchPost {
+  upvotes: string;
+  postName: string;
+  upvotedBy: string[];
+  postDes: string;
+  createdAt: string;
+  createdBy: {
+    userName: string;
+    userProfile: Int8Array;
+  };
+  updatedAt: string[];
+  expireAt: string;
+  postMetaData: Int8Array;
+  board: string;
+  downvotes: string;
+  downvotedBy: string[];
+  postId: string;
+}
 
 type PostInfo = {
   postId: string;
@@ -100,6 +120,10 @@ const MainPosts = (props: Theme) => {
 
         if (props.type == "archive") {
           setTotalPosts(response?.archivePostCounts);
+        } else if(props.type === "searchPosts"){
+          if(props.searchPosts){
+            setTotalPosts(props.searchPosts?.length)
+          }
         } else {
           setTotalPosts(response?.mainPostCounts);
         }
@@ -180,6 +204,12 @@ const MainPosts = (props: Theme) => {
   useEffect(() => {
     if (props.type == "archive") {
       getPosts("archive");
+    } else if(props.type === 'searchPosts'){
+      console.log("search posts here")
+      if(props.searchPosts){
+        setPostsData(props.searchPosts)
+        setDataFetched(true);
+      }
     } else {
       getPosts();
     }
