@@ -19,8 +19,8 @@ type PostInfo = {
     userName: string;
     userProfile: Int8Array;
   };
-  upvotes: number;
-  commentsCount: number;
+  upvotedBy: string[];
+  comments: any;
 };
 
 interface Board {
@@ -50,7 +50,8 @@ const Post = () => {
   const [votes, setVotes] = React.useState<boolean[]>(
     Array(postList.length).fill(true)
   );
-  const [postsData, setPostsData] = useState<PostInfo[]>([]);
+  // const [postsData, setPostsData] = useState<PostInfo[]>([]);
+  const [recentPostsData, setRecentPostsData] = useState<PostInfo[]>([])
   const [boardsData, setBoardsData] = useState<string>("");
   const [activeSelection, setActiveSelection] = useState("Recent");
   const [postsPerPage, setPostsPerPage] = useState(10);
@@ -62,89 +63,99 @@ const Post = () => {
   const { getAllComments } = CommentsApiHanlder()
   const className = "LandingPage__TrendingPosts";
 
-  const getAllPostFilter = async (selectedBoard: string) => {
-    try {
-      const res = await getRecentPosts({ ["recent"]: null },
-        postsPerPage,
-        currentPage,
-        selectedBoard);
+  // const getAllPostFilter = async (selectedBoard: string) => {
+  //   try {
+  //     const res = await getRecentPosts({ ["recent"]: null },
+  //       postsPerPage,
+  //       currentPage,
+  //       selectedBoard);
       
-      return res;
-    } catch (err) {
-      console.error("Error: ", err);
-    }
-  };
+  //     return res;
+  //   } catch (err) {
+  //     console.error("Error: ", err);
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
         
-        const response = (await getBoards()) as BackendResponse;
-        if (response.status == false) {
-          throw new Error("Failed to fetch communities");
-        }
-        const boards = response.data[0];
-        if (boards && boards.length > 0) {
-          setBoardsData(boards[0]?.boardName);
-          setSelectedBoard(boards[0]?.boardName);
-        } else {
+  //       const response = (await getBoards()) as BackendResponse;
+  //       if (response.status == false) {
+  //         throw new Error("Failed to fetch communities");
+  //       }
+  //       const boards = response.data[0];
+  //       if (boards && boards.length > 0) {
+  //         setBoardsData(boards[0]?.boardName);
+  //         setSelectedBoard(boards[0]?.boardName);
+  //       } else {
           
-        }
-      } catch (error) {
-        console.error("Error fetching communities:", error);
-      }
-    };
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching communities:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
-  useEffect(() => {
-    getPosts();
-  }, []);
+  // useEffect(() => {
+  //   getPosts();
+  // }, []);
 
-  async function getPosts() {
-    try {
-      const response = (await getAllPostFilter(selectedBoard)) as PostResponse;
-      if (response.status === true && response.data) {
+  // async function getPosts() {
+  //   try {
+  //     const response = (await getAllPostFilter(selectedBoard)) as PostResponse;
+  //     if (response.status === true && response.data) {
         
-        const posts = response.data.flat(); 
+  //       const posts = response.data.flat(); 
         
-        const commentsCountPromises = posts.map(element => getCommentsCounts(element.postId));
+  //       const commentsCountPromises = posts.map(element => getCommentsCounts(element.postId));
         
-        const commentsCounts = await Promise.all(commentsCountPromises);
-        posts.forEach((element, index) => {
+  //       const commentsCounts = await Promise.all(commentsCountPromises);
+  //       posts.forEach((element, index) => {
           
-          const timestamp = convertNanosecondsToTimestamp(BigInt(element.createdAt));
+  //         const timestamp = convertNanosecondsToTimestamp(BigInt(element.createdAt));
           
-          element.createdAt = timestamp;
-          element.upvotes = Number(element.upvotes);
+  //         element.createdAt = timestamp;
+  //         element.upvotes = Number(element.upvotes);
           
-          element.commentsCount = commentsCounts[index] || 0;
-        });
-        setPostsData(posts);
-      }
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
-  }
+  //         element.commentsCount = commentsCounts[index] || 0;
+  //       });
+  //       setPostsData(posts);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching posts:", error);
+  //   }
+  // }
 
-  const getCommentsCounts = async (id: string) => {
-    const response = (await getAllComments(id)) as CommentsResponse;
-    if (response && response.status == true) {
-      let data = response.data[0];
-      if (data && data.length > 0) {
+  // const getCommentsCounts = async (id: string) => {
+  //   const response = (await getAllComments(id)) as CommentsResponse;
+  //   if (response && response.status == true) {
+  //     let data = response.data[0];
+  //     if (data && data.length > 0) {
         
-        return data.length;
-      }
-    }
-  };
+  //       return data.length;
+  //     }
+  //   }
+  // };
 
 
-  const handleVote = (index: number, vote: boolean) => {
-    const newVotes = [...votes];
-    newVotes[index] = vote;
-    setVotes(newVotes);
-  };
+  // const handleVote = (index: number, vote: boolean) => {
+  //   const newVotes = [...votes];
+  //   newVotes[index] = vote;
+  //   setVotes(newVotes);
+  // };
+
+  useEffect(()=>{
+    const fetchRecentPost = async ()=>{
+      const res  = await getRecentPosts() as PostInfo[];
+      console.log("res of comments", res[0].comments)
+
+      setRecentPostsData(res)
+    } 
+    fetchRecentPost()
+  }, [])
 
   return (
     <div
@@ -160,7 +171,7 @@ const Post = () => {
             "__postCards my-20 w-full gap-8 flex flex-wrap px-[100px] justify-center items-start"
           }
         >
-          {postsData.map((post, index) => (
+          {recentPostsData.length > 0 && recentPostsData.map((post, index) => (
             <Link
               key={post.postId}
               to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}?type=archive`}
@@ -175,18 +186,22 @@ const Post = () => {
                 <div className="postData w-full p-6 flex-direction-col gap-4">
                   <div className="top flex-row-center justify-between">
                     <section className="owner flex-row-center gap-2">
+                      <div className="w-8 h-8 tablet:w-10 tablet:h-10 flex justify-center rounded-md">
                       <img
                         src={convertInt8ToBase64(post.createdBy.userProfile)}
                         alt="Profile Image"
-                        className="w-[35px]"
+                        className="block h-full w-full object-cover rounded-md cursor-pointer"
                       />
-                      <span className="text-[20px] font-semibold">
+                      </div>
+                      <span className="text-xs tablet:text-md font-semibold">
                         {post.createdBy.userName}
                       </span>
                     </section>
 
                     <section className="flex-direction-row gap-2 text-[15px]">
-                      <span className="text-xs">{post.createdAt}</span>
+                      <span className="text-xs">{convertNanosecondsToTimestamp(
+            BigInt(post.createdAt)
+          )}</span>
                       <span className="text-xs">{post.postId}</span>
                     </section>
                   </div>
@@ -200,11 +215,11 @@ const Post = () => {
                     <section className="counts gap-4 flex-direction-row">
                       <span className="timeToken flex-row-center gap-1">
                         <MdOutlineVerifiedUser />
-                        {post.upvotes}
+                        {post.upvotedBy.length}
                       </span>
                       <span className="comments flex-row-center gap-1">
                         <LiaCommentSolid />
-                        {post.commentsCount} Comments
+                        {post.comments.empty === null ? "0" : `${post.comments?.leaf?.keyvals.length}`} Comments
                       </span>
                     </section>
                   </div>

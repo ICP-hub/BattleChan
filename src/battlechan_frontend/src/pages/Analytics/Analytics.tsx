@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Navbar from "../../components/Dashboard/Navbar/Navbar";
 import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
@@ -9,19 +9,12 @@ import mybalance_Img from "../../images/my-balance-img.png";
 import UserApiHanlder from "../../API_Handlers/user";
 import TokensApiHanlder from "../../API_Handlers/tokens";
 import { useConnect } from "@connect2ic/react";
+import Constant from "../../utils/constants";
 
 type Theme = {
   handleThemeSwitch: Function;
   type?: string;
 };
-
-interface DataItem {
-  message: string;
-  username?: string;
-  time: string;
-  tokenChange: number;
-  imageUrl: string;
-}
 
 interface UserAnalytics {
   likedPost: number;
@@ -32,28 +25,16 @@ interface UserAnalytics {
   status: boolean;
 }
 
-const data: DataItem[] = [
-  {
-    message: "Upvote: Kd_1129 with post Id #1256320000",
-    username: "Kd_1129",
-    time: "3hrs ago",
-    tokenChange: -1,
-    imageUrl: trendingPost_coverImg,
-  },
-  {
-    message: "Downvote: Kd_1129 with post Id #1256320000",
-    username: "Kd_1129",
-    time: "3hrs ago",
-    tokenChange: -1,
-    imageUrl: trendingPost_coverImg,
-  },
-  {
-    message: "You Earn 100$ Time token on Buying.",
-    time: "3hrs ago",
-    tokenChange: 100,
-    imageUrl: trendingPost_coverImg,
-  },
-];
+interface PostUpvoteData {
+  postId: string;
+  postMetaData: Int8Array;
+  userName: string;
+}
+
+interface Response {
+  upvotes: PostUpvoteData[];
+  downvotes: PostUpvoteData[];
+}
 
 const Analytics = (props: Theme) => {
   const [likedPost, setLikedPost] = React.useState(0);
@@ -86,6 +67,19 @@ const Analytics = (props: Theme) => {
       }
     }
     getAnalytics();
+  }, []);
+
+  const [voteData, setVoteData] = useState<Response | null>(null);
+
+  const { votesOfUser } = UserApiHanlder();
+  const { convertInt8ToBase64 } = Constant();
+
+  useEffect(() => {
+    const getUserUpvotes = async () => {
+      const res = (await votesOfUser()) as Response;
+      setVoteData(res);
+    };
+    getUserUpvotes();
   }, []);
 
   return (
@@ -336,57 +330,52 @@ const Analytics = (props: Theme) => {
             </h1>
 
             <div>
-              {data.map((item, index) => (
+              {voteData?.upvotes.map((vote, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6"
                 >
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
-                      {item.message.split(" ").map((word, index) => {
-                        if (word === "Upvote:") {
-                          return (
-                            <span key={index} className="text-[#18AF00]">
-                              {word}{" "}
-                            </span>
-                          );
-                        } else if (word === "Downvote:") {
-                          return (
-                            <span key={index} className="text-red">
-                              {word}{" "}
-                            </span>
-                          );
-                        } else if (
-                          item.username &&
-                          word.includes(item.username ?? "")
-                        ) {
-                          return <strong key={index}>{word} </strong>;
-                        } else {
-                          return <span key={index}>{word} </span>;
-                        }
-                      })}
-                    </div>
-
-                    <div className="mt-2 dark:text-[#fff] dark:text-opacity-50">
-                      <i>{item.time}</i>
+                      You loss 1 token by{" "}
+                      <span className="text-[#18AF00]">
+                        {"Upvoting"}
+                      </span>{" "}
+                      <strong>{vote.userName}</strong> with post Id {vote.postId}
                     </div>
                   </div>
                   <div className="flex items-center pl-2">
-                    <div
-                      className={
-                        item.tokenChange > 0
-                          ? "text-[#18AF00] font-semibold mr-2 tablet:mr-4"
-                          : "text-red mr-2 tablet:mr-4"
-                      }
-                    >
-                      {item.tokenChange > 0
-                        ? `+${item.tokenChange}`
-                        : item.tokenChange}
+                    <div className={"text-red mr-2 tablet:mr-4"}>-1</div>
+                    <div className="w-24 h-10">
+                      <img
+                        className="block h-full w-full rounded"
+                        src={convertInt8ToBase64(vote.postMetaData)}
+                        alt="post image"
+                      />
                     </div>
-                    <div className="w-24">
+                  </div>
+                </div>
+              ))}
+              {voteData?.downvotes.map((vote, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6"
+                >
+                  <div className="text-sm max-w-60 tablet:max-w-none items-center">
+                    <div>
+                      You loss 1 token by{" "}
+                      <span className="text-red">
+                        {"Upvoting"}
+                      </span>{" "}
+                      <strong>{vote.userName}</strong> with post Id {vote.postId}
+                    </div>
+                  </div>
+                  <div className="flex items-center pl-2">
+                    <div className={"text-red mr-2 tablet:mr-4"}>-1</div>
+                    <div className="max-w-20 tablet:max-w-28 rounded-sm flex items-center">
                       <img
                         className="block h-auto w-full rounded"
-                        src={item.imageUrl}
+                        src={convertInt8ToBase64(vote.postMetaData)}
                         alt="post image"
                       />
                     </div>

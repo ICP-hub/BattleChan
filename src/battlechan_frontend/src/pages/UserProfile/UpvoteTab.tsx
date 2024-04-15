@@ -52,7 +52,7 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
               <div className="text-sm max-w-60 tablet:max-w-none tablet:flex tablet:gap-6 items-center">
                 <div>
                   You upvoted a post by <strong>{vote.userName}</strong> with
-                  post Id #{vote.postId}
+                  post Id {vote.postId}
                 </div>
                 <div className="flex items-center justify-end gap-2 mt-2 tablet:mt-0">
                   <div className="tablet:hidden">
