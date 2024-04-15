@@ -59,7 +59,7 @@ const SearchPosts = (props: Theme) => {
       }
     };
     fetchSearchPosts();
-  }, []);
+  }, [searchInput]);
 
   return (
     <MainPosts

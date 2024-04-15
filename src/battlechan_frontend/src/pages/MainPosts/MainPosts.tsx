@@ -207,7 +207,16 @@ const MainPosts = (props: Theme) => {
     } else if(props.type === 'searchPosts'){
       console.log("search posts here")
       if(props.searchPosts){
-        setPostsData(props.searchPosts)
+        const posts = props.searchPosts;
+        posts.forEach((element) => {
+          const timestamp: string = convertNanosecondsToTimestamp(
+            BigInt(element.createdAt)
+          );
+
+          element.createdAt = timestamp;
+          element.upvotes = Number(element.upvotes);
+        });
+        setPostsData(posts)
         setDataFetched(true);
       }
     } else {
