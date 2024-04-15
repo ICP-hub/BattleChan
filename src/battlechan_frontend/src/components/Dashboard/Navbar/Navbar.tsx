@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
 import { ConnectDialog } from "@connect2ic/react";
@@ -9,12 +9,13 @@ import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
 import defaultImg from "../../../images/User.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -38,16 +39,18 @@ const Navbar = (props: Theme) => {
   const [fileURL, setFileURL] = React.useState(defaultImg);
   const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
-  
+  const [searchInput, setSearchInput] = React.useState("");
+
   const { getProfileData, votesOfUser } = UserApiHanlder();
+  const { getSearchPost } = PostApiHanlder();
   const { principal, isConnected } = useConnect();
   const { getBalance } = TokensApiHanlder();
-  
-  
-  
+
   const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -64,7 +67,6 @@ const Navbar = (props: Theme) => {
       if (response && response.status !== false) {
         setUserName(response?.userName);
         setFileURL(response?.profileImg);
-        
       } else {
         if (principal) {
           setUserName(truncateString(principal, 17));
@@ -72,7 +74,6 @@ const Navbar = (props: Theme) => {
       }
     };
 
-    
     fetchData();
   }, [userName]);
 
@@ -84,9 +85,18 @@ const Navbar = (props: Theme) => {
       }
     };
 
-    
     fetchData();
   }, [principal]);
+
+  async function handleSearchSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    console.log("search form submitted with input: ", searchInput)
+    if(searchInput !== ""){
+      navigate(`/dashboard/searchPosts?searchInput=${searchInput}`)
+    }
+
+  }
 
   return (
     <div
@@ -112,15 +122,20 @@ const Navbar = (props: Theme) => {
           "__rightSection flex-row-center font-bold tablet:gap-4 gap-2"
         }
       >
-        <div className="input relative flex-row-center text-[#767676] laptop:flex hidden">
-          <IoSearch className={`absolute text-3xl ml-4 p-1`} />
-          <input
-            type="text"
-            name="search"
-            placeholder="Search here...."
-            className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor}`}
-          />
-        </div>
+        <form onSubmit={handleSearchSubmit}>
+          <div className="input relative flex-row-center text-[#767676] laptop:flex hidden">
+            <IoSearch className={`absolute text-3xl ml-4 p-1`} />
+            <input
+              type="text"
+              name="search"
+              placeholder="Search here...."
+              className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor} border border-light `}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
+            />
+          </div>
+        </form>
 
         <div
           className={
@@ -150,13 +165,13 @@ const Navbar = (props: Theme) => {
         {!is1000px &&
           (isConnected ? (
             <>
-            <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
-            <img
-              src={fileURL}
-              onClick={() => setShowOverlay(!showOverlay)}
-              className="block h-full w-full object-cover rounded-md cursor-pointer"
-            />
-            </div>
+              <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
+                <img
+                  src={fileURL}
+                  onClick={() => setShowOverlay(!showOverlay)}
+                  className="block h-full w-full object-cover rounded-md cursor-pointer"
+                />
+              </div>
             </>
           ) : (
             <button
@@ -181,14 +196,12 @@ const Navbar = (props: Theme) => {
               </div>
 
               <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
-            <img
-              src={fileURL}
-              onClick={() => setShowOverlay(!showOverlay)}
-              className="block h-full w-full object-cover rounded-md cursor-pointer"
-            />
-            </div>
-
-              
+                <img
+                  src={fileURL}
+                  onClick={() => setShowOverlay(!showOverlay)}
+                  className="block h-full w-full object-cover rounded-md cursor-pointer"
+                />
+              </div>
             </React.Fragment>
           ) : (
             <button
