@@ -50,7 +50,7 @@ const Navbar = (props: Theme) => {
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -63,25 +63,42 @@ const Navbar = (props: Theme) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = (await getProfileData()) as ProfileData;
-      if (response && response.status !== false) {
-        setUserName(response?.userName);
-        setFileURL(response?.profileImg);
-      } else {
-        if (principal) {
-          setUserName(truncateString(principal, 17));
+      try {
+        const response = await getProfileData();
+
+        if (response && response.status) {
+          setUserName(response.userName);
+          setFileURL(response.profileImg);
+        } else if (response === undefined) {
+          console.warn("Profile data is undefined");
+        } else {
+          if (principal) {
+            setUserName(truncateString(principal, 17));
+          }
         }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
       }
     };
 
     fetchData();
-  }, [userName]);
+  }, [userName, principal, isConnected]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (principal) {
-        const data = await getBalance(principal || "");
-        setTokenBalance(Number(data));
+      try {
+        if (principal) {
+          const data = await getBalance(principal);
+          const parsedBalance = Number(data);
+
+          if (!isNaN(parsedBalance)) {
+            setTokenBalance(parsedBalance);
+          } else {
+            console.warn("Received invalid balance data:", data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching balance:", error);
       }
     };
 
@@ -91,11 +108,10 @@ const Navbar = (props: Theme) => {
   async function handleSearchSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    console.log("search form submitted with input: ", searchInput)
-    if(searchInput !== ""){
-      navigate(`/dashboard/searchPosts?searchInput=${searchInput}`)
+    console.log("search form submitted with input: ", searchInput);
+    if (searchInput !== "") {
+      navigate(`/dashboard/searchPosts?searchInput=${searchInput}`);
     }
-
   }
 
   return (
