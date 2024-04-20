@@ -16,6 +16,8 @@ import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import PostApiHanlder from "../../../API_Handlers/post";
+import SearchBar from "./SearchBar";
+import SearchResultsList from "./SearchResultsList";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -25,6 +27,11 @@ interface ProfileData {
   userName: string;
   profileImg: string;
   status: boolean;
+}
+
+interface Post {
+  postId: string;
+  postName: string;
 }
 
 const truncateString = (str: string, maxLength: number): string => {
@@ -39,7 +46,7 @@ const Navbar = (props: Theme) => {
   const [fileURL, setFileURL] = React.useState(defaultImg);
   const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
-  const [searchInput, setSearchInput] = React.useState("");
+  const [results, setResults] = React.useState<Post[]>([]);
 
   const { getProfileData, votesOfUser } = UserApiHanlder();
   const { getSearchPost } = PostApiHanlder();
@@ -88,15 +95,7 @@ const Navbar = (props: Theme) => {
     fetchData();
   }, [principal]);
 
-  async function handleSearchSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
 
-    console.log("search form submitted with input: ", searchInput)
-    if(searchInput !== ""){
-      navigate(`/dashboard/searchPosts?searchInput=${searchInput}`)
-    }
-
-  }
 
   return (
     <div
@@ -122,20 +121,10 @@ const Navbar = (props: Theme) => {
           "__rightSection flex-row-center font-bold tablet:gap-4 gap-2"
         }
       >
-        <form onSubmit={handleSearchSubmit}>
-          <div className="input relative flex-row-center text-[#767676] laptop:flex hidden">
-            <IoSearch className={`absolute text-3xl ml-4 p-1`} />
-            <input
-              type="text"
-              name="search"
-              placeholder="Search here...."
-              className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor} border border-light `}
-              onChange={(e) => {
-                setSearchInput(e.target.value);
-              }}
-            />
-          </div>
-        </form>
+        <div className="relative">
+        <SearchBar setResults={setResults} />
+        {results && results.length > 0 && <SearchResultsList results={results} />}
+        </div>
 
         <div
           className={
