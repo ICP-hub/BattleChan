@@ -184,7 +184,7 @@ const UserApiHanlder = () => {
         res.profileImg_int8arr = userDataArray[0]?.profileImg;
         res.status = true;
       }
-      
+      console.log(res);
       return res;
     } catch (err) {
       console.error("Error getting user info: ", err);

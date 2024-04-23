@@ -55,6 +55,9 @@ const ProfileOverlay = (props: Props) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("username before fetching data in profile overlay: ", userName);
+        console.log("principal before fetching data in profile overlay: ", principal);
+        console.log("isConnected before fetching data in profile overlay: ", isConnected);
       const response = (await getProfileData()) as ProfileData;
       if (response && response.status !== false) {
         setUserName(response?.userName);

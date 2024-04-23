@@ -71,6 +71,10 @@ const Navbar = (props: Theme) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("username before fetching data in navbar: ", userName);
+        console.log("principal before fetching data in navbar: ", principal);
+        console.log("isConnected before fetching data in navbar: ", isConnected);
+
         const response = await getProfileData();
 
         if (response && response.status) {

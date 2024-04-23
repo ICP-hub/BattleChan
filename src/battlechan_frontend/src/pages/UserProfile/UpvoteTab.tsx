@@ -26,11 +26,19 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
 
   useEffect(() => {
     const getUserUpvotes = async () => {
-      const { upvotes, downvotes } = (await votesOfUser()) as Response;
-      if (type === "downvote") {
-        setVoteData(downvotes);
-      } else {
-        setVoteData(upvotes);
+      const votesData = (await votesOfUser()) as Response;
+      if (votesData) {
+        const { upvotes, downvotes } = votesData;
+
+        if (type === "downvote") {
+          if (votesData && downvotes) {
+            setVoteData(downvotes);
+          }
+        } else {
+          if (votesData && upvotes) {
+            setVoteData(upvotes);
+          }
+        }
       }
     };
     getUserUpvotes();
