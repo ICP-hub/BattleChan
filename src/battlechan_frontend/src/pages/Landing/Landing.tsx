@@ -54,7 +54,17 @@ function Landing(props: Theme) {
 
   useEffect(() => {
     const fetchData = async () => {
+      // console.log("username before fetching data in navbar: ", userName);
+        console.log("principal before fetching data in landing: ", principal);
+        console.log("isConnected before fetching data in landing: ", isConnected);
+        console.log("isUserAuthenticated before fetching data in landing: ", isUserAuthenticatedRef);
+        console.log("principalidRef before fetching data in landing: ", principal_idRef);
       const response = (await getProfileData()) as ProfileData;
+      console.log("principal after fetching data in landing: ", principal);
+        console.log("isConnected after fetching data in landing: ", isConnected);
+        console.log("isUserAuthenticated after fetching data in landing: ", isUserAuthenticatedRef);
+        console.log("principalidRef after fetching data in landing: ", principal_idRef);
+        console.log("response after calling getProfileData", response)
       if (response && response.status == false) {
         if (isUserAuthenticatedRef.current && principal_idRef.current) {
           navigate("/dashboard/settingProfile");
