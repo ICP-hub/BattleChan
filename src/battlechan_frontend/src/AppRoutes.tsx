@@ -24,6 +24,8 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
   let { isConnected, principal, isIdle, isInitializing } = useConnect();
   const [allow, setAllow] = useState<null | boolean>(null);
 
+  console.log(isConnected);
+  console.log(principal);
   useEffect(() => {
     if (isInitializing == false) {
       setAllow(principal ? true : false);

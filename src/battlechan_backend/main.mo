@@ -329,8 +329,10 @@ actor BattleChan {
   };
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
+    Debug.print(debug_show(userId));
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
+        Debug.print("Error! No user Exist");
         { data = null; status = false; error = ?"Error! No user Exist" };
       };
 

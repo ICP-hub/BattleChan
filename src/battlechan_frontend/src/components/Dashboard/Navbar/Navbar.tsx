@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
-import { ConnectDialog } from "@connect2ic/react";
 
 import { IoSearch } from "react-icons/io5";
 
@@ -220,8 +219,6 @@ const Navbar = (props: Theme) => {
           handleThemeSwitch={props.handleThemeSwitch}
         />
       </section>
-
-      <ConnectDialog />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./AppRoutes"; 
 import { Toaster } from "react-hot-toast";
 import ClientSetup from "./ClientSetup"; 
+import { ConnectDialog } from "@connect2ic/react";
 
 type Theme = "dark" | "light";
 
@@ -36,6 +37,7 @@ function App() {
     
     <Router>
       <Toaster />
+      <ConnectDialog />
       <AppRoutes handleThemeSwitch={handleThemeSwitch} />
     </Router>
     

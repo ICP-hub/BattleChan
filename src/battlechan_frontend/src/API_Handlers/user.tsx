@@ -177,6 +177,7 @@ const UserApiHanlder = () => {
         status: false,
       } as Profile;
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
+      console.log(response);
       if (response && response.status !== false) {
         const userDataArray: UserInfo[] = response.data;
         res.userName = userDataArray[0]?.userName;
