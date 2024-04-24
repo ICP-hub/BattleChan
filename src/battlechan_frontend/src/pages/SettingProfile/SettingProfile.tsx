@@ -9,6 +9,7 @@ import { useCanister } from "@connect2ic/react";
 import UserApiHanlder from "../../API_Handlers/user";
 import toast from "react-hot-toast";
 import Constant from "../../utils/constants";
+import { useConnect } from "@connect2ic/react";
 
 const useBackend = () => {
   return useCanister("backend");
@@ -49,6 +50,7 @@ const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
   const { registerUser, isUserRegistered, updateUser, getProfileData } =
     UserApiHanlder();
+  let { principal } = useConnect();
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
@@ -195,6 +197,19 @@ const SettingProfile = (props: Theme) => {
 
         <section className="profileName laptop:p-4 p-2 laptop:m-8 my-4 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2 phone:text-base text-sm">
+            <span className="font-semibold py-1">Principal ID</span>
+            <input
+              type="text"
+              name="principal_id"
+              disabled={true}
+              value={principal}
+              className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green rounded-lg w-full"
+            />
+          </div>
+        </section>
+
+        <section className="profileName laptop:p-4 p-2 laptop:m-8 my-4 rounded-lg border border-light-green flex-row-center justify-between">
+          <div className="name flex flex-col items-start gap-2 phone:text-base text-sm">
             <span className="font-semibold py-1">User Name</span>
             {!showInput && <span>{userName}</span>}
             {showInput && (
@@ -221,11 +236,10 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${
-                showInput
-                  ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
-                  : " bg-dark dark:bg-light"
-              } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+              className={`${showInput
+                ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
+                : " bg-dark dark:bg-light"
+                } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change
