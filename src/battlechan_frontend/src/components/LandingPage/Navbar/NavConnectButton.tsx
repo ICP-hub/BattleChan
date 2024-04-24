@@ -43,8 +43,6 @@ const NavConnectButton = () => {
           <MdArrowOutward className="tablet:text-2xl text-lg" />
         </span>
       )}
-
-      <ConnectDialog />
     </div>
   );
 };

@@ -26,11 +26,19 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
 
   useEffect(() => {
     const getUserUpvotes = async () => {
-      const { upvotes, downvotes } = (await votesOfUser()) as Response;
-      if (type === "downvote") {
-        setVoteData(downvotes);
-      } else {
-        setVoteData(upvotes);
+      const votesData = (await votesOfUser()) as Response;
+      if (votesData) {
+        const { upvotes, downvotes } = votesData;
+
+        if (type === "downvote") {
+          if (votesData && downvotes) {
+            setVoteData(downvotes);
+          }
+        } else {
+          if (votesData && upvotes) {
+            setVoteData(upvotes);
+          }
+        }
       }
     };
     getUserUpvotes();
@@ -52,7 +60,7 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
               <div className="text-sm max-w-60 tablet:max-w-none tablet:flex tablet:gap-6 items-center">
                 <div>
                   You upvoted a post by <strong>{vote.userName}</strong> with
-                  post Id #{vote.postId}
+                  post Id {vote.postId}
                 </div>
                 <div className="flex items-center justify-end gap-2 mt-2 tablet:mt-0">
                   <div className="tablet:hidden">

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
-import { ConnectDialog } from "@connect2ic/react";
 
 import { IoSearch } from "react-icons/io5";
 
@@ -9,12 +8,15 @@ import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
 import defaultImg from "../../../images/User.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
+import PostApiHanlder from "../../../API_Handlers/post";
+import SearchBar from "./SearchBar";
+import SearchResultsList from "./SearchResultsList";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -24,6 +26,11 @@ interface ProfileData {
   userName: string;
   profileImg: string;
   status: boolean;
+}
+
+interface Post {
+  postId: string;
+  postName: string;
 }
 
 const truncateString = (str: string, maxLength: number): string => {
@@ -38,16 +45,18 @@ const Navbar = (props: Theme) => {
   const [fileURL, setFileURL] = React.useState(defaultImg);
   const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
-  
+  const [results, setResults] = React.useState<Post[]>([]);
+
   const { getProfileData, votesOfUser } = UserApiHanlder();
+  const { getSearchPost } = PostApiHanlder();
   const { principal, isConnected } = useConnect();
   const { getBalance } = TokensApiHanlder();
-  
-  
-  
+
   const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const body = document.querySelector("body")?.style;
@@ -60,33 +69,53 @@ const Navbar = (props: Theme) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = (await getProfileData()) as ProfileData;
-      if (response && response.status !== false) {
-        setUserName(response?.userName);
-        setFileURL(response?.profileImg);
-        
-      } else {
-        if (principal) {
-          setUserName(truncateString(principal, 17));
+      try {
+        console.log("username before fetching data in navbar: ", userName);
+        console.log("principal before fetching data in navbar: ", principal);
+        console.log("isConnected before fetching data in navbar: ", isConnected);
+
+        const response = await getProfileData();
+
+        if (response && response.status) {
+          setUserName(response.userName);
+          setFileURL(response.profileImg);
+        } else if (response === undefined) {
+          console.warn("Profile data is undefined");
+        } else {
+          if (principal) {
+            setUserName(truncateString(principal, 17));
+          }
         }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
       }
     };
 
-    
     fetchData();
-  }, [userName]);
+  }, [userName, principal, isConnected]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (principal) {
-        const data = await getBalance(principal || "");
-        setTokenBalance(Number(data));
+      try {
+        if (principal) {
+          const data = await getBalance(principal);
+          const parsedBalance = Number(data);
+
+          if (!isNaN(parsedBalance)) {
+            setTokenBalance(parsedBalance);
+          } else {
+            console.warn("Received invalid balance data:", data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching balance:", error);
       }
     };
 
-    
     fetchData();
   }, [principal]);
+
+
 
   return (
     <div
@@ -112,14 +141,9 @@ const Navbar = (props: Theme) => {
           "__rightSection flex-row-center font-bold tablet:gap-4 gap-2"
         }
       >
-        <div className="input relative flex-row-center text-[#767676] laptop:flex hidden">
-          <IoSearch className={`absolute text-3xl ml-4 p-1`} />
-          <input
-            type="text"
-            name="search"
-            placeholder="Search here...."
-            className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light bg-${darkColor}`}
-          />
+        <div className="relative">
+        <SearchBar setResults={setResults} />
+        {results && results.length > 0 && <SearchResultsList results={results} />}
         </div>
 
         <div
@@ -150,13 +174,13 @@ const Navbar = (props: Theme) => {
         {!is1000px &&
           (isConnected ? (
             <>
-            <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
-            <img
-              src={fileURL}
-              onClick={() => setShowOverlay(!showOverlay)}
-              className="block h-full w-full object-cover rounded-md cursor-pointer"
-            />
-            </div>
+              <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
+                <img
+                  src={fileURL}
+                  onClick={() => setShowOverlay(!showOverlay)}
+                  className="block h-full w-full object-cover rounded-md cursor-pointer"
+                />
+              </div>
             </>
           ) : (
             <button
@@ -181,14 +205,12 @@ const Navbar = (props: Theme) => {
               </div>
 
               <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
-            <img
-              src={fileURL}
-              onClick={() => setShowOverlay(!showOverlay)}
-              className="block h-full w-full object-cover rounded-md cursor-pointer"
-            />
-            </div>
-
-              
+                <img
+                  src={fileURL}
+                  onClick={() => setShowOverlay(!showOverlay)}
+                  className="block h-full w-full object-cover rounded-md cursor-pointer"
+                />
+              </div>
             </React.Fragment>
           ) : (
             <button
@@ -207,8 +229,6 @@ const Navbar = (props: Theme) => {
           handleThemeSwitch={props.handleThemeSwitch}
         />
       </section>
-
-      <ConnectDialog />
     </div>
   );
 };

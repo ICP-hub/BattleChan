@@ -127,7 +127,7 @@ const Body = () => {
           </div>
         </div>
 
-        <div className="flex small_phone:justify-around justify-between">
+        <div className="flex small_phone:justify-around justify-between items-center">
           <div className="">
             {boardNames.map((boardName, index) => (
               <div className={`flex ml-4`}>
@@ -145,11 +145,11 @@ const Body = () => {
           </div>
           <div className="small_phone:text-base text-xs">
             {boardSizes.map((boardSize, index) => (
-              <div className={` text-center flex items-center p-2 gap-2`}>
-                <span className="font-semibold big_tablet:mb-1">
+              <div className={` text-center flex items-end p-2 gap-2`}>
+                <span className="font-semibold">
                   {boardSize !== undefined ? boardSize.toString() : ""}
                 </span>
-                <span className="text-xs dark:text-[#fff] dark:text-opacity-50">
+                <span className="text-xs dark:text-[#fff] dark:text-opacity-50 tablet:leading-5">
                   {createdAt[index] !== "" ? createdAt[index] : "No Posts"}
                 </span>
               </div>

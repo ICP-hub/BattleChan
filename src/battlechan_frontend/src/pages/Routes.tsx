@@ -9,6 +9,7 @@ import CreatePost from "./CreatePost/CreatePost";
 import ArchivePosts from "./ArchivePosts/ArchivePosts";
 import Analytics from "./Analytics/Analytics";
 import DashboardPage from "./DashboardPage/DashboardPage";
+import SearchPosts from "./SearchPosts/SearchPosts";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -46,6 +47,10 @@ function Routing(props: Theme) {
         <Route
           path="/archivePosts"
           element={<ArchivePosts handleThemeSwitch={props.handleThemeSwitch} />}
+        />
+        <Route
+          path="/searchPosts"
+          element={<SearchPosts handleThemeSwitch={props.handleThemeSwitch} />}
         />
         <Route
           path="/analytics"

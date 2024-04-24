@@ -40,6 +40,8 @@ const TokensApiHanlder = () => {
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
             const expirationTime = Date.now() + (5 * 60 * 1000); 
             const expiresAt: bigint = BigInt(expirationTime);
+            console.log("balance", Number(balance));
+            console.log("amnt", amnt);
 
             if (Number(balance) >= amnt) {
                 
@@ -58,7 +60,7 @@ const TokensApiHanlder = () => {
                 }
                 
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
-                
+                console.log("ICRC2", res);
                 if (res && res?.ok) {
                     result.status = true;
                 } else {

@@ -177,6 +177,7 @@ const UserApiHanlder = () => {
         status: false,
       } as Profile;
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
+      console.log(response);
       if (response && response.status !== false) {
         const userDataArray: UserInfo[] = response.data;
         res.userName = userDataArray[0]?.userName;
@@ -184,7 +185,7 @@ const UserApiHanlder = () => {
         res.profileImg_int8arr = userDataArray[0]?.profileImg;
         res.status = true;
       }
-      
+      console.log(res);
       return res;
     } catch (err) {
       console.error("Error getting user info: ", err);

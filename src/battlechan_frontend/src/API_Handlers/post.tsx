@@ -1,180 +1,275 @@
 import { useCanister } from "@connect2ic/react";
 
 interface Counts {
-    postData: bigint;
-    userAchivedPostData: bigint;
-    userData: bigint;
-    withdrawPost: bigint;
+  postData: bigint;
+  userAchivedPostData: bigint;
+  userData: bigint;
+  withdrawPost: bigint;
 }
 
 interface TotalCounts {
-    status: boolean;
-    data: Counts[][];
-    error: string[];
+  status: boolean;
+  data: Counts[][];
+  error: string[];
 }
 
 interface TotalCountsResponse {
-    mainPostCounts: number;
-    archivePostCounts: number;
+  mainPostCounts: number;
+  archivePostCounts: number;
+}
+
+type PostInfo = {
+  postId: string;
+  postName: string;
+  postMetaData: Int8Array;
+  postDes: string;
+  expireAt: BigInt;
+  createdAt: string;
+  createdBy: {
+    userName: string;
+    userProfile: Int8Array;
+  };
+  upvotedBy: string[];
+  comments: any;
+};
+
+interface SearchPost {
+  upvotes: string;
+  postName: string;
+  upvotedBy: string[];
+  postDes: string;
+  createdAt: string;
+  createdBy: {
+    userName: string;
+    userProfile: Int8Array;
+  };
+  updatedAt: string[];
+  expireAt: string;
+  postMetaData: Int8Array;
+  board: string;
+  downvotes: string;
+  downvotedBy: string[];
+  postId: string;
+}
+
+interface SearchApiResponse {
+  archivedPost: PostInfo[];
+  activePost: PostInfo[];
 }
 
 const PostApiHanlder = () => {
-    
-    const [backend] = useCanister("backend");
+  const [backend] = useCanister("backend");
 
-    const createPost = async (boardName: string, { postName, postDes, postMetaData }: { postName: string, postDes: string, postMetaData: Int8Array | undefined }) => {
-        try {
-            const postData = {
-                postName: postName, 
-                postDes: postDes, 
-                postMetaData: postMetaData, 
-            };
+  const createPost = async (
+    boardName: string,
+    {
+      postName,
+      postDes,
+      postMetaData,
+    }: {
+      postName: string;
+      postDes: string;
+      postMetaData: Int8Array | undefined;
+    }
+  ) => {
+    try {
+      const postData = {
+        postName: postName,
+        postDes: postDes,
+        postMetaData: postMetaData,
+      };
 
-            const res = await backend.createPost(boardName, postData);
-            
-            return res;
-        } catch (err) {
-            console.error("Error creating post : ", err);
-        }
-    };
+      const res = await backend.createPost(boardName, postData);
 
-    
-    const getBoards = async () => {
-        try {
+      return res;
+    } catch (err) {
+      console.error("Error creating post : ", err);
+    }
+  };
 
-            const res = await backend.getTotalPostInBoard();
-            
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-        }
-    };
-    
-    const getMainPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
-        try {
-            const res = await backend.postFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-        }
-    };
+  const getBoards = async () => {
+    try {
+      const res = await backend.getTotalPostInBoard();
 
-    
-    const getRecentPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
-        try {
-            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-        }
-    };
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
 
+  const getMainPosts = async (
+    filter: Object,
+    chunkSize: Number,
+    pageNumber: Number,
+    boardName: string
+  ) => {
+    try {
+      const res = await backend.postFilter(
+        filter,
+        pageNumber,
+        chunkSize,
+        boardName.toLocaleLowerCase()
+      );
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
 
-    
-    const getArchivePosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
-        try {
-            const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-        }
-    };
+  // const getRecentPosts = async (filter: Object, chunkSize: Number, pageNumber: Number, boardName: string) => {
+  //     try {
+  //         const res = await backend.archivePostFilter(filter, pageNumber, chunkSize, boardName.toLocaleLowerCase());
+  //         return res;
+  //     } catch (err) {
+  //         console.error("Error: ", err);
+  //     }
+  // };
+  const getRecentPosts = async () => {
+    try {
+      const res = (await backend.getRecentPost()) as PostInfo[];
+      console.log("res recent: ", res);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
 
-    
-    const archivePost = async (postId: string) => {
-        try {
-            const res = await backend.archivePost(postId);
-            return res;
-        } catch (err) {
-            console.error("Error archiving a post : ", err);
-        }
-    };
+  const getArchivePosts = async (
+    filter: Object,
+    chunkSize: Number,
+    pageNumber: Number,
+    boardName: string
+  ) => {
+    try {
+      const res = await backend.archivePostFilter(
+        filter,
+        pageNumber,
+        chunkSize,
+        boardName.toLocaleLowerCase()
+      );
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
 
-    
-    const getSingleMainPost = async (postId: string) => {
-        try {
-            const res = await backend.getPostInfo(postId);
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-        }
-    };
+  const archivePost = async (postId: string) => {
+    try {
+      const res = await backend.archivePost(postId);
+      return res;
+    } catch (err) {
+      console.error("Error archiving a post : ", err);
+    }
+  };
 
-    
-    const getSingleArchivePost = async (postId: string) => {
-        try {
-            const res = await backend.getSingleArchivedPost(postId);
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-        }
-    };
+  const getSingleMainPost = async (postId: string) => {
+    try {
+      const res = await backend.getPostInfo(postId);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
 
-    
-    const upvotePost = async (postId: string) => {
-        try {
-            const res = await backend.upvoteOrDownvotePost(postId, { upvote: null });
-            return res;
-        } catch (err) {
-            console.error("Error upvoting a post : ", err);
-            return err;
-        }
-    };
+  const getSingleArchivePost = async (postId: string) => {
+    try {
+      const res = await backend.getSingleArchivedPost(postId);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
 
-    
-    const downvotePost = async (postId: string) => {
-        try {
-            const res = await backend.upvoteOrDownvotePost(postId, { downvote: null });
-            return res;
-        } catch (err) {
-            console.error("Error downvoting a post : ", err);
-            return err;
-        }
-    };
+  const upvotePost = async (postId: string) => {
+    try {
+      const res = await backend.upvoteOrDownvotePost(postId, { upvote: null });
+      return res;
+    } catch (err) {
+      console.error("Error upvoting a post : ", err);
+      return err;
+    }
+  };
 
-    
-    const getTotalCounts = async () => {
-        try {
-            let res = { mainPostCounts: 0, archivePostCounts: 0 } as TotalCountsResponse;
-            const totalCounts = (await backend.getTotalCounts()) as TotalCounts;
-            
-            if (totalCounts && totalCounts?.data) {
-                const counts = totalCounts.data.flat();
-                res.mainPostCounts = Number(counts[0]?.postData);
-                res.archivePostCounts = Number(counts[0]?.userAchivedPostData);
-            }
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-            return err;
-        }
-    };
+  const downvotePost = async (postId: string) => {
+    try {
+      const res = await backend.upvoteOrDownvotePost(postId, {
+        downvote: null,
+      });
+      return res;
+    } catch (err) {
+      console.error("Error downvoting a post : ", err);
+      return err;
+    }
+  };
 
-    
-    const getUsersMainPosts = async () => {
-        try {
-            const res = await backend.getUserPost();
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-            return err;
-        }
-    };
+  const getTotalCounts = async () => {
+    try {
+      let res = {
+        mainPostCounts: 0,
+        archivePostCounts: 0,
+      } as TotalCountsResponse;
+      const totalCounts = (await backend.getTotalCounts()) as TotalCounts;
 
-    
-    const getUsersArchivePosts = async () => {
-        try {
-            const res = await backend.getArchivedPostOfUser(10, 1);
-            return res;
-        } catch (err) {
-            console.error("Error: ", err);
-            return err;
-        }
-    };
+      if (totalCounts && totalCounts?.data) {
+        const counts = totalCounts.data.flat();
+        res.mainPostCounts = Number(counts[0]?.postData);
+        res.archivePostCounts = Number(counts[0]?.userAchivedPostData);
+      }
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+      return err;
+    }
+  };
 
+  const getUsersMainPosts = async () => {
+    try {
+      const res = await backend.getUserPost();
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+      return err;
+    }
+  };
 
-    
-    return { createPost, getRecentPosts, getBoards, getMainPosts, archivePost, getArchivePosts, getSingleMainPost, getSingleArchivePost, upvotePost, downvotePost, getTotalCounts, getUsersMainPosts, getUsersArchivePosts };
+  const getUsersArchivePosts = async () => {
+    try {
+      const res = await backend.getArchivedPostOfUser(10, 1);
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+      return err;
+    }
+  };
+
+  const getSearchPost = async (searchInput: string) => {
+    try {
+      console.log("search input received: ", searchInput);
+      const res = await backend.searchPost(searchInput) as SearchApiResponse;
+      console.log("search response: ", res);
+      return [...res.activePost, ...res.archivedPost];
+    } catch (err) {
+      console.error("Search Post Error: ", err);
+      return err;
+    }
+  };
+
+  return {
+    createPost,
+    getRecentPosts,
+    getBoards,
+    getMainPosts,
+    archivePost,
+    getArchivePosts,
+    getSingleMainPost,
+    getSingleArchivePost,
+    upvotePost,
+    downvotePost,
+    getTotalCounts,
+    getUsersMainPosts,
+    getUsersArchivePosts,
+    getSearchPost,
+  };
 };
 
 export default PostApiHanlder;

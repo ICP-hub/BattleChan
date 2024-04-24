@@ -72,8 +72,6 @@ const AttractiveCompo = () => {
             <MdArrowOutward />
           </button>
         )}
-
-        <ConnectDialog />
       </div>
     </div>
   );
