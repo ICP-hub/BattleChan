@@ -33,17 +33,17 @@ const TokensApiHanlder = () => {
             
             const is_sufficient_balance = await getBalance(principal || "");
             
-            const balance = is_sufficient_balance;
+            let balance = is_sufficient_balance;
             
             let fees = 100;
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
             const expirationTime = Date.now() + (5 * 60 * 1000); 
             const expiresAt: bigint = BigInt(expirationTime);
-            console.log("balance", Number(balance));
+            balance = (Number(balance) * Math.pow(10, 8));
+            console.log("balance", balance);
             console.log("amnt", amnt);
-
-            if (Number(balance) >= amnt) {
+            if (balance >= amnt) {
                 
                 let data = {
                     fee: [fees],

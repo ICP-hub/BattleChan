@@ -1,8 +1,8 @@
 import { useCanister } from "@connect2ic/react";
 import Constant from "../utils/constants";
 import PostApiHanlder from "./post";
-
-
+// import { Principal } from "@dfinity/principal";
+import { Principal } from "@dfinity/candid/lib/cjs/idl";
 const useBackend = () => {
   return useCanister("backend");
 };
@@ -176,6 +176,9 @@ const UserApiHanlder = () => {
         profileImg_int8arr: new Int8Array(),
         status: false,
       } as Profile;
+      const result = await backend.getUserInfo() as any;
+      console.log(Principal.valueToString(result.data[0]?.userId));
+
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
       console.log(response);
       if (response && response.status !== false) {
