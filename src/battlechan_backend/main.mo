@@ -12,6 +12,7 @@ import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
 import Option "mo:base/Option";
 import Iter "mo:base/Iter";
+import Cycles "mo:base/ExperimentalCycles";
 
 import Types "utils/types";
 
@@ -363,8 +364,8 @@ actor BattleChan {
   };
 
   public query func searchPost(postName : Text) : async {
-    activePost : [Types.PostRes];
-    archivedPost : [Types.PostRes];
+    activePost : [Types.PostSearch];
+    archivedPost : [Types.PostSearch];
   } {
     var node = postNameRootNode;
     let { updatedResult; updatedNode } = Search.searchHelper(postName, node);
@@ -376,26 +377,16 @@ actor BattleChan {
     let archivedPostArray = createTrieMapOfArchivedPost(userAchivedPostTrie);
     let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPostArray.vals(), Text.equal, Text.hash);
 
-    var activePostList = List.nil<Types.PostRes>();
-    var archivedPostList = List.nil<Types.PostRes>();
+    var activePostList = List.nil<Types.PostSearch>();
+    var archivedPostList = List.nil<Types.PostSearch>();
 
     for (i in result.vals()) {
       switch (Trie.get(postTrieMap, textKey i, Text.equal)) {
         case (?r) {
-          let postRes : Types.PostRes = {
+          let postRes : Types.PostSearch = {
             postId = r.postId;
             postName = r.postName;
-            postDes = r.postDes;
-            board = r.board;
-            upvotedBy = r.upvotedBy;
-            downvotedBy = r.downvotedBy;
-            upvotes = r.upvotes;
-            downvotes = r.downvotes;
-            postMetaData = r.postMetaData;
-            createdBy = r.createdBy;
-            createdAt = r.createdAt;
-            expireAt = r.expireAt;
-            updatedAt = r.updatedAt;
+
           };
           activePostList := List.push(postRes, activePostList);
         };
@@ -403,20 +394,9 @@ actor BattleChan {
           switch (userArchivedPostsMap.get(i)) {
 
             case (?value) {
-              let archivedPostRes : Types.PostRes = {
+              let archivedPostRes : Types.PostSearch = {
                 postId = value.postId;
                 postName = value.postName;
-                postDes = value.postDes;
-                board = value.board;
-                upvotedBy = value.upvotedBy;
-                downvotedBy = value.downvotedBy;
-                upvotes = value.upvotes;
-                downvotes = value.downvotes;
-                postMetaData = value.postMetaData;
-                createdBy = value.createdBy;
-                createdAt = value.createdAt;
-                expireAt = value.expireAt;
-                updatedAt = value.updatedAt;
               };
               archivedPostList := List.push(archivedPostRes, archivedPostList);
             };
@@ -430,6 +410,7 @@ actor BattleChan {
       archivedPost = List.toArray(archivedPostList);
     };
   };
+  
 
   public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
@@ -765,7 +746,44 @@ actor BattleChan {
   public query func getBoardData(boardName : Types.BoardName) : async ?Types.BoardInfo {
     Trie.get(boardTrieMap, textKey boardName, Text.equal);
   };
+  public shared query ({ caller = userId }) func listCommentersReward() : async Types.Result_1<[Types.CommentRewards]> {
+    let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
+      case (?value) { value };
+      case (null) {
+        return { data = null; status = false; error = ?notFound.noUser };
+      };
+    };
+    let userCommentData : [Types.CommentId] = userInfo.likedComments;
+    var userCommentOnPost : List.List<Types.WithdrawRecord> = List.nil<Types.WithdrawRecord>();
+    var userRewardedComments : List.List<Types.CommentRewards> = List.nil<Types.CommentRewards>();
+    for (item in userCommentData.vals()) {
+      let postId : Types.PostId = getPostIdFromCommentId(item);
+      switch (Trie.get(withdrawPostTrie, textKey postId, Text.equal)) {
+        case (null) {};
+        case (?r) {
+          userCommentOnPost := List.append<Types.WithdrawRecord>(r, userCommentOnPost);
+        };
+      };
+    };
+    if (List.size<Types.WithdrawRecord>(userCommentOnPost) == 0) {
+      return { data = null; status = false; error = ?notFound.noData };
+    };
+    for (item in List.toArray(userCommentOnPost).vals()) {
+      switch (Trie.get(item.commentersReward, principalKey userId, Principal.equal)) {
+        case (null) {};
+        case (?r) { userRewardedComments := List.push(r, userRewardedComments) };
+      };
+    };
+    if (List.size<Types.CommentRewards>(userRewardedComments) == 0) {
+      return { data = null; status = false; error = ?notFound.noData };
+    };
+    return {
+      data = ?List.toArray(userRewardedComments);
+      status = true;
+      error = null;
+    };
 
+  };
   public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat; updatedAt : ?Text }]> {
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat; updatedAt : ?Text }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = v.totalPosts; updatedAt = v.updatedAt });
     if (Array.size(boardPostData) == 0) {

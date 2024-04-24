@@ -120,6 +120,10 @@ module {
         ownerReward : Int;
         createdAt : Text;
     };
+    public type PostSearch = {
+        postId : PostId;
+        postName : Text;
+    };
     public type PostRes = {
         postId : PostId;
         postName : Text;
