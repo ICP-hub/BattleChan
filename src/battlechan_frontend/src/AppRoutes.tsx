@@ -26,6 +26,8 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
   console.log("isInitializing in AppRoutes: ", isInitializing)
   console.log("Principla in App routes: ", principal)
 
+  console.log(isConnected);
+  console.log(principal);
   useEffect(() => {
     if (isInitializing == false) {
       console.log("principal after isInitializing is false: ", principal)
