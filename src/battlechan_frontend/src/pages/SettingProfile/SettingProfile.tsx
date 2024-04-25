@@ -56,7 +56,6 @@ const SettingProfile = (props: Theme) => {
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
-  const [textToCopy, setTextToCopy] = React.useState("Text to copy");
   const isRegisteredRef = React.useRef(isRegistered);
 
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
@@ -197,9 +196,7 @@ const SettingProfile = (props: Theme) => {
     const convertedSymbols = extractInnerHTML(principalID);
     const innerHTML = extractInnerHTML(convertedSymbols);
 
-    setTextToCopy(innerHTML);
-
-    textArea.value = textToCopy;
+    textArea.value = innerHTML;
     document.body.appendChild(textArea);
     textArea.select();
 
@@ -210,7 +207,7 @@ const SettingProfile = (props: Theme) => {
         copiedOK?.classList.remove("hidden");
         setTimeout(() => {
           copiedOK?.classList.add("hidden");
-        }, 2000);
+        }, 1000);
       }
     } catch (err) {
       console.error("Copy failed:", err);
