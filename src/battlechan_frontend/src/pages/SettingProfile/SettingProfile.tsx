@@ -107,15 +107,27 @@ const SettingProfile = (props: Theme) => {
     }
   }
 
+  function disableBtn(button: any) {
+    button.setAttribute("disabled", "true");
+    button.style.opacity = "0.5";
+  }
+  function enableBtn(button: any) {
+    button.removeAttribute("disabled");
+    button.style.opacity = "1";
+  }
+
   React.useEffect(() => {
-    const registerBtn = document.getElementById("registerBtn");
-    if (registerBtn) {
-      registerBtn.addEventListener("click", async () => {
+    const regButton = document.getElementById("registerBtn");
+
+    if (regButton) {
+      regButton.addEventListener("click", async () => {
         if (isRegisteredRef.current === true) {
+          disableBtn(regButton);
           const data = await updateUser(
             userNameRef.current,
             fileDataRef.current?.int8Array
           );
+
           if (data && (data as Data)?.ok) {
             toast.success((data as Data).ok);
           } else {
@@ -123,12 +135,16 @@ const SettingProfile = (props: Theme) => {
               "Error Updating Profile: please verify and enter correct fields!"
             );
           }
+
+          enableBtn(regButton);
         } else {
           try {
+            disableBtn(regButton);
             const data = await registerUser(
               userNameRef.current,
               fileDataRef.current?.int8Array
             );
+
             if (data && (data as Data)?.ok) {
               toast.success((data as Data).ok);
             } else {
@@ -136,9 +152,13 @@ const SettingProfile = (props: Theme) => {
                 "Error Updating Profile: please verify and enter correct fields!"
               );
             }
+
+            enableBtn(regButton);
           } catch (error) {
             console.error("Error registering user:", error);
           }
+
+          enableBtn(regButton);
         }
       });
     }
@@ -234,13 +254,9 @@ const SettingProfile = (props: Theme) => {
           <div className="name flex flex-col items-start gap-2 phone:text-base text-sm">
             <span className="font-semibold py-1">Principal ID</span>
             <div className="flex-row-center gap-2">
-              <input
-                type="text"
-                name="principal_id"
-                disabled={true}
-                value={principal}
-                className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green rounded-lg w-full"
-              />
+              <p className="py-1 px-2 italic bg-light dark:bg-dark border border-light-green rounded-lg w-full">
+                {principal}
+              </p>
               <button
                 onClick={() => handleCopyClick(principal)}
                 className="p-2 text-dark dark:text-light hover:bg-dirty-light-green rounded-lg relative"
