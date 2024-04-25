@@ -15,6 +15,7 @@ import Iter "mo:base/Iter";
 import Cycles "mo:base/ExperimentalCycles";
 
 import Types "utils/types";
+import { anonymousCheck } "./utils/validations";
 
 import Search "./controllers/search";
 import { createBoardInfo } "controllers/board";
@@ -331,6 +332,11 @@ actor BattleChan {
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
     // Debug.print(debug_show (userId));
+    if (anonymousCheck(userId) == true) {
+      return { data = null; status = false; error = ?"Error! No user Exist" };
+
+    };
+
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
         // Debug.print("Error! No user Exist");
@@ -412,7 +418,6 @@ actor BattleChan {
       archivedPost = List.toArray(archivedPostList);
     };
   };
-  
 
   public query func getPostInfo(postId : Types.PostId) : async Types.Result_1<Types.PostInfo> {
     let postInfo : Types.PostInfo = switch (Trie.get(postTrieMap, textKey postId, Text.equal)) {
