@@ -108,14 +108,10 @@ const SettingProfile = (props: Theme) => {
   }
 
   function disableBtn(button: any) {
-    console.log("disabled");
-
     button.setAttribute("disabled", "true");
     button.style.opacity = "0.5";
   }
   function enableBtn(button: any) {
-    console.log("enable");
-
     button.removeAttribute("disabled");
     button.style.opacity = "1";
   }
