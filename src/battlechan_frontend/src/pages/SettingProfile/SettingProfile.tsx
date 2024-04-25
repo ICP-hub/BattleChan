@@ -5,6 +5,7 @@ import NavButtons from "../../components/Dashboard/NavButtons/NavButtons";
 import bg from "../../images/dashboard_bg.png";
 import defaultImg from "../../images/User.png";
 
+import { FaRegCopy } from "react-icons/fa6";
 import { useCanister } from "@connect2ic/react";
 import UserApiHanlder from "../../API_Handlers/user";
 import toast from "react-hot-toast";
@@ -50,24 +51,22 @@ const SettingProfile = (props: Theme) => {
   const [backend] = useBackend();
   const { registerUser, isUserRegistered, updateUser, getProfileData } =
     UserApiHanlder();
+  const { handleFileUpload, convertInt8ToBase64 } = Constant();
   let { principal } = useConnect();
 
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
+  const [textToCopy, setTextToCopy] = React.useState("Text to copy");
   const isRegisteredRef = React.useRef(isRegistered);
 
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
-
   const [userName, setUserName] = React.useState("Please Update your Username");
-
   const [inputUserName, setInputUserName] = React.useState("");
-
   const [fileData, setFileData] = React.useState<{
     base64: string;
     int8Array: Int8Array;
   } | null>(null);
 
-  const { handleFileUpload, convertInt8ToBase64 } = Constant();
   React.useRef(isRegistered);
   const userNameRef = React.useRef(userName);
   const fileDataRef = React.useRef(fileData);
@@ -170,6 +169,42 @@ const SettingProfile = (props: Theme) => {
     fetchData();
   }, [isRegistered]);
 
+  const handleCopyClick = (principalID: any) => {
+    const textArea = document.createElement("textarea");
+    const copiedOK = document.getElementById("copied");
+
+    //set textToCopy to the selftext_html
+    const convertedSymbols = extractInnerHTML(principalID);
+    const innerHTML = extractInnerHTML(convertedSymbols);
+
+    setTextToCopy(innerHTML);
+
+    textArea.value = textToCopy;
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+      const copySuccessful = document.execCommand("copy");
+      console.log("copySuccessful: ", copySuccessful);
+      if (copySuccessful) {
+        copiedOK?.classList.remove("hidden");
+        setTimeout(() => {
+          copiedOK?.classList.add("hidden");
+        }, 2000);
+      }
+    } catch (err) {
+      console.error("Copy failed:", err);
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
+
+  const extractInnerHTML = (htmlString: string) => {
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = htmlString;
+    return wrapper.textContent || wrapper.innerText;
+  };
+
   return (
     <div
       className={
@@ -198,13 +233,27 @@ const SettingProfile = (props: Theme) => {
         <section className="profileName laptop:p-4 p-2 laptop:m-8 my-4 rounded-lg border border-light-green flex-row-center justify-between">
           <div className="name flex flex-col items-start gap-2 phone:text-base text-sm">
             <span className="font-semibold py-1">Principal ID</span>
-            <input
-              type="text"
-              name="principal_id"
-              disabled={true}
-              value={principal}
-              className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green rounded-lg w-full"
-            />
+            <div className="flex-row-center gap-2">
+              <input
+                type="text"
+                name="principal_id"
+                disabled={true}
+                value={principal}
+                className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green rounded-lg w-full"
+              />
+              <button
+                onClick={() => handleCopyClick(principal)}
+                className="p-2 text-dark dark:text-light hover:bg-dirty-light-green rounded-lg relative"
+              >
+                <p
+                  id="copied"
+                  className="px-2 phone:text-base text-sm absolute bottom-[40px] left-[-10px] bg-light-green text-dark rounded-lg font-semibold hidden"
+                >
+                  Copied
+                </p>
+                <FaRegCopy />
+              </button>
+            </div>
           </div>
         </section>
 
@@ -236,10 +285,11 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${showInput
-                ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
-                : " bg-dark dark:bg-light"
-                } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+              className={`${
+                showInput
+                  ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
+                  : " bg-dark dark:bg-light"
+              } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change
