@@ -78,8 +78,8 @@ const DashboardPage = (props: Theme) => {
   const data01 = [
     { name: "Upvote", value: likedPostRef.current },
     { name: "Downvote", value: dislikedPostRef.current },
-    { name: "Earned", value: 120 },
-    { name: "Buy", value: 100 },
+    { name: "Earned", value: 5 },
+    { name: "Buy", value: 1 },
   ];
 
   return (
