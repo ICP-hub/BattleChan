@@ -208,22 +208,6 @@ const PostDetails = (props: Theme) => {
     }
   };
 
-  useEffect(() => {
-    let upvoteBtn = document.getElementById("upvoteBtn");
-    let downvoteBtn = document.getElementById("downvoteBtn");
-
-    const handleUpvoteClick = () => handleUpvote(postId);
-    const handleDownvoteClick = () => handleDownvote(postId);
-
-    upvoteBtn?.addEventListener("click", handleUpvoteClick);
-    downvoteBtn?.addEventListener("click", handleDownvoteClick);
-
-    return () => {
-      upvoteBtn?.removeEventListener("click", handleUpvoteClick);
-      downvoteBtn?.removeEventListener("click", handleDownvoteClick);
-    };
-  }, []);
-
   const handleUpvote = async (postId: string) => {
     if (type === "archive") {
       return;

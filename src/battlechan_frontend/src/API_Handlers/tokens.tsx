@@ -38,8 +38,8 @@ const TokensApiHanlder = () => {
             let fees = 100;
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
-            const expirationTime = Date.now() + (5 * 60 * 1000); 
-            const expiresAt: bigint = BigInt(expirationTime);
+            // const expirationTime = Date.now() + (5 * 60 * 1000); 
+            // const expiresAt: bigint = BigInt(expirationTime);
             balance = (Number(balance) * Math.pow(10, 8));
             console.log("balance", balance);
             console.log("amnt", amnt);
@@ -52,7 +52,7 @@ const TokensApiHanlder = () => {
                     created_at_time: [],
                     amount: amnt,
                     expected_allowance: [],
-                    expires_at: [expiresAt],
+                    expires_at: [],
                     spender: {
                         owner: owner,
                         subaccount: []
