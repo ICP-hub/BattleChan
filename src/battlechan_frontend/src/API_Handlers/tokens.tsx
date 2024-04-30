@@ -11,6 +11,7 @@ const useLedger = () => {
 
 interface BackendResponse {
     ok: string;
+    Ok: string;
     err: {
         [key: string]: string;
     };
@@ -61,7 +62,7 @@ const TokensApiHanlder = () => {
                 
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
                 console.log("ICRC2", res);
-                if (res && res?.ok) {
+                if (res && (res?.Ok || res?.ok)) {
                     result.status = true;
                 } else {
                     result.status = false;
