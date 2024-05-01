@@ -337,9 +337,8 @@ const Analytics = (props: Theme) => {
                 >
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
-                      You loss 1 token by{" "}
                       <span className="text-[#18AF00]">
-                        {"Upvoting"}
+                        {"Upvote:"}
                       </span>{" "}
                       <strong>{vote.userName}</strong> with post Id {vote.postId}
                     </div>
@@ -363,9 +362,8 @@ const Analytics = (props: Theme) => {
                 >
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
-                      You loss 1 token by{" "}
                       <span className="text-red">
-                        {"Upvoting"}
+                        {"Downvote:"}
                       </span>{" "}
                       <strong>{vote.userName}</strong> with post Id {vote.postId}
                     </div>
