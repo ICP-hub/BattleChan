@@ -143,7 +143,9 @@ const CreatePost = (props: Theme) => {
 
     async function try_and_catch(button: any) {
       button.setAttribute("disabled", "true");
-      button.style.opacity = "0.5"; // Example: setting opacity to 50%
+      button.style.backgroundColor = "#000000"
+      button.style.pointerEvents = "none"; // Disable pointer events to prevent hover effects
+      button.innerHTML = "<span class='small_loader'></span>";
 
       try {
         // Call the asynchronous function
@@ -153,8 +155,10 @@ const CreatePost = (props: Theme) => {
         console.error("Error creating post:", error);
       } finally {
         // Re-enable the button in the finally block to ensure it gets re-enabled
-        button.style.opacity = "1";
         button.removeAttribute("disabled");
+        button.innerHTML = "Post";
+        button.style.pointerEvents = "auto";
+        button.style.backgroundColor = "#3A6841"
       }
     }
 
