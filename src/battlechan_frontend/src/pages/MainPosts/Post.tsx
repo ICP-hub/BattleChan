@@ -5,7 +5,7 @@ import { MdOutlineVerifiedUser } from "react-icons/md";
 import { TbSquareChevronUpFilled } from "react-icons/tb";
 import { TbSquareChevronDownFilled } from "react-icons/tb";
 import PostApiHanlder from "../../API_Handlers/post";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useConnect } from "@connect2ic/react";
 import { toast } from "react-hot-toast";
 import CommentsApiHanlder from "../../API_Handlers/comments";
@@ -80,7 +80,7 @@ const Post: React.FC<PostProps> = ({
   const [principal_id, setPrincipal_id] = useState("");
   const principal_idRef = React.useRef(principal_id);
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
-  const navigate = useNavigate();
+  const button = document.getElementById("upvoteBtn");
 
   const className = "Dashboard__MainPosts__Post";
 
@@ -132,24 +132,46 @@ const Post: React.FC<PostProps> = ({
     if (type === "archive") {
       return;
     }
-    if (isUserAuthenticatedRef.current) {
-      const is_approved = (await icrc2_approve(
+
+    if (!isUserAuthenticatedRef.current) {
+      toast.error("Please first Connect your Wallet to Upvote this post!");
+      return;
+    }
+
+    try {
+      const isApproved = (await icrc2_approve(
         principal_idRef.current
       )) as Response;
-      if (is_approved.status == true) {
-        const data = (await upvotePost(postId)) as VoteResponse;
-        if (data && data?.ok) {
-          toast.success("Successfully Upvoted Post!");
-        } else {
-          const lastIndex = data.err[1].lastIndexOf(":");
-          const errorMsg = data.err[1].slice(lastIndex + 2);
-          toast.error(errorMsg);
-        }
-      } else {
-        toast.error(is_approved.err);
+
+      if (isApproved.status !== true) {
+        toast.error(isApproved.err);
+        return;
       }
-    } else {
-      toast.error("Please first Connect your Wallet to Upvote this post!");
+
+      if (!button) {
+        return;
+      }
+
+      button.setAttribute("disabled", "true");
+      button.style.opacity = "0.5";
+
+      const data = (await upvotePost(postId)) as VoteResponse;
+
+      if (data && data.ok) {
+        toast.success("Successfully Upvoted Post!");
+      } else {
+        const lastIndex = data.err[1].lastIndexOf(":");
+        const errorMsg = data.err[1].slice(lastIndex + 2);
+        toast.error(errorMsg);
+      }
+    } catch (error) {
+      console.error("Error occurred while upvoting:", error);
+    } finally {
+      // Reset button to original state
+      if (button) {
+        button.removeAttribute("disabled");
+        button.style.opacity = "1";
+      }
     }
   };
 
@@ -157,12 +179,22 @@ const Post: React.FC<PostProps> = ({
     if (type === "archive") {
       return;
     }
+
     if (isUserAuthenticatedRef.current) {
       const is_approved = (await icrc2_approve(
         principal_idRef.current
       )) as Response;
+
       if (is_approved.status == true) {
         const data = (await downvotePost(postId)) as VoteResponse;
+
+        if (!button) {
+          return;
+        }
+
+        button.setAttribute("disabled", "true");
+        button.style.opacity = "0.5";
+
         if (data && data?.ok) {
           toast.success("Successfully Downvoted Post!");
         } else {
@@ -175,6 +207,10 @@ const Post: React.FC<PostProps> = ({
       }
     } else {
       toast.error("Please first Connect your Wallet to Downvote this post!");
+      if (button) {
+        button.removeAttribute("disabled");
+        button.style.opacity = "1";
+      }
     }
   };
 

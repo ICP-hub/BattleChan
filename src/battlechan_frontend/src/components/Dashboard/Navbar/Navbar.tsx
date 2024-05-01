@@ -16,6 +16,7 @@ import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import PostApiHanlder from "../../../API_Handlers/post";
 import SearchBar from "./SearchBar";
+import PhoneSearchBar from "./PhoneSearchBar";
 import SearchResultsList from "./SearchResultsList";
 
 type Theme = {
@@ -46,6 +47,7 @@ const Navbar = (props: Theme) => {
   const [tokenBalance, setTokenBalance] = React.useState(0);
   const [userName, setUserName] = React.useState("");
   const [results, setResults] = React.useState<Post[]>([]);
+  const [showSearchBarInPhone, setShowSearchBarInPhone] = useState(false);
 
   const { getProfileData, votesOfUser } = UserApiHanlder();
   const { getSearchPost } = PostApiHanlder();
@@ -72,7 +74,10 @@ const Navbar = (props: Theme) => {
       try {
         console.log("username before fetching data in navbar: ", userName);
         console.log("principal before fetching data in navbar: ", principal);
-        console.log("isConnected before fetching data in navbar: ", isConnected);
+        console.log(
+          "isConnected before fetching data in navbar: ",
+          isConnected
+        );
 
         const response = await getProfileData();
 
@@ -115,8 +120,6 @@ const Navbar = (props: Theme) => {
     fetchData();
   }, [principal]);
 
-
-
   return (
     <div
       className={
@@ -138,12 +141,14 @@ const Navbar = (props: Theme) => {
       <section
         className={
           className +
-          "__rightSection flex-row-center font-bold tablet:gap-4 gap-2"
+          "__rightSection flex-row-center font-bold tablet:gap-4 gap-2 relative"
         }
       >
         <div className="relative">
-        <SearchBar setResults={setResults} />
-        {results && results.length > 0 && <SearchResultsList results={results} />}
+          <SearchBar setResults={setResults} />
+          {results && results.length > 0 && (
+            <SearchResultsList results={results} />
+          )}
         </div>
 
         <div
@@ -168,12 +173,27 @@ const Navbar = (props: Theme) => {
         </div>
 
         {!is1000px && (
-          <IoSearch className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer small_phone:block hidden" />
+          <IoSearch
+            onClick={() => setShowSearchBarInPhone(!showSearchBarInPhone)}
+            className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer small_phone:block hidden"
+          />
+        )}
+
+        {!is1000px && showSearchBarInPhone && (
+          <React.Fragment>
+            <PhoneSearchBar
+              setResults={setResults}
+              setShowSearchBarInPhone={setShowSearchBarInPhone}
+            />
+            {results && results.length > 0 && (
+              <SearchResultsList results={results} />
+            )}
+          </React.Fragment>
         )}
 
         {!is1000px &&
           (isConnected ? (
-            <>
+            <React.Fragment>
               <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
                 <img
                   src={fileURL}
@@ -181,7 +201,7 @@ const Navbar = (props: Theme) => {
                   className="block h-full w-full object-cover rounded-md cursor-pointer"
                 />
               </div>
-            </>
+            </React.Fragment>
           ) : (
             <button
               className={

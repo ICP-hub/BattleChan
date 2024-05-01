@@ -209,20 +209,42 @@ const PostDetails = (props: Theme) => {
   };
 
   const handleUpvote = async (postId: string) => {
+    let upvoteBtn = document.getElementById("upvoteBtn");
+
     if (type === "archive") {
       return;
     }
-
+    
+    
     if (isUserAuthenticatedRef.current) {
       const is_approved = await icrc2_approve(principal_idRef.current);
+      console.log(is_approved);
+
       if (is_approved) {
+        if (!upvoteBtn) {
+          return;
+        }
+
+        upvoteBtn.setAttribute("disable", "true");
+        upvoteBtn.style.opacity = "0.5";
+        
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
           toast.success("Successfully Upvoted Post!");
+          
+          if (upvoteBtn) {
+            upvoteBtn.removeAttribute("disabled");
+            upvoteBtn.style.opacity = "1";
+          }
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
           const errorMsg = data.err[1].slice(lastIndex + 2);
           toast.error(errorMsg);
+          
+          if (upvoteBtn) {
+            upvoteBtn.removeAttribute("disabled");
+            upvoteBtn.style.opacity = "1";
+          }
         }
       }
     } else {
@@ -231,6 +253,8 @@ const PostDetails = (props: Theme) => {
   };
 
   const handleDownvote = async (postId: string) => {
+    let downvoteBtn = document.getElementById("downvoteBtn");
+
     if (type === "archive") {
       return;
     }
@@ -334,7 +358,6 @@ const PostDetails = (props: Theme) => {
               )}
 
               <div className="text-lg">
-                
                 <TimeComponent
                   expireAt={postsData?.expireAt ?? 1n}
                   id={postsData?.postId ?? ""}
@@ -444,7 +467,6 @@ const PostDetails = (props: Theme) => {
                     />
                     <div className="flex items-center justify-end mt-4">
                       <div className="flex justify-center items-center gap-4">
-                        
                         <button
                           onClick={handleAddComment}
                           className={
