@@ -16,9 +16,10 @@ module {
         if (checkText(userData.userName, 100) == false) {
             Debug.trap(reject.outBound);
         };
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { Debug.trap(reject.alreadyExist) };
@@ -44,9 +45,9 @@ module {
         if (checkText(userData.userName, 70) == false) {
             Debug.trap(reject.outBound);
         };
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
         let userInfo :Types.UserInfo= switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) {Debug.trap(reject.noAccount)};
@@ -67,10 +68,5 @@ module {
         }
 
     };
-    // public func getAllUserPost(userId : Types.UserId, userTrieMap : Trie.Trie<Types.UserId, Types.UserInfo>, postTrieMap : Trie.Trie<Types.PostId, Types.PostInfo>) {
-    //     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
-    //         case (null) {return };
-    //         case (?userData) { userData.postIds};
-    //     };
-    // };
+   
 };
