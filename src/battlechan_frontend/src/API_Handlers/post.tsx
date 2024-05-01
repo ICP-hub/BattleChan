@@ -246,6 +246,7 @@ const PostApiHanlder = () => {
     try {
       console.log("search input received: ", searchInput);
       const res = await backend.searchPost(searchInput) as SearchApiResponse;
+      
       console.log("search response: ", res);
       return [...res.activePost, ...res.archivedPost];
     } catch (err) {

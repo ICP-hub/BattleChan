@@ -13,7 +13,7 @@ interface SearchResultsListProps {
 const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
   return (
     <>
-      <div className="bg-light dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light absolute left-0 right-0 rounded-xl mt-2 p-2 font-normal">
+      <div className="bg-light absolute left-0 right-0 tablet:top-[8vh] top-[6vh] dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light rounded-xl mt-2 p-2 font-normal">
         <div
           className={`overflow-y-scroll max-h-52 ${
             results.length <= 6 ? "no-scrollbar" : ""

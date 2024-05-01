@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 interface Post {
   postId: string;
   postName: string;
+}
+
+type PostInfo = {
+  postId: string;
+  postName: string;
+};
+
+interface BackendResponse {
+  status: boolean;
+  archivedPost: PostInfo[];
+  activePost: PostInfo[];
 }
 
 type SearchResults = Post[];
@@ -14,8 +26,13 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
   const [searchInput, setSearchInput] = React.useState("");
+  const { getSearchPost } = PostApiHanlder();
 
-  function fetchSearchData(value: string) {
+  async function fetchSearchData(value: string) {
+    let response;
+    response = await getSearchPost(value) as BackendResponse;
+    console.log(response);
+
     const results = data.filter((post) => {
       return (
         value &&

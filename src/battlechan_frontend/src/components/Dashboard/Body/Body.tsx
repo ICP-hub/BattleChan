@@ -10,17 +10,15 @@ import NavButtons from "../NavButtons/NavButtons";
 import PostApiHanlder from "../../../API_Handlers/post";
 import Constant from "../../../utils/constants";
 
-
 interface Board {
   [x: string]: any;
   boardName: string;
   boardSize: string;
   updatedAt: [bigint];
-  
 }
 interface BackendResponse {
   status: boolean;
-  data: Board[][]; 
+  data: Board[][];
   error: string[];
 }
 
@@ -49,21 +47,15 @@ const Body = () => {
             convertNanosecondsToTimeAgo(board?.updatedAt[0]) || undefined
         );
         const cleanedCreatedAt = createdAt.map((date) => date || "");
-        
-        
-        
 
         setBoardNames(names);
         setBoardSizes(sizes);
         setCreatedAt(cleanedCreatedAt);
       } else {
-        
       }
-      
     }
 
     fetchBoardNames();
-    
   }, []);
   const className = "Home";
 

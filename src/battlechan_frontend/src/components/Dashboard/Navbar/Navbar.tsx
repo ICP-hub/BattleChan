@@ -144,7 +144,7 @@ const Navbar = (props: Theme) => {
           "__rightSection flex-row-center font-bold tablet:gap-4 gap-2 relative"
         }
       >
-        <div className="relative">
+        <div className={`relative ${!is1000px ? "hidden" : "flex"}`}>
           <SearchBar setResults={setResults} />
           {results && results.length > 0 && (
             <SearchResultsList results={results} />
