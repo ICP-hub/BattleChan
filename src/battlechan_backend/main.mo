@@ -487,6 +487,45 @@ actor BattleChan {
     };
     return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
   };
+  public shared query ({ caller = userId }) func getAllRepliesOfArchivedPost(commentId : Types.CommentId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.ReplyInfo]> {
+    let postId = getPostIdFromCommentId(commentId);
+    let postArray : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
+      case (null) {
+        return { data = null; status = true; error = ?notFound.noArchivedPost };
+      };
+      case (?result) { List.toArray(result) };
+    };
+    let archivedPostTrieMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(postArray.vals(), Text.equal, Text.hash);
+    let postInfo : Types.PostInfo = switch (archivedPostTrieMap.get(postId)) {
+      case (null) {
+        return { data = null; status = true; error = ?notFound.noPost };
+      };
+      case (?r) { r };
+    };
+    let commentData : [(Types.CommentId, Types.CommentInfo)] = Trie.toArray<Types.CommentId, Types.CommentInfo, (Types.CommentId, Types.CommentInfo)>(
+      postInfo.comments,
+      func(k, v) = (k, v),
+    );
+    let archivedCommentTrieMap = TrieMap.fromEntries<Types.CommentId, Types.CommentInfo>(commentData.vals(), Text.equal, Text.hash);
+    let replies = switch (archivedCommentTrieMap.get(commentId)) {
+      case (null) {
+        return { data = null; status = false; error = ?notFound.noData };
+      };
+      case (?result) { result.replies };
+    };
+    let repliesData : [Types.ReplyInfo] = Trie.toArray<Types.ReplyId, Types.ReplyInfo, Types.ReplyInfo>(
+      replies,
+      func(k, v) = v,
+    );
+    if (commentData.size() < chunk_size) {
+      return { data = ?repliesData; status = true; error = null };
+    };
+    let paginatedCommentInfo : [[Types.ReplyInfo]] = paginate<Types.ReplyInfo>(repliesData, chunk_size);
+    if (paginatedCommentInfo.size() < pageNo) {
+      return { data = null; status = true; error = ?notFound.noPageExist };
+    };
+    return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
+  };
 
   public query func archivePostFilter(filterOptions : Types.FilterOptions, pageNo : Nat, chunk_size : Nat, boardName : Types.BoardName) : async Types.Result_1<[Types.PostRes]> {
 
