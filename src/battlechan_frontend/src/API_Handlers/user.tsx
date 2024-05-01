@@ -179,6 +179,9 @@ const UserApiHanlder = () => {
       const result = await backend.getUserInfo() as any;
       console.log(Principal.valueToString(result.data[0]?.userId));
 
+      const listCommentersRewardRes = await backend.listCommentersReward() as any;
+      console.log(listCommentersRewardRes);
+
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
       console.log(response);
       if (response && response.status !== false) {
