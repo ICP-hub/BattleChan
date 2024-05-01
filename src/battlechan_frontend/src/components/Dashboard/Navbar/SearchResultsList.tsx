@@ -32,6 +32,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
               </div>
             </Link>
           ))}
+
           {results.map((post) => (
             <Link
               key={post.postId}
