@@ -1,9 +1,21 @@
 import React from "react";
 import { IoSearch } from "react-icons/io5";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 interface Post {
   postId: string;
   postName: string;
+}
+
+type PostInfo = {
+  postId: string;
+  postName: string;
+};
+
+interface BackendResponse {
+  status: boolean;
+  archivedPost: PostInfo[];
+  activePost: PostInfo[];
 }
 
 type SearchResults = Post[];
@@ -13,10 +25,18 @@ interface SearchBarProps {
   setShowSearchBarInPhone: Function;
 }
 
-const PhoneSearchBar: React.FC<SearchBarProps> = ({ setResults, setShowSearchBarInPhone }) => {
+const PhoneSearchBar: React.FC<SearchBarProps> = ({
+  setResults,
+  setShowSearchBarInPhone,
+}) => {
   const [searchInput, setSearchInput] = React.useState("");
+  const { getSearchPost } = PostApiHanlder();
 
-  function fetchSearchData(value: string) {
+  async function fetchSearchData(value: string) {
+    let response;
+    response = (await getSearchPost(value)) as BackendResponse;
+    console.log(response);
+
     const results = data.filter((post) => {
       return (
         value &&
@@ -25,14 +45,16 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({ setResults, setShowSearchBar
         post.postName.toLowerCase().includes(value.toLowerCase())
       );
     });
-    
+
     setResults(results);
   }
 
   return (
-    <div className="input absolute top-0 left-[10px] flex-row-center text-[#767676] flex">
-      <IoSearch className={`absolute small_phone:text-3xl text-2xl tablet:ml-4 ml-2 p-1`} />
-      
+    <div className="input absolute top-0 tablet:left-0 left-[2px] flex-row-center text-[#767676] flex">
+      <IoSearch
+        className={`absolute small_phone:text-3xl text-2xl tablet:ml-4 ml-2 p-1`}
+      />
+
       <input
         type="text"
         name="search"
