@@ -11,15 +11,15 @@ type Props = {
 interface Response {
   status: boolean;
   err: string;
-};
+}
 
 const WithdrawOverlay = (props: Props) => {
-  const className = "WithdrawOverlay";
   const [amount, setAmount] = React.useState(0);
+  const className = "WithdrawOverlay";
   const { withdrawPost } = TokensApiHanlder();
 
   const handleClosePopup = () => {
-    props.setProfilePopUp(false); 
+    props.setProfilePopUp(false);
   };
 
   const handleWithdrawButton = (amount: number) => {
@@ -27,23 +27,39 @@ const WithdrawOverlay = (props: Props) => {
   };
 
   const withdrawPostFn = async (amount: number) => {
-    const data = (await withdrawPost(props.postId, amount)) as Response;
-    if (data.status == true) {
-      toast.success(`Successfully Withdrawn $Time Tokens from Post: ${props.postId}`);
-      props.setProfilePopUp(false); 
-    } else {
-      toast.error(data.err);
-      props.setProfilePopUp(false); 
+    try {
+      const confirmBtn = document.getElementById("confirmBtn");
+      if (confirmBtn) {
+        confirmBtn.setAttribute("disabled", "true");
+        confirmBtn.style.border = "0px";
+        confirmBtn.style.pointerEvents = "none"; // Disable pointer events to prevent hover effects
+        confirmBtn.innerHTML = "<span class='small_loader'></span>";
+      }
+
+      const data = await withdrawPost(props.postId, amount);
+
+      if (data.status === true) {
+        toast.success(
+          `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
+        );
+      } else {
+        toast.error(data.err);
+      }
+    } catch (error) {
+      console.error("Error withdrawing post:", error);
+      toast.error("An error occurred while withdrawing the post.");
+    } finally {
+      props.setProfilePopUp(false);
     }
   };
-
 
   return (
     <div
       className={
         className +
         " " +
-        `${props.display ? "block" : "hidden"
+        `${
+          props.display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
@@ -74,7 +90,11 @@ const WithdrawOverlay = (props: Props) => {
           >
             Cancel
           </button>
-          <button className="small-button bg-dirty-light-green  border hover:bg-dark-green" onClick={() => handleWithdrawButton(amount)}>
+          <button
+            id="confirmBtn"
+            className="small-button bg-dirty-light-green flex items-center border hover:bg-dark-green"
+            onClick={() => handleWithdrawButton(amount)}
+          >
             Confirm
           </button>
         </div>

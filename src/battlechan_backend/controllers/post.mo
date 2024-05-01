@@ -8,6 +8,7 @@ import Text "mo:base/Text";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
+import Nat64 "mo:base/Nat64";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
@@ -467,7 +468,7 @@ module {
             switch (filterOptions) {
                 case (#upvote) {
                     for (j in Iter.range(0, n - i - 2)) {
-                        if (arr[j].upvotes < arr[j + 1].upvotes) {
+                        if (Nat64.toText(arr[j].upvotes) < Nat64.toText(arr[j + 1].upvotes)) {
                             // Swap elements if they are in the wrong order
                             temp := arr[j];
                             arr[j] := arr[j + 1];
@@ -477,7 +478,7 @@ module {
                 };
                 case (#downvote) {
                     for (j in Iter.range(0, n - i - 2)) {
-                        if (arr[j].downvotes < arr[j + 1].downvotes) {
+                        if (Nat64.toText(arr[j].downvotes) < Nat64.toText(arr[j + 1].downvotes)) {
                             // Swap elements if they are in the wrong order
                             temp := arr[j];
                             arr[j] := arr[j + 1];

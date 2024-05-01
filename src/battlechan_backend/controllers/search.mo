@@ -18,6 +18,7 @@ module {
             var user = [];
         };
     };
+    
     public func textKey(t : Text) : Key<Text> {
         { hash = Text.hash t; key = t };
     };

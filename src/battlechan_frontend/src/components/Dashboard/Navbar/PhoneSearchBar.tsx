@@ -10,9 +10,10 @@ type SearchResults = Post[];
 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
+  setShowSearchBarInPhone: Function;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
+const PhoneSearchBar: React.FC<SearchBarProps> = ({ setResults, setShowSearchBarInPhone }) => {
   const [searchInput, setSearchInput] = React.useState("");
 
   function fetchSearchData(value: string) {
@@ -24,19 +25,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
         post.postName.toLowerCase().includes(value.toLowerCase())
       );
     });
-
+    
     setResults(results);
   }
 
   return (
-    <div className="input relative flex-row-center text-[#767676] laptop:flex hidden">
-      <IoSearch className={`absolute text-3xl ml-4 p-1`} />
-
+    <div className="input absolute top-0 left-[10px] flex-row-center text-[#767676] flex">
+      <IoSearch className={`absolute small_phone:text-3xl text-2xl tablet:ml-4 ml-2 p-1`} />
+      
       <input
         type="text"
         name="search"
         placeholder="Search here...."
-        className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light dark:bg-dark border border-light dark:focus:outline dark:focus:outline-light`}
+        className={`rounded-[2rem] tablet:w-[300px] small_phone:w-[220px] w-[200px] tablet:pl-12 small_phone:pl-10 pl-8 tablet:py-3.5 small_phone:py-2.5 py-2 tablet:text-lg text-sm font-normal text-dark dark:text-light dark:bg-dark border border-light dark:focus:outline dark:focus:outline-light`}
         value={searchInput}
         onChange={(e) => {
           const value = e.target.value;
@@ -45,13 +46,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
         }}
         onBlur={() => {
           setResults([]);
+          // setShowSearchBarInPhone(false);
         }}
       />
     </div>
   );
 };
 
-export default SearchBar;
+export default PhoneSearchBar;
 
 const data: Post[] = [
   {
