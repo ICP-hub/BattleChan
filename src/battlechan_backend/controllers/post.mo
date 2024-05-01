@@ -79,7 +79,7 @@ module {
                 userProfile = userInfo.profileImg;
             };
             expireAt = updatedExpireTime;
-            createdAt = Int.toText(now());
+            createdAt = now();
             updatedAt = null;
         };
 
@@ -314,8 +314,9 @@ module {
         if (postInfo.createdBy.ownerId != userId) {
             Debug.trap(reject.noAccess);
         };
+
         let withDrawAmount = amount * 100_000_000;
-        let postToken = ((postInfo.expireAt - 5 * 60_000_000_000) - now()) / 100;
+        let postToken = ((postInfo.expireAt - postInfo.createdAt - 5 * 60_000_000_000) - now()) / 100;
         if (withDrawAmount > postToken) {
             Debug.trap(reject.outOfToken);
         };
@@ -324,15 +325,15 @@ module {
         Debug.print(debug_show (tokenLeft));
         let totalCommentersReward = (25 * withDrawAmount) / 100;
         let ownerReward : Int = withDrawAmount - totalCommentersReward;
-        if (tokenLeft < 60_000_000_000) {
-            Debug.trap(reject.oneMinLeft);
+        if (tokenLeft < 500_000_000) {
+            Debug.trap(debug_show { tokenLeft });
         };
 
         var rewardSeakersTrie : Trie.Trie<Types.UserId, { likes : Nat; amount : Int; claimedStatus : Bool }> = Trie.empty<Types.UserId, Types.CommentRewards>();
         let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
         var totalLikesOnComment = 0;
         for (comment in commentData.vals()) {
-            if (comment.likedBy.size() > 5) {
+            if (comment.likedBy.size() > 1) {
                 let ownerId = comment.createdBy.ownerId;
                 totalLikesOnComment := totalLikesOnComment + comment.likedBy.size();
                 rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { likes = comment.likedBy.size(); amount = 0; claimedStatus = false }).0;
@@ -461,7 +462,7 @@ module {
                 userProfile = [];
             };
             expireAt = 0;
-            createdAt = "";
+            createdAt = 0;
             updatedAt = ?"";
         };
         for (i in Iter.range(0, n - 2)) {

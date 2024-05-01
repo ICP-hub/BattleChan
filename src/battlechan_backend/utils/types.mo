@@ -104,7 +104,7 @@ module {
             userProfile : [Int8];
         };
         comments : Trie.Trie<CommentId, CommentInfo>;
-        createdAt : Text;
+        createdAt : Int;
         expireAt : Int;
         updatedAt : ?Text;
     };
@@ -139,7 +139,7 @@ module {
             userName : Text;
             userProfile : [Int8];
         };
-        createdAt : Text;
+        createdAt : Int;
         expireAt : Int;
         updatedAt : ?Text;
     };

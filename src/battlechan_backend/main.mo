@@ -48,7 +48,7 @@ actor BattleChan {
 
   private stable let freePostTime = 5;
   private stable let voteTime = 1;
-  let decimal = 100000000;
+  let decimal = 100_000_000;
   let transactionFee = 100;
   stable var postNameRootNode : Search.Node = Search.createNode();
 
