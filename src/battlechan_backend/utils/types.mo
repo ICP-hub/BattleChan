@@ -104,11 +104,12 @@ module {
             userProfile : [Int8];
         };
         comments : Trie.Trie<CommentId, CommentInfo>;
-        createdAt : Int;
+        createdAt : Text;
         expireAt : Int;
         updatedAt : ?Text;
     };
     public type CommentRewards = {
+        postId : PostId;
         likes : Nat;
         amount : Int;
         claimedStatus : Bool;
@@ -139,7 +140,7 @@ module {
             userName : Text;
             userProfile : [Int8];
         };
-        createdAt : Int;
+        createdAt : Text;
         expireAt : Int;
         updatedAt : ?Text;
     };

@@ -10,9 +10,7 @@ import Nat "mo:base/Nat";
 import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
-import Option "mo:base/Option";
 import Iter "mo:base/Iter";
-import Cycles "mo:base/ExperimentalCycles";
 
 import Types "utils/types";
 import { anonymousCheck } "./utils/validations";

@@ -8,6 +8,8 @@ import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
 import List "mo:base/List";
 import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Char "mo:base/Char";
 import Types "types";
 
 module {
@@ -32,7 +34,19 @@ module {
         let postId = arr[1];
         return postId;
     };
+    public func textToInt(txt : Text) : Int {
+        assert (txt.size() > 0);
+        let chars = txt.chars();
 
+        var num : Int = 0;
+        for (v in chars) {
+            let charToNum = Nat32.toNat(Char.toNat32(v) -48);
+            assert (charToNum >= 0 and charToNum <= 9);
+            num := num * 10 + charToNum;
+        };
+
+        num;
+    };
     public func paginate<V>(array : [V], chunkSize : Nat) : [[V]] {
 
         var paginationArray : List.List<[V]> = List.nil<[V]>();
@@ -58,12 +72,12 @@ module {
     };
     func secToNanoSec(min : Int) : Int {
         let seconds = min * 60;
-        seconds * 1_000_000_000;
+       return seconds * 1_000_000_000;
     };
     public func increaseTime(min : Int, expireTime : Int) : Int {
         let increasedTime = secToNanoSec(min) + expireTime;
         return increasedTime;
-    };
+    };  
     public func decreaseTime(min : Int, expireTime : Int) : Int {
         let decreasedTime = expireTime - secToNanoSec(min);
         return decreasedTime;
