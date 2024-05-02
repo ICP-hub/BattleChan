@@ -9,10 +9,11 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Nat64 "mo:base/Nat64";
+import Float "mo:base/Float";
 import Types "../utils/types";
 import { reject } "../utils/message";
 import { anonymousCheck; checkText } "../utils/validations";
-import { increaseTime; decreaseTime } "../utils/helper";
+import { increaseTime; decreaseTime; textToInt } "../utils/helper";
 import { principalKey; textKey } "../keys";
 module {
 
@@ -79,7 +80,7 @@ module {
                 userProfile = userInfo.profileImg;
             };
             expireAt = updatedExpireTime;
-            createdAt = now();
+            createdAt = Int.toText(now());
             updatedAt = null;
         };
 
@@ -315,28 +316,33 @@ module {
             Debug.trap(reject.noAccess);
         };
 
-        let withDrawAmount = amount * 100_000_000;
-        let postToken = ((postInfo.expireAt - postInfo.createdAt - 5 * 60_000_000_000) - now()) / 100;
+        let withDrawAmount = amount;
+        let postToken = (postInfo.expireAt - 300_000_000_000 - now()) / 600;
+
         if (withDrawAmount > postToken) {
             Debug.trap(reject.outOfToken);
         };
+
         let tokenLeft = postToken - withDrawAmount;
 
-        Debug.print(debug_show (tokenLeft));
         let totalCommentersReward = (25 * withDrawAmount) / 100;
-        let ownerReward : Int = withDrawAmount - totalCommentersReward;
-        if (tokenLeft < 500_000_000) {
-            Debug.trap(debug_show { tokenLeft });
-        };
 
-        var rewardSeakersTrie : Trie.Trie<Types.UserId, { likes : Nat; amount : Int; claimedStatus : Bool }> = Trie.empty<Types.UserId, Types.CommentRewards>();
+        var ownerReward : Int = withDrawAmount - totalCommentersReward;
+        // if (tokenLeft < 500_000_000) {
+        //     Debug.trap(debug_show { postToken });
+        // };
+
+        var rewardSeakersTrie : Trie.Trie<Types.UserId, { postId : Types.PostId; likes : Nat; amount : Int; claimedStatus : Bool }> = Trie.empty<Types.UserId, Types.CommentRewards>();
         let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
+        if (Array.size(commentData) == 0) {
+            ownerReward := tokenLeft;
+        };
         var totalLikesOnComment = 0;
         for (comment in commentData.vals()) {
             if (comment.likedBy.size() > 1) {
                 let ownerId = comment.createdBy.ownerId;
                 totalLikesOnComment := totalLikesOnComment + comment.likedBy.size();
-                rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { likes = comment.likedBy.size(); amount = 0; claimedStatus = false }).0;
+                rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { postId; likes = comment.likedBy.size(); amount = 0; claimedStatus = false }).0;
             };
         };
         let rewardSeakersArray = Trie.toArray<Types.UserId, Types.CommentRewards, (Types.UserId, Types.CommentRewards)>(rewardSeakersTrie, func(k, v) = (k, v));
@@ -346,7 +352,7 @@ module {
             let userLikes = reward.1.likes;
             let rewardAmountInPercent = (userLikes / totalLikesOnComment) * 100;
             let userRewardAmount = (rewardAmountInPercent * totalCommentersReward) / 100;
-            rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { likes = userLikes; amount = userRewardAmount; claimedStatus = false }).0;
+            rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { postId; likes = userLikes; amount = userRewardAmount; claimedStatus = false }).0;
         };
         let withdrawRecord : Types.WithdrawRecord = {
             postId;
@@ -384,6 +390,7 @@ module {
             case (null) { Debug.trap("No negative number") };
             case (?v) { v };
         };
+        Debug.trap(debug_show ({ ownerReward }));
         {
             updatedPostTrie;
             updatedWithDrawPostTrie;
@@ -412,6 +419,7 @@ module {
             case (null) { Debug.trap("Negative number") };
         };
         let updatedCommentersReward : Types.CommentRewards = {
+            postId = postId;
             likes = commenterReward.likes;
             amount = commenterReward.amount;
             claimedStatus = true;
@@ -462,7 +470,7 @@ module {
                 userProfile = [];
             };
             expireAt = 0;
-            createdAt = 0;
+            createdAt = "";
             updatedAt = ?"";
         };
         for (i in Iter.range(0, n - 2)) {
