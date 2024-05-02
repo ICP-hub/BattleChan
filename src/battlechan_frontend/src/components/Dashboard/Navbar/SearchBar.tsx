@@ -7,18 +7,17 @@ interface Post {
   postName: string;
 }
 
-type PostInfo = {
+interface PostInfo {
   postId: string;
   postName: string;
-};
+}
 
 interface BackendResponse {
-  status: boolean;
   archivedPost: PostInfo[];
   activePost: PostInfo[];
 }
 
-type SearchResults = Post[];
+type SearchResults = BackendResponse
 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
@@ -29,20 +28,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
   const { getSearchPost } = PostApiHanlder();
 
   async function fetchSearchData(value: string) {
-    let response;
-    response = await getSearchPost(value) as BackendResponse;
-    console.log(response);
+    try {
+      const response = await getSearchPost(value) as BackendResponse;
+      console.log({ response });
 
-    const results = data.filter((post) => {
-      return (
-        value &&
-        post &&
-        post.postName &&
-        post.postName.toLowerCase().includes(value.toLowerCase())
-      );
-    });
 
-    setResults(results);
+      setResults(response);
+    } catch (error) {
+      console.error("Error fetching search data:", error);
+      setResults({ activePost: [], archivedPost: [] });
+    }
   }
 
   return (
@@ -53,15 +48,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
         type="text"
         name="search"
         placeholder="Search here...."
+        id="postsearch"
         className={`rounded-[2rem] xl:w-[400px] pl-14 px-8 py-3.5 text-lg font-normal text-dark dark:text-light dark:bg-dark border border-light dark:focus:outline dark:focus:outline-light`}
         value={searchInput}
         onChange={(e) => {
           const value = e.target.value;
           setSearchInput(value);
-          fetchSearchData(value);
+          fetchSearchData(searchInput);
         }}
         onBlur={() => {
-          setResults([]);
+          setResults({ activePost: [], archivedPost: [] });
         }}
       />
     </div>
@@ -69,42 +65,3 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
 };
 
 export default SearchBar;
-
-const data: Post[] = [
-  {
-    postId: "1",
-    postName: "Hello",
-  },
-  {
-    postId: "2",
-    postName: "Hello two",
-  },
-  {
-    postId: "3",
-    postName: "Hello three",
-  },
-  {
-    postId: "4",
-    postName: "Hello four",
-  },
-  {
-    postId: "5",
-    postName: "Hello five",
-  },
-  {
-    postId: "6",
-    postName: "Hello six",
-  },
-  {
-    postId: "7",
-    postName: "Hello seven",
-  },
-  {
-    postId: "8",
-    postName: "Hello eight",
-  },
-  {
-    postId: "9",
-    postName: "Hello nine",
-  },
-];

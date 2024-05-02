@@ -1,60 +1,55 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
 import PostApiHanlder from "../../../API_Handlers/post";
-
+ 
 interface Post {
   postId: string;
   postName: string;
 }
-
+ 
 type PostInfo = {
   postId: string;
   postName: string;
 };
-
+ 
 interface BackendResponse {
-  status: boolean;
   archivedPost: PostInfo[];
   activePost: PostInfo[];
 }
-
-type SearchResults = Post[];
-
+ 
+type SearchResults = BackendResponse;
+ 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
   setShowSearchBarInPhone: Function;
 }
-
+ 
 const PhoneSearchBar: React.FC<SearchBarProps> = ({
   setResults,
   setShowSearchBarInPhone,
 }) => {
   const [searchInput, setSearchInput] = React.useState("");
   const { getSearchPost } = PostApiHanlder();
-
+ 
   async function fetchSearchData(value: string) {
-    let response;
-    response = (await getSearchPost(value)) as BackendResponse;
-    console.log(response);
+    try {
+      const response = await getSearchPost(value) as BackendResponse;
+      console.log({ response });
 
-    const results = data.filter((post) => {
-      return (
-        value &&
-        post &&
-        post.postName &&
-        post.postName.toLowerCase().includes(value.toLowerCase())
-      );
-    });
 
-    setResults(results);
+      setResults(response);
+    } catch (error) {
+      console.error("Error fetching search data:", error);
+      setResults({ activePost: [], archivedPost: [] });
+    }
   }
-
+ 
   return (
     <div className="input absolute top-0 tablet:left-0 left-[2px] flex-row-center text-[#767676] flex">
       <IoSearch
         className={`absolute small_phone:text-3xl text-2xl tablet:ml-4 ml-2 p-1`}
       />
-
+ 
       <input
         type="text"
         name="search"
@@ -64,19 +59,20 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({
         onChange={(e) => {
           const value = e.target.value;
           setSearchInput(value);
-          fetchSearchData(value);
+          fetchSearchData(searchInput);
         }}
+ 
         onBlur={() => {
-          setResults([]);
+          setResults({ activePost: [], archivedPost: [] }); 
           // setShowSearchBarInPhone(false);
         }}
       />
     </div>
   );
 };
-
+ 
 export default PhoneSearchBar;
-
+ 
 const data: Post[] = [
   {
     postId: "1",
