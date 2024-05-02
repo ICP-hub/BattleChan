@@ -1,27 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+ 
 interface Post {
   postId: string;
   postName: string;
 }
-
+ 
 interface SearchResultsListProps {
-  results: Post[];
+  activePost: Post[];
+  archivedPost: Post[];
 }
-
-const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
+ 
+const SearchResultsList: React.FC<SearchResultsListProps> = ({ activePost, archivedPost }) => {
   return (
     <>
       <div className="bg-light absolute left-0 right-0 tablet:top-[8vh] top-[6vh] dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light rounded-xl mt-2 p-2 font-normal">
         <div
           className={`overflow-y-scroll max-h-52 ${
-            results.length <= 6 ? "no-scrollbar" : ""
+            (activePost.length + archivedPost.length) <= 6 ? "no-scrollbar" : ""
           }`}
         >
-          {results.map((post) => (
+          {activePost.map((post:any) => (
             <Link
               key={post.postId}
+              // active
               to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
             >
               <div
@@ -32,8 +34,8 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
               </div>
             </Link>
           ))}
-
-          {results.map((post) => (
+ 
+          {archivedPost.map((post:any) => (
             <Link
               key={post.postId}
               to={`/dashboard/postDetails/${encodeURIComponent(
@@ -53,5 +55,5 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
     </>
   );
 };
-
+ 
 export default SearchResultsList;

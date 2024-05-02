@@ -174,7 +174,7 @@ const Post = () => {
           {recentPostsData.length > 0 && recentPostsData.map((post, index) => (
             <Link
               key={post.postId}
-              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}?type=archive`}
+              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
             >
               <div className="trendingPostCard w-[380px] rounded-lg bg-light text-dark shadow-md shadow-dark">
                 <img

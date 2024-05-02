@@ -104,12 +104,17 @@ const PostApiHanlder = () => {
     boardName: string
   ) => {
     try {
+      console.log(filter);
+      console.log(pageNumber);
+      console.log(chunkSize);
+      console.log(boardName);
       const res = await backend.postFilter(
         filter,
         pageNumber,
         chunkSize,
         boardName.toLocaleLowerCase()
       );
+      console.log("main posts", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -248,12 +253,12 @@ const PostApiHanlder = () => {
       const res = await backend.searchPost(searchInput) as SearchApiResponse;
       
       console.log("search response: ", res);
-      return [...res.activePost, ...res.archivedPost];
+      return res;
     } catch (err) {
       console.error("Search Post Error: ", err);
-      return err;
-    }
-  };
+      return err;
+}
+};
 
   return {
     createPost,
