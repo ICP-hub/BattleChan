@@ -222,7 +222,7 @@ const MainPosts = (props: Theme) => {
     } else {
       getPosts();
     }
-  }, [props.type, currentPage, postsPerPage, selectedBoard]);
+  }, [props.type, currentPage, postsPerPage, selectedBoard, activeSelection]);
 
   async function getPosts(postsType?: string) {
     try {

@@ -23,19 +23,19 @@ interface Response {
 }
 
 const TokensApiHanlder = () => {
-    
+
     const [backend, canisterId] = useBackend();
     const [ledger] = useLedger();
 
-    
+
     const icrc2_approve = async (principal: string, amount: number = 1) => {
         let result = { status: false, err: "" } as Response;
         try {
-            
+
             const is_sufficient_balance = await getBalance(principal || "");
-            
+
             let balance = is_sufficient_balance;
-            
+
             let fees = 100;
             let owner = Principal.fromText(canisterId.canisterDefinition.canisterId);
             let amnt = Number(amount * Math.pow(10, 8)) + Number(fees);
@@ -45,7 +45,7 @@ const TokensApiHanlder = () => {
             console.log("balance", balance);
             console.log("amnt", amnt);
             if (balance >= amnt) {
-                
+
                 let data = {
                     fee: [fees],
                     memo: [],
@@ -59,7 +59,7 @@ const TokensApiHanlder = () => {
                         subaccount: []
                     }
                 }
-                
+
                 const res = (await ledger.icrc2_approve(data)) as BackendResponse;
                 console.log("ICRC2", res);
                 if (res && (res?.Ok || res?.ok)) {
@@ -74,7 +74,7 @@ const TokensApiHanlder = () => {
             } else {
                 result.status = false;
                 result.err = "Insufficient Balance!"
-                
+
                 return result;
             }
         } catch (err) {
@@ -85,16 +85,16 @@ const TokensApiHanlder = () => {
         }
     };
 
-    
+
     const getBalance = async (principal: string) => {
         try {
-            
+
             const argument = {
                 owner: Principal.fromText(principal),
                 subaccount: []
             };
             const res = await ledger.icrc1_balance_of(argument);
-            
+
             let balance = (Number(res) / Math.pow(10, 8));
             return balance;
         } catch (err) {
@@ -102,13 +102,17 @@ const TokensApiHanlder = () => {
         }
     };
 
-    
+
     const withdrawPost = async (postId: string, amount: number) => {
         let result = { status: false, err: "" } as Response;
         try {
+            let amnt: number = Number(amount * Math.pow(10, 8));
+            let integerAmnt = parseInt(amnt.toString(), 10);
+
             console.log("postId", postId);
-            console.log("withdraw amount", amount);
-            const res = (await backend.withdrawPost(postId, amount)) as BackendResponse;
+            console.log("withdraw amount", amnt);
+            console.log("withdraw amntInteger", integerAmnt);
+            const res = (await backend.withdrawPost(postId, integerAmnt)) as BackendResponse;
             console.log("withdraw res", res);
 
             if (res && (res?.ok || res?.Ok)) {
@@ -136,7 +140,7 @@ const TokensApiHanlder = () => {
         }
     };
 
-    
+
     return { getBalance, icrc2_approve, withdrawPost };
 };
 
