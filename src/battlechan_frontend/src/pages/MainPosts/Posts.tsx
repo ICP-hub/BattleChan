@@ -18,15 +18,16 @@ interface PostData {
 interface PostsProps {
   currentPosts: PostData[];
   type?: string;
+  getPosts: (params?: string) => void;
 }
 
 let comments = 0;
-const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
+const Posts: React.FC<PostsProps> = ({ currentPosts, type, getPosts }) => {
   const className = "Dashboard__MainPosts__Posts";
 
   if (currentPosts.length <= 0) {
     return (
-        <h1 className="text-center p-8">No Posts Exists</h1>
+      <h1 className="text-center p-8">No Posts Exists</h1>
     );
   }
 
@@ -55,6 +56,7 @@ const Posts: React.FC<PostsProps> = ({ currentPosts, type }) => {
               userName={post.createdBy.userName}
               userProfile={post.createdBy.userProfile}
               type={type}
+              getPosts={getPosts}
             />
           </div>
         ))}

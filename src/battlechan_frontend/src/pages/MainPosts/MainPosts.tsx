@@ -410,7 +410,7 @@ const MainPosts = (props: Theme) => {
           {!dataFetched ? (
             <CardSkeleton />
           ) : (
-            <Posts currentPosts={currentPosts} type={props.type} />
+            <Posts currentPosts={currentPosts} type={props.type} getPosts={getPosts} />
           )}
         </div>
       </div>

@@ -28,6 +28,7 @@ interface PostProps {
   comments: number;
   expireAt: BigInt;
   type?: string;
+  getPosts: (params?: string) => void;
 }
 
 interface Response {
@@ -66,6 +67,7 @@ const Post: React.FC<PostProps> = ({
   expireAt,
   userProfile,
   type,
+  getPosts
 }) => {
   const [time, setTime] = useState("0:00");
   const [commentsCount, setCommentsCount] = useState(0);
@@ -158,6 +160,7 @@ const Post: React.FC<PostProps> = ({
       const data = (await upvotePost(postId)) as VoteResponse;
 
       if (data && data.ok) {
+        getPosts();
         toast.success("Successfully Upvoted Post!");
       } else {
         const lastIndex = data.err[1].lastIndexOf(":");
@@ -196,6 +199,7 @@ const Post: React.FC<PostProps> = ({
         button.style.opacity = "0.5";
 
         if (data && data?.ok) {
+          getPosts();
           toast.success("Successfully Downvoted Post!");
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
@@ -217,6 +221,7 @@ const Post: React.FC<PostProps> = ({
   const archive = async () => {
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
+      getPosts();
     }
   };
 
@@ -243,8 +248,7 @@ const Post: React.FC<PostProps> = ({
       className={
         className +
         " " +
-        `flex flex-col small_phone:gap-4 gap-2 xl:p-5 small_phone:p-3 p-2 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${
-          type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
+        `flex flex-col small_phone:gap-4 gap-2 xl:p-5 small_phone:p-3 p-2 rounded-md border border-dark dark:border-[#FEFFFE] border-opacity-50 ${type === "archive" ? "bg-[#00000033] dark:bg-[#FFFFFF33]" : ""
         }`
       }
     >
@@ -281,9 +285,8 @@ const Post: React.FC<PostProps> = ({
 
                       <button className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold">
                         <span
-                          className={`${
-                            type === "archive" ? "text-red" : "text-light-green"
-                          }`}
+                          className={`${type === "archive" ? "text-red" : "text-light-green"
+                            }`}
                         >
                           {type === "archive" ? "0:00 " : `${time} `}
                         </span>
@@ -359,9 +362,8 @@ const Post: React.FC<PostProps> = ({
                         onClick={() => setShowOverlay(true)}
                       >
                         <span
-                          className={`${
-                            type === "archive" ? "text-red" : "text-light-green"
-                          }`}
+                          className={`${type === "archive" ? "text-red" : "text-light-green"
+                            }`}
                         >
                           {type === "archive" ? "0:00 " : `${time} `}
                         </span>
@@ -404,17 +406,15 @@ const Post: React.FC<PostProps> = ({
       <section className="flex-row-center justify-between">
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
           <TbSquareChevronUpFilled
-            className={`${
-              vote ? "text-dirty-light-green" : "text-[#878787]"
-            } cursor-pointer`}
+            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
+              } cursor-pointer`}
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
           />
 
           <TbSquareChevronDownFilled
-            className={`${
-              !vote ? "text-dirty-light-green" : "text-[#878787]"
-            } cursor-pointer`}
+            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
+              } cursor-pointer`}
             id="downvoteBtn"
             onClick={type === "archive" ? undefined : () => handleDownvote(id)}
           />
