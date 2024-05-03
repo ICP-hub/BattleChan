@@ -7,9 +7,11 @@ import trendingPost_coverImg from "../../images/trendingPost_coverImg.png";
 import mybalance_Img from "../../images/my-balance-img.png";
 
 import UserApiHanlder from "../../API_Handlers/user";
+import CommentsApiHanlder from "../../API_Handlers/comments";
 import TokensApiHanlder from "../../API_Handlers/tokens";
 import { useConnect } from "@connect2ic/react";
 import Constant from "../../utils/constants";
+import toast from "react-hot-toast";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -36,12 +38,32 @@ interface Response {
   downvotes: PostUpvoteData[];
 }
 
+type RewardsData = {
+  claimedStatus?: boolean;
+  likes?: number;
+  amount?: number;
+  postId?: string;
+  status?: boolean;
+  error?: string;
+};
+
+interface ClaimResponse {
+  ok: string;
+  Ok: string;
+  err: {
+    [key: string]: string;
+  };
+  status?: boolean;
+  msg?: string;
+};
+
 const Analytics = (props: Theme) => {
   const [likedPost, setLikedPost] = React.useState(0);
   const [dislikedPost, setDislikedPost] = React.useState(0);
   const [tokenBalance, setTokenBalance] = React.useState(0);
 
   const { getBalance } = TokensApiHanlder();
+  const { getRewardsOfUser, claimReward } = CommentsApiHanlder();
   const { getUserAnalytics } = UserApiHanlder();
   const { principal, isConnected } = useConnect();
 
@@ -70,6 +92,7 @@ const Analytics = (props: Theme) => {
   }, []);
 
   const [voteData, setVoteData] = useState<Response | null>(null);
+  const [rewardsData, setRewardsData] = useState<RewardsData[] | null>(null);
 
   const { votesOfUser } = UserApiHanlder();
   const { convertInt8ToBase64 } = Constant();
@@ -81,6 +104,41 @@ const Analytics = (props: Theme) => {
     };
     getUserUpvotes();
   }, []);
+
+  const getRewards = async () => {
+    const res = [(await getRewardsOfUser()) as RewardsData];
+    const data = res.flat();
+    if (data[0].status == true) {
+      setRewardsData(data);
+      console.log(rewardsData);
+    }
+  };
+
+  useEffect(() => {
+    getRewards();
+  }, []);
+
+  const [buttonDisabled, setButtonDisabled] = useState<boolean[]>(Array(rewardsData?.length || 0).fill(false));
+
+  const handleClaimButtonClick = async (index: number, postId: string) => {
+    // Temporarily disable the button
+    const updatedButtonDisabled = [...buttonDisabled];
+    updatedButtonDisabled[index] = true;
+    setButtonDisabled(updatedButtonDisabled);
+
+    const response = (await claimReward(index, postId)) as ClaimResponse;
+    // Call the function to claim rewards here
+    if (response && response?.status == true) {
+      getRewards();
+      toast.success("Successfully Claimed Reward!");
+    } else {
+      getRewards();
+      toast.error(response?.msg || "Error: Something went wrong, Please try again later!");
+    }
+
+    updatedButtonDisabled[index] = false;
+    setButtonDisabled(updatedButtonDisabled);
+  };
 
   return (
     <>
@@ -100,11 +158,11 @@ const Analytics = (props: Theme) => {
               <h2 className="font-bold tablet:text-3xl tablet:ml-11">
                 Balance Check
               </h2>
-              <div className="flex items-center justify-center gap-2 z-10">
+              {/* <div className="flex items-center justify-center gap-2 z-10">
                 <button className="border border-[#fff] dark:border-[#fff] text-[#fff] dark:text-[#fff] rounded-md phone:px-6 px-4 py-2 font-semibold text-xs tablet:text-base">
                   Today
                 </button>
-              </div>
+              </div> */}
             </div>
             <div className="bg-[#2A4B2F] rounded-[10px] flex gap-2 tablet:gap-7 items-center mt-6 p-3 text-[#fff]">
               <div className="bg-[#fff] rounded-md w-32 tablet:w-48">
@@ -330,6 +388,36 @@ const Analytics = (props: Theme) => {
             </h1>
 
             <div>
+
+              {rewardsData?.map((data, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6"
+                >
+                  <div className="text-sm max-w-60 tablet:max-w-none items-center">
+                    <div>
+                      Claim Your Reward of
+                      <strong> {data.amount}</strong> Tokens from post Id <strong>{data.postId}</strong>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center pl-2">
+                    <div className="w-24 h-10">
+                      <button
+                        type="button"
+                        className={`${data.claimedStatus ? 'disable' : ''
+                          } ${data.claimedStatus ? 'bg-[#5f7d63]' : 'bg-[#272727] dark:bg-[#c2c2c2]'
+                          } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+                        onClick={() => handleClaimButtonClick(index, data.postId || "")}
+                        disabled={data.claimedStatus || buttonDisabled[index]}
+                      >
+                        {buttonDisabled[index] ? 'Claiming...' : data.claimedStatus ? 'Claimed' : 'Claim'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
               {voteData?.upvotes.map((vote, index) => (
                 <div
                   key={index}

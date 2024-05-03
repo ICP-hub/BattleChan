@@ -361,6 +361,7 @@ const PostDetails = (props: Theme) => {
                 <TimeComponent
                   expireAt={postsData?.expireAt ?? 1n}
                   id={postsData?.postId ?? ""}
+                  type={type || ""}
                 />{" "}
                 min left
               </div>

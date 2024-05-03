@@ -256,7 +256,7 @@ const PostApiHanlder = () => {
       return res;
     } catch (err) {
       console.error("Search Post Error: ", err);
-      return err;
+      return err;
 }
 };
 

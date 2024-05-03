@@ -121,7 +121,9 @@ const Post: React.FC<PostProps> = ({
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
-        archive();
+        if (type !== "archive") {
+          archive();
+        }
       } else {
         setTime(formatTime(BigInt(remainingTime)));
       }

@@ -75,20 +75,45 @@ type PostInfo = {
 
 interface PostResponse {
   status: boolean;
-  data: PostInfo[]; 
+  data: PostInfo[];
   error: string[];
 }
 
+type RewardsData = {
+  claimedStatus?: boolean;
+  likes?: number;
+  amount?: number;
+  postId?: string;
+  status?: boolean;
+  error?: string;
+};
+
+interface RewardsResponse {
+  status: boolean;
+  data: RewardsData[];
+  error: string[];
+}
+
+interface ClaimResponse {
+  ok: string;
+  Ok: string;
+  err: {
+    [key: string]: string;
+  };
+  status?: boolean;
+  msg?: string;
+}
+
 const CommentsApiHanlder = () => {
-  
+
   const [backend] = useBackend();
   const { getSingleMainPost, getSingleArchivePost } = PostApiHanlder();
 
-  
+
   const getAllComments = async (postId: string) => {
     try {
       const res = await backend.getAllCommentOfPost(postId, 10, 1);
-      
+
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -98,29 +123,27 @@ const CommentsApiHanlder = () => {
   const getAllCommentsOfArchivedPost = async (postId: string) => {
     try {
       const res = await backend.getAllCommentOfArchivedPost(postId, 10, 1);
-      
+
       return res;
     } catch (err) {
       console.error("Error: ", err);
     }
   };
 
-  
   const getAllReplies = async (commentId: string) => {
     try {
       const res = await backend.getAllRepliesofComment(commentId, 10, 1);
-      
+
       return res;
     } catch (err) {
       console.error("Error: ", err);
     }
   };
 
-  
   const createComment = async (postId: string, comment: string) => {
     try {
       const res = await backend.createComment(postId, comment);
-      
+
       return res;
     } catch (err) {
       console.error("Error creating post : ", err);
@@ -130,20 +153,19 @@ const CommentsApiHanlder = () => {
   const createCommentReply = async (commentId: string, reply: string) => {
     try {
       const res = await backend.createCommentReply(commentId, reply);
-      
+
       return res;
     } catch (err) {
       console.error("Error creating post : ", err);
     }
   };
 
-  
   const getUserCommentInfo = async (commentId: string) => {
     try {
       const res = (await backend.getSingleComment(
         commentId
       )) as BackendResponse;
-      
+
       return res.data;
     } catch (err) {
       console.error("Error: ", err);
@@ -157,7 +179,7 @@ const CommentsApiHanlder = () => {
         { upvote: null },
         commentId
       );
-      
+
       return res;
     } catch (err) {
       console.error("Error liking comment : ", err);
@@ -171,7 +193,7 @@ const CommentsApiHanlder = () => {
         { upvote: null },
         replyId
       );
-      
+
       return res;
     } catch (err) {
       console.error("Error liking comment reply : ", err);
@@ -185,27 +207,26 @@ const CommentsApiHanlder = () => {
         { downvote: null },
         commentId
       );
-      
+
       return res;
     } catch (err) {
       console.error("Error disliking comment : ", err);
     }
   };
 
-  
   const getUserSingleComment = async (commentId: string) => {
     try {
-      
+
       const fetchedComments: UserComment[] = [];
       const fetchedCommentInfo = (await getUserCommentInfo(
         commentId
       )) as UserComment[];
-      
+
       if (fetchedCommentInfo && fetchedCommentInfo.length > 0) {
         const postId = commentId.split("_")[0];
-        
+
         const post = (await getSingleMainPost(postId)) as PostResponse;
-        
+
         if (post) {
           fetchedComments.push({
             ...fetchedCommentInfo[0],
@@ -214,7 +235,7 @@ const CommentsApiHanlder = () => {
           });
         }
       }
-      
+
       return fetchedComments;
     } catch (err) {
       console.error("Error liking comment : ", err);
@@ -223,7 +244,7 @@ const CommentsApiHanlder = () => {
 
   const getAllCommentOfUser = async () => {
     try {
-      
+
       const response =
         (await backend.getAllCommentOfUser()) as BackendResponseUserComment;
 
@@ -233,19 +254,19 @@ const CommentsApiHanlder = () => {
       let userActiveComments: AllUserComment[] = [];
 
       if (response) {
-        
+
         activePostCommentData = [...response.data[0].active];
         archivedPostCommentData = [...response.data[0].archived];
 
         if (archivedPostCommentData && archivedPostCommentData.length > 0) {
-          
+
           for (const comment of archivedPostCommentData) {
             const postId = comment[0].split("_")[0];
             const singlePost = (await getSingleArchivePost(
               postId
             )) as PostResponse;
-            
-            
+
+
 
             userArchivedComments.push({
               commentId: comment[0],
@@ -257,13 +278,13 @@ const CommentsApiHanlder = () => {
           }
         }
         if (activePostCommentData && activePostCommentData.length > 0) {
-          
+
           for (const comment of activePostCommentData) {
             const postId = comment[0].split("_")[0];
             const singlePost = (await getSingleMainPost(
               postId
             )) as PostResponse;
-            
+
             userActiveComments.push({
               commentId: comment[0],
               postMetaData: singlePost.data[0].postMetaData,
@@ -280,7 +301,116 @@ const CommentsApiHanlder = () => {
     }
   };
 
-  
+  const getRewardsOfUser = async () => {
+    let rewards = [];
+    try {
+      const response = (await backend.listCommentersReward()) as RewardsResponse;
+      if (response && response.status == true) {
+        if (response.data[0]) {
+          let data = response.data[0];
+          rewards.push({
+            amount: data?.amount,
+            claimedStatus: data?.claimedStatus,
+            likes: data?.likes,
+            postId: data?.postId,
+            status: true,
+          })
+        } else {
+          const lastIndex = response?.error[1].lastIndexOf(":");
+          const errorMsg = response?.error[1].slice(lastIndex + 2);
+          rewards.push({
+            status: false,
+            error: errorMsg
+          });
+        }
+      } else {
+        // rewards.push({
+        //   status: false,
+        //   error: response.error[0]
+        // });
+      }
+
+      rewards.push({
+        amount: 1.5,
+        claimedStatus: true,
+        likes: 0,
+        postId: "#1234567",
+        status: true
+      },{
+        amount: 1.5,
+        claimedStatus: false,
+        likes: 0,
+        postId: "#53764342",
+        status: true
+      },{
+        amount: 1.5,
+        claimedStatus: false,
+        likes: 0,
+        postId: "#78786876",
+        status: true
+      },);
+      console.log("rewards", rewards);
+      return rewards;
+    } catch (err) {
+      if (err instanceof Error) {
+        const lastIndex = err.message.lastIndexOf(":");
+        const errorMsg = err.message.slice(lastIndex + 2);
+        rewards.push({
+          status: false,
+          error: errorMsg
+        });
+        return rewards;
+      } else {
+        let errorMsg = "Error: Something went wrong, Please try again later!";
+        rewards.push({
+          status: false,
+          error: errorMsg
+        });
+        console.error("Error: ", err);
+        return rewards;
+      }
+    }
+  };
+
+  const claimReward = async (index: number, postId: string) => {
+    let result = { status: false } as ClaimResponse;
+    try {
+      console.log(index)
+      console.log(postId)
+      if (index < 0 || !Number.isInteger(index)) {
+        throw new Error('Index must be a non-negative integer.');
+      }
+      const response = (await backend.claimReward(BigInt(index), postId)) as ClaimResponse;
+      if (response?.Ok || response?.ok) {
+        result.status = true;
+      } else {
+        result.status = false;
+        const lastIndex = response.err[1].lastIndexOf(":");
+        const errorMsg = response.err[1].slice(lastIndex + 2);
+        result.msg = errorMsg;
+      }
+      console.log("claim", response);
+      return result;
+    } catch (err) {
+      if (err instanceof Error) {
+        const lastIndex = err.message.lastIndexOf(":");
+        const errorMsg = err.message.slice(lastIndex + 2);
+        result.status = false;
+        result.msg = errorMsg;
+
+        return result;
+      } else {
+        let errorMsg = "Error: Something went wrong, Please try again later!";
+        result.status = false;
+        result.msg = errorMsg;
+
+        console.error("Error: ", err);
+        return result;
+      }
+    }
+  };
+
+
   return {
     getAllComments,
     getAllReplies,
@@ -293,6 +423,8 @@ const CommentsApiHanlder = () => {
     getUserSingleComment,
     likeCommentReply,
     getAllCommentOfUser,
+    getRewardsOfUser,
+    claimReward
   };
 };
 
