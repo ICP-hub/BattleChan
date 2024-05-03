@@ -206,9 +206,9 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func claimReward(index : Nat, postId : Types.PostId) : async Types.Result {
+  public shared ({ caller = userId }) func claimReward(postId : Types.PostId) : async Types.Result {
     try {
-      let { updatedWithDrawPostTrie; amount } = claim(index, userId, postId, userTrieMap, withdrawPostTrie);
+      let { updatedWithDrawPostTrie; amount } = claim(userId, postId, userTrieMap, withdrawPostTrie);
       let paymentRes = await ledger.icrc1_transfer({
         to = {
           owner = userId;
@@ -837,8 +837,8 @@ actor BattleChan {
       status = true;
       error = null;
     };
-
   };
+
   public query func getTotalPostInBoard() : async Types.Result_1<[{ boardName : Text; size : Nat; updatedAt : ?Text }]> {
     let boardPostData = Trie.toArray<Text, Types.BoardInfo, { boardName : Text; size : Nat; updatedAt : ?Text }>(boardTrieMap, func(k, v) = { boardName = v.boardName; size = v.totalPosts; updatedAt = v.updatedAt });
     if (Array.size(boardPostData) == 0) {
