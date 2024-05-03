@@ -324,31 +324,31 @@ const CommentsApiHanlder = () => {
           });
         }
       } else {
-        // rewards.push({
-        //   status: false,
-        //   error: response.error[0]
-        // });
+        rewards.push({
+          status: false,
+          error: response.error[0]
+        });
       }
 
-      rewards.push({
-        amount: 1.5,
-        claimedStatus: true,
-        likes: 0,
-        postId: "#1234567",
-        status: true
-      },{
-        amount: 1.5,
-        claimedStatus: false,
-        likes: 0,
-        postId: "#53764342",
-        status: true
-      },{
-        amount: 1.5,
-        claimedStatus: false,
-        likes: 0,
-        postId: "#78786876",
-        status: true
-      },);
+      // rewards.push({
+      //   amount: 1.5,
+      //   claimedStatus: true,
+      //   likes: 0,
+      //   postId: "#1234567",
+      //   status: true
+      // },{
+      //   amount: 1.5,
+      //   claimedStatus: false,
+      //   likes: 0,
+      //   postId: "#53764342",
+      //   status: true
+      // },{
+      //   amount: 1.5,
+      //   claimedStatus: false,
+      //   likes: 0,
+      //   postId: "#78786876",
+      //   status: true
+      // },);
       console.log("rewards", rewards);
       return rewards;
     } catch (err) {

@@ -99,7 +99,7 @@ actor BattleChan {
 
   func insertNameNode(postName : Text, userId : Text) : () {
     var newNode : Search.Node = postNameRootNode;
-    for (char in Text.toIter(postName)) {
+    for (char in Text.toIter(Text.toLowercase(postName))) {
       let data = Char.toText(char);
       switch (Trie.get(newNode.children, Search.textKey data, Text.equal)) {
         case (null) {
@@ -369,18 +369,29 @@ actor BattleChan {
     return { data = ?List.toArray(allPosts); status = true; error = null };
   };
 
-  public query func searchPost(postName : Text) : async {
+  func searchNameNode(substring : Text) : [Text] {
+    var node = postNameRootNode;
+    var result : [Text] = [];
+    for (char in Text.toIter(Text.toLowercase(substring))) {
+      let data = Char.toText(char);
+      switch (Trie.get(node.children, Search.textKey data, Text.equal)) {
+        case (null) return result;
+        case (?childNode) node := childNode;
+      };
+    };
+
+    result := Search.collectUsers(node, result);
+    return result;
+  };
+
+  public func searchPost(postName : Text) : async {
     activePost : [Types.PostSearch];
     archivedPost : [Types.PostSearch];
   } {
-    var node = postNameRootNode;
-    let { updatedResult; updatedNode } = Search.searchHelper(postName, node);
-    var result = updatedResult;
-
-    node := updatedNode;
-    result := Search.collectUsers(node, updatedResult);
-
+    let result = searchNameNode(Text.toLowercase(postName));
     let archivedPostArray = createTrieMapOfArchivedPost(userAchivedPostTrie);
+    // Debug.trap(debug_show ({ archivedPostArray }));
+
     let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPostArray.vals(), Text.equal, Text.hash);
 
     var activePostList = List.nil<Types.PostSearch>();
