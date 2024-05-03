@@ -4,9 +4,10 @@ import PostApiHanlder from "../../API_Handlers/post";
 interface TimeDisplayProps {
   id: string;
   expireAt: BigInt;
+  type: string;
 }
 
-const TimeComponent: React.FC<TimeDisplayProps> = ({ id, expireAt }) => {
+const TimeComponent: React.FC<TimeDisplayProps> = ({ id, expireAt, type }) => {
   const [time, setTime] = useState("0:00");
   const { archivePost } = PostApiHanlder();
 
@@ -32,7 +33,9 @@ const TimeComponent: React.FC<TimeDisplayProps> = ({ id, expireAt }) => {
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");
-        archive();
+        if(type !== "archive"){
+          archive();
+        }
       } else {
         setTime(formatTime(BigInt(remainingTime)));
       }

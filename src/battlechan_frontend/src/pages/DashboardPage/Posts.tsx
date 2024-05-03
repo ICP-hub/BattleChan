@@ -94,7 +94,7 @@ const Posts = () => {
                 <TdTag para={post.upvotedBy.length} />
                 <TdTag
                   para={
-                    <TimeComponent expireAt={post.expireAt} id={post.postId} />
+                    <TimeComponent expireAt={post.expireAt} id={post.postId} type={""} />
                   }
                 />
               </tr>
