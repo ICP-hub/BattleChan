@@ -10,6 +10,7 @@ import List "mo:base/List";
 import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
 import Char "mo:base/Char";
+import Array "mo:base/Array";
 import Types "types";
 
 module {
@@ -47,6 +48,7 @@ module {
 
         num;
     };
+
     public func paginate<V>(array : [V], chunkSize : Nat) : [[V]] {
 
         var paginationArray : List.List<[V]> = List.nil<[V]>();
@@ -72,12 +74,12 @@ module {
     };
     func secToNanoSec(min : Int) : Int {
         let seconds = min * 60;
-       return seconds * 1_000_000_000;
+        return seconds * 1_000_000_000;
     };
     public func increaseTime(min : Int, expireTime : Int) : Int {
         let increasedTime = secToNanoSec(min) + expireTime;
         return increasedTime;
-    };  
+    };
     public func decreaseTime(min : Int, expireTime : Int) : Int {
         let decreasedTime = expireTime - secToNanoSec(min);
         return decreasedTime;
