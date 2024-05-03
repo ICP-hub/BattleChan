@@ -149,6 +149,12 @@ module {
         #downvote;
         #recent;
     };
+    public type Node = {
+        var children : Trie.Trie<Text, Node>;
+        var isEndOfWord : Bool;
+        var user : [Text];
+    };
+
     public type Message = Text;
     public type Result_1<V> = {
         data : ?V;
