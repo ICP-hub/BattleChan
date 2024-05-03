@@ -384,13 +384,14 @@ actor BattleChan {
     return result;
   };
 
-  public query func searchPost(postName : Text) : async {
+  public func searchPost(postName : Text) : async {
     activePost : [Types.PostSearch];
     archivedPost : [Types.PostSearch];
   } {
-  let result =  searchNameNode(Text.toLowercase(postName));
-
+    let result = searchNameNode(Text.toLowercase(postName));
     let archivedPostArray = createTrieMapOfArchivedPost(userAchivedPostTrie);
+    // Debug.trap(debug_show ({ archivedPostArray }));
+
     let userArchivedPostsMap = TrieMap.fromEntries<Types.PostId, Types.PostInfo>(archivedPostArray.vals(), Text.equal, Text.hash);
 
     var activePostList = List.nil<Types.PostSearch>();
