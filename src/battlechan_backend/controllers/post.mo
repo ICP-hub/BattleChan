@@ -397,7 +397,27 @@ module {
             ownerReward = reward;
         };
     };
-    public func claim(index : Nat, userId : Types.UserId, postId : Types.PostId, userTrieMap : Types.UserTrieMap, withdrawPostTrie : Types.WithdrawTrieMap) : {
+    func checkReward(withdrawInfo : [Types.WithdrawRecord], userId : Principal) : ?{
+        commenterReward : Types.CommentRewards;
+        index : Nat;
+    } {
+        var index = 0;
+        for (item in withdrawInfo.vals()) {
+
+            switch (Trie.get(item.commentersReward, principalKey userId, Principal.equal)) {
+                case (?value) {
+                    return ?{ commenterReward = value; index };
+                };
+                case (null) {};
+
+            };
+            index := index +1;
+        };
+
+        return null
+
+    };
+    public func claim(userId : Types.UserId, postId : Types.PostId, userTrieMap : Types.UserTrieMap, withdrawPostTrie : Types.WithdrawTrieMap) : {
         updatedWithDrawPostTrie : Types.WithdrawTrieMap;
         amount : Nat;
     } {
@@ -406,11 +426,11 @@ module {
             case (?value) { List.toArray(value) };
             case (null) { Debug.trap("Post hasn't been withdrawn yet!") };
         };
-
-        let commenterReward = switch (Trie.get(withdrawInfo[index].commentersReward, principalKey userId, Principal.equal)) {
+        let { commenterReward; index } = switch (checkReward(withdrawInfo, userId)) {
             case (?value) { value };
-            case (null) { Debug.trap("No Reward found") };
+            case (null) { Debug.trap("No Reward found!") };
         };
+
         if (commenterReward.claimedStatus == true) {
             Debug.trap("Already claimed Rewards");
         };

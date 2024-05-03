@@ -305,6 +305,7 @@ const CommentsApiHanlder = () => {
     let rewards = [];
     try {
       const response = (await backend.listCommentersReward()) as RewardsResponse;
+      console.log("claim res", response);
       if (response && response.status == true) {
         if (response.data[0]) {
           let data = response.data[0];
@@ -372,15 +373,11 @@ const CommentsApiHanlder = () => {
     }
   };
 
-  const claimReward = async (index: number, postId: string) => {
+  const claimReward = async (postId: string) => {
     let result = { status: false } as ClaimResponse;
     try {
-      console.log(index)
       console.log(postId)
-      if (index < 0 || !Number.isInteger(index)) {
-        throw new Error('Index must be a non-negative integer.');
-      }
-      const response = (await backend.claimReward(BigInt(index), postId)) as ClaimResponse;
+      const response = (await backend.claimReward(postId)) as ClaimResponse;
       if (response?.Ok || response?.ok) {
         result.status = true;
       } else {

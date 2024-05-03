@@ -126,7 +126,7 @@ const Analytics = (props: Theme) => {
     updatedButtonDisabled[index] = true;
     setButtonDisabled(updatedButtonDisabled);
 
-    const response = (await claimReward(index, postId)) as ClaimResponse;
+    const response = (await claimReward(postId)) as ClaimResponse;
     // Call the function to claim rewards here
     if (response && response?.status == true) {
       getRewards();
