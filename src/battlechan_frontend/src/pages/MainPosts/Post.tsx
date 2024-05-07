@@ -221,6 +221,9 @@ const Post: React.FC<PostProps> = ({
   };
 
   const archive = async () => {
+    if(type === "archive"){
+      return;
+    }
     const response = (await archivePost(id)) as Response;
     if (response && response?.ok) {
       getPosts();
@@ -438,6 +441,7 @@ const Post: React.FC<PostProps> = ({
         display={showOverlay}
         setProfilePopUp={setShowOverlay}
         postId={id}
+        getPosts={getPosts}
       />
     </div>
   );
