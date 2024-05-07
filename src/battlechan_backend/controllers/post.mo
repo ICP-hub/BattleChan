@@ -35,9 +35,9 @@ module {
         updatedUserInfo : Types.UserInfo;
         newPost : Types.PostInfo;
     } {
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         if (checkText(postReq.postName, 100) == false) {
             Debug.trap(reject.noAccount);
@@ -317,8 +317,8 @@ module {
         };
 
         let withDrawAmount = amount;
-        let postToken = (postInfo.expireAt - 300_000_000_000 - now()) / 600;
-
+        //let postToken = (postInfo.expireAt - 300_000_000_000 - now()) / 600;
+        let postToken =((postInfo.expireAt - now())-300_000_000_000)/60_000_000_000;
         if (withDrawAmount > postToken) {
             Debug.trap(reject.outOfToken);
         };

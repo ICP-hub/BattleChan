@@ -17,9 +17,9 @@ module {
             Debug.trap(reject.outBound);
         };
 
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { Debug.trap(reject.alreadyExist) };
@@ -45,9 +45,9 @@ module {
         if (checkText(userData.userName, 70) == false) {
             Debug.trap(reject.outBound);
         };
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
         let userInfo :Types.UserInfo= switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { value };
             case (null) {Debug.trap(reject.noAccount)};
