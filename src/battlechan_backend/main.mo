@@ -496,6 +496,8 @@ actor BattleChan {
     };
     return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
   };
+
+
   public shared query ({ caller = userId }) func getAllRepliesOfArchivedPost(commentId : Types.CommentId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.ReplyInfo]> {
     let postId = getPostIdFromCommentId(commentId);
     let postArray : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
@@ -801,6 +803,8 @@ actor BattleChan {
   public query func getBoardData(boardName : Types.BoardName) : async ?Types.BoardInfo {
     Trie.get(boardTrieMap, textKey boardName, Text.equal);
   };
+
+
   public shared query ({ caller = userId }) func listCommentersReward() : async Types.Result_1<[Types.CommentRewards]> {
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (?value) { value };
@@ -895,6 +899,8 @@ actor BattleChan {
     };
 
   };
+
+  
   public query func getRecentPost() : async [Types.PostInfo] {
     let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
     var recentPostList = List.nil<Types.PostInfo>();
