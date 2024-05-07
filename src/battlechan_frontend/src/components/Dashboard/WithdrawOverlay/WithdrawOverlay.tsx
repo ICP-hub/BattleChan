@@ -6,6 +6,7 @@ type Props = {
   display: boolean;
   setProfilePopUp: any;
   postId: string;
+  getPosts: (params?: string) => void;
 };
 
 interface Response {
@@ -39,6 +40,7 @@ const WithdrawOverlay = (props: Props) => {
       const data = await withdrawPost(props.postId, amount);
 
       if (data.status === true) {
+        props.getPosts();
         toast.success(
           `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
         );

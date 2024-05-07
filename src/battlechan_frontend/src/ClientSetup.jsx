@@ -2,24 +2,33 @@
 import React from 'react';
 import { createClient } from "@connect2ic/core";
 import { InternetIdentity } from "@connect2ic/core/providers";
-import { PlugWallet } from "@connect2ic/core/providers";
+import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
 import { Connect2ICProvider } from "@connect2ic/react";
-import { backend, canisterId, idlFactory } from "../../declarations/backend/index";
-import { ledger, canisterId as ledgerCanisterID, idlFactory as ledgeridlFactory } from "../../declarations/ledger/index";
+import * as backend from "../../declarations/backend/index";
+import * as ledger from "../../declarations/ledger/index";
 
 const client = createClient({
     canisters: {
-        backend: {
-            canisterId: canisterId,
-            idlFactory: idlFactory
-        },
-        ledger: {
-            canisterId: ledgerCanisterID,
-            idlFactory: ledgeridlFactory
-        },
+        backend,
+        ledger
     },
     providers: [new InternetIdentity(), new PlugWallet()],
 });
+
+client.on("connect", async () => {
+    // Connected
+    console.log("connected");
+    console.log(client.status);
+    console.log(client.principal);
+    console.log(client._service);
+    console.log(client.providers);
+    console.log(client.config);
+    console.log("anonymousActors", client.anonymousActors);
+})
+
+console.log(client.actors);
+console.log("status", client.status);
+console.log("anonymousActors", client.anonymousActors);
 
 const ClientSetup = ({ children }) => (
     <Connect2ICProvider client={client}>
