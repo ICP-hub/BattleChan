@@ -84,6 +84,10 @@ const Post: React.FC<PostProps> = ({
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
   const button = document.getElementById("upvoteBtn");
 
+
+  const [upvoteDisabled, setUpvoteDisabled] = useState(false);
+  const [downvoteDisabled, setDownvoteDisabled] = useState(false);
+
   const className = "Dashboard__MainPosts__Post";
 
   useEffect(() => {
@@ -141,6 +145,7 @@ const Post: React.FC<PostProps> = ({
       toast.error("Please first Connect your Wallet to Upvote this post!");
       return;
     }
+    setUpvoteDisabled(true);
 
     try {
       const isApproved = (await icrc2_approve(
@@ -172,6 +177,8 @@ const Post: React.FC<PostProps> = ({
     } catch (error) {
       console.error("Error occurred while upvoting:", error);
     } finally {
+      setUpvoteDisabled(false);
+
       // Reset button to original state
       if (button) {
         button.removeAttribute("disabled");
@@ -184,6 +191,7 @@ const Post: React.FC<PostProps> = ({
     if (type === "archive") {
       return;
     }
+    setDownvoteDisabled(true);
 
     if (isUserAuthenticatedRef.current) {
       const is_approved = (await icrc2_approve(
@@ -203,10 +211,13 @@ const Post: React.FC<PostProps> = ({
         if (data && data?.ok) {
           getPosts();
           toast.success("Successfully Downvoted Post!");
+          setDownvoteDisabled(false);
         } else {
           const lastIndex = data.err[1].lastIndexOf(":");
           const errorMsg = data.err[1].slice(lastIndex + 2);
           toast.error(errorMsg);
+          setDownvoteDisabled(false);
+
         }
       } else {
         toast.error(is_approved.err);
@@ -221,7 +232,7 @@ const Post: React.FC<PostProps> = ({
   };
 
   const archive = async () => {
-    if(type === "archive"){
+    if (type === "archive") {
       return;
     }
     const response = (await archivePost(id)) as Response;
@@ -410,19 +421,24 @@ const Post: React.FC<PostProps> = ({
 
       <section className="flex-row-center justify-between">
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
-          <TbSquareChevronUpFilled
-            className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
-            id="upvoteBtn"
-            onClick={type === "archive" ? undefined : () => handleUpvote(id)}
-          />
+          {!upvoteDisabled && (
+            <TbSquareChevronUpFilled
+              className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
+                } cursor-pointer`}
+              id="upvoteBtn"
+              onClick={type === "archive" ? undefined : () => handleUpvote(id)}
+            />
+          )}
 
-          <TbSquareChevronDownFilled
-            className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
-              } cursor-pointer`}
-            id="downvoteBtn"
-            onClick={type === "archive" ? undefined : () => handleDownvote(id)}
-          />
+          {!downvoteDisabled && (
+            <TbSquareChevronDownFilled
+              className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
+                } cursor-pointer`}
+              id="downvoteBtn"
+              onClick={type === "archive" ? undefined : () => handleDownvote(id)}
+            />
+          )}
+
         </div>
 
         <div className="flex-row-center tablet:text-lg small_phone:text-sm text-xs gap-2 justify-end">
