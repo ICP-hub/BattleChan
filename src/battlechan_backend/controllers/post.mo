@@ -311,23 +311,41 @@ module {
     } {
 
         let postInfo : Types.PostInfo = getPostInfo(postId, postTrieMap);
-
+        Debug.print("hlo");
         if (postInfo.createdBy.ownerId != userId) {
             Debug.trap(reject.noAccess);
         };
 
         let withDrawAmount = amount;
+        Debug.print(Int.toText(withDrawAmount));
         //let postToken = (postInfo.expireAt - 300_000_000_000 - now()) / 600;
-        let postToken =((postInfo.expireAt - now())-300_000_000_000)/60_000_000_000;
+        // let time =Int
+        // Debug.print("expiretime");
+        // Debug.print(Int.toText(postInfo.expireAt));
+        // Debug.print("now");
+        // Debug.print(Int.toText(now()));
+        let postToken =(postInfo.expireAt - 300_000_000_000 - now())/600;
+        // Debug.print("posttoken");
+        // Debug.print(Int.toText(postToken));
         if (withDrawAmount > postToken) {
             Debug.trap(reject.outOfToken);
         };
 
         let tokenLeft = postToken - withDrawAmount;
+        // Debug.print("total");
+        // Debug.print(Int.toText(tokenLeft));
+
 
         let totalCommentersReward = (25 * withDrawAmount) / 100;
+        // Debug.print("total");
+        // Debug.print(Int.toText(totalCommentersReward));
 
         var ownerReward : Int = withDrawAmount - totalCommentersReward;
+
+        // Debug.print("ownerReward");
+        // Debug.print(Int.toText(ownerReward));
+
+
         // if (tokenLeft < 500_000_000) {
         //     Debug.trap(debug_show { postToken });
         // };
@@ -361,7 +379,11 @@ module {
             ownerReward;
             createdAt = Int.toText(now());
         };
-        let updatedExpireTime = postInfo.expireAt - (tokenLeft * 100);
+        Debug.print("expiredtime");
+        Debug.print(Int.toText(postInfo.expireAt));
+        let updatedExpireTime = postInfo.expireAt - (withDrawAmount * 60_000_000_000);
+        Debug.print("updatedexpiredtime");
+        Debug.print(Int.toText(updatedExpireTime));
         let updatedPostInfo : Types.PostInfo = {
             postId = postInfo.postId;
             postName = postInfo.postName;
@@ -390,7 +412,7 @@ module {
             case (null) { Debug.trap("No negative number") };
             case (?v) { v };
         };
-        Debug.trap(debug_show ({ ownerReward }));
+        // Debug.trap(debug_show ({ ownerReward }));
         {
             updatedPostTrie;
             updatedWithDrawPostTrie;

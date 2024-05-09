@@ -51,9 +51,14 @@ actor BattleChan {
   stable var postNameRootNode : Search.Node = Search.createNode();
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
+  // mainnet
+  let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
+  let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
 
-  let tokenCanisterId = "weoa5-5qaaa-aaaan-qmctq-cai";
-  let backendCanisterId = Principal.fromText("jeupf-yyaaa-aaaan-ql7iq-cai");
+  //testnet
+  // let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+  // let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
+
   let ledger = actor (tokenCanisterId) : Token.Token;
 
   public shared ({ caller = userId }) func createUserAccount(userReq : Types.UserReq) : async Types.Result {
