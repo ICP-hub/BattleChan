@@ -167,8 +167,8 @@ const Post: React.FC<PostProps> = ({
       const data = (await upvotePost(postId)) as VoteResponse;
 
       if (data && data.ok) {
-        getPosts();
-        toast.success("Successfully Upvoted Post!");
+      getPosts();
+      toast.success("Successfully Upvoted Post!");
       } else {
         const lastIndex = data.err[1].lastIndexOf(":");
         const errorMsg = data.err[1].slice(lastIndex + 2);
@@ -259,6 +259,7 @@ const Post: React.FC<PostProps> = ({
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
+  console.log({ upvoteDisabled })
   return (
     <div
       className={
@@ -421,23 +422,28 @@ const Post: React.FC<PostProps> = ({
 
       <section className="flex-row-center justify-between">
         <div className="buttons flex-row-center gap-2 small_phone:ml-3 ml-0 phone:text-4xl text-2xl">
-          {!upvoteDisabled && (
+          <button
+            id="upvoteBtn"
+            onClick={type === "archive" ? undefined : () => handleUpvote(id)}
+            disabled={upvoteDisabled}
+            style={{ border: "none", background: "none", padding: 0, cursor: "pointer" }} 
+          >
             <TbSquareChevronUpFilled
-              className={`${vote ? "text-dirty-light-green" : "text-[#878787]"
-                } cursor-pointer`}
-              id="upvoteBtn"
-              onClick={type === "archive" ? undefined : () => handleUpvote(id)}
+              className={`${(vote && !upvoteDisabled) ? "text-dirty-light-green" : "text-[#878787]"} cursor-pointer`}
             />
-          )}
+          </button>
 
-          {!downvoteDisabled && (
+          <button
+            id="downvoteBtn"
+            onClick={type === "archive" ? undefined : () => handleDownvote(id)}
+            disabled={downvoteDisabled}
+            style={{ border: "none", background: "none", padding: 0, cursor: "pointer" }}
+          >
             <TbSquareChevronDownFilled
-              className={`${!vote ? "text-dirty-light-green" : "text-[#878787]"
-                } cursor-pointer`}
-              id="downvoteBtn"
-              onClick={type === "archive" ? undefined : () => handleDownvote(id)}
+              className={`${(!vote && !downvoteDisabled) ? "text-dirty-light-green" : "text-[#878787]"} cursor-pointer`}
+
             />
-          )}
+          </button>
 
         </div>
 
