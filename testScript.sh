@@ -8,4 +8,4 @@ dfx canister call ledger icrc2_transfer_from "(record { from = record { owner = 
 
 
 
-dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"z3psl-4r5mf-zkmpj-drzda-w562g-cu7c3-duyna-wsbjj-bf6gs-xkt6f-hae\" }; amount = 1000000000000000000000000 })" --network ic
+dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"wrlyg-vikm4-hno7j-tkhix-xvqg5-owmqz-jdune-ecdvl-t4vwz-k66l3-tqe\" }; amount = 1000000000000000000000000 })" --network ic

@@ -381,6 +381,9 @@ module {
         };
         Debug.print("expiredtime");
         Debug.print(Int.toText(postInfo.expireAt));
+        Debug.print("currenttime");
+        Debug.print(Int.toText(now()));
+        
         let updatedExpireTime = postInfo.expireAt - (withDrawAmount * 60_000_000_000);
         Debug.print("updatedexpiredtime");
         Debug.print(Int.toText(updatedExpireTime));

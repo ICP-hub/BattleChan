@@ -161,6 +161,8 @@ const PostApiHanlder = () => {
   const archivePost = async (postId: string) => {
     try {
       const res = await backend.archivePost(postId);
+      console.log("function call AarchivePost");
+      console.log(res);
       return res;
     } catch (err) {
       console.error("Error archiving a post : ", err);
