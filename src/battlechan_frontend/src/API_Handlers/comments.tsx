@@ -81,8 +81,8 @@ interface PostResponse {
 
 type RewardsData = {
   claimedStatus?: boolean;
-  likes?: number;
-  amount?: number;
+  likes?: bigint;
+  amount?: bigint;
   postId?: string;
   status?: boolean;
   error?: string;
@@ -306,13 +306,29 @@ const CommentsApiHanlder = () => {
     try {
       const response = (await backend.listCommentersReward()) as RewardsResponse;
       console.log("claim res", response);
+
+      // let obj: RewardsResponse = {
+      //   status: true,
+      //   data:
+      //     [
+      //       {
+      //         amount: 25000000n,
+      //         claimedStatus: false,
+      //         likes: 4n,
+      //         postId: "#3512677225"
+      //       }
+      //     ],
+      //   error: [""]
+      // };
+
       if (response && response.status == true) {
         if (response.data[0]) {
           let data = response.data[0];
+
           rewards.push({
-            amount: data?.amount,
+            amount: (Number(data?.amount) / Math.pow(10, 8)),
             claimedStatus: data?.claimedStatus,
-            likes: data?.likes,
+            likes: Number(data?.likes),
             postId: data?.postId,
             status: true,
           })
