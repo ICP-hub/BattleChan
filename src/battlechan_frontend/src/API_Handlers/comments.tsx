@@ -90,7 +90,7 @@ type RewardsData = {
 
 interface RewardsResponse {
   status: boolean;
-  data: RewardsData[];
+  data: RewardsData[][];
   error: string[];
 }
 
@@ -309,7 +309,7 @@ const CommentsApiHanlder = () => {
 
       // let obj: RewardsResponse = {
       //   status: true,
-      //   data:
+      //   data: [
       //     [
       //       {
       //         amount: 25000000n,
@@ -318,20 +318,31 @@ const CommentsApiHanlder = () => {
       //         postId: "#3512677225"
       //       }
       //     ],
+      //     [
+      //       {
+      //         amount: 25000000n,
+      //         claimedStatus: true,
+      //         likes: 5n,
+      //         postId: "#3512677225"
+      //       }
+      //     ],
+      //   ],
       //   error: [""]
       // };
 
       if (response && response.status == true) {
         if (response.data[0]) {
-          let data = response.data[0];
-
-          rewards.push({
-            amount: (Number(data?.amount) / Math.pow(10, 8)),
-            claimedStatus: data?.claimedStatus,
-            likes: Number(data?.likes),
-            postId: data?.postId,
-            status: true,
-          })
+          response.data.forEach(innerArray => {
+            innerArray.forEach(data => {
+              rewards.push({
+                amount: (Number(data?.amount) / Math.pow(10, 8)),
+                claimedStatus: data?.claimedStatus,
+                likes: Number(data?.likes),
+                postId: data?.postId,
+                status: true
+              });
+            });
+          });
         } else {
           const lastIndex = response?.error[1].lastIndexOf(":");
           const errorMsg = response?.error[1].slice(lastIndex + 2);
