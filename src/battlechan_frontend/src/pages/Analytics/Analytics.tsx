@@ -398,6 +398,8 @@ const Analytics = (props: Theme) => {
                     <div>
                       Claim Your Reward of
                       <strong> {data.amount}</strong> Tokens from post Id <strong>{data.postId}</strong>
+                      <br/>
+                      <span className="opacity-75"><i>Comment Likes: {data.likes}</i></span>
                     </div>
                   </div>
 

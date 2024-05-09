@@ -88,7 +88,7 @@ const MainPosts = (props: Theme) => {
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Recent");
-  const [postsPerPage, setPostsPerPage] = useState(20);
+  const [postsPerPage, setPostsPerPage] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
@@ -117,7 +117,7 @@ const MainPosts = (props: Theme) => {
     async function getTotalPosts() {
       try {
         const response = (await getTotalCounts()) as TotalCountsResponse;
-
+        console.log("counts", response);
         if (props.type == "archive") {
           setTotalPosts(response?.archivePostCounts);
         } else if(props.type === "searchPosts"){
@@ -279,19 +279,36 @@ const MainPosts = (props: Theme) => {
 
   const goToPrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage(prevPage => prevPage - 1); // Update currentPage by decrementing it by 1
     }
   };
 
   const goToNextPage = () => {
-    if (currentPage < Math.ceil(totalPosts / postsPerPage)) {
-      setCurrentPage(currentPage + 1);
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
+    if (currentPage < totalPages) {
+      setCurrentPage(prevPage => prevPage + 1); // Update currentPage by incrementing it by 1
     }
   };
 
   const goToPage = (page: number) => {
-    setCurrentPage(page);
+    setCurrentPage(page); // Update currentPage to the selected page
   };
+
+  // const goToPrevPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
+
+  // const goToNextPage = () => {
+  //   if (currentPage < Math.ceil(totalPosts / postsPerPage)) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
+
+  // const goToPage = (page: number) => {
+  //   setCurrentPage(page);
+  // };
 
   return (
     <div
