@@ -259,7 +259,7 @@ const Post: React.FC<PostProps> = ({
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  console.log({ upvoteDisabled })
+  // console.log({ upvoteDisabled })
   return (
     <div
       className={
