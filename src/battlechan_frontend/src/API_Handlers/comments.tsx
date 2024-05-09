@@ -81,8 +81,8 @@ interface PostResponse {
 
 type RewardsData = {
   claimedStatus?: boolean;
-  likes?: number;
-  amount?: number;
+  likes?: bigint;
+  amount?: bigint;
   postId?: string;
   status?: boolean;
   error?: string;
@@ -312,9 +312,9 @@ const CommentsApiHanlder = () => {
       //   data:
       //     [
       //       {
-      //         amount: Number(25000000n),
+      //         amount: 25000000n,
       //         claimedStatus: false,
-      //         likes: Number(4n),
+      //         likes: 4n,
       //         postId: "#3512677225"
       //       }
       //     ],
