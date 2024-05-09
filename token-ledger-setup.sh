@@ -19,10 +19,10 @@ dfx deploy ledger --argument "(variant {Init =
 record {
      token_symbol = \"time\";
      token_name = \"time_token\";
-     minting_account = record { owner = principal \"m4etk-jcqiv-42f7u-xv6f4-to4ar-fgwuc-su6zz-jqcon-tk3vb-7ghim-aqe\" };
+     minting_account = record { owner = principal \"wsia5-6ckwa-lx5aq-ky57y-jgniw-ezqy4-5jkes-bjkdd-zneku-c4rvw-dae\" };
      transfer_fee = 100;
      metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\"; }; 1000000000000000000 }; };
+     initial_balances = vec { record { record { owner = principal \"pnzx2-eiaaa-aaaak-qcnuq-cai\"; }; 1000000000000000000 }; };
      archive_options = record {
          num_blocks_to_archive = 1000000000;
          trigger_threshold = 1000000000;
@@ -36,15 +36,15 @@ dfx deploy ledger --argument "(variant {Init =
 record {
      token_symbol = \"Time\";
      token_name = \"time_token\";
-     minting_account = record { owner = principal \"bkyz2-fmaaa-aaaaa-qaaaq-cai\" };
+     minting_account = record { owner = principal \"wsia5-6ckwa-lx5aq-ky57y-jgniw-ezqy4-5jkes-bjkdd-zneku-c4rvw-dae\" };
      transfer_fee = 100;
      metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\";  1000000000; }; };
+     initial_balances = vec { record { record { owner = principal \"wsia5-6ckwa-lx5aq-ky57y-jgniw-ezqy4-5jkes-bjkdd-zneku-c4rvw-dae\";  100000000000; }; };
      archive_options = record {
          num_blocks_to_archive = 1000000000;
          trigger_threshold = 1000000000;
-         controller_id = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\";
-         };
+         controller_id = principal \"wsia5-6ckwa-lx5aq-ky57y-jgniw-ezqy4-5jkes-bjkdd-zneku-c4rvw-dae\";
+        };
      feature_flags = opt record {icrc2 = true;};
  }
 })"

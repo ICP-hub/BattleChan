@@ -145,7 +145,7 @@ const Post: React.FC<PostProps> = ({
     try {
       const isApproved = (await icrc2_approve(
         principal_idRef.current
-      )) as Response;
+      )) as Response; 
 
       if (isApproved.status !== true) {
         toast.error(isApproved.err);
