@@ -502,7 +502,6 @@ actor BattleChan {
     return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
   };
 
-
   public shared query ({ caller = userId }) func getAllRepliesOfArchivedPost(commentId : Types.CommentId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.ReplyInfo]> {
     let postId = getPostIdFromCommentId(commentId);
     let postArray : [(Types.PostId, Types.PostInfo)] = switch (Trie.get(userAchivedPostTrie, principalKey userId, Principal.equal)) {
@@ -809,7 +808,6 @@ actor BattleChan {
     Trie.get(boardTrieMap, textKey boardName, Text.equal);
   };
 
-
   public shared query ({ caller = userId }) func listCommentersReward() : async Types.Result_1<[Types.CommentRewards]> {
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (?value) { value };
@@ -905,7 +903,6 @@ actor BattleChan {
 
   };
 
-  
   public query func getRecentPost() : async [Types.PostInfo] {
     let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
     var recentPostList = List.nil<Types.PostInfo>();
@@ -987,6 +984,24 @@ actor BattleChan {
       return { data = null; status = false; error = ?notFound.noData };
     };
     return { data = ?postDataAll; status = true; error = null };
+  };
+
+  public query func totalPostsInBoard(boardName : Types.BoardName) : async Types.Result_1<Nat> {
+    let boardId = toBoardId(boardName);
+    let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
+
+    let postMap = TrieMap.fromEntries<Types.BoardName, [Types.PostId]>(allPosts.vals(), Text.equal, Text.hash);
+
+    switch (postMap.get(boardId)) {
+      case (null) {
+        return { data = null; status = true; error = null };
+      };
+      case (?postIds) {
+        let postIdsArray = Array.foldLeft<Types.PostId, [Types.PostId]>(postIds, [], func(ids, id) = Array.append<Types.PostId>(ids, [id]));
+        let postCount = Array.size<Types.PostId>(postIdsArray);
+        return { data = ?postCount; status = true; error = null };
+      };
+    };
   };
 
   //  function for the testing
