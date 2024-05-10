@@ -1,18 +1,21 @@
 
 import React from 'react';
 import { createClient } from "@connect2ic/core";
-import { InternetIdentity } from "@connect2ic/core/providers";
+import { defaultProviders } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
 import { Connect2ICProvider } from "@connect2ic/react";
-import * as backend from "../../declarations/backend/index";
-import * as ledger from "../../declarations/ledger/index";
+import * as backend from "../../declarations/backend";
+import * as ledger from "../../declarations/ledger";
 
 const client = createClient({
     canisters: {
         backend,
         ledger
     },
-    providers: [new InternetIdentity(), new PlugWallet()],
+    providers: defaultProviders,
+    globalProviderConfig: {
+        dev: import.meta.env.DEV,
+    },
 });
 
 client.on("connect", async () => {

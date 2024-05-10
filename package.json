@@ -18,6 +18,8 @@
   "dependencies": {
     "@connect2ic/core": "^0.1.1",
     "@connect2ic/react": "^0.1.0",
+    "@dfinity/agent": "^1.3.0",
+    "@dfinity/principal": "^1.3.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.14",

@@ -1,12 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import toast from "react-hot-toast";
 import PostApiHanlder from "../../../API_Handlers/post";
-import { useCanister } from "@connect2ic/react";
-
-const useBackend = () => {
-  return useCanister("backend");
-};
 
 type Props = {
   display: boolean;
@@ -29,7 +24,6 @@ interface BackendResponse {
 }
 
 const WithdrawOverlay = (props: Props) => {
-  const [backend, canisterId] = useBackend();
   const [amount, setAmount] = React.useState(0);
   const className = "WithdrawOverlay";
   const { withdrawPost } = TokensApiHanlder();
@@ -42,44 +36,6 @@ const WithdrawOverlay = (props: Props) => {
   const handleWithdrawButton = (amount: number) => {
     withdrawPostFn(amount);
   };
-
-  useEffect(() => {
-    async function withdraw_post() {
-      try {
-        const confirmBtn = document.getElementById("confirmBtn");
-        confirmBtn?.addEventListener("click", async () => {
-          const amountInput = document.getElementById("amount") as HTMLInputElement;
-          const amountValue = parseInt(amountInput.value);
-
-          if (isNaN(amountValue)) {
-            console.log("Invalid amount entered");
-            return;
-          }
-          console.log("HERE");
-          withdrawPostFn(amountValue);
-          // let amnt: number = Number(amount || 0 * Math.pow(10, 8));
-          // let integerAmnt = parseInt(amnt.toString(), 10);
-
-          // console.log("postId", props.postId);
-          // console.log("withdraw amount", amnt);
-          // console.log("withdraw amntInteger", integerAmnt);
-          // const res = (await backend.withdrawPost(props.postId, integerAmnt)) as BackendResponse;
-          // console.log("withdraw res", res);
-
-          // if (res && (res?.ok || res?.Ok)) {
-          //   toast.success(
-          //     `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
-          //   );
-          // } else {
-          //   console.log("error", res);
-          // }
-        })
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-    withdraw_post();
-  }, []);
 
   const withdrawPostFn = async (amount: number) => {
     try {
@@ -94,38 +50,17 @@ const WithdrawOverlay = (props: Props) => {
       const singlePost = await getSingleMainPost(props.postId);
       console.log("singlePost", singlePost);
 
-      let amnt: number = Number(amount * Math.pow(10, 8));
-      let integerAmnt = parseInt(amnt.toString(), 10);
-
-      console.log("postId", props.postId);
-      console.log("withdraw amount", amnt);
-      console.log("withdraw amntInteger", integerAmnt);
-      const res = (await backend.withdrawPost(props.postId, integerAmnt)) as BackendResponse;
-      console.log("withdraw res", res);
-
-      if (res && (res?.ok || res?.Ok)) {
+      const data = await withdrawPost(props.postId, amount);
+      const singlePost2 = await getSingleMainPost(props.postId);
+      console.log("singlePost2", singlePost2);
+      if (data.status === true) {
+        props.getPosts();
         toast.success(
           `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
         );
       } else {
-        console.log("error", res);
+        toast.error(data.err);
       }
-
-      // const data = await withdrawPost(props.postId, amount);
-      // const singlePost2 = await getSingleMainPost(props.postId);
-      // console.log("singlePost2", singlePost2);
-      // if (data.status === true) {
-      //   const singlePost = await getSingleMainPost(props.postId);
-      //   console.log("singlePost", singlePost);
-
-      //   const data = props.getPosts();
-      //   console.log(data);
-      //   toast.success(
-      //     `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
-      //   );
-      // } else {
-      //   toast.error(data.err);
-      // }
     } catch (error) {
       console.error("Error withdrawing post:", error);
       toast.error("An error occurred while withdrawing the post.");
