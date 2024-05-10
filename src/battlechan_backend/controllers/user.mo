@@ -17,9 +17,9 @@ module {
             Debug.trap(reject.outBound);
         };
 
-        // if (anonymousCheck(userId) == true) {
-        //     Debug.trap(reject.anonymous);
-        // };
+        if (anonymousCheck(userId) == true) {
+            Debug.trap(reject.anonymous);
+        };
 
         switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
             case (?value) { Debug.trap(reject.alreadyExist) };
