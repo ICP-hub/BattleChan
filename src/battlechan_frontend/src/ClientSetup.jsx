@@ -18,6 +18,7 @@ const client = createClient({
 client.on("connect", async () => {
     // Connected
     console.log("connected");
+    console.log("Actors", client.actors);
     console.log(client.status);
     console.log(client.principal);
     console.log(client._service);
@@ -26,7 +27,7 @@ client.on("connect", async () => {
     console.log("anonymousActors", client.anonymousActors);
 })
 
-console.log(client.actors);
+console.log("Actors", client.actors);
 console.log("status", client.status);
 console.log("anonymousActors", client.anonymousActors);
 

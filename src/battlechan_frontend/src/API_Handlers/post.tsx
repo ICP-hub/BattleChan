@@ -114,7 +114,7 @@ const PostApiHanlder = () => {
         chunkSize,
         boardName.toLocaleLowerCase()
       );
-      console.log("main posts", res);
+      console.log("postFilter", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -152,6 +152,7 @@ const PostApiHanlder = () => {
         chunkSize,
         boardName.toLocaleLowerCase()
       );
+      console.log("ArchivePostFilter", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);

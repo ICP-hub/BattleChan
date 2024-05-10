@@ -1,7 +1,7 @@
 import React from "react";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import toast from "react-hot-toast";
-
+import PostApiHanlder from "../../../API_Handlers/post";
 type Props = {
   display: boolean;
   setProfilePopUp: any;
@@ -18,6 +18,7 @@ const WithdrawOverlay = (props: Props) => {
   const [amount, setAmount] = React.useState(0);
   const className = "WithdrawOverlay";
   const { withdrawPost } = TokensApiHanlder();
+  const { getSingleMainPost } = PostApiHanlder();
 
   const handleClosePopup = () => {
     props.setProfilePopUp(false);
@@ -40,7 +41,11 @@ const WithdrawOverlay = (props: Props) => {
       const data = await withdrawPost(props.postId, amount);
 
       if (data.status === true) {
-        props.getPosts();
+        const singlePost = await getSingleMainPost(props.postId);
+        console.log(singlePost);
+
+        const data = props.getPosts();
+        console.log(data);
         toast.success(
           `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
         );
@@ -60,8 +65,7 @@ const WithdrawOverlay = (props: Props) => {
       className={
         className +
         " " +
-        `${
-          props.display ? "block" : "hidden"
+        `${props.display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}

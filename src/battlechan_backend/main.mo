@@ -52,12 +52,12 @@ actor BattleChan {
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
   // mainnet
-  let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
-  let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
+  // let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
+  // let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
 
   //testnet
-  // let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
-  // let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
+  let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+  let backendCanisterId = Principal.fromText("br5f7-7uaaa-aaaaa-qaaca-cai");
 
   let ledger = actor (tokenCanisterId) : Token.Token;
 
