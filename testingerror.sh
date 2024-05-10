@@ -10,47 +10,47 @@ dfx identity use default
 
 # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 # dfx canister call backend getUserInfo
-# dfx canister call backend createNewBoard '("tester", "abxc")'
-# 
-# dfx canister call backend createPost '("tester", record {postName = "postName"; postDes = "postDescription"; postMetaData = vec {12; 34; 56}})'
+dfx canister call backend createNewBoard '("tester", "abxc")'
+
+dfx canister call backend createPost '("tester", record {postName = "postName"; postDes = "postDescription"; postMetaData = vec {12; 34; 56}})'
 # dfx canister call backend getAllPosts
 
 
-dfx canister call backend getPostInfo '("#1067489291")'
+# dfx canister call backend getPostInfo '("#3416953136")'
 
 
-dfx identity use minter 
-dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
-dfx canister call backend getUserInfo
-dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
-dfx canister call backend getPostInfo '("#1067489291")'
+# dfx identity use minter 
+# # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
+# dfx canister call backend getUserInfo
+# dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"br5f7-7uaaa-aaaaa-qaaca-cai\"}})"
+# dfx canister call backend upvoteOrDownvotePost '("#3416953136", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#3416953136")'
 
 
-dfx identity use  testing
-dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
-dfx canister call backend getUserInfo
-dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
-dfx canister call backend getPostInfo '("#1067489291")'
+# dfx identity use  testing
+# # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
+# dfx canister call backend getUserInfo
+# dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"br5f7-7uaaa-aaaaa-qaaca-cai\"}})"
+# dfx canister call backend upvoteOrDownvotePost '("#3416953136", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#3416953136")'
 
 
-dfx identity use  reciever
-dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
-dfx canister call backend getUserInfo
-dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
-dfx canister call backend getPostInfo '("#1067489291")'
+# dfx identity use  reciever
+# # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
+# dfx canister call backend getUserInfo
+# dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"br5f7-7uaaa-aaaaa-qaaca-cai\"}})"
+# dfx canister call backend upvoteOrDownvotePost '("#3416953136", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#3416953136")'
 
-dfx canister call backend createComment '("#1067489291","sample")';
-
-
-
-# dfx identity use anonymous
+# dfx canister call backend createComment '("#3416953136","sample")';
 
 
-# dfx canister call backend withdrawPost '("#1067489291",1)'
-# dfx canister call backend getPostInfo '("#1067489291")'
+
+# dfx identity use default
+
+
+# dfx canister call backend withdrawPost '("#3416953136",1)'
+# dfx canister call backend getPostInfo '("#3416953136")'
 
 # dfx canister call backend postFilter '(variant {upvote}, 1,10 , "sample")'
 
@@ -66,8 +66,8 @@ dfx canister call backend createComment '("#1067489291","sample")';
 # dfx identity use  testing
 # dfx canister call backend getUserInfo
 # dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-# dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
-# dfx canister call backend getPostInfo '("#1067489291")'
+# dfx canister call backend upvoteOrDownvotePost '("#3416953136", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#3416953136")'
 
 
 
@@ -75,5 +75,5 @@ dfx canister call backend createComment '("#1067489291","sample")';
 # dfx identity use  receiver
 # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 # dfx canister call backend getUserInfo
-# dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
-# dfx canister call backend getPostInfo '("#1067489291")'
+# dfx canister call backend upvoteOrDownvotePost '("#3416953136", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#3416953136")'

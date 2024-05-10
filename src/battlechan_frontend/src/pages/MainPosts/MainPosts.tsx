@@ -138,9 +138,9 @@ const MainPosts = (props: Theme) => {
   };
 
   useEffect(() => {
-    async function getTotalPosts() {
+    async function getTotalPosts(boardName: string) {
       try {
-        const response = (await getTotalCounts()) as TotalCountsResponse;
+        const response = (await getTotalCounts(boardName)) as TotalCountsResponse;
         console.log("counts", response);
         if (props.type == "archive") {
           setTotalPosts(response?.archivePostCounts);
@@ -155,8 +155,8 @@ const MainPosts = (props: Theme) => {
         console.error("Error fetching total posts:", error);
       }
     }
-    getTotalPosts();
-  }, []);
+    getTotalPosts(selectedBoard);
+  }, [selectedBoard]);
 
   useEffect(() => {
     const fetchData = async () => {

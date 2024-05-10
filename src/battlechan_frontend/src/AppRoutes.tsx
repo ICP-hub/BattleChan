@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Loader from "./components/Loader/Loader";
 import { useClient, useConnect } from "@connect2ic/react";
-
+import toast from "react-hot-toast";
 
 const DashboardRoutes = lazy(() => import("./pages/Routes"));
 const Landing = lazy(() => import("./pages/Landing/Landing"));
