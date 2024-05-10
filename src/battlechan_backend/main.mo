@@ -52,12 +52,12 @@ actor BattleChan {
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
   // mainnet
-  // let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
-  // let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
+  let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
+  let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
 
   //testnet
-  let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
-  let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
+  // let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+  // let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
   let ledger = actor (tokenCanisterId) : Token.Token;
 
@@ -986,20 +986,36 @@ actor BattleChan {
     return { data = ?postDataAll; status = true; error = null };
   };
 
-  public query func totalPostsInBoard(boardName : Types.BoardName) : async Types.Result_1<Nat> {
+  public query func totalPostsInBoard(boardName : Types.BoardName) : async Types.Result_1<{archivedpostcount:Nat ; activepostcount:Nat;}> {
     let boardId = toBoardId(boardName);
     let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
-
+    var archived_count : Nat = 0;
     let postMap = TrieMap.fromEntries<Types.BoardName, [Types.PostId]>(allPosts.vals(), Text.equal, Text.hash);
+    let archivedPostsList = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
+    var archivedPost = List.nil<(Types.PostId, Types.PostInfo)>();
+    for (list in archivedPostsList.vals()) {
+      archivedPost := List.append<(Types.PostId, Types.PostInfo)>(archivedPost, list);
+    };
+
+    for (post in List.toArray(archivedPost).vals()) {
+      if (post.1.board == boardName) {
+        archived_count := archived_count + 1;
+      };
+    };
 
     switch (postMap.get(boardId)) {
       case (null) {
-        return { data = null; status = true; error = null };
+        return { data = ?{archivedpostcount=0;activepostcount=0}; status = true; error = null };
       };
       case (?postIds) {
         let postIdsArray = Array.foldLeft<Types.PostId, [Types.PostId]>(postIds, [], func(ids, id) = Array.append<Types.PostId>(ids, [id]));
         let postCount = Array.size<Types.PostId>(postIdsArray);
-        return { data = ?postCount; status = true; error = null };
+        let totalData = {
+          archivedpostcount=archived_count;
+          activepostcount=postCount;
+        };
+        
+        return { data = ?totalData; status = true; error = null };
       };
     };
   };
