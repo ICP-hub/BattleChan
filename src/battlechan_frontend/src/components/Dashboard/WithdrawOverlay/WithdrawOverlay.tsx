@@ -2,6 +2,12 @@ import React from "react";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import toast from "react-hot-toast";
 import PostApiHanlder from "../../../API_Handlers/post";
+import { useCanister } from "@connect2ic/react";
+
+const useBackend = () => {
+  return useCanister("backend");
+};
+
 type Props = {
   display: boolean;
   setProfilePopUp: any;
@@ -14,7 +20,16 @@ interface Response {
   err: string;
 }
 
+interface BackendResponse {
+  ok: string;
+  Ok: string;
+  err: {
+      [key: string]: string;
+  };
+}
+
 const WithdrawOverlay = (props: Props) => {
+  const [backend, canisterId] = useBackend();
   const [amount, setAmount] = React.useState(0);
   const className = "WithdrawOverlay";
   const { withdrawPost } = TokensApiHanlder();
@@ -40,22 +55,39 @@ const WithdrawOverlay = (props: Props) => {
 
       const singlePost = await getSingleMainPost(props.postId);
       console.log("singlePost", singlePost);
-      
-      const data = await withdrawPost(props.postId, amount);
-      const singlePost2 = await getSingleMainPost(props.postId);
-      console.log("singlePost2", singlePost2);
-      if (data.status === true) {
-        const singlePost = await getSingleMainPost(props.postId);
-        console.log("singlePost", singlePost);
 
-        const data = props.getPosts();
-        console.log(data);
+      let amnt: number = Number(amount * Math.pow(10, 8));
+      let integerAmnt = parseInt(amnt.toString(), 10);
+
+      console.log("postId", props.postId);
+      console.log("withdraw amount", amnt);
+      console.log("withdraw amntInteger", integerAmnt);
+      const res = (await backend.withdrawPost(props.postId, integerAmnt)) as BackendResponse;
+      console.log("withdraw res", res);
+
+      if (res && (res?.ok || res?.Ok)) {
         toast.success(
           `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
         );
       } else {
-        toast.error(data.err);
+        console.log("error", res);
       }
+
+      // const data = await withdrawPost(props.postId, amount);
+      // const singlePost2 = await getSingleMainPost(props.postId);
+      // console.log("singlePost2", singlePost2);
+      // if (data.status === true) {
+      //   const singlePost = await getSingleMainPost(props.postId);
+      //   console.log("singlePost", singlePost);
+
+      //   const data = props.getPosts();
+      //   console.log(data);
+      //   toast.success(
+      //     `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
+      //   );
+      // } else {
+      //   toast.error(data.err);
+      // }
     } catch (error) {
       console.error("Error withdrawing post:", error);
       toast.error("An error occurred while withdrawing the post.");
