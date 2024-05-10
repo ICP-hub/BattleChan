@@ -990,6 +990,7 @@ actor BattleChan {
     let boardId = toBoardId(boardName);
     let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
     var archived_count : Nat = 0;
+    //count of archived
     let postMap = TrieMap.fromEntries<Types.BoardName, [Types.PostId]>(allPosts.vals(), Text.equal, Text.hash);
     let archivedPostsList = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
     var archivedPost = List.nil<(Types.PostId, Types.PostInfo)>();
@@ -1002,7 +1003,7 @@ actor BattleChan {
         archived_count := archived_count + 1;
       };
     };
-
+    //count of active post
     switch (postMap.get(boardId)) {
       case (null) {
         return { data = ?{archivedpostcount=0;activepostcount=0}; status = true; error = null };
