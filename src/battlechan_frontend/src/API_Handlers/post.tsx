@@ -173,6 +173,7 @@ const PostApiHanlder = () => {
   const getSingleMainPost = async (postId: string) => {
     try {
       const res = await backend.getPostInfo(postId);
+      console.log("getPostInfo", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);

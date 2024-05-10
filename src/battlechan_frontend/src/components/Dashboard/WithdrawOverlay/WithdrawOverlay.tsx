@@ -38,11 +38,15 @@ const WithdrawOverlay = (props: Props) => {
         confirmBtn.innerHTML = "<span class='small_loader'></span>";
       }
 
+      const singlePost = await getSingleMainPost(props.postId);
+      console.log("singlePost", singlePost);
+      
       const data = await withdrawPost(props.postId, amount);
-
+      const singlePost2 = await getSingleMainPost(props.postId);
+      console.log("singlePost2", singlePost2);
       if (data.status === true) {
         const singlePost = await getSingleMainPost(props.postId);
-        console.log(singlePost);
+        console.log("singlePost", singlePost);
 
         const data = props.getPosts();
         console.log(data);
