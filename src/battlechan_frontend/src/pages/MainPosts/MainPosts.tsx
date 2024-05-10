@@ -98,6 +98,30 @@ const MainPosts = (props: Theme) => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
+  // const formatTime = (remainingTime: bigint) => {
+  //   const seconds = Math.floor(Number(remainingTime) / 1e9);
+  //   const minutes = Math.floor(seconds / 60);
+  //   const remainingSeconds = seconds % 60;
+
+  //   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  // };
+
+  // const interval = setInterval(() => {
+  //   const currentTime = BigInt(Date.now()) * BigInt(1000000);
+  //   const remainingTime = Number(4284742663020955669n) - Number(currentTime);
+  //   console.log(currentTime)
+  //   console.log(remainingTime);
+  //   console.log(formatTime(BigInt(remainingTime)));
+    
+  //   if (remainingTime <= 0) {
+  //     clearInterval(interval);
+  //     console.log("archive");
+  //   } else {
+  //     console.log(formatTime(BigInt(remainingTime)));
+  //   }
+  // }, 1000);
+  
+
   const { convertNanosecondsToTimestamp } = Constant();
   const {
     createPost,
@@ -114,14 +138,14 @@ const MainPosts = (props: Theme) => {
   };
 
   useEffect(() => {
-    async function getTotalPosts() {
+    async function getTotalPosts(boardName: string) {
       try {
-        const response = (await getTotalCounts()) as TotalCountsResponse;
+        const response = (await getTotalCounts(boardName)) as TotalCountsResponse;
         console.log("counts", response);
         if (props.type == "archive") {
           setTotalPosts(response?.archivePostCounts);
-        } else if(props.type === "searchPosts"){
-          if(props.searchPosts){
+        } else if (props.type === "searchPosts") {
+          if (props.searchPosts) {
             setTotalPosts(props.searchPosts?.length)
           }
         } else {
@@ -131,8 +155,8 @@ const MainPosts = (props: Theme) => {
         console.error("Error fetching total posts:", error);
       }
     }
-    getTotalPosts();
-  }, []);
+    getTotalPosts(selectedBoard);
+  }, [selectedBoard]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,9 +228,9 @@ const MainPosts = (props: Theme) => {
   useEffect(() => {
     if (props.type == "archive") {
       getPosts("archive");
-    } else if(props.type === 'searchPosts'){
+    } else if (props.type === 'searchPosts') {
       console.log("search posts here")
-      if(props.searchPosts){
+      if (props.searchPosts) {
         const posts = props.searchPosts;
         posts.forEach((element) => {
           const timestamp: string = convertNanosecondsToTimestamp(
@@ -388,9 +412,8 @@ const MainPosts = (props: Theme) => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${
-                      activeSelection === "Recent" ? "bg-[#295A31]" : ""
-                    }`}
+                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${activeSelection === "Recent" ? "bg-[#295A31]" : ""
+                      }`}
                     onClick={() => handleSelection("Recent")}
                   >
                     Recent
@@ -399,9 +422,8 @@ const MainPosts = (props: Theme) => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${
-                      activeSelection === "Upvote" ? "bg-[#295A31]" : ""
-                    }`}
+                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${activeSelection === "Upvote" ? "bg-[#295A31]" : ""
+                      }`}
                     onClick={() => handleSelection("Upvote")}
                   >
                     Upvote
@@ -410,9 +432,8 @@ const MainPosts = (props: Theme) => {
                 <li>
                   <a
                     href="javascript:void(0)"
-                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${
-                      activeSelection === "Downvote" ? "bg-[#295A31]" : ""
-                    }`}
+                    className={`block px-4 py-2 text-[10px] tablet:text-base text-light ${activeSelection === "Downvote" ? "bg-[#295A31]" : ""
+                      }`}
                     onClick={() => handleSelection("Downvote")}
                   >
                     Downvote

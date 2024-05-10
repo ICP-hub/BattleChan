@@ -335,10 +335,10 @@ actor BattleChan {
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
     // Debug.print(debug_show (userId));
-    if (anonymousCheck(userId) == true) {
-      return { data = null; status = false; error = ?"Error! No user Exist" };
+    // if (anonymousCheck(userId) == true) {
+    //   return { data = null; status = false; error = ?"Error! No user Exist" };
 
-    };
+    // };
 
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {
@@ -501,7 +501,6 @@ actor BattleChan {
     };
     return { data = ?paginatedCommentInfo[pageNo]; status = true; error = null };
   };
-
 
   public shared query ({ caller = userId }) func getAllRepliesOfArchivedPost(commentId : Types.CommentId, chunk_size : Nat, pageNo : Nat) : async Types.Result_1<[Types.ReplyInfo]> {
     let postId = getPostIdFromCommentId(commentId);
@@ -809,7 +808,6 @@ actor BattleChan {
     Trie.get(boardTrieMap, textKey boardName, Text.equal);
   };
 
-
   public shared query ({ caller = userId }) func listCommentersReward() : async Types.Result_1<[Types.CommentRewards]> {
     let userInfo : Types.UserInfo = switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (?value) { value };
@@ -905,7 +903,6 @@ actor BattleChan {
 
   };
 
-  
   public query func getRecentPost() : async [Types.PostInfo] {
     let postDataAll = Trie.toArray<Text, Types.PostInfo, Types.PostInfo>(postTrieMap, func(k, v) = v);
     var recentPostList = List.nil<Types.PostInfo>();
@@ -987,6 +984,41 @@ actor BattleChan {
       return { data = null; status = false; error = ?notFound.noData };
     };
     return { data = ?postDataAll; status = true; error = null };
+  };
+
+  public query func totalPostsInBoard(boardName : Types.BoardName) : async Types.Result_1<{archivedpostcount:Nat ; activepostcount:Nat;}> {
+    let boardId = toBoardId(boardName);
+    let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
+    var archived_count : Nat = 0;
+    //count of archived
+    let postMap = TrieMap.fromEntries<Types.BoardName, [Types.PostId]>(allPosts.vals(), Text.equal, Text.hash);
+    let archivedPostsList = Trie.toArray<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>, List.List<(Types.PostId, Types.PostInfo)>>(userAchivedPostTrie, func(k, v) = v);
+    var archivedPost = List.nil<(Types.PostId, Types.PostInfo)>();
+    for (list in archivedPostsList.vals()) {
+      archivedPost := List.append<(Types.PostId, Types.PostInfo)>(archivedPost, list);
+    };
+
+    for (post in List.toArray(archivedPost).vals()) {
+      if (post.1.board == boardName) {
+        archived_count := archived_count + 1;
+      };
+    };
+    //count of active post
+    switch (postMap.get(boardId)) {
+      case (null) {
+        return { data = ?{archivedpostcount=0;activepostcount=0}; status = true; error = null };
+      };
+      case (?postIds) {
+        let postIdsArray = Array.foldLeft<Types.PostId, [Types.PostId]>(postIds, [], func(ids, id) = Array.append<Types.PostId>(ids, [id]));
+        let postCount = Array.size<Types.PostId>(postIdsArray);
+        let totalData = {
+          archivedpostcount=archived_count;
+          activepostcount=postCount;
+        };
+        
+        return { data = ?totalData; status = true; error = null };
+      };
+    };
   };
 
   //  function for the testing

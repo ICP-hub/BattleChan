@@ -64,6 +64,7 @@ const CreatePost = (props: Theme) => {
   const principal_idRef = React.useRef(principal_id);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+  const navigate = useNavigate();
 
   useEffect(() => {
     isUserAuthenticatedRef.current = isUserAuthenticated;
@@ -97,7 +98,6 @@ const CreatePost = (props: Theme) => {
   }, [isUserAuthenticatedRef, principal_idRef]);
 
   const is870px = useMediaQuery("(min-width: 870px)");
-  const navigate = useNavigate();
   const className = "HomePage__CreatePost";
 
   const handleFileInput = async (

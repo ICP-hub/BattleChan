@@ -19,14 +19,14 @@ dfx deploy ledger --argument "(variant {Init =
 record {
      token_symbol = \"time\";
      token_name = \"time_token\";
-     minting_account = record { owner = principal \"wsia5-6ckwa-lx5aq-ky57y-jgniw-ezqy4-5jkes-bjkdd-zneku-c4rvw-dae\" };
+     minting_account = record { owner = principal \"gelwp-gaysy-pgvzl-h3772-nwy6h-iof3r-5ld2o-hvd7r-6cfg4-i5jnb-bqe\" };
      transfer_fee = 100;
      metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"pnzx2-eiaaa-aaaak-qcnuq-cai\"; }; 1000000000000000000 }; };
+     initial_balances = vec { record { record { owner = principal \"gelwp-gaysy-pgvzl-h3772-nwy6h-iof3r-5ld2o-hvd7r-6cfg4-i5jnb-bqe\"; }; 1000000000000000000 }; };
      archive_options = record {
          num_blocks_to_archive = 1000000000;
          trigger_threshold = 1000000000;
-         controller_id = principal \"rzo6e-othar-as4dz-5dm3l-5mlxo-q7w3x-5ol3f-74pvr-s2mbw-vdigk-yae\";
+         controller_id = principal \"gelwp-gaysy-pgvzl-h3772-nwy6h-iof3r-5ld2o-hvd7r-6cfg4-i5jnb-bqe\";
      };
      feature_flags = opt record {icrc2 = true;};
  }

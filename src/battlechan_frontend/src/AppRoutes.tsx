@@ -3,8 +3,8 @@ import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Loader from "./components/Loader/Loader";
-import { useConnect } from "@connect2ic/react";
-
+import { useClient, useConnect } from "@connect2ic/react";
+import toast from "react-hot-toast";
 
 const DashboardRoutes = lazy(() => import("./pages/Routes"));
 const Landing = lazy(() => import("./pages/Landing/Landing"));
@@ -17,23 +17,22 @@ const CreatePost = lazy(() => import("./pages/CreatePost/CreatePost"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage/DashboardPage"));
 
 interface AppRoutesProps {
-  handleThemeSwitch: () => void; 
+  handleThemeSwitch: () => void;
 }
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
-  let { isConnected, principal, isIdle, isInitializing } = useConnect();
+  let { isConnected, principal } = useConnect();
   const [allow, setAllow] = useState<null | boolean>(null);
-  console.log("isInitializing in AppRoutes: ", isInitializing)
   console.log("Principla in App routes: ", principal)
 
   console.log(isConnected);
   console.log(principal);
   useEffect(() => {
-    if (isInitializing == false) {
-      console.log("principal after isInitializing is false: ", principal)
+    if (isConnected == true) {
+      console.log("isConnected is true: ", principal)
       setAllow(principal ? true : false);
     }
-  }, [principal, isInitializing]);
+  }, [principal, isConnected]);
 
   return (
     <Routes>

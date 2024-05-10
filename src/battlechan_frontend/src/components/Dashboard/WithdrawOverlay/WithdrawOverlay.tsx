@@ -1,6 +1,7 @@
 import React from "react";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import toast from "react-hot-toast";
+import PostApiHanlder from "../../../API_Handlers/post";
 
 type Props = {
   display: boolean;
@@ -14,10 +15,19 @@ interface Response {
   err: string;
 }
 
+interface BackendResponse {
+  ok: string;
+  Ok: string;
+  err: {
+    [key: string]: string;
+  };
+}
+
 const WithdrawOverlay = (props: Props) => {
   const [amount, setAmount] = React.useState(0);
   const className = "WithdrawOverlay";
   const { withdrawPost } = TokensApiHanlder();
+  const { getSingleMainPost } = PostApiHanlder();
 
   const handleClosePopup = () => {
     props.setProfilePopUp(false);
@@ -37,8 +47,12 @@ const WithdrawOverlay = (props: Props) => {
         confirmBtn.innerHTML = "<span class='small_loader'></span>";
       }
 
-      const data = await withdrawPost(props.postId, amount);
+      const singlePost = await getSingleMainPost(props.postId);
+      console.log("singlePost", singlePost);
 
+      const data = await withdrawPost(props.postId, amount);
+      const singlePost2 = await getSingleMainPost(props.postId);
+      console.log("singlePost2", singlePost2);
       if (data.status === true) {
         props.getPosts();
         toast.success(
@@ -60,8 +74,7 @@ const WithdrawOverlay = (props: Props) => {
       className={
         className +
         " " +
-        `${
-          props.display ? "block" : "hidden"
+        `${props.display ? "block" : "hidden"
         } z-20 fixed top-0 left-0 w-full h-full bg-black backdrop-blur-md flex items-center justify-center`
       }
       onClick={handleClosePopup}
@@ -79,6 +92,7 @@ const WithdrawOverlay = (props: Props) => {
         <input
           type="number"
           name="amount"
+          id="amount"
           min={1}
           placeholder="Enter Amount"
           className="rounded-[3rem] p-2 text-dark"

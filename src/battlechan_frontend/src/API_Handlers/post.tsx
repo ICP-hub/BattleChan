@@ -1,10 +1,8 @@
 import { useCanister } from "@connect2ic/react";
 
 interface Counts {
-  postData: bigint;
-  userAchivedPostData: bigint;
-  userData: bigint;
-  withdrawPost: bigint;
+  activepostcount: number;
+  archivedpostcount: number;
 }
 
 interface TotalCounts {
@@ -114,7 +112,7 @@ const PostApiHanlder = () => {
         chunkSize,
         boardName.toLocaleLowerCase()
       );
-      console.log("main posts", res);
+      // console.log("postFilter", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -132,7 +130,7 @@ const PostApiHanlder = () => {
   const getRecentPosts = async () => {
     try {
       const res = (await backend.getRecentPost()) as PostInfo[];
-      console.log("res recent: ", res);
+      // console.log("res recent: ", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -152,6 +150,7 @@ const PostApiHanlder = () => {
         chunkSize,
         boardName.toLocaleLowerCase()
       );
+      // console.log("ArchivePostFilter", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -161,6 +160,8 @@ const PostApiHanlder = () => {
   const archivePost = async (postId: string) => {
     try {
       const res = await backend.archivePost(postId);
+      console.log("function call ArchivePost");
+      console.log(res);
       return res;
     } catch (err) {
       console.error("Error archiving a post : ", err);
@@ -170,6 +171,7 @@ const PostApiHanlder = () => {
   const getSingleMainPost = async (postId: string) => {
     try {
       const res = await backend.getPostInfo(postId);
+      // console.log("getPostInfo", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);
@@ -207,19 +209,21 @@ const PostApiHanlder = () => {
     }
   };
 
-  const getTotalCounts = async () => {
+  const getTotalCounts = async (boardName: string) => {
     try {
       let res = {
         mainPostCounts: 0,
         archivePostCounts: 0,
       } as TotalCountsResponse;
-      const totalCounts = (await backend.getTotalCounts()) as TotalCounts;
-
+      const totalCounts = (await backend.totalPostsInBoard(boardName.toLocaleLowerCase())) as TotalCounts;
+      // console.log("totalCounts", totalCounts);
       if (totalCounts && totalCounts?.data) {
         const counts = totalCounts.data.flat();
-        res.mainPostCounts = Number(counts[0]?.postData);
-        res.archivePostCounts = Number(counts[0]?.userAchivedPostData);
+        res.mainPostCounts = Number(counts[0]?.activepostcount);
+        res.archivePostCounts = Number(counts[0]?.archivedpostcount);
       }
+
+      // console.log("totalPostsInBoard", res);
       return res;
     } catch (err) {
       console.error("Error: ", err);

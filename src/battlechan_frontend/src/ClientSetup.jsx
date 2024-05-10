@@ -1,23 +1,26 @@
 
 import React from 'react';
 import { createClient } from "@connect2ic/core";
-import { InternetIdentity } from "@connect2ic/core/providers";
-import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
+import { InternetIdentity, NFID, InfinityWallet } from "@connect2ic/core/providers";
 import { Connect2ICProvider } from "@connect2ic/react";
-import * as backend from "../../declarations/backend/index";
-import * as ledger from "../../declarations/ledger/index";
+import * as backend from "../../declarations/backend";
+import * as ledger from "../../declarations/ledger";
 
 const client = createClient({
     canisters: {
         backend,
         ledger
     },
-    providers: [new InternetIdentity(), new PlugWallet()],
+    providers: [new InternetIdentity(), new NFID(), new InfinityWallet()],
+    globalProviderConfig: {
+        dev: import.meta.env.DEV,
+    },
 });
 
 client.on("connect", async () => {
     // Connected
     console.log("connected");
+    console.log("Actors", client.actors);
     console.log(client.status);
     console.log(client.principal);
     console.log(client._service);
@@ -26,7 +29,7 @@ client.on("connect", async () => {
     console.log("anonymousActors", client.anonymousActors);
 })
 
-console.log(client.actors);
+console.log("Actors", client.actors);
 console.log("status", client.status);
 console.log("anonymousActors", client.anonymousActors);
 
