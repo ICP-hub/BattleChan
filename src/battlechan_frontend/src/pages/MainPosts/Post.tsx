@@ -122,9 +122,9 @@ const Post: React.FC<PostProps> = ({
       const currentTime = BigInt(Date.now()) * BigInt(1000000);
       const remainingTime = Number(expireAt) - Number(currentTime);
 
-      console.log("currentTime", currentTime);
-      console.log("expireAt", Number(expireAt));
-      console.log("remainingTime", remainingTime);
+      // console.log("currentTime", currentTime);
+      // console.log("expireAt", Number(expireAt));
+      // console.log("remainingTime", remainingTime);
       if (remainingTime <= 0) {
         clearInterval(interval);
         setTime("0:00");

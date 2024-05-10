@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TokensApiHanlder from "../../../API_Handlers/tokens";
 import toast from "react-hot-toast";
 import PostApiHanlder from "../../../API_Handlers/post";
@@ -24,7 +24,7 @@ interface BackendResponse {
   ok: string;
   Ok: string;
   err: {
-      [key: string]: string;
+    [key: string]: string;
   };
 }
 
@@ -42,6 +42,44 @@ const WithdrawOverlay = (props: Props) => {
   const handleWithdrawButton = (amount: number) => {
     withdrawPostFn(amount);
   };
+
+  useEffect(() => {
+    async function withdraw_post() {
+      try {
+        const confirmBtn = document.getElementById("confirmBtn");
+        confirmBtn?.addEventListener("click", async () => {
+          const amountInput = document.getElementById("amount") as HTMLInputElement;
+          const amountValue = parseInt(amountInput.value);
+
+          if (isNaN(amountValue)) {
+            console.log("Invalid amount entered");
+            return;
+          }
+          console.log("HERE");
+          withdrawPostFn(amountValue);
+          // let amnt: number = Number(amount || 0 * Math.pow(10, 8));
+          // let integerAmnt = parseInt(amnt.toString(), 10);
+
+          // console.log("postId", props.postId);
+          // console.log("withdraw amount", amnt);
+          // console.log("withdraw amntInteger", integerAmnt);
+          // const res = (await backend.withdrawPost(props.postId, integerAmnt)) as BackendResponse;
+          // console.log("withdraw res", res);
+
+          // if (res && (res?.ok || res?.Ok)) {
+          //   toast.success(
+          //     `Successfully Withdrawn ${amount} Tokens from Post: ${props.postId}`
+          //   );
+          // } else {
+          //   console.log("error", res);
+          // }
+        })
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    withdraw_post();
+  }, []);
 
   const withdrawPostFn = async (amount: number) => {
     try {
@@ -119,6 +157,7 @@ const WithdrawOverlay = (props: Props) => {
         <input
           type="number"
           name="amount"
+          id="amount"
           min={1}
           placeholder="Enter Amount"
           className="rounded-[3rem] p-2 text-dark"

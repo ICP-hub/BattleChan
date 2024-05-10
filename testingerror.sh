@@ -46,13 +46,13 @@ dfx canister call backend createComment '("#1067489291","sample")';
 
 
 
-dfx identity use anonymous
+# dfx identity use anonymous
 
 
-dfx canister call backend withdrawPost '("#1067489291",1)'
-dfx canister call backend getPostInfo '("#1067489291")'
+# dfx canister call backend withdrawPost '("#1067489291",1)'
+# dfx canister call backend getPostInfo '("#1067489291")'
 
-dfx canister call backend postFilter '(variant {upvote}, 1,10 , "sample")'
+# dfx canister call backend postFilter '(variant {upvote}, 1,10 , "sample")'
 
 
 
