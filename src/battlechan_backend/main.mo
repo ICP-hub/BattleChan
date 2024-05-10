@@ -57,7 +57,7 @@ actor BattleChan {
 
   //testnet
   let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
-  let backendCanisterId = Principal.fromText("br5f7-7uaaa-aaaaa-qaaca-cai");
+  let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
   let ledger = actor (tokenCanisterId) : Token.Token;
 
@@ -335,10 +335,10 @@ actor BattleChan {
 
   public shared query ({ caller = userId }) func getUserInfo() : async Types.Result_1<Types.UserInfo> {
     // Debug.print(debug_show (userId));
-    if (anonymousCheck(userId) == true) {
-      return { data = null; status = false; error = ?"Error! No user Exist" };
+    // if (anonymousCheck(userId) == true) {
+    //   return { data = null; status = false; error = ?"Error! No user Exist" };
 
-    };
+    // };
 
     switch (Trie.get(userTrieMap, principalKey userId, Principal.equal)) {
       case (null) {

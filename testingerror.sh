@@ -1,3 +1,6 @@
+
+# vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe
+# dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe\" }; amount = 1000000000000000000 })"
 dfx identity use default
 
 # dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"hdyut-lwweb-zxdhi-le3sy-33e4m-qcavd-6dxiy-6egds-c32xp-5hxv4-zqe\" }; amount = 1000000000000000000 })" 
@@ -13,39 +16,44 @@ dfx identity use default
 # dfx canister call backend getAllPosts
 
 
-dfx canister call backend getPostInfo '("#1935039877")'
+dfx canister call backend getPostInfo '("#1067489291")'
 
 
 dfx identity use minter 
 dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 dfx canister call backend getUserInfo
 dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-dfx canister call backend upvoteOrDownvotePost '("#1935039877", variant { upvote  })'
-dfx canister call backend getPostInfo '("#1935039877")'
+dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
+dfx canister call backend getPostInfo '("#1067489291")'
 
 
 dfx identity use  testing
 dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 dfx canister call backend getUserInfo
 dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-dfx canister call backend upvoteOrDownvotePost '("#1935039877", variant { upvote  })'
-dfx canister call backend getPostInfo '("#1935039877")'
+dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
+dfx canister call backend getPostInfo '("#1067489291")'
 
 
 dfx identity use  reciever
 dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 dfx canister call backend getUserInfo
 dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-dfx canister call backend upvoteOrDownvotePost '("#1935039877", variant { upvote  })'
-dfx canister call backend getPostInfo '("#1935039877")'
+dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
+dfx canister call backend getPostInfo '("#1067489291")'
 
-dfx canister call backend createComment '("#1935039877","sample")';
+dfx canister call backend createComment '("#1067489291","sample")';
 
 
 
-dfx identity use default
+dfx identity use anonymous
 
-dfx canister call backend withdrawPost '("#1935039877",1)'
+
+dfx canister call backend withdrawPost '("#1067489291",1)'
+dfx canister call backend getPostInfo '("#1067489291")'
+
+dfx canister call backend postFilter '(variant {upvote}, 1,10 , "sample")'
+
 
 
 
@@ -58,8 +66,8 @@ dfx canister call backend withdrawPost '("#1935039877",1)'
 # dfx identity use  testing
 # dfx canister call backend getUserInfo
 # dfx canister call ledger icrc2_approve "(record {fee = opt 100 ; amount = 10000000000 ; spender = record {owner = principal \"be2us-64aaa-aaaaa-qaabq-cai\"}})"
-# dfx canister call backend upvoteOrDownvotePost '("#1935039877", variant { upvote  })'
-# dfx canister call backend getPostInfo '("#1935039877")'
+# dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#1067489291")'
 
 
 
@@ -67,5 +75,5 @@ dfx canister call backend withdrawPost '("#1935039877",1)'
 # dfx identity use  receiver
 # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 # dfx canister call backend getUserInfo
-# dfx canister call backend upvoteOrDownvotePost '("#1935039877", variant { upvote  })'
-# dfx canister call backend getPostInfo '("#1935039877")'
+# dfx canister call backend upvoteOrDownvotePost '("#1067489291", variant { upvote  })'
+# dfx canister call backend getPostInfo '("#1067489291")'
