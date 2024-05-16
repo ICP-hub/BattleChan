@@ -96,13 +96,13 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
       <Route
         path="/dashboard/analytics/*"
         element={
-          // allow == true ? (
+          allow == true ? (
             <Suspense fallback={<Loader />}>
               <Analytics handleThemeSwitch={handleThemeSwitch} />
             </Suspense>
-          // ) : allow == false ? (
-          //   <Navigate to="/" />
-          // ) : null
+          ) : allow == false ? (
+            <Navigate to="/" />
+          ) : null
         }
       />
       <Route
