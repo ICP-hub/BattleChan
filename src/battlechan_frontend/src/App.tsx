@@ -4,10 +4,11 @@ import "./App.css";
 import "./Connect2ic/Connect2ic.scss";
 
 import { BrowserRouter as Router } from "react-router-dom";
-import AppRoutes from "./AppRoutes"; 
+import AppRoutes from "./AppRoutes";
 import { Toaster } from "react-hot-toast";
-import ClientSetup from "./ClientSetup"; 
+import ClientSetup from "./ClientSetup";
 import { ConnectDialog } from "@connect2ic/react";
+import Layout from "./Layout";
 
 type Theme = "dark" | "light";
 
@@ -34,13 +35,15 @@ function App() {
   }
 
   return (
-    
+
     <Router>
       <Toaster />
       <ConnectDialog />
-      <AppRoutes handleThemeSwitch={handleThemeSwitch} />
+      <Layout handleThemeSwitch={handleThemeSwitch}>
+        <AppRoutes handleThemeSwitch={handleThemeSwitch} />
+      </Layout>
     </Router>
-    
+
   );
 }
 

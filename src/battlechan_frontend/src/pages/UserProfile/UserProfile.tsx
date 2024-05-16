@@ -51,7 +51,6 @@ const UserProfile = (props: Theme) => {
           `min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-[center_top_3rem] bg-contain bg-no-repeat`
         }
       >
-        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
         <div className="hidden tablet:block">
           <NavButtons />

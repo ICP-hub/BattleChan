@@ -84,7 +84,6 @@ const DashboardPage = (props: Theme) => {
 
   return (
     <div className="min-h-screen dark:bg-dark dark:bg-green-gradient bg-[#ECECEC] bg-center-top bg-cover bg-no-repeat">
-      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <NavButtons />
 
       <div className={className + " " + `h-full w-full laptop:py-10 py-5`}>
