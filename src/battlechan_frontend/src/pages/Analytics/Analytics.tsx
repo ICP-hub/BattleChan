@@ -62,7 +62,7 @@ const Analytics = (props: Theme) => {
   const [dislikedPost, setDislikedPost] = React.useState(0);
   const [tokenBalance, setTokenBalance] = React.useState(0);
 
-  const { getBalance } = TokensApiHanlder();
+  const { getBalance, icrc1_transfer } = TokensApiHanlder();
   const { getRewardsOfUser, claimReward } = CommentsApiHanlder();
   const { getUserAnalytics } = UserApiHanlder();
   const { principal, isConnected } = useConnect();
@@ -93,7 +93,10 @@ const Analytics = (props: Theme) => {
 
   const [voteData, setVoteData] = useState<Response | null>(null);
   const [rewardsData, setRewardsData] = useState<RewardsData[] | null>(null);
-
+  const [principalId, setPrincipalId] = React.useState("");
+  const [amount, setAmount] = React.useState(0);
+  const adminPrincipal = "zha44-ywxln-mzci4-u5acw-jrncf-ijud7-t5w63-zfo4b-cypfc-giono-kqe";
+  // const adminPrincipal = "bkvkj-i3f3r-pitry-pzsc3-i5pwi-6pp5q-cnask-xolcl-fxqke-wbf4d-gae";
   const { votesOfUser } = UserApiHanlder();
   const { convertInt8ToBase64 } = Constant();
 
@@ -119,6 +122,7 @@ const Analytics = (props: Theme) => {
   }, []);
 
   const [buttonDisabled, setButtonDisabled] = useState<boolean[]>(Array(rewardsData?.length || 0).fill(false));
+  const [TransferbuttonDisabled, setTransferButtonDisabled] = useState(false);
 
   const handleClaimButtonClick = async (index: number, postId: string) => {
     // Temporarily disable the button
@@ -139,6 +143,32 @@ const Analytics = (props: Theme) => {
     updatedButtonDisabled[index] = false;
     setButtonDisabled(updatedButtonDisabled);
   };
+
+  const handleTransferClick = async (amount: number, principal_id: string) => {
+    setTransferButtonDisabled(true);
+    if (amount == 0) {
+      setTransferButtonDisabled(false);
+      toast.error("Error: Invalid Amount Value!");
+      return null;
+    }
+    if (principal_id == "") {
+      setTransferButtonDisabled(false);
+      toast.error("Error: Invalid Principal ID!");
+      return null;
+    }
+    const response = await icrc1_transfer(principal_id, amount);
+
+    if (response && response?.status == true) {
+      setTransferButtonDisabled(false);
+      toast.success("Successfully Transferred Tokens!");
+    } else {
+      getRewards();
+      setTransferButtonDisabled(false);
+      toast.error(response?.err || "Error: Something went wrong, Please try again later!");
+    }
+  };
+
+
 
   return (
     <>
@@ -389,6 +419,45 @@ const Analytics = (props: Theme) => {
 
             <div>
 
+              {principal && isConnected && principal === adminPrincipal && (
+                <div
+                  key={1}
+                  className="flex items-center justify-between border border-green rounded-[10px] p-3 mt-6"
+                >
+                  <div className="text-sm max-w-60 tablet:max-w-none items-center">
+                    <div>
+                      <input
+                        type="text"
+                        name="principal_id"
+                        placeholder="Principal ID"
+                        onChange={(e) => setPrincipalId(e.target.value)}
+                        className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green  rounded-lg"
+                      />
+                      <input
+                        type="number"
+                        name="amount"
+                        placeholder="Amount"
+                        onChange={(e) => setAmount(Number(e.target.value))}
+                        className="ml-3 py-1 px-4 italic bg-light dark:bg-dark border border-light-green rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center pl-2">
+                    <div className="w-24 h-10">
+                      <button
+                        type="button"
+                        onClick={() => handleTransferClick(amount, principalId)}
+                        disabled={TransferbuttonDisabled}
+                        className={`bg-[#272727] dark:bg-[#c2c2c2] text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+                      >
+                        Transfer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {rewardsData?.map((data, index) => (
                 <div
                   key={index}
@@ -398,7 +467,7 @@ const Analytics = (props: Theme) => {
                     <div>
                       Claim Your Reward of
                       <strong> {data.amount}</strong> Tokens from post Id <strong>{data.postId}</strong>
-                      <br/>
+                      <br />
                       <span className="opacity-75"><i>Comment Likes: {data.likes}</i></span>
                     </div>
                   </div>
