@@ -326,6 +326,7 @@ const CreatePost = (props: Theme) => {
                   name="Change"
                   id="profile"
                   className="hidden"
+                  accept="image/*"
                   onChange={handleFileInput}
                 />
               </React.Fragment>
