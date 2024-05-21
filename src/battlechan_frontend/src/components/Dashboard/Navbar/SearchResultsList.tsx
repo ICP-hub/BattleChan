@@ -27,7 +27,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
             <Link
               key={post.postId}
               // active
-              to={"/dashboard/postDetails/${encodeURIComponent(post.postId)}"}
+              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
             >
               <div
                 key={post.postId}
