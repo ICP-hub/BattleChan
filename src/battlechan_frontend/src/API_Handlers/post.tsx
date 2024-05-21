@@ -215,7 +215,9 @@ const PostApiHanlder = () => {
         mainPostCounts: 0,
         archivePostCounts: 0,
       } as TotalCountsResponse;
-      const totalCounts = (await backend.totalPostsInBoard(boardName.toLocaleLowerCase())) as TotalCounts;
+      const totalCounts = (await backend.totalPostsInBoard(
+        boardName.toLocaleLowerCase()
+      )) as TotalCounts;
       // console.log("totalCounts", totalCounts);
       if (totalCounts && totalCounts?.data) {
         const counts = totalCounts.data.flat();
@@ -256,8 +258,8 @@ const PostApiHanlder = () => {
       console.log("search input received: ", searchInput);
       const res = (await backend.searchPost(searchInput)) as SearchApiResponse;
 
-      // console.log("search response: ", res);
-      return [...res.activePost, ...res.archivedPost];
+      console.log("search response: ", res);
+      return res;
     } catch (err) {
       console.error("Search Post Error: ", err);
       return err;
@@ -265,20 +267,20 @@ const PostApiHanlder = () => {
   };
 
   return {
-    getBoards,
     createPost,
-    upvotePost,
-    archivePost,
-    downvotePost,
-    getMainPosts,
-    getSearchPost,
     getRecentPosts,
-    getTotalCounts,
+    getBoards,
+    getMainPosts,
+    archivePost,
     getArchivePosts,
     getSingleMainPost,
-    getUsersMainPosts,
     getSingleArchivePost,
+    upvotePost,
+    downvotePost,
+    getTotalCounts,
+    getUsersMainPosts,
     getUsersArchivePosts,
+    getSearchPost,
   };
 };
 
