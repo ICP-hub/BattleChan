@@ -15,16 +15,9 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
   activePost,
   archivedPost,
 }) => {
-  const className = "SearchResult";
-
   return (
-    <div className={className}>
-      <div
-        className={
-          className +
-          "__container bg-light absolute left-0 right-0 tablet:top-[8vh] top-[6vh] dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light rounded-xl mt-2 p-2 font-normal"
-        }
-      >
+    <>
+      <div className="bg-light absolute left-0 right-0 tablet:top-[8vh] top-[6vh] dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light rounded-xl mt-2 p-2 font-normal">
         <div
           className={`overflow-y-scroll max-h-52 ${
             activePost.length + archivedPost.length <= 6 ? "no-scrollbar" : ""
@@ -34,7 +27,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
             <Link
               key={post.postId}
               // active
-              to={`/dashboard/postDetails/${encodeURIComponent(post.postId)}`}
+              to={"/dashboard/postDetails/${encodeURIComponent(post.postId)}"}
             >
               <div
                 key={post.postId}
@@ -62,7 +55,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
