@@ -47,7 +47,7 @@ const FAQs = () => {
                     </span>
                     <span
                       onClick={() => setAnserKey(item.index)}
-                      className="flex flex-row items-center gap-2 laptop:ml-8 phone:ml-4 ml-2 laptop:text-base text-sm"
+                      className="flex flex-row items-center gap-2 laptop:ml-8 phone:ml-4 ml-2 mr-2 laptop:text-base text-sm"
                     >
                       {item.question}
                     </span>
