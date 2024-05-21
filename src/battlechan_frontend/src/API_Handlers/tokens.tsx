@@ -17,6 +17,14 @@ interface BackendResponse {
     };
 }
 
+interface icrc1Response {
+    ok: string;
+    Ok: string;
+    err: {
+        [key: string]: string;
+    };
+}
+
 interface Response {
     status: boolean;
     err: string;
@@ -138,8 +146,56 @@ const TokensApiHanlder = () => {
         }
     };
 
+    const icrc1_transfer = async (principal_id: string, amount: number) => {
+        let result = { status: false, err: "" } as Response;
+        try {
+            // dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe\" }; amount = 1000000000000000000 })"
+            let amnt = Number(amount * Math.pow(10, 8));
+            let owner = Principal.fromText(principal_id);
+            let fees = 0;
+            let obj = {
+                fee: [fees],
+                memo: [],
+                from_subaccount: [],
+                created_at_time: [],
+                to: {
+                    owner: owner,
+                    subaccount: []
+                },
+                amount: amnt
+            }
+            console.log("principal_id", principal_id);
+            console.log("amnt", amnt);
+            const res = (await ledger.icrc1_transfer(obj)) as icrc1Response;
+            console.log("ledger res", res);
 
-    return { getBalance, icrc2_approve, withdrawPost };
+            if (res && (res?.ok || res?.Ok)) {
+                result.status = true;
+            } else {
+                result.status = false;
+                const lastIndex = res?.err[1].lastIndexOf(":");
+                const errorMsg = res?.err[1].slice(lastIndex + 2);
+                result.err = errorMsg;
+            }
+            return result;
+        } catch (err) {
+            if (err instanceof Error) {
+                result.status = false;
+                const lastIndex = err.message.lastIndexOf(":");
+                const errorMsg = err.message.slice(lastIndex + 2);
+                result.err = errorMsg;
+                return result;
+            } else {
+                result.status = false;
+                result.err = "Error: Something went wrong, Please try again later!";
+                console.error("Error: ", err);
+                return result;
+            }
+        }
+    };
+
+
+    return { getBalance, icrc2_approve, withdrawPost, icrc1_transfer };
 };
 
 export default TokensApiHanlder;

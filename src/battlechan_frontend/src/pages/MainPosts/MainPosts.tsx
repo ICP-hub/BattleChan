@@ -88,7 +88,7 @@ const MainPosts = (props: Theme) => {
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Recent");
-  const [postsPerPage, setPostsPerPage] = useState(15);
+  const [postsPerPage, setPostsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
@@ -98,29 +98,6 @@ const MainPosts = (props: Theme) => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
-  // const formatTime = (remainingTime: bigint) => {
-  //   const seconds = Math.floor(Number(remainingTime) / 1e9);
-  //   const minutes = Math.floor(seconds / 60);
-  //   const remainingSeconds = seconds % 60;
-
-  //   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  // };
-
-  // const interval = setInterval(() => {
-  //   const currentTime = BigInt(Date.now()) * BigInt(1000000);
-  //   const remainingTime = Number(4284742663020955669n) - Number(currentTime);
-  //   console.log(currentTime)
-  //   console.log(remainingTime);
-  //   console.log(formatTime(BigInt(remainingTime)));
-    
-  //   if (remainingTime <= 0) {
-  //     clearInterval(interval);
-  //     console.log("archive");
-  //   } else {
-  //     console.log(formatTime(BigInt(remainingTime)));
-  //   }
-  // }, 1000);
-  
 
   const { convertNanosecondsToTimestamp } = Constant();
   const {
@@ -278,8 +255,10 @@ const MainPosts = (props: Theme) => {
           element.upvotes = Number(element.upvotes);
         });
         setPostsData(posts);
+        setCurrentPosts(posts);
       } else {
         setPostsData([]);
+        setCurrentPosts([]);
         setDataFetched(true);
       }
     } catch (error) {
@@ -288,9 +267,9 @@ const MainPosts = (props: Theme) => {
     }
   }
 
-  useEffect(() => {
-    setCurrentPosts(postsData.slice(indexOfFirstPost, indexOfLastPost));
-  }, [postsData, selectedBoard, currentPage]);
+  // useEffect(() => {
+  //   setCurrentPosts(postsData.slice(indexOfFirstPost, indexOfLastPost));
+  // }, [postsData, selectedBoard, currentPage]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -317,22 +296,6 @@ const MainPosts = (props: Theme) => {
   const goToPage = (page: number) => {
     setCurrentPage(page); // Update currentPage to the selected page
   };
-
-  // const goToPrevPage = () => {
-  //   if (currentPage > 1) {
-  //     setCurrentPage(currentPage - 1);
-  //   }
-  // };
-
-  // const goToNextPage = () => {
-  //   if (currentPage < Math.ceil(totalPosts / postsPerPage)) {
-  //     setCurrentPage(currentPage + 1);
-  //   }
-  // };
-
-  // const goToPage = (page: number) => {
-  //   setCurrentPage(page);
-  // };
 
   return (
     <div

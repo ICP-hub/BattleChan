@@ -22,7 +22,7 @@ interface AppRoutesProps {
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
   let { isConnected, principal } = useConnect();
-  const [allow, setAllow] = useState<null | boolean>(null);
+  const [allow, setAllow] = useState<null | boolean>(false);
   console.log("Principla in App routes: ", principal)
 
   console.log(isConnected);
