@@ -254,31 +254,31 @@ const PostApiHanlder = () => {
   const getSearchPost = async (searchInput: string) => {
     try {
       console.log("search input received: ", searchInput);
-      const res = await backend.searchPost(searchInput) as SearchApiResponse;
-      
-      console.log("search response: ", res);
-      return res;
+      const res = (await backend.searchPost(searchInput)) as SearchApiResponse;
+
+      // console.log("search response: ", res);
+      return [...res.activePost, ...res.archivedPost];
     } catch (err) {
       console.error("Search Post Error: ", err);
       return err;
-}
-};
+    }
+  };
 
   return {
-    createPost,
-    getRecentPosts,
     getBoards,
-    getMainPosts,
+    createPost,
+    upvotePost,
     archivePost,
+    downvotePost,
+    getMainPosts,
+    getSearchPost,
+    getRecentPosts,
+    getTotalCounts,
     getArchivePosts,
     getSingleMainPost,
-    getSingleArchivePost,
-    upvotePost,
-    downvotePost,
-    getTotalCounts,
     getUsersMainPosts,
+    getSingleArchivePost,
     getUsersArchivePosts,
-    getSearchPost,
   };
 };
 

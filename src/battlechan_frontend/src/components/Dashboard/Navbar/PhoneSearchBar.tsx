@@ -32,10 +32,10 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({
   const { getSearchPost } = PostApiHanlder();
  
   async function fetchSearchData(value: string) {
+
     try {
       const response = await getSearchPost(value) as BackendResponse;
       console.log({ response });
-
 
       setResults(response);
     } catch (error) {
@@ -64,7 +64,10 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({
  
         onBlur={() => {
           setResults({ activePost: [], archivedPost: [] }); 
-          // setShowSearchBarInPhone(false);
+          
+          setTimeout(() => {
+            setShowSearchBarInPhone(false);
+          }, 3000);
         }}
       />
     </div>

@@ -17,7 +17,7 @@ interface BackendResponse {
   activePost: PostInfo[];
 }
 
-type SearchResults = BackendResponse
+type SearchResults = BackendResponse;
 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
@@ -29,9 +29,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
 
   async function fetchSearchData(value: string) {
     try {
-      const response = await getSearchPost(value) as BackendResponse;
+      const response = (await getSearchPost(value)) as BackendResponse;
       console.log({ response });
-
 
       setResults(response);
     } catch (error) {

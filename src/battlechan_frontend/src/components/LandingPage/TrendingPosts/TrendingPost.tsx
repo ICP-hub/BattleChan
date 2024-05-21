@@ -1,4 +1,3 @@
-
 import Card from "./Card";
 
 import bg from "../../../images/trending_post_bg.png";
@@ -31,18 +30,26 @@ const TrendingPost = () => {
                   : ""
               }`}
             >
-              <h1 className={`font-bold tablet:text-5xl text-4xl`}>{item.number}</h1>
-              <p className={`tablet:text-base phone:text-sm text-xs font-normal text-center`}>{item.title}</p>
+              <h1 className={`font-bold tablet:text-5xl text-4xl`}>
+                {item.number}
+              </h1>
+              <p
+                className={`tablet:text-base phone:text-sm text-xs font-normal text-center`}
+              >
+                {item.title}
+              </p>
             </div>
           ))}
       </section>
 
       <section className={className + "__trendingPosts w-full"}>
-        <h1 className="font-bold laptop:text-5xl text-4xl text-center px-2">
+        <h1 className="font-bold laptop:text-5xl text-4xl  text-center px-4">
           This Week Trending Posts
         </h1>
+
         <br />
-        <p className="laptop:text-2xl text-lg font-normal text-center px-2">
+
+        <p className="laptop:text-2xl phone:text-lg text-sm font-normal text-center px-4">
           Stay Ahead with Trending Posts & Explore the Posts Everyone's Talking
           About
         </p>

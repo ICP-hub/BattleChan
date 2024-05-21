@@ -144,8 +144,6 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
 
   return (
     <div className="ml-5">
-      
-
       {currentComment.slice(0, visibleComments).map((comment, index) => (
         <div key={index} className="flex flex-col gap-4 border-l relative mt-7">
           

@@ -1,26 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
- 
+
 interface Post {
   postId: string;
   postName: string;
 }
- 
+
 interface SearchResultsListProps {
   activePost: Post[];
   archivedPost: Post[];
 }
- 
-const SearchResultsList: React.FC<SearchResultsListProps> = ({ activePost, archivedPost }) => {
+
+const SearchResultsList: React.FC<SearchResultsListProps> = ({
+  activePost,
+  archivedPost,
+}) => {
+  const className = "SearchResult";
+
   return (
-    <>
-      <div className="bg-light absolute left-0 right-0 tablet:top-[8vh] top-[6vh] dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light rounded-xl mt-2 p-2 font-normal">
+    <div className={className}>
+      <div
+        className={
+          className +
+          "__container bg-light absolute left-0 right-0 tablet:top-[8vh] top-[6vh] dark:bg-dark dark:bg-opacity-100 text-dark dark:text-light dark:border dark:border-light rounded-xl mt-2 p-2 font-normal"
+        }
+      >
         <div
           className={`overflow-y-scroll max-h-52 ${
-            (activePost.length + archivedPost.length) <= 6 ? "no-scrollbar" : ""
+            activePost.length + archivedPost.length <= 6 ? "no-scrollbar" : ""
           }`}
         >
-          {activePost.map((post:any) => (
+          {activePost.map((post: any) => (
             <Link
               key={post.postId}
               // active
@@ -34,8 +44,8 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ activePost, archi
               </div>
             </Link>
           ))}
- 
-          {archivedPost.map((post:any) => (
+
+          {archivedPost.map((post: any) => (
             <Link
               key={post.postId}
               to={`/dashboard/postDetails/${encodeURIComponent(
@@ -52,8 +62,8 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ activePost, archi
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
- 
+
 export default SearchResultsList;
