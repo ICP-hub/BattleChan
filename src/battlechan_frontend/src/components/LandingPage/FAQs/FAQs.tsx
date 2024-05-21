@@ -5,7 +5,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 const FAQs = () => {
-  const [answerKey, setAnserKey] = useState(0);
+  const [answerKey, setAnserKey] = useState(1);
   const darkColor = document.documentElement.className;
   const className = "LandingPage__FAQs";
 
@@ -37,7 +37,6 @@ const FAQs = () => {
               <div className="flex flex-col gap-y-2 p-2 border border-green rounded-[1.5rem]">
                 <p
                   key={i}
-                  onClick={() => setAnserKey(item.index)}
                   className="cursor-pointer questionPara flex-row-center justify-between"
                 >
                   <p className="flex-row-center">
@@ -46,22 +45,31 @@ const FAQs = () => {
                     >
                       {item.index}
                     </span>
-                    <span className="flex flex-row items-center gap-2 laptop:ml-8 phone:ml-4 ml-2 laptop:text-base phone:text-sm text-xs">
+                    <span
+                      onClick={() => setAnserKey(item.index)}
+                      className="flex flex-row items-center gap-2 laptop:ml-8 phone:ml-4 ml-2 laptop:text-base text-sm"
+                    >
                       {item.question}
                     </span>
                   </p>
 
                   <span>
                     {item.index != answerKey ? (
-                      <RiArrowDropDownLine className="laptop:hidden text-3xl" />
+                      <RiArrowDropDownLine
+                        className="laptop:hidden text-3xl"
+                        onClick={() => setAnserKey(item.index)}
+                      />
                     ) : (
-                      <FaAngleRight className="laptop:hidden text-lg m-2" />
+                      <FaAngleRight
+                        className="laptop:hidden text-lg m-2"
+                        onClick={() => setAnserKey((0))}
+                      />
                     )}
                   </span>
                 </p>
 
                 {item.index == answerKey && (
-                  <p className="laptop:text-base phone:text-sm text-xs p-2">
+                  <p className="laptop:text-base text-sm laptop:hidden block p-2">
                     <span className="font-bold">Answer:</span> {item.ans}
                   </p>
                 )}
