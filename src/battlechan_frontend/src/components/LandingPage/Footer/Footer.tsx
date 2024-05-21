@@ -29,23 +29,24 @@ const Footer = () => {
             <a href="#" className="m-4">
               Guide
             </a>
-            <a href="#" className="m-4 gap-2 flex-row-center">
+            <a href="https://internetcomputer.org" target="_blank" className="m-4 gap-2 flex-row-center">
               Internet Computer
               <HiLink />
             </a>
 
-            <a href="#" className="m-4 gap-2 flex-row-center">
+            {/* <a href="#" className="m-4 gap-2 flex-row-center">
               Zealy Contest
               <HiLink />
+            </a> */}
+            <a href="https://t.me/BattleChanICP" target="_blank" className="m-4 gap-2 flex-row-center">
+              Support
+              <FaTelegramPlane />
             </a>
           </div>
 
           {/* Right */}
           <div className="flex-direction-col items-start">
-            <a href="#" className="m-4 gap-2 flex-row-center">
-              Support
-              <FaTelegramPlane />
-            </a>
+
             <a href="#" className="m-4 gap-2 flex-row-center">
               White Papers
               <HiLink />
@@ -57,7 +58,7 @@ const Footer = () => {
           </div>
         </section>
 
-        
+
       </div>
 
       {/* Bottom */}
@@ -76,10 +77,12 @@ const Footer = () => {
 
         {/* Social Medias */}
         <section className="__socialMedia flex-row-center py-2 big_tablet:gap-8 tablet:gap-4 phone:gap-2 gap-4 text-2xl">
-          <FaSquareXTwitter />
-          <SiMedium />
-          <FaLinkedin />
-          <IoLogoYoutube />
+          <a href="https://twitter.com/BattleCHAN_" target="_blank" rel="noopener noreferrer">
+            <FaSquareXTwitter />
+          </a>
+          <a href="https://t.me/BattleChanICP" target="_blank" rel="noopener noreferrer">
+            <FaTelegramPlane />
+          </a>
         </section>
       </div>
     </footer>
