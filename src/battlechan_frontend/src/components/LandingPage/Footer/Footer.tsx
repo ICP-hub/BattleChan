@@ -1,4 +1,3 @@
-
 import { HiLink } from "react-icons/hi";
 import { FaTelegramPlane } from "react-icons/fa";
 
@@ -29,7 +28,11 @@ const Footer = () => {
             <a href="#" className="m-4">
               Guide
             </a>
-            <a href="https://internetcomputer.org" target="_blank" className="m-4 gap-2 flex-row-center">
+            <a
+              href="https://internetcomputer.org"
+              target="_blank"
+              className="m-4 gap-2 flex-row-center"
+            >
               Internet Computer
               <HiLink />
             </a>
@@ -38,7 +41,11 @@ const Footer = () => {
               Zealy Contest
               <HiLink />
             </a> */}
-            <a href="https://t.me/BattleChanICP" target="_blank" className="m-4 gap-2 flex-row-center">
+            <a
+              href="https://t.me/BattleChanICP"
+              target="_blank"
+              className="m-4 gap-2 flex-row-center"
+            >
               Support
               <FaTelegramPlane />
             </a>
@@ -46,7 +53,6 @@ const Footer = () => {
 
           {/* Right */}
           <div className="flex-direction-col items-start">
-
             <a href="#" className="m-4 gap-2 flex-row-center">
               White Papers
               <HiLink />
@@ -57,8 +63,6 @@ const Footer = () => {
             </a>
           </div>
         </section>
-
-
       </div>
 
       {/* Bottom */}
@@ -70,17 +74,22 @@ const Footer = () => {
       >
         <section className="__links big_tablet:gap-10 tablet:gap-4 gap-2 flex-row-center small_phone:text-base text-sm font-semibold">
           <span>&copy; Battlechan</span>
-          <span>Terms of use</span>
-          <span>Cookies</span>
-          <span>Privacy Policy</span>
         </section>
 
         {/* Social Medias */}
         <section className="__socialMedia flex-row-center py-2 big_tablet:gap-8 tablet:gap-4 phone:gap-2 gap-4 text-2xl">
-          <a href="https://twitter.com/BattleCHAN_" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://twitter.com/BattleCHAN_"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaSquareXTwitter />
           </a>
-          <a href="https://t.me/BattleChanICP" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://t.me/BattleChanICP"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaTelegramPlane />
           </a>
         </section>
