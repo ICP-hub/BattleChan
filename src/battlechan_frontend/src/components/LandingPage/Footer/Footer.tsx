@@ -73,7 +73,7 @@ const Footer = () => {
         }
       >
         <section className="__links big_tablet:gap-10 tablet:gap-4 gap-2 flex-row-center small_phone:text-base text-sm font-semibold">
-          <span>&copy; Battlechan</span>
+          <span>All rights reserved. &copy; {new Date().getFullYear()} Battlechan</span>
         </section>
 
         {/* Social Medias */}
