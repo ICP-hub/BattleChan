@@ -117,7 +117,6 @@ function Landing(props: Theme) {
         <HiOutlineArrowUp className="text-xl" />
       </button>
 
-      <Navbar handleThemeSwitch={handleThemeSwitch} />
 
       <HeroSection />
 

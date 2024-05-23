@@ -305,7 +305,6 @@ const PostDetails = (props: Theme) => {
       <div
         className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat`}
       >
-        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
         <div className="hidden tablet:block">
           <NavButtons />

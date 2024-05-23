@@ -228,7 +228,6 @@ const SettingProfile = (props: Theme) => {
         className + " " + "min-h-screen bg-[#ECECEC] dark:bg-dark z-0 relative"
       }
     >
-      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
       <NavButtons />
 

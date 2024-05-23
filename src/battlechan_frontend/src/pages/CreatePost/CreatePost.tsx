@@ -213,7 +213,6 @@ const CreatePost = (props: Theme) => {
 
   return (
     <div className="bg-[#ECECEC] dark:bg-dark relative z-0">
-      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
 
       <NavButtons />
 

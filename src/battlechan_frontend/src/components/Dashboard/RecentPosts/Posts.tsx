@@ -206,6 +206,7 @@ const Post = () => {
                     </section>
                   </div>
 
+                  <p className="postContent"><b>{post.postName}</b></p>
                   <p className="postContent">{post.postDes.length > 70
                     ? `${post.postDes.slice(0, 220)}...`
                     : post.postDes}</p>
