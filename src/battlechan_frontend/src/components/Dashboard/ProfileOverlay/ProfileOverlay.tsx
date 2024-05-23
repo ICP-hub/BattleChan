@@ -130,7 +130,7 @@ const ProfileOverlay = (props: Props) => {
             
 
             <div className="Time_Balance flex-row-center justify-between hover:bg-dirty-light-green hover:text-light transition">
-              <Link to="/dashboard/analytics">
+              <Link to="/dashboard/analytics" onClick={() => setProfilePopUp(false)}>
                 <p className="flex-row-center gap-2 p-3">
                   <RxLapTimer />
                   Time Balance
@@ -141,14 +141,14 @@ const ProfileOverlay = (props: Props) => {
             </div>
           </section>
 
-          <Link to="/dashboard/userProfile">
+          <Link to="/dashboard/userProfile" onClick={() => setProfilePopUp(false)}>
             <button className="flex-row-center w-full gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm hover:bg-light hover:text-dark transition">
               <BsPersonCircle />
               My Profile
             </button>
           </Link>
 
-          <Link to="/dashboard/settingProfile">
+          <Link to="/dashboard/settingProfile" onClick={() => setProfilePopUp(false)}>
             <button className="flex-row-center w-full gap-2 tablet:px-4 px-2 py-2 tablet:text-lg text-sm hover:bg-light hover:text-dark transition">
               <TbSettings />
               Settings
