@@ -11,7 +11,6 @@ function Dashboard(props: Theme) {
 
   return (
     <div className={className + " " + `bg-[#ECECEC] dark:bg-dark`}>
-      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <Body />
       <RecentPosts />
     </div>

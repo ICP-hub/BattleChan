@@ -175,7 +175,6 @@ const Analytics = (props: Theme) => {
       <div
         className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat relative`}
       >
-        <Navbar handleThemeSwitch={props.handleThemeSwitch} />
         <NavButtons />
 
         <div className="dark:text-[#fff] px-6 tablet:px-10 gap-8 flex flex-col">

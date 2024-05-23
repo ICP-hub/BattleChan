@@ -301,7 +301,6 @@ const MainPosts = (props: Theme) => {
     <div
       className={`min-h-lvh bg-[#ECECEC] dark:bg-dark dark:bg-green-gradient bg-top bg-contain bg-no-repeat relative z-0`}
     >
-      <Navbar handleThemeSwitch={props.handleThemeSwitch} />
       <NavButtons />
 
       <div
