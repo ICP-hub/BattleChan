@@ -140,6 +140,16 @@ const CommentsApiHanlder = () => {
     }
   };
 
+  const getAllRepliesOfArchivedPost = async (commentId: string) => {
+    try {
+      const res = await backend.getAllRepliesOfArchivedPost(commentId, 10, 1);
+
+      return res;
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  };
+
   const createComment = async (postId: string, comment: string) => {
     try {
       const res = await backend.createComment(postId, comment);
@@ -448,7 +458,8 @@ const CommentsApiHanlder = () => {
     likeCommentReply,
     getAllCommentOfUser,
     getRewardsOfUser,
-    claimReward
+    claimReward,
+    getAllRepliesOfArchivedPost
   };
 };
 
