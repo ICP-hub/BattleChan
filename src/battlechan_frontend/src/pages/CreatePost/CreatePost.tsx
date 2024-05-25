@@ -252,9 +252,8 @@ const CreatePost = (props: Theme) => {
             </label>
             <textarea
               name="description"
-              cols={50}
-              rows={5}
-              className="w-full phone:p-3 p-2 italic bg-light dark:bg-dark border border-light-green rounded-md"
+      
+              className="w-full min-h-[125px] phone:p-3 resize-none p-2 italic bg-light dark:bg-dark border border-light-green rounded-md"
               placeholder="Describe about your post in a nutshell"
               onChange={(e) => setPostDes(e.target.value)}
             ></textarea>
