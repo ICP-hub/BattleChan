@@ -14,14 +14,14 @@ const About = () => {
     <div
       className={
         className +
-        " w-full tablet:h-[90vh] tablet:px-24 phone:px-16 px-4 bg-green flex-direction-row relative text-light"
+        " w-full large:h-[90vh] tablet:px-24 phone:px-16 px-4 bg-green flex-direction-row relative text-light"
       }
     >
       {/* Texts on the left side */}
       <section
         className={
           className +
-          "__leftSide tablet:w-1/3 h-full gap-8 tablet:py-24 py-16 flex flex-col items-center tablet:items-start justify-evenly"
+          "__leftSide large:w-1/3 h-full gap-8 tablet:py-24 py-16 flex flex-col items-center tablet:items-start justify-evenly"
         }
       >
         <h1 className="tablet:text-5xl text-4xl font-bold text-center tablet:text-left"> About Battlechan</h1>
@@ -43,7 +43,7 @@ const About = () => {
       <section
         className={
           className +
-          "__rightSide relative w-2/3 h-full hidden tablet:flex-direction-col justify-around"
+          "__rightSide relative w-2/3 h-full hidden large:flex-direction-col justify-around"
         }
       >
         <div className="hidden large:block">
