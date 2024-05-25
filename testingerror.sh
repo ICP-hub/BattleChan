@@ -1,7 +1,7 @@
 
 # vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe
 # dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe\" }; amount = 1000000000000000000 })"
-dfx identity use default
+dfx identity use me
 
 # dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"hdyut-lwweb-zxdhi-le3sy-33e4m-qcavd-6dxiy-6egds-c32xp-5hxv4-zqe\" }; amount = 1000000000000000000 })" 
 # dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"rf6gg-3mjl4-u3vuz-33b7o-dykbs-qjz4t-wy3kq-px2c7-tk7xx-lxxpe-qae\" }; amount = 1000000000000000000 })" 
@@ -10,7 +10,7 @@ dfx identity use default
 
 # dfx canister call backend createUserAccount '(record {userName = "test" ; profileImg = vec {12; 34; 56}})'
 # dfx canister call backend getUserInfo
-dfx canister call backend createNewBoard '("tester", "abxc")'
+# dfx canister call backend createNewBoard '("tester", "abxc")'
 
 dfx canister call backend createPost '("tester", record {postName = "postName"; postDes = "postDescription"; postMetaData = vec {12; 34; 56}})'
 # dfx canister call backend getAllPosts

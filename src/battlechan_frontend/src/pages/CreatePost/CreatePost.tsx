@@ -77,6 +77,9 @@ const CreatePost = (props: Theme) => {
       if (isConnected && principal) {
         setIsUserAuthenticated(true);
         setPrincipal_id(principal);
+      } else {
+        toast.error("Please Authenticate first in order to create Post!")
+        navigate("/dashboard");
       }
     };
 
@@ -89,6 +92,7 @@ const CreatePost = (props: Theme) => {
       const response = (await getProfileData()) as ProfileData;
       if (response && response.status == false) {
         if (isUserAuthenticatedRef.current && principal_idRef.current) {
+          toast.error("Please Update your Profile first in order to Create Post!");
           navigate("/dashboard/settingProfile");
         }
       }
@@ -202,8 +206,8 @@ const CreatePost = (props: Theme) => {
     )) as postResponse;
 
     if (response && response?.ok) {
-      navigate("/dashboard/mainPosts");
       toast.success("Post Created Successfully!");
+      navigate("/dashboard/mainPosts");
     } else {
       toast.error(
         "Error Creating your Post, Please verify and provide valid data!"

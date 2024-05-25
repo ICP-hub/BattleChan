@@ -151,22 +151,50 @@ const CommentsApiHanlder = () => {
   };
 
   const createComment = async (postId: string, comment: string) => {
+    let result = { status: false, error: "" };
     try {
       const res = await backend.createComment(postId, comment);
-
+      console.log(res);
       return res;
     } catch (err) {
-      console.error("Error creating post : ", err);
+      if (err instanceof Error) {
+        const lastIndex = err.message.lastIndexOf(":");
+        const errorMsg = err.message.slice(lastIndex + 2);
+        result.status = false;
+        result.error = errorMsg;
+
+        return result;
+      } else {
+        let errorMsg = "Error: Something went wrong, Please try again later!";
+        result.status = false;
+        result.error = errorMsg;
+
+        return result;
+      }
     }
   };
 
   const createCommentReply = async (commentId: string, reply: string) => {
+    let result = { status: false, error: "" };
     try {
       const res = await backend.createCommentReply(commentId, reply);
 
       return res;
     } catch (err) {
-      console.error("Error creating post : ", err);
+      if (err instanceof Error) {
+        const lastIndex = err.message.lastIndexOf(":");
+        const errorMsg = err.message.slice(lastIndex + 2);
+        result.status = false;
+        result.error = errorMsg;
+
+        return result;
+      } else {
+        let errorMsg = "Error: Something went wrong, Please try again later!";
+        result.status = false;
+        result.error = errorMsg;
+
+        return result;
+      }
     }
   };
 

@@ -56,8 +56,8 @@ const UserProfile = (props: Theme) => {
         setIsUserAuthenticated(true);
         setPrincipal_id(principal);
       } else {
-        navigate("/dashboard");
         toast.error("Please Authenticate first in order to see User Profile!")
+        navigate("/dashboard");
       }
     };
 
@@ -70,6 +70,7 @@ const UserProfile = (props: Theme) => {
       const response = (await getProfileData()) as ProfileData;
       if (response && response.status == false) {
         if (isUserAuthenticatedRef.current && principal_idRef.current) {
+          toast.error("Please Update your Profile first in order to access User Profile!");
           navigate("/dashboard/settingProfile");
         }
       }

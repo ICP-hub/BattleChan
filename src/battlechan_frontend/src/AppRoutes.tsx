@@ -22,17 +22,22 @@ interface AppRoutesProps {
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ handleThemeSwitch }) => {
   let { isConnected, principal } = useConnect();
-  const [allow, setAllow] = useState<null | boolean>(false);
+  const [allow, setAllow] = useState<null | boolean>(null);
+  const [isLoading, setIsLoading] = useState(true);
   console.log("Principla in App routes: ", principal)
 
   console.log(isConnected);
   console.log(principal);
   useEffect(() => {
-    if (isConnected == true) {
-      console.log("isConnected is true: ", principal)
-      setAllow(principal ? true : false);
+    if (isConnected !== undefined) {
+      setAllow(isConnected && principal ? true : false);
+      setIsLoading(false);
     }
   }, [principal, isConnected]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <Routes>

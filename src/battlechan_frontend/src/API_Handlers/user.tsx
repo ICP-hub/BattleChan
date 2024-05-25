@@ -169,18 +169,18 @@ const UserApiHanlder = () => {
   };
 
   const getProfileData = async () => {
+    let res = {
+      userName: "",
+      profileImg: "",
+      profileImg_int8arr: new Int8Array(),
+      status: false,
+    } as Profile;
     try {
-      let res = {
-        userName: "",
-        profileImg: "",
-        profileImg_int8arr: new Int8Array(),
-        status: false,
-      } as Profile;
       const result = await backend.getUserInfo() as any;
       console.log(Principal.valueToString(result.data[0]?.userId));
 
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
-      console.log(response);
+      // console.log(response);
       if (response && response.status !== false) {
         const userDataArray: UserInfo[] = response.data;
         res.userName = userDataArray[0]?.userName;
@@ -188,11 +188,12 @@ const UserApiHanlder = () => {
         res.profileImg_int8arr = userDataArray[0]?.profileImg;
         res.status = true;
       }
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (err) {
       console.error("Error getting user info: ", err);
-      return undefined;
+      res.status = false;
+      return res;
     }
   };
 

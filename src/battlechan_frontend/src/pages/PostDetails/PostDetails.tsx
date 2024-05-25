@@ -91,6 +91,7 @@ interface ProfileData {
 
 interface commentResponse {
   ok: string;
+  error: string;
 }
 
 const PostDetails = (props: Theme) => {
@@ -214,8 +215,8 @@ const PostDetails = (props: Theme) => {
     if (type === "archive") {
       return;
     }
-    
-    
+
+
     if (isUserAuthenticatedRef.current) {
       const is_approved = await icrc2_approve(principal_idRef.current);
       console.log(is_approved);
@@ -227,11 +228,11 @@ const PostDetails = (props: Theme) => {
 
         upvoteBtn.setAttribute("disable", "true");
         upvoteBtn.style.opacity = "0.5";
-        
+
         const data = (await upvotePost(postId)) as VoteResponse;
         if (data && data?.ok) {
           toast.success("Successfully Upvoted Post!");
-          
+
           if (upvoteBtn) {
             upvoteBtn.removeAttribute("disabled");
             upvoteBtn.style.opacity = "1";
@@ -240,7 +241,7 @@ const PostDetails = (props: Theme) => {
           const lastIndex = data.err[1].lastIndexOf(":");
           const errorMsg = data.err[1].slice(lastIndex + 2);
           toast.error(errorMsg);
-          
+
           if (upvoteBtn) {
             upvoteBtn.removeAttribute("disabled");
             upvoteBtn.style.opacity = "1";
@@ -282,16 +283,14 @@ const PostDetails = (props: Theme) => {
       postsData?.postId ?? "",
       newComment
     )) as commentResponse;
-
+    // console.log("response", response);
     if (response && response?.ok) {
       toast.success(response.ok);
       getComments();
       setNewComment("");
       setLoading(false);
     } else {
-      toast.error(
-        "Error Creating comment, Please verify and provide valid data!"
-      );
+      toast.error(response.error);
       setLoading(false);
     }
   }
@@ -369,17 +368,15 @@ const PostDetails = (props: Theme) => {
 
           <div className="flex gap-2 phone:text-5xl text-3xl mt-4 tablet:mt-11">
             <TbSquareChevronUpFilled
-              className={`${
-                vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="upvoteBtn"
               onClick={() => handleUpvote(postId)}
             />
 
             <TbSquareChevronDownFilled
-              className={`${
-                !vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
-              } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
+              className={`${!vote ? "text-dirty-light-green" : "text-[#C1C1C1]"
+                } cursor-pointer ${type === "archive" ? "bg-opacity-50" : ""}`}
               id="downvoteBtn"
               onClick={() => handleDownvote(postId)}
             />

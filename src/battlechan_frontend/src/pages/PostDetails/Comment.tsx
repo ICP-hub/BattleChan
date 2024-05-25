@@ -38,6 +38,7 @@ interface CommentProps {
 
 interface ReplyResponse {
   ok: string;
+  error: string;
 }
 
 interface LikeResponse {
@@ -103,7 +104,7 @@ const Comment: React.FC<CommentProps> = ({ currentComment, getComments, type }) 
       setReply("");
       setLoading(false);
     } else {
-      toast.error("Error Creating reply, Please verify and provide valid data!");
+      toast.error(response.error);
       setLoading(false);
     }
   }
