@@ -46,7 +46,7 @@ const About = () => {
           "__rightSide relative w-2/3 h-full hidden tablet:flex-direction-col justify-around"
         }
       >
-        <div className="hidden tablet:block">
+        <div className="hidden large:block">
         <Cards />
         </div>
 
