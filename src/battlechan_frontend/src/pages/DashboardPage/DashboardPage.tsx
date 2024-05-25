@@ -8,6 +8,8 @@ import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
 import TokensApiHanlder from "../../API_Handlers/tokens";
 import { useConnect } from "@connect2ic/react";
 import UserApiHanlder from "../../API_Handlers/user";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 type Theme = {
   handleThemeSwitch: Function;
@@ -22,6 +24,12 @@ interface UserAnalytics {
   status: boolean;
 }
 
+interface ProfileData {
+  userName: string;
+  profileImg: string;
+  status: boolean;
+};
+
 const DashboardPage = (props: Theme) => {
   const className = "dashboard__dashboardPage";
   const is430px = useMediaQuery("(max-width: 430px)");
@@ -34,8 +42,48 @@ const DashboardPage = (props: Theme) => {
   const [dislikedPost, setDislikedPost] = React.useState(0);
   const dislikedPostRef = React.useRef(dislikedPost);
   const { getBalance } = TokensApiHanlder();
-  const { getUserAnalytics } = UserApiHanlder();
+  const { getUserAnalytics, getProfileData } = UserApiHanlder();
   const { principal, isConnected } = useConnect();
+  const [principal_id, setPrincipal_id] = useState("");
+  const principal_idRef = React.useRef(principal_id);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const isUserAuthenticatedRef = React.useRef(isUserAuthenticated);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    isUserAuthenticatedRef.current = isUserAuthenticated;
+    principal_idRef.current = principal_id;
+  }, [isUserAuthenticated, principal_id]);
+
+  // Check if User is Authenticated or not
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (isConnected && principal) {
+        setIsUserAuthenticated(true);
+        setPrincipal_id(principal);
+      } else {
+        toast.error("Please Authenticate first in order to see User Profile!")
+        navigate("/dashboard");
+      }
+    };
+
+    checkAuthentication();
+  }, [isConnected, principal]);
+
+  // If user is not Authenticated or not Registered navigate it to profile page
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = (await getProfileData()) as ProfileData;
+      if (response && response.status == false) {
+        if (isUserAuthenticatedRef.current && principal_idRef.current) {
+          toast.error("Please Update your Profile first in order to access Dashboard Page!");
+          navigate("/dashboard/settingProfile");
+        }
+      }
+    };
+
+    fetchData();
+  }, [isUserAuthenticatedRef, principal_idRef]);
 
   useEffect(() => {
     likedPostRef.current = likedPost;
