@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { createClient } from "@connect2ic/core";
-import { InternetIdentity, NFID, InfinityWallet, PlugWallet } from "@connect2ic/core/providers";
+import { InternetIdentity, NFID, InfinityWallet } from "@connect2ic/core/providers";
 import { Connect2ICProvider } from "@connect2ic/react";
 import * as backend from "../../declarations/backend";
 import * as ledger from "../../declarations/ledger";
@@ -11,7 +11,7 @@ const client = createClient({
         backend,
         ledger
     },
-    providers: [new InternetIdentity(), new NFID(), new InfinityWallet(), new PlugWallet()],
+    providers: [new InternetIdentity(), new NFID(), new InfinityWallet()],
     globalProviderConfig: {
         dev: import.meta.env.DEV,
     },
