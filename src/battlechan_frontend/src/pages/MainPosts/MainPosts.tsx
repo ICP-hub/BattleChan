@@ -118,7 +118,7 @@ const MainPosts = (props: Theme) => {
     async function getTotalPosts(boardName: string) {
       try {
         const response = (await getTotalCounts(boardName)) as TotalCountsResponse;
-        console.log("counts", response);
+        // console.log("counts", response);
         if (props.type == "archive") {
           setTotalPosts(response?.archivePostCounts);
         } else if (props.type === "searchPosts") {

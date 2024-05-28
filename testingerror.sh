@@ -1,6 +1,6 @@
 
 # vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe
-# dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"vvrwv-pyvar-koyv5-jqnpq-4lea4-gc5x3-f64nm-n67xc-jvewm-urdpj-nqe\" }; amount = 1000000000000000000 })"
+# dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"jeujt-n5fds-palrt-qwul2-uwjg3-xjgkv-2n36h-joch2-soxdi-5nwzz-dae\" }; amount = 1000000000000000000 })"
 dfx identity use me
 
 # dfx  canister call ledger icrc1_transfer "(record { to = record { owner = principal \"hdyut-lwweb-zxdhi-le3sy-33e4m-qcavd-6dxiy-6egds-c32xp-5hxv4-zqe\" }; amount = 1000000000000000000 })" 

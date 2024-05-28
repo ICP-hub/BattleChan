@@ -102,10 +102,10 @@ const PostApiHanlder = () => {
     boardName: string
   ) => {
     try {
-      console.log(filter);
-      console.log(pageNumber);
-      console.log(chunkSize);
-      console.log(boardName);
+      // console.log(filter);
+      // console.log(pageNumber);
+      // console.log(chunkSize);
+      // console.log(boardName);
       const res = await backend.postFilter(
         filter,
         pageNumber,
