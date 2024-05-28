@@ -75,65 +75,62 @@ const Constant = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     return new Promise<{ int8Array: Int8Array, base64: string }>((resolve, reject) => {
       const file = event.target.files?.[0];
-
+  
       if (!file) return reject('No file selected');
-
+  
       const maxSize = 1.7 * 1024 * 1024; 
-
+  
       if (file.size > maxSize) {
         return reject('File size exceeds the limit of 1.7MB');
       }
-
+  
       if (!file.type.startsWith('image')) {
         return reject('Please upload an image file');
       }
-
+  
       const reader = new FileReader();
-
-      reader.onload = (e) => {
-        if (e.target && e.target.result) {
+  
+      reader.onload = async () => {
+        if (reader.result && typeof reader.result === 'string') {
           const img = new Image();
-          img.src = e.target.result.toString();
-
+          img.src = reader.result;
+  
           img.onload = () => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-
+  
             if (!ctx) return reject('Could not create canvas context');
-
+  
             canvas.width = img.width;
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0, img.width, img.height);
-
-            const quality = 0.7; 
-            const dataURL = canvas.toDataURL('image/jpeg', quality);
-
-            
-            fetch(dataURL)
-              .then((res) => res.blob())
-              .then(async (blob) => {
+  
+            canvas.toBlob(async (blob) => {
+              if (!blob) return reject('Error converting canvas to blob');
+  
+              const arrayBuffer = await blob.arrayBuffer();
+              const int8Array = new Int8Array(arrayBuffer);
+              const uint8Array = new Uint8Array(arrayBuffer);
+              
+              let binary = '';
+              uint8Array.forEach(byte => {
+                  binary += String.fromCharCode(byte);
+              });
+              const base64 = "data:image/jpeg;base64," + btoa(binary);
+              
                 
-                const arrayBuffer = await blob.arrayBuffer();
-
-                
-                const int8Array = new Int8Array(arrayBuffer);
-
-                
-                const base64 = "data:image/jpeg;base64," + btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-
-                
-                resolve({ int8Array, base64 });
-              })
-              .catch((error) => reject(error));
+              resolve({ int8Array, base64 });
+            }, 'image/jpeg', 0.7);
           };
         }
       };
-
+  
       reader.onerror = () => reject('Error reading file');
-
+  
       reader.readAsDataURL(file);
     });
   };
+  
 
   
   return { convertNanosecondsToTimestamp, handleFileUpload, convertInt8ToBase64, convertNanosecondsToTimeAgo };
