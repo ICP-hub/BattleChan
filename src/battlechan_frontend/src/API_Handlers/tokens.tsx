@@ -114,11 +114,11 @@ const TokensApiHanlder = () => {
     const withdrawPost = async (postId: string, amount: number) => {
         let result = { status: false, err: "" } as Response;
         try {
-            let intAmount = parseInt(amount.toString());
+            // let intAmount = parseInt(amount.toString());
 
             console.log("postId", postId);
-            console.log("withdraw amntInteger", intAmount);
-            const res = (await backend.withdrawPost(postId, intAmount)) as BackendResponse;
+            console.log("withdraw amntInteger", amount);
+            const res = (await backend.withdrawPost(postId, Number(amount))) as BackendResponse;
             console.log("withdraw res", res);
 
             if (res && (res?.ok || res?.Ok)) {

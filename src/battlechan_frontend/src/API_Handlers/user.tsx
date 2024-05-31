@@ -177,7 +177,7 @@ const UserApiHanlder = () => {
     } as Profile;
     try {
       const result = await backend.getUserInfo() as any;
-      console.log(Principal.valueToString(result.data[0]?.userId));
+      // console.log(Principal.valueToString(result.data[0]?.userId));
 
       const response = (await backend.getUserInfo()) as BackendResponseUserInfo;
       // console.log(response);

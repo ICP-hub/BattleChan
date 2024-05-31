@@ -112,7 +112,7 @@ const CommentsApiHanlder = () => {
 
   const getAllComments = async (postId: string) => {
     try {
-      const res = await backend.getAllCommentOfPost(postId, 10, 1);
+      const res = await backend.getAllCommentOfPost(postId, 50, 1);
 
       return res;
     } catch (err) {
@@ -122,7 +122,7 @@ const CommentsApiHanlder = () => {
 
   const getAllCommentsOfArchivedPost = async (postId: string) => {
     try {
-      const res = await backend.getAllCommentOfArchivedPost(postId, 10, 1);
+      const res = await backend.getAllCommentOfArchivedPost(postId, 50, 1);
 
       return res;
     } catch (err) {
@@ -132,7 +132,7 @@ const CommentsApiHanlder = () => {
 
   const getAllReplies = async (commentId: string) => {
     try {
-      const res = await backend.getAllRepliesofComment(commentId, 10, 1);
+      const res = await backend.getAllRepliesofComment(commentId, 50, 1);
 
       return res;
     } catch (err) {
@@ -142,7 +142,7 @@ const CommentsApiHanlder = () => {
 
   const getAllRepliesOfArchivedPost = async (commentId: string) => {
     try {
-      const res = await backend.getAllRepliesOfArchivedPost(commentId, 10, 1);
+      const res = await backend.getAllRepliesOfArchivedPost(commentId, 50, 1);
 
       return res;
     } catch (err) {

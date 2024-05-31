@@ -79,7 +79,8 @@ const Cards = () => {
   return (
     <React.Fragment>
       {/* Card 1 */}
-      <div className="tablet:right-[-93px] right-0 card bg-dark h-auto w-full large:w-[700px] gap-8 mt-40 rounded-2xl flex items-center  relative  ">
+      <div className="right-0 card bg-dark h-auto w-full large:w-[700px] gap-8 mt-40 rounded-2xl flex flex-wrap tablet:flex-nowrap items-center">
+
         <section className="left_image w-1/3 relative flex-wrap">
           <img
             src={tablet}
@@ -90,7 +91,7 @@ const Cards = () => {
 
         <section className="right_content h-full pr-8 pt-4 pb-8 px-8 flex flex-col justify-between">
           <div className="right_content_top flex items-end justify-between relative flex-wrap">
-            <div className="w-[5%]">
+            <div className="w-[13%]">
               <img
                 src={profile_pic}
                 alt="Profile Photo"
@@ -113,7 +114,7 @@ const Cards = () => {
       </div>
 
       {/* Card 2 */}
-      <div className="card bg-dark h-auto w-full large:w-[700px] gap-8 mb-36 rounded-2xl flex items-center relative mt-24 flex-wrap">
+      <div className="card bg-dark h-auto w-full large:w-[700px] gap-8 mb-36 rounded-2xl flex items-center relative mt-24 flex flex-wrap tablet:flex-nowrap">
         <section className="left_image w-1/3 relative">
           <img
             src={tablet}
@@ -122,12 +123,12 @@ const Cards = () => {
           />
         </section>
 
-        <section className="right_content h-full pr-8 pt-4 pb-8 px-8 flex flex-col justify-between">
-          <div className="right_content_top flex items-end justify-between relative flex-wrap ">
-            <div className="w-[5%]">
+        <section className="right_content h-full pr-8 pt-4 pb-8 px-8  flex flex-col justify-between">
+          <div className="right_content_top flex items-end justify-between  relative flex-wrap  ">
+            <div className="w-[13%]">
               <img src={profile_pic} alt="Profile Photo" className="absolute bottom-4 w-[50px] pointer-events-none" />
             </div>
-            <p className="name text-xl">Lannister Grey</p>
+            <p className="name text-xl  ">Lannister Grey</p>
             <p className="date_and_time">Oct 29, 2023 ; 13:30</p>
             <p className="left_time text-xl">
               <span className="text-red">0:52</span> min left

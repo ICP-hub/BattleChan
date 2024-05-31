@@ -88,7 +88,7 @@ const MainPosts = (props: Theme) => {
   const [boardsData, setBoardsData] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSelection, setActiveSelection] = useState("Recent");
-  const [postsPerPage, setPostsPerPage] = useState(20);
+  const [postsPerPage, setPostsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedBoard, setSelectedBoard] = useState<string>("");

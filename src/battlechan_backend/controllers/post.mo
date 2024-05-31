@@ -304,72 +304,95 @@ module {
         };
     };
 
-    public func withdraw(postId : Types.PostId, amount : Int, userId : Types.UserId, postTrieMap : Types.PostTrieMap, withdrawPostTrie : Types.WithdrawTrieMap) : {
+    public func withdraw(postId : Types.PostId, amount : Nat, userId : Types.UserId, postTrieMap : Types.PostTrieMap, withdrawPostTrie : Types.WithdrawTrieMap) : {
         updatedPostTrie : Types.PostTrieMap;
         updatedWithDrawPostTrie : Types.WithdrawTrieMap;
         ownerReward : Nat;
     } {
 
         let postInfo : Types.PostInfo = getPostInfo(postId, postTrieMap);
-        Debug.print("hlo");
         if (postInfo.createdBy.ownerId != userId) {
             Debug.trap(reject.noAccess);
         };
 
-        let withDrawAmount = amount;
+        let withDrawAmount : Nat = amount * 100_000_000;
+        // let withDrawAmount = amount;
         Debug.print(Int.toText(withDrawAmount));
-        //let postToken = (postInfo.expireAt - 300_000_000_000 - now()) / 600;
-        // let time =Int
-        // Debug.print("expiretime");
-        // Debug.print(Int.toText(postInfo.expireAt));
-        // Debug.print("now");
-        // Debug.print(Int.toText(now()));
-        let postToken =(postInfo.expireAt - 300_000_000_000 - now())/600;
-        // Debug.print("posttoken");
-        // Debug.print(Int.toText(postToken));
-        if (withDrawAmount > postToken) {
+
+        // Initial free 30 minutes in nanoseconds
+        let initialFreeTime : Int = 30 * 60 * 1_000_000_000;
+
+        // Calculate the total post tokens based on the new rate: 1 $TIME token = 5 minutes
+        let postToken = ((postInfo.expireAt - now() - initialFreeTime) / (5 * 60 * 1_000_000_000)) * 100_000_000;
+        // Debug.print("Initial postToken: " # Int.toText(postToken));
+
+        // Ensure that withdrawals can only happen if the visibility time is at least 5 minutes greater than 30 minutes
+        if (postToken <= 0) {
+            Debug.trap(reject.outOfToken);
+        };
+
+        // Ensure the withdraw amount does not dip below the 30-minute buffer
+        let effectiveTokens = postToken * 100_000_000;
+        // Debug.print("Effective tokens: " # Int.toText(effectiveTokens));
+
+        if (withDrawAmount > effectiveTokens) {
             Debug.trap(reject.outOfToken);
         };
 
         let tokenLeft = postToken - withDrawAmount;
+        // Debug.print("Token left after withdraw: " # Int.toText(tokenLeft));
+
         // Debug.print("total");
         // Debug.print(Int.toText(tokenLeft));
 
-
-        let totalCommentersReward = (25 * withDrawAmount) / 100;
+        // let totalCommentersReward = (25 * withDrawAmount) / 100;
         // Debug.print("total");
         // Debug.print(Int.toText(totalCommentersReward));
 
-        var ownerReward : Int = withDrawAmount - totalCommentersReward;
+        // var ownerReward : Int = withDrawAmount - totalCommentersReward;
+
+        // Calculate the reward to be sent to the owner (subtracting the total commenters' reward)
+        // Calculate the reward to be sent to the commenters
+        let totalCommentersReward : Nat = (withDrawAmount * 25_000_000) / 100_000_000;
+        // Debug.print("withDrawAmount: " # Int.toText(withDrawAmount));
+        // Debug.print("totalCommentersReward: " # Nat.toText(totalCommentersReward));
+        var ownerReward : Nat = withDrawAmount - totalCommentersReward;
 
         // Debug.print("ownerReward");
         // Debug.print(Int.toText(ownerReward));
-
 
         // if (tokenLeft < 500_000_000) {
         //     Debug.trap(debug_show { postToken });
         // };
 
-        var rewardSeakersTrie : Trie.Trie<Types.UserId, { postId : Types.PostId; likes : Nat; amount : Int; claimedStatus : Bool }> = Trie.empty<Types.UserId, Types.CommentRewards>();
+        var rewardSeakersTrie : Trie.Trie<Types.UserId, { postId : Types.PostId; likes : Nat; amount : Nat; claimedStatus : Bool }> = Trie.empty<Types.UserId, Types.CommentRewards>();
         let commentData : [Types.CommentInfo] = Trie.toArray<Types.CommentId, Types.CommentInfo, Types.CommentInfo>(postInfo.comments, func(k, v) = v);
         if (Array.size(commentData) == 0) {
-            ownerReward := tokenLeft;
+            ownerReward := withDrawAmount;
         };
         var totalLikesOnComment = 0;
         for (comment in commentData.vals()) {
             if (comment.likedBy.size() > 1) {
+                // Change to >= 5 for 5+ likes
                 let ownerId = comment.createdBy.ownerId;
                 totalLikesOnComment := totalLikesOnComment + comment.likedBy.size();
                 rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { postId; likes = comment.likedBy.size(); amount = 0; claimedStatus = false }).0;
             };
         };
+
         let rewardSeakersArray = Trie.toArray<Types.UserId, Types.CommentRewards, (Types.UserId, Types.CommentRewards)>(rewardSeakersTrie, func(k, v) = (k, v));
 
         for (reward in rewardSeakersArray.vals()) {
             let ownerId = reward.0;
             let userLikes = reward.1.likes;
-            let rewardAmountInPercent = (userLikes / totalLikesOnComment) * 100;
-            let userRewardAmount = (rewardAmountInPercent * totalCommentersReward) / 100;
+            let rewardAmountInPercent = (userLikes * 100) / totalLikesOnComment;
+            // Debug.print("totalLikesOnComment: " # Int.toText(totalLikesOnComment));
+            // Debug.print("rewardAmountInPercent: " # Int.toText(rewardAmountInPercent));
+            // Debug.print("totalCommentersReward: " # Nat.toText(totalCommentersReward));
+            let userRewardAmount : Nat = (rewardAmountInPercent * totalCommentersReward / 100);
+            // Debug.print("(rewardAmountInPercent * totalCommentersReward): " # Nat.toText((rewardAmountInPercent * totalCommentersReward)));
+            // Debug.print("(rewardAmountInPercent * totalCommentersReward) / 100: " # Nat.toText(userRewardAmount));
+            // Debug.print("userRewardAmount: " # Nat.toText(userRewardAmount));
             rewardSeakersTrie := Trie.put(rewardSeakersTrie, principalKey ownerId, Principal.equal, { postId; likes = userLikes; amount = userRewardAmount; claimedStatus = false }).0;
         };
         let withdrawRecord : Types.WithdrawRecord = {
@@ -383,8 +406,28 @@ module {
         Debug.print(Int.toText(postInfo.expireAt));
         Debug.print("currenttime");
         Debug.print(Int.toText(now()));
-        
-        let updatedExpireTime = postInfo.expireAt - (withDrawAmount * 60_000_000_000);
+
+        // let updatedExpireTime = postInfo.expireAt - (withDrawAmount * 60_000_000_000);
+
+        // Debugging step: print values before updating expire time
+        // Debug.print("postInfo.expireAt: " # Int.toText(postInfo.expireAt));
+        // Debug.print("withDrawAmount: " # Nat.toText(withDrawAmount));
+
+        // Ensure the correct conversion factor (5 minutes per token in nanoseconds)
+        // Convert the withDrawAmount from its native scale to the desired scale for 5 minutes each
+        let scaledWithdrawAmount = withDrawAmount / 100_000_000; // Scaling down if withDrawAmount is in millions
+        // Debug.print("Scaled withDrawAmount: " # Nat.toText(scaledWithdrawAmount));
+
+        // Calculate the withdraw amount in nanoseconds
+        let withdrawAmountInNanoseconds = scaledWithdrawAmount * 300_000_000_000; // 5 minutes in nanoseconds
+        // Debug.print("withdrawAmountInNanoseconds: " # Int.toText(withdrawAmountInNanoseconds));
+
+        // Update the expire time by subtracting the calculated nanoseconds
+        let updatedExpireTime = postInfo.expireAt - withdrawAmountInNanoseconds;
+
+        // Adjust the post visibility time reduction to 5 minutes per $TIME token
+        // let updatedExpireTime = postInfo.expireAt - (withDrawAmount * 5 * 60_000_000_000);
+
         Debug.print("updatedexpiredtime");
         Debug.print(Int.toText(updatedExpireTime));
         let updatedPostInfo : Types.PostInfo = {
@@ -411,10 +454,17 @@ module {
         };
         let updatedWithDrawPostTrie = Trie.put(withdrawPostTrie, textKey postId, Text.equal, withdrawPostInfo).0;
         let updatedPostTrie = Trie.put(postTrieMap, textKey postId, Text.equal, updatedPostInfo).0;
-        let reward : Nat = switch (Nat.fromText(Int.toText(ownerReward))) {
+        // Debug.print("Initial postToken: " # Int.toText(postToken));
+        // Debug.print("Effective tokens: " # Int.toText(effectiveTokens));
+        // Debug.print("Withdraw amount: " # Int.toText(withDrawAmount));
+        // Debug.print("Token left after withdraw: " # Int.toText(tokenLeft));
+        // Debug.print("Owner reward: " # Nat.toText(ownerReward));
+
+        let reward : Nat = switch (Nat.fromText(Nat.toText(ownerReward))) {
             case (null) { Debug.trap("No negative number") };
             case (?v) { v };
         };
+        Debug.print("Final owner reward (Nat): " # Nat.toText(reward));
         // Debug.trap(debug_show ({ ownerReward }));
         {
             updatedPostTrie;
@@ -422,6 +472,7 @@ module {
             ownerReward = reward;
         };
     };
+
     func checkReward(withdrawInfo : [Types.WithdrawRecord], userId : Principal) : ?{
         commenterReward : Types.CommentRewards;
         index : Nat;
@@ -459,10 +510,7 @@ module {
         if (commenterReward.claimedStatus == true) {
             Debug.trap("Already claimed Rewards");
         };
-        let rewardAmount = switch (Nat.fromText(Int.toText(commenterReward.amount))) {
-            case (?result) { result };
-            case (null) { Debug.trap("Negative number") };
-        };
+        let rewardAmount = commenterReward.amount;
         let updatedCommentersReward : Types.CommentRewards = {
             postId = postId;
             likes = commenterReward.likes;

@@ -11,6 +11,7 @@ import UserApiHanlder from "../../API_Handlers/user";
 import toast from "react-hot-toast";
 import Constant from "../../utils/constants";
 import { useConnect } from "@connect2ic/react";
+import { useNavigate } from "react-router-dom";
 
 const useBackend = () => {
   return useCanister("backend");
@@ -57,6 +58,7 @@ const SettingProfile = (props: Theme) => {
   const [showInput, setShowInput] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
   const isRegisteredRef = React.useRef(isRegistered);
+  const navigate = useNavigate();
 
   const [fileURL, setFileURL] = React.useState(userData.imageURL);
   const [userName, setUserName] = React.useState("Please Update your Username");
@@ -129,6 +131,7 @@ const SettingProfile = (props: Theme) => {
 
           if (data && (data as Data)?.ok) {
             toast.success((data as Data).ok);
+            navigate("/dashboard/mainPosts");
           } else {
             toast.error(
               "Error Updating Profile: please verify and enter correct fields!"
@@ -146,6 +149,7 @@ const SettingProfile = (props: Theme) => {
 
             if (data && (data as Data)?.ok) {
               toast.success((data as Data).ok);
+              navigate("/dashboard/mainPosts");
             } else {
               toast.error(
                 "Error Updating Profile: please verify and enter correct fields!"
@@ -297,11 +301,10 @@ const SettingProfile = (props: Theme) => {
 
             <button
               type="button"
-              className={`${
-                showInput
-                  ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
-                  : " bg-dark dark:bg-light"
-              } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+              className={`${showInput
+                ? "disable bg-[#272727] dark:bg-[#c2c2c2]"
+                : " bg-dark dark:bg-light"
+                } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
               onClick={handleNameChange}
             >
               Change

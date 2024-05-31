@@ -111,7 +111,7 @@ module {
     public type CommentRewards = {
         postId : PostId;
         likes : Nat;
-        amount : Int;
+        amount : Nat;
         claimedStatus : Bool;
     };
     public type WithdrawRecord = {

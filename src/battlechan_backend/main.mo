@@ -11,6 +11,7 @@ import Char "mo:base/Char";
 import TrieMap "mo:base/TrieMap";
 import Int "mo:base/Int";
 import Iter "mo:base/Iter";
+import Float "mo:base/Float";
 
 import Types "utils/types";
 import { anonymousCheck } "./utils/validations";
@@ -44,20 +45,24 @@ actor BattleChan {
   private stable var withdrawPostTrie = Trie.empty<Types.PostId, List.List<Types.WithdrawRecord>>();
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
-  private stable let freePostTime = 5;
-  private stable let voteTime = 1;
+  // Initial Free Post Time [30]
+  private stable let freePostTime = 30;
+  // Initial Vote Time [5]
+  private stable let voteTime = 5;
+  // Initial Vote token [1]
+  private stable let voteToken = 1;
   let decimal = 100_000_000;
   let transactionFee = 100;
   stable var postNameRootNode : Search.Node = Search.createNode();
 
   // private let paymentCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
   // mainnet
-  let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
-  let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
+  // let tokenCanisterId = "qccgw-riaaa-aaaak-qigta-cai";
+  // let backendCanisterId = Principal.fromText("qfdac-4qaaa-aaaak-qigtq-cai");
 
   //testnet
-  // let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
-  // let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
+  let tokenCanisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+  let backendCanisterId = Principal.fromText("be2us-64aaa-aaaaa-qaabq-cai");
 
   let ledger = actor (tokenCanisterId) : Token.Token;
 
@@ -156,7 +161,7 @@ actor BattleChan {
             spender_subaccount = null;
             from = { owner = userId; subaccount = null };
             to = { owner = backendCanisterId; subaccount = null };
-            amount = voteTime * decimal;
+            amount = voteToken * decimal;
             fee = ?transactionFee;
             memo = null;
             created_at_time = null;
@@ -180,7 +185,7 @@ actor BattleChan {
     };
   };
 
-  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Int) : async Types.Result {
+  public shared ({ caller = userId }) func withdrawPost(postId : Types.PostId, amount : Nat) : async Types.Result {
     try {
       let { updatedPostTrie; updatedWithDrawPostTrie; ownerReward } = withdraw(postId, amount, userId, postTrieMap, withdrawPostTrie);
       postTrieMap := updatedPostTrie;
@@ -223,7 +228,7 @@ actor BattleChan {
         memo = null;
         from_subaccount = null;
         created_at_time = null;
-        amount;
+        amount = amount;
       });
       switch (paymentRes) {
         case (#Ok(index)) {};
@@ -986,7 +991,7 @@ actor BattleChan {
     return { data = ?postDataAll; status = true; error = null };
   };
 
-  public query func totalPostsInBoard(boardName : Types.BoardName) : async Types.Result_1<{archivedpostcount:Nat ; activepostcount:Nat;}> {
+  public query func totalPostsInBoard(boardName : Types.BoardName) : async Types.Result_1<{ archivedpostcount : Nat; activepostcount : Nat }> {
     let boardId = toBoardId(boardName);
     let allPosts : [(Types.BoardName, [Types.PostId])] = Trie.toArray<Types.BoardName, Types.BoardInfo, (Types.BoardName, [Types.PostId])>(boardTrieMap, func(k, v) = (k, v.postIds));
     var archived_count : Nat = 0;
@@ -1006,16 +1011,20 @@ actor BattleChan {
     //count of active post
     switch (postMap.get(boardId)) {
       case (null) {
-        return { data = ?{archivedpostcount=0;activepostcount=0}; status = true; error = null };
+        return {
+          data = ?{ archivedpostcount = 0; activepostcount = 0 };
+          status = true;
+          error = null;
+        };
       };
       case (?postIds) {
         let postIdsArray = Array.foldLeft<Types.PostId, [Types.PostId]>(postIds, [], func(ids, id) = Array.append<Types.PostId>(ids, [id]));
         let postCount = Array.size<Types.PostId>(postIdsArray);
         let totalData = {
-          archivedpostcount=archived_count;
-          activepostcount=postCount;
+          archivedpostcount = archived_count;
+          activepostcount = postCount;
         };
-        
+
         return { data = ?totalData; status = true; error = null };
       };
     };
