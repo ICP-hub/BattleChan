@@ -284,7 +284,7 @@ const SettingProfile = (props: Theme) => {
                 placeholder="type your name"
                 onChange={(e) => setInputUserName(e.target.value)}
                 onBlur={handleSaveBtn}
-                className="py-1 px-4 italic bg-light dark:bg-dark border border-light-green  rounded-lg"
+                className="small_phone:w-full w-4/5 py-1 px-4 italic bg-light dark:bg-dark border border-light-green  rounded-lg"
               />
             )}
           </div>
