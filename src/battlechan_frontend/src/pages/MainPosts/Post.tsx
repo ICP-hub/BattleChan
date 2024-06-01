@@ -378,11 +378,11 @@ const Post: React.FC<PostProps> = ({
                       </h1>
 
                       <button
-                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green hover:text-darkcursor-pointer"
+                        className="flex items-center gap-1 px-2 rounded-lg text-1xl tablet:text-lg text-nowrap font-semibold hover:bg-dirty-light-green hover:text-light cursor-pointer"
                         onClick={() => setShowOverlay(true)}
                       >
                         <span
-                          className={`${type === "archive" ? "text-red" : "text-light-green"
+                          className={`${type === "archive" ? "text-red" : "text-light-green hover:text-light"
                             }`}
                         >
                           {type === "archive" ? "0:00 " : `${time} `}
