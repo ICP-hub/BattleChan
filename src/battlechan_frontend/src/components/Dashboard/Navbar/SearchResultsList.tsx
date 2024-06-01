@@ -31,7 +31,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
             onClick={() => {
               setTimeout(() => {
                 setResults({ activePost: [], archivedPost: [] });
-              }, 1000);
+              }, 500);
             }}
           >
             <div
@@ -52,7 +52,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
             onClick={() => {
               setTimeout(() => {
                 setResults({ activePost: [], archivedPost: [] });
-              }, 1000);
+              }, 500);
             }}
           >
             <div
