@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useConnect } from "@connect2ic/react";
- 
+
 import { IoSearch } from "react-icons/io5";
- 
+
 import goldcoin from "../../../images/goldcoin.png";
 import dark_logo from "../../../images/dark_logo.png";
 import light_logo from "../../../images/light_logo.png";
 import defaultImg from "../../../images/User.png";
 import { Link, useNavigate } from "react-router-dom";
- 
+
 import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import UserApiHanlder from "../../../API_Handlers/user";
 import NavConnectButton from "../../LandingPage/Navbar/NavConnectButton";
@@ -18,39 +18,39 @@ import PostApiHanlder from "../../../API_Handlers/post";
 import SearchBar from "./SearchBar";
 import PhoneSearchBar from "./PhoneSearchBar";
 import SearchResultsList from "./SearchResultsList";
- 
+
 type Theme = {
   handleThemeSwitch: Function;
 };
- 
+
 interface ProfileData {
   userName: string;
   profileImg: string;
   status: boolean;
 }
- 
+
 interface Post {
   postId: string;
   postName: string;
 }
- 
+
 interface Posts {
   archivedPost: Post[];
   activePost: Post[];
 }
- 
+
 interface BackendResponse {
   archivedPost: Post[];
   activePost: Post[];
 }
- 
+
 const truncateString = (str: string, maxLength: number): string => {
   if (str.length <= maxLength) {
     return str;
   }
   return str.slice(0, maxLength) + "...";
 };
- 
+
 const Navbar = (props: Theme) => {
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [fileURL, setFileURL] = React.useState(defaultImg);
@@ -60,20 +60,20 @@ const Navbar = (props: Theme) => {
     activePost: [],
     archivedPost: [],
   });
- 
+
   const [showSearchBarInPhone, setShowSearchBarInPhone] = useState(false);
- 
+
   const { getProfileData, votesOfUser } = UserApiHanlder();
   const { getSearchPost } = PostApiHanlder();
   const { principal, isConnected } = useConnect();
   const { getBalance, withdrawPost } = TokensApiHanlder();
- 
+
   const darkColor = document.documentElement.className;
   const is1000px = useMediaQuery("(min-width: 1000px)");
   const className = "HomePage__Navbar";
- 
+
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const body = document.querySelector("body")?.style;
     if (body && showOverlay == true) {
@@ -82,7 +82,7 @@ const Navbar = (props: Theme) => {
       body.overflow = "auto";
     }
   }, [showOverlay]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,8 +92,8 @@ const Navbar = (props: Theme) => {
           "isConnected before fetching data in navbar: ",
           isConnected
         );
- 
-        const response = await getProfileData(); 
+
+        const response = await getProfileData();
         if (response && response.status) {
           setUserName(response.userName);
           setFileURL(response.profileImg);
@@ -108,17 +108,17 @@ const Navbar = (props: Theme) => {
         console.error("Error fetching profile data:", error);
       }
     };
- 
+
     fetchData();
   }, [userName, principal, isConnected]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (principal) {
           const data = await getBalance(principal);
           const parsedBalance = Number(data);
- 
+
           if (!isNaN(parsedBalance)) {
             setTokenBalance(parsedBalance);
           } else {
@@ -129,10 +129,10 @@ const Navbar = (props: Theme) => {
         console.error("Error fetching balance:", error);
       }
     };
- 
+
     fetchData();
   }, [principal]);
- 
+
   return (
     <div
       className={
@@ -150,7 +150,7 @@ const Navbar = (props: Theme) => {
           alt="BATTLE CHAN"
         />
       </Link>
- 
+
       <section
         className={
           className +
@@ -159,11 +159,17 @@ const Navbar = (props: Theme) => {
       >
         <div className={`relative ${!is1000px ? "hidden" : "flex"}`}>
           <SearchBar setResults={setResults} />
-          {results && (results.activePost.length > 0 || results.archivedPost.length > 0) && (
-            <SearchResultsList activePost={results.activePost} archivedPost={results.archivedPost} />
-          )}
+          {results &&
+            results.activePost &&
+            (results.activePost.length > 0 ||
+              results.archivedPost.length > 0) && (
+              <SearchResultsList
+                activePost={results.activePost}
+                archivedPost={results.archivedPost}
+              />
+            )}
         </div>
- 
+
         <div
           className={
             className +
@@ -184,26 +190,32 @@ const Navbar = (props: Theme) => {
             Buy
           </button>
         </div>
- 
+
         {!is1000px && (
           <IoSearch
             onClick={() => setShowSearchBarInPhone(!showSearchBarInPhone)}
             className="tablet:min-w-[30px] tablet:text-3xl text-2xl cursor-pointer small_phone:block hidden"
           />
         )}
- 
+
         {!is1000px && showSearchBarInPhone && (
           <React.Fragment>
             <PhoneSearchBar
               setResults={setResults}
-              setShowSearchBarInPhone={setShowSearchBarInPhone}
             />
-          {results && (results.activePost.length > 0 || results.archivedPost.length > 0) && (
-            <SearchResultsList activePost={results.activePost} archivedPost={results.archivedPost} />
-          )}
+            {results &&
+              results.activePost &&
+              (results.activePost.length > 0 ||
+                results.archivedPost.length > 0) && (
+                <SearchResultsList
+                  setResults={setResults}
+                  activePost={results.activePost}
+                  archivedPost={results.archivedPost}
+                />
+              )}
           </React.Fragment>
         )}
- 
+
         {!is1000px &&
           (isConnected ? (
             <React.Fragment>
@@ -225,7 +237,7 @@ const Navbar = (props: Theme) => {
               <NavConnectButton />
             </button>
           ))}
- 
+
         {is1000px &&
           (isConnected ? (
             <React.Fragment>
@@ -236,7 +248,7 @@ const Navbar = (props: Theme) => {
                   <span className="text-light-green">{tokenBalance}</span>
                 </div>
               </div>
- 
+
               <div className="w-9 h-9 tablet:w-12 tablet:h-12 flex justify-center rounded-md">
                 <img
                   src={fileURL}
@@ -255,7 +267,7 @@ const Navbar = (props: Theme) => {
               <NavConnectButton />
             </button>
           ))}
- 
+
         <ProfileOverlay
           display={showOverlay}
           setProfilePopUp={setShowOverlay}
@@ -265,5 +277,5 @@ const Navbar = (props: Theme) => {
     </div>
   );
 };
- 
+
 export default Navbar;
