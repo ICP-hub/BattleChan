@@ -180,7 +180,7 @@ const Post = () => {
                 <img
                   src={convertInt8ToBase64(post.postMetaData)}
                   alt="Post Cover Image"
-                  className="postImage w-full"
+                  className="postImage w-full h-[268px]"
                 />
 
                 <div className="postData w-full p-6 flex-direction-col gap-4">
