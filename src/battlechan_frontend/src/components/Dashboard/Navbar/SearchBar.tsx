@@ -55,9 +55,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
           setSearchInput(value);
           fetchSearchData(searchInput);
         }}
-        onBlur={() => {
-          setResults({ activePost: [], archivedPost: [] });
-        }}
       />
     </div>
   );

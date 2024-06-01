@@ -202,13 +202,13 @@ const Navbar = (props: Theme) => {
           <React.Fragment>
             <PhoneSearchBar
               setResults={setResults}
-              setShowSearchBarInPhone={setShowSearchBarInPhone}
             />
             {results &&
               results.activePost &&
               (results.activePost.length > 0 ||
                 results.archivedPost.length > 0) && (
                 <SearchResultsList
+                  setResults={setResults}
                   activePost={results.activePost}
                   archivedPost={results.archivedPost}
                 />
