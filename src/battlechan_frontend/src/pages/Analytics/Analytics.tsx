@@ -55,7 +55,7 @@ interface ClaimResponse {
   };
   status?: boolean;
   msg?: string;
-};
+}
 
 const Analytics = (props: Theme) => {
   const [likedPost, setLikedPost] = React.useState(0);
@@ -95,7 +95,8 @@ const Analytics = (props: Theme) => {
   const [rewardsData, setRewardsData] = useState<RewardsData[] | null>(null);
   const [principalId, setPrincipalId] = React.useState("");
   const [amount, setAmount] = React.useState(0);
-  const adminPrincipal = "zha44-ywxln-mzci4-u5acw-jrncf-ijud7-t5w63-zfo4b-cypfc-giono-kqe";
+  const adminPrincipal =
+    "zha44-ywxln-mzci4-u5acw-jrncf-ijud7-t5w63-zfo4b-cypfc-giono-kqe";
   // const adminPrincipal = "bkvkj-i3f3r-pitry-pzsc3-i5pwi-6pp5q-cnask-xolcl-fxqke-wbf4d-gae";
   const { votesOfUser } = UserApiHanlder();
   const { convertInt8ToBase64 } = Constant();
@@ -121,7 +122,9 @@ const Analytics = (props: Theme) => {
     getRewards();
   }, []);
 
-  const [buttonDisabled, setButtonDisabled] = useState<boolean[]>(Array(rewardsData?.length || 0).fill(false));
+  const [buttonDisabled, setButtonDisabled] = useState<boolean[]>(
+    Array(rewardsData?.length || 0).fill(false)
+  );
   const [TransferbuttonDisabled, setTransferButtonDisabled] = useState(false);
 
   const handleClaimButtonClick = async (index: number, postId: string) => {
@@ -137,7 +140,9 @@ const Analytics = (props: Theme) => {
       toast.success("Successfully Claimed Reward!");
     } else {
       getRewards();
-      toast.error(response?.msg || "Error: Something went wrong, Please try again later!");
+      toast.error(
+        response?.msg || "Error: Something went wrong, Please try again later!"
+      );
     }
 
     updatedButtonDisabled[index] = false;
@@ -164,11 +169,11 @@ const Analytics = (props: Theme) => {
     } else {
       getRewards();
       setTransferButtonDisabled(false);
-      toast.error(response?.err || "Error: Something went wrong, Please try again later!");
+      toast.error(
+        response?.err || "Error: Something went wrong, Please try again later!"
+      );
     }
   };
-
-
 
   return (
     <>
@@ -384,29 +389,29 @@ const Analytics = (props: Theme) => {
             </svg>
           </div>
 
-          <div className="flex items-center flex-wrap justify-center text-[#fff]">
+          <div className="flex items-stretch flex-wrap justify-center text-[#fff]">
             <div className="p-2 w-1/2 tablet:w-1/4">
-              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
-                <div>Upvote</div>
-                <div className="font-bold text-xl mt-2">{likedPost}</div>
+              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] h-full bg-cover bg-center text-center rounded-md p-2 tablet:p-8">
+                <p>Upvote</p>
+                <p className="font-bold text-xl mt-2">{likedPost}</p>
               </div>
             </div>
             <div className="p-2 w-1/2 tablet:w-1/4">
-              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
-                <div>Downvote</div>
-                <div className="font-bold text-xl mt-2">{dislikedPost}</div>
+              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] h-full bg-cover bg-center text-center rounded-md p-2 tablet:p-8">
+                <p>Downvote</p>
+                <p className="font-bold text-xl mt-2">{dislikedPost}</p>
               </div>
             </div>
             <div className="p-2 w-1/2 tablet:w-1/4">
-              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
-                <div>Buy</div>
-                <div className="font-bold text-xl mt-2">0</div>
+              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] h-full bg-cover bg-center text-center rounded-md p-2 tablet:p-8">
+                <p>Buy</p>
+                <p className="font-bold text-xl mt-2">0</p>
               </div>
             </div>
             <div className="p-2 w-1/2 tablet:w-1/4">
-              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] bg-cover bg-center text-center rounded-md p-2 tablet:p-11">
-                <div>Earn From Others</div>
-                <div className="font-bold text-xl mt-2">0</div>
+              <div className="bg-[url('/src/images/analytics-card-bg.jpg')] h-full bg-cover bg-center text-center rounded-md p-2 tablet:p-8">
+                <p>Earn From Others</p>
+                <p className="font-bold text-xl mt-2">0</p>
               </div>
             </div>
           </div>
@@ -417,7 +422,6 @@ const Analytics = (props: Theme) => {
             </h1>
 
             <div>
-
               {principal && isConnected && principal === adminPrincipal && (
                 <div
                   key={1}
@@ -465,9 +469,12 @@ const Analytics = (props: Theme) => {
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
                       Claim Your Reward of
-                      <strong> {data.amount}</strong> Tokens from post Id <strong>{data.postId}</strong>
+                      <strong> {data.amount}</strong> Tokens from post Id{" "}
+                      <strong>{data.postId}</strong>
                       <br />
-                      <span className="opacity-75"><i>Comment Likes: {data.likes}</i></span>
+                      <span className="opacity-75">
+                        <i>Comment Likes: {data.likes}</i>
+                      </span>
                     </div>
                   </div>
 
@@ -475,13 +482,21 @@ const Analytics = (props: Theme) => {
                     <div className="w-24 h-10">
                       <button
                         type="button"
-                        className={`${data.claimedStatus ? 'disable' : ''
-                          } ${data.claimedStatus ? 'bg-[#5f7d63]' : 'bg-[#272727] dark:bg-[#c2c2c2]'
-                          } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
-                        onClick={() => handleClaimButtonClick(index, data.postId || "")}
+                        className={`${data.claimedStatus ? "disable" : ""} ${
+                          data.claimedStatus
+                            ? "bg-[#5f7d63]"
+                            : "bg-[#272727] dark:bg-[#c2c2c2]"
+                        } text-light dark:text-dark phone:text-base text-sm laptop:py-2 laptop:px-4 py-1 px-2 rounded-lg font-semibold`}
+                        onClick={() =>
+                          handleClaimButtonClick(index, data.postId || "")
+                        }
                         disabled={data.claimedStatus || buttonDisabled[index]}
                       >
-                        {buttonDisabled[index] ? 'Claiming...' : data.claimedStatus ? 'Claimed' : 'Claim'}
+                        {buttonDisabled[index]
+                          ? "Claiming..."
+                          : data.claimedStatus
+                          ? "Claimed"
+                          : "Claim"}
                       </button>
                     </div>
                   </div>
@@ -495,10 +510,9 @@ const Analytics = (props: Theme) => {
                 >
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
-                      <span className="text-[#18AF00]">
-                        {"Upvote:"}
-                      </span>{" "}
-                      <strong>{vote.userName}</strong> with post Id {vote.postId}
+                      <span className="text-[#18AF00]">{"Upvote:"}</span>{" "}
+                      <strong>{vote.userName}</strong> with post Id{" "}
+                      {vote.postId}
                     </div>
                   </div>
                   <div className="flex items-center pl-2">
@@ -520,10 +534,9 @@ const Analytics = (props: Theme) => {
                 >
                   <div className="text-sm max-w-60 tablet:max-w-none items-center">
                     <div>
-                      <span className="text-red">
-                        {"Downvote:"}
-                      </span>{" "}
-                      <strong>{vote.userName}</strong> with post Id {vote.postId}
+                      <span className="text-red">{"Downvote:"}</span>{" "}
+                      <strong>{vote.userName}</strong> with post Id{" "}
+                      {vote.postId}
                     </div>
                   </div>
                   <div className="flex items-center pl-2">

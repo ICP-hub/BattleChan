@@ -65,14 +65,19 @@ const Comments = () => {
           ))}
 
           <tbody>
-            {commentData.length > 0 &&
+            {commentData &&
+              commentData.length > 0 &&
               commentData.map((comment) => (
                 <>
                   <tr key={comment.commentId}>
                     <TdTag para={comment.commentId} />
-                    <TdTag para={comment.comment.length > 70
-                      ? `${comment.comment.slice(0, 70)}...`
-                      : comment.comment} />
+                    <TdTag
+                      para={
+                        comment.comment.length > 70
+                          ? `${comment.comment.slice(0, 70)}...`
+                          : comment.comment
+                      }
+                    />
                     <TdTag para={String(comment.likedBy.length)} />
                   </tr>
                 </>
@@ -80,7 +85,7 @@ const Comments = () => {
           </tbody>
         </table>
       </div>
-    </React.Fragment >
+    </React.Fragment>
   );
 };
 
