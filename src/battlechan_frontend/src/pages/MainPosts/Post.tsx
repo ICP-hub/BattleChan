@@ -153,7 +153,7 @@ const Post: React.FC<PostProps> = ({
     try {
       const isApproved = (await icrc2_approve(
         principal_idRef.current
-      )) as Response; 
+      )) as Response;
 
       if (isApproved.status !== true) {
         toast.error(isApproved.err);
@@ -170,8 +170,8 @@ const Post: React.FC<PostProps> = ({
       const data = (await upvotePost(postId)) as VoteResponse;
 
       if (data && data.ok) {
-      getPosts();
-      toast.success("Successfully Upvoted Post!");
+        getPosts();
+        toast.success("Successfully Upvoted Post!");
       } else {
         const lastIndex = data.err[1].lastIndexOf(":");
         const errorMsg = data.err[1].slice(lastIndex + 2);
@@ -283,7 +283,7 @@ const Post: React.FC<PostProps> = ({
             >
               <img
                 alt="post image"
-                className="block xl:max-w-28 laptop:max-w-20 tablet:max-w-28 phone:max-w-20 max-w-16 rounded-lg aspect-square object-cover pointer-events-none"
+                className="block   phone:max-w-20 max-w-[90px] max-h-[90px] rounded-lg aspect-square object-contain pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
@@ -338,11 +338,11 @@ const Post: React.FC<PostProps> = ({
                   <p className="tablet:text-lg text-sm font-semibold text-ellipsis overflow-hidden">
                     {postName}
                   </p>
-                  <p className="tablet:text-md small_phone:text-sm text-xs text-gray-800 text-wrap break-all">
-                    {content.length > 70
-                      ? `${content.slice(0, 70)}...`
-                      : content}
+                  <p className="tablet:text-md small_phone:text-sm text-xs max-w-inherit text-gray-800 break-all">
+                    {content.length > 70 ? `${content.slice(0, 50)}...` : content}
                   </p>
+
+
                 </Link>
               </section>
             </div>
@@ -429,7 +429,7 @@ const Post: React.FC<PostProps> = ({
             id="upvoteBtn"
             onClick={type === "archive" ? undefined : () => handleUpvote(id)}
             disabled={upvoteDisabled}
-            style={{ border: "none", background: "none", padding: 0, cursor: "pointer" }} 
+            style={{ border: "none", background: "none", padding: 0, cursor: "pointer" }}
           >
             <TbSquareChevronUpFilled
               className={`${(vote && !upvoteDisabled) ? "text-dirty-light-green" : "text-[#878787]"} cursor-pointer`}
