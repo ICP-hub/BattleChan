@@ -70,7 +70,7 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
               </div>
               <div className="ml-4 max-w-20 tablet:max-w-28 rounded-sm flex items-center gap-4">
                 <img
-                  className="block h-auto w-full rounded"
+                  className="block h-auto h- w-full rounded h-[60px] cover"
                   src={convertInt8ToBase64(vote.postMetaData)}
                   alt="post image"
                 />
