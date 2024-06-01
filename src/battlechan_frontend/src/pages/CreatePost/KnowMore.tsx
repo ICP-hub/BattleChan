@@ -7,7 +7,7 @@ const KnowMore = () => {
 
       <ul className="list-disc xl:px-[25vw] laptop:px-[20vw] tablet:px-[15vw] px-[10vw] dark:text-grey tablet:text-base text-sm flex flex-col tablet:gap-2 gap-4">
         <li>
-          Posting is free, and it grants 5 minutes of visibility to each new
+          Posting is free, and it grants 30 minutes of visibility to each new
           post.
         </li>
         <li>
