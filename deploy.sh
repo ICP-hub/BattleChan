@@ -47,7 +47,6 @@ record {
 
 dfx deploy backend --network ic
 
-
 dfx deploy battlechan_frontend --network ic
 
 

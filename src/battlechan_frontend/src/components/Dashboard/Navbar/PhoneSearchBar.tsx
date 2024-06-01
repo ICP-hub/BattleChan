@@ -21,12 +21,10 @@ type SearchResults = BackendResponse;
 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
-  setShowSearchBarInPhone: Function;
 }
 
 const PhoneSearchBar: React.FC<SearchBarProps> = ({
   setResults,
-  setShowSearchBarInPhone,
 }) => {
   const [searchInput, setSearchInput] = React.useState("");
   const { getSearchPost } = PostApiHanlder();
@@ -58,10 +56,10 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({
           setSearchInput(value);
           fetchSearchData(searchInput);
         }}
-        onBlur={() => {
-          setResults({ activePost: [], archivedPost: [] });
-          // setShowSearchBarInPhone(false);
-        }}
+        // onBlur={() => {
+        //   setResults({ activePost: [], archivedPost: [] });
+        //   // setShowSearchBarInPhone(false);
+        // }}
       />
     </div>
   );
