@@ -46,7 +46,7 @@ actor BattleChan {
   private stable var userAchivedPostTrie = Trie.empty<Types.UserId, List.List<(Types.PostId, Types.PostInfo)>>();
 
   // Initial Free Post Time [30]
-  private stable let freePostTime = 2;
+  private stable let freePostTime = 30;
   // Initial Vote Time [5]
   private stable let voteTime = 5;
   // Initial Vote token [1]
