@@ -69,11 +69,20 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
                 </div>
               </div>
               <div className="ml-4 max-w-20 tablet:max-w-28 rounded-sm flex items-center gap-4">
-                <img
+                <div className="flex items-center pl-2">
+                  <div className="w-24 h-10">
+                    <img
+                      className="block h-full w-full rounded"
+                      src={convertInt8ToBase64(vote.postMetaData)}
+                      alt="post image"
+                    />
+                  </div>
+                </div>
+                {/* <img
                   className="block h-auto w-full rounded"
                   src={convertInt8ToBase64(vote.postMetaData)}
                   alt="post image"
-                />
+                /> */}
                 <div className="hidden tablet:block">
                   <MdArrowOutward size={18} />
                 </div>

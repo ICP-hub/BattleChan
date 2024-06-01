@@ -164,6 +164,7 @@ const Navbar = (props: Theme) => {
             (results.activePost.length > 0 ||
               results.archivedPost.length > 0) && (
               <SearchResultsList
+                setResults={setResults}
                 activePost={results.activePost}
                 archivedPost={results.archivedPost}
               />
