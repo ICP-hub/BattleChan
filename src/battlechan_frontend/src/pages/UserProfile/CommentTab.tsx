@@ -22,7 +22,6 @@ interface CommentTabProps {
   userInfo: UserInfo[];
 }
 
-
 interface AllUserComment {
   commentId: string;
   postMetaData: Int8Array;
@@ -54,7 +53,8 @@ const CommentTab: React.FC<CommentTabProps> = ({ userInfo }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {commentData.length > 0 &&
+      {commentData &&
+        commentData.length > 0 &&
         commentData.map((comment) => (
           <>
             <div
