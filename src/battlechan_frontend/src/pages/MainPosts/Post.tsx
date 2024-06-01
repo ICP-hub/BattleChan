@@ -280,10 +280,11 @@ const Post: React.FC<PostProps> = ({
               to={`/dashboard/postDetails/${encodeURIComponent(
                 id
               )}?type=archive`}
+              className="max-w-[90px] max-h-[90px] flex items-center justify-center"
             >
               <img
                 alt="post image"
-                className="block   phone:max-w-20 max-w-[90px] max-h-[90px] rounded-lg aspect-square object-contain pointer-events-none"
+                className="block xl:w-28 phone:w-24 small_phone:w-20 w-16 rounded-lg aspect-square object-cover pointer-events-none"
                 src={convertInt8ToBase64(imageUrl)}
               />
             </Link>
