@@ -372,7 +372,7 @@ module {
         };
         var totalLikesOnComment = 0;
         for (comment in commentData.vals()) {
-            if (comment.likedBy.size() > 1) {
+            if (comment.likedBy.size() >= 5) {
                 // Change to >= 5 for 5+ likes
                 let ownerId = comment.createdBy.ownerId;
                 totalLikesOnComment := totalLikesOnComment + comment.likedBy.size();

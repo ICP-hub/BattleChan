@@ -541,9 +541,9 @@ const Analytics = (props: Theme) => {
                   </div>
                   <div className="flex items-center pl-2">
                     <div className={"text-red mr-2 tablet:mr-4"}>-1</div>
-                    <div className="max-w-20 tablet:max-w-28 rounded-sm flex items-center">
+                    <div className="w-24 h-10">
                       <img
-                        className="block h-auto w-full rounded"
+                        className="block h-full w-full rounded"
                         src={convertInt8ToBase64(vote.postMetaData)}
                         alt="post image"
                       />
