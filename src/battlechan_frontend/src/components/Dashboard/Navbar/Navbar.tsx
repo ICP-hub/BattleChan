@@ -61,7 +61,10 @@ const Navbar = (props: Theme) => {
     archivedPost: [],
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [showSearchBarInPhone, setShowSearchBarInPhone] = useState(false);
+  const [isSearchListVisible, setIsSearchListVisible] = useState(false);
 
   const { getProfileData, votesOfUser } = UserApiHanlder();
   const { getSearchPost } = PostApiHanlder();
@@ -133,6 +136,21 @@ const Navbar = (props: Theme) => {
     fetchData();
   }, [principal]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        !document.querySelector(".search-results-list")?.contains(event.target as Node)
+      ) {
+        setIsSearchListVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div
       className={
@@ -158,15 +176,17 @@ const Navbar = (props: Theme) => {
         }
       >
         <div className={`relative ${!is1000px ? "hidden" : "flex"}`}>
-          <SearchBar setResults={setResults} />
+          <SearchBar setResults={setResults} setIsSearchListVisible={setIsSearchListVisible} setIsLoading={setIsLoading} />
           {results &&
             results.activePost &&
-            (results.activePost.length > 0 ||
-              results.archivedPost.length > 0) && (
+
+            isSearchListVisible && results.activePost.length + results.archivedPost.length > 0 && (
               <SearchResultsList
                 setResults={setResults}
                 activePost={results.activePost}
                 archivedPost={results.archivedPost}
+                setIsSearchListVisible={setIsSearchListVisible}
+                isLoading={isLoading}
               />
             )}
         </div>
@@ -201,17 +221,16 @@ const Navbar = (props: Theme) => {
 
         {!is1000px && showSearchBarInPhone && (
           <React.Fragment>
-            <PhoneSearchBar
-              setResults={setResults}
-            />
+            <PhoneSearchBar setResults={setResults} setIsSearchListVisible={setIsSearchListVisible} setIsLoading={setIsLoading} />
             {results &&
               results.activePost &&
-              (results.activePost.length > 0 ||
-                results.archivedPost.length > 0) && (
+              (isSearchListVisible && results.activePost.length + results.archivedPost.length > 0) && (
                 <SearchResultsList
                   setResults={setResults}
                   activePost={results.activePost}
                   archivedPost={results.archivedPost}
+                  setIsSearchListVisible={setIsSearchListVisible}
+                  isLoading={isLoading}
                 />
               )}
           </React.Fragment>
