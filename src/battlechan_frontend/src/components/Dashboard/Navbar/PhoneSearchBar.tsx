@@ -21,15 +21,21 @@ type SearchResults = BackendResponse;
 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
+  setIsSearchListVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
 const PhoneSearchBar: React.FC<SearchBarProps> = ({
   setResults,
+  setIsLoading
 }) => {
   const [searchInput, setSearchInput] = React.useState("");
   const { getSearchPost } = PostApiHanlder();
 
   async function fetchSearchData(value: string) {
+    setIsLoading(true); // Start loading
+
     try {
       const response = (await getSearchPost(value)) as BackendResponse;
       console.log({ response });
@@ -38,6 +44,8 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({
     } catch (error) {
       console.error("Error fetching search data:", error);
       setResults({ activePost: [], archivedPost: [] });
+    } finally {
+      setIsLoading(false); // End loading
     }
   }
 
@@ -56,10 +64,10 @@ const PhoneSearchBar: React.FC<SearchBarProps> = ({
           setSearchInput(value);
           fetchSearchData(searchInput);
         }}
-        // onBlur={() => {
-        //   setResults({ activePost: [], archivedPost: [] });
-        //   // setShowSearchBarInPhone(false);
-        // }}
+      // onBlur={() => {
+      //   setResults({ activePost: [], archivedPost: [] });
+      //   // setShowSearchBarInPhone(false);
+      // }}
       />
     </div>
   );

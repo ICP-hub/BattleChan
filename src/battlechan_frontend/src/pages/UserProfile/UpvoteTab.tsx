@@ -87,6 +87,7 @@ const UpvoteTab: React.FC<UpvoteTabProps> = ({ type }) => {
                   <MdArrowOutward size={18} />
                 </div>
               </div>
+
             </div>
           ))}
       </div>

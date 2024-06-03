@@ -21,21 +21,29 @@ type SearchResults = BackendResponse;
 
 interface SearchBarProps {
   setResults: React.Dispatch<React.SetStateAction<SearchResults>>;
+  setIsSearchListVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ setResults, setIsSearchListVisible,setIsLoading }) => {
   const [searchInput, setSearchInput] = React.useState("");
   const { getSearchPost } = PostApiHanlder();
 
   async function fetchSearchData(value: string) {
     try {
+      setIsLoading(true); 
+
       const response = (await getSearchPost(value)) as BackendResponse;
       console.log({ response });
 
       setResults(response);
+      setIsSearchListVisible(true); // Show search list when results are fetched
     } catch (error) {
       console.error("Error fetching search data:", error);
       setResults({ activePost: [], archivedPost: [] });
+      setIsSearchListVisible(false); // Hide search list if there's an error
+    } finally {
+      setIsLoading(false); // End loading
     }
   }
 
@@ -53,7 +61,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
         onChange={(e) => {
           const value = e.target.value;
           setSearchInput(value);
-          fetchSearchData(searchInput);
+          if (value.trim() !== "") {
+            fetchSearchData(value);
+          } else {
+            setResults({ activePost: [], archivedPost: [] });
+            setIsSearchListVisible(false); // Hide search list if input is empty
+          }
         }}
       />
     </div>
