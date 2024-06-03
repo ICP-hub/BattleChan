@@ -32,7 +32,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
         </div>) : (
 
         <div
-          className={`overflow-y-scroll max-h-52 ${activePost.length + archivedPost.length <= 6 ? "no-scrollbar" : ""
+          className={`overflow-y-scroll max-h-52 search-results-list ${activePost.length + archivedPost.length <= 6 ? "no-scrollbar" : ""
             }`}
         >
           {activePost.map((post: any) => (
