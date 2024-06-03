@@ -144,7 +144,7 @@ const PostDetails = (props: Theme) => {
       setShowComments(true);
     }
     getPostDetail(decodedPostId);
-  }, [is700px]);
+  }, [is700px,postId]);
 
   const formatTime = (remainingTime: bigint) => {
     const seconds = Math.floor(Number(remainingTime) / 1e9);
