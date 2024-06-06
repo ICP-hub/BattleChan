@@ -42,7 +42,7 @@ const About = () => {
           <img
             src={dollarCoin}
             alt="dollar coin"
-            className="absolute pointer-events-none 1170px:w-[150px] big_tablet:w-[100px] w-[80px] 1170px:right-0 right-0 1170px:top-0 top-[-12%]"
+            className="absolute pointer-events-none 1170px:w-[150px] big_tablet:w-[100px] small_phone:w-[80px] w-[50px] 1170px:right-0 right-0 1170px:top-0 small_phone:w-[80px] w-[50px]:top-[-12%] top-[-5%]"
           />
           <img
             src={dollarCoin}
@@ -52,7 +52,7 @@ const About = () => {
           <img
             src={Sword}
             alt="Sword"
-            className="absolute 1170px:w-auto big_tablet:w-[100px] w-[80px] pointer-events-none 1170px:top-[5%] top-[-15%] left-0"
+            className="absolute 1170px:w-auto big_tablet:w-[100px] w-[80px] pointer-events-none 1170px:top-[5%] small_phone:w-[80px] w-[50px]:top-[-15%] top-[-10%] left-0"
           />
           <img
             src={Sword}
@@ -62,12 +62,12 @@ const About = () => {
           <img
             src={like}
             alt="Thumbs up"
-            className="absolute pointer-events-none 1170px:w-[200px] 1170px:w-[150px] w-[120px] 1170px:right-[-15%] right-[-10%] 1170px:top-[47%] big_tablet:top-[45%] phone:top-[50%] top-[35%] translate-x-[-50%] translate-y-[-50%]"
+            className="absolute pointer-events-none 1170px:w-[200px] 1170px:w-[150px] small_phone:w-[120px] w-[100px] 1170px:right-[-15%] right-[-10%] 1170px:top-[47%] big_tablet:top-[45%] phone:top-[50%] small_phone:top-[35%] top-[38%] translate-x-[-50%] translate-y-[-50%]"
           />
           <img
             src={like}
             alt="Thumbs up"
-            className="absolute pointer-events-none 1170px:w-[200px] big_tablet:w-[150px] w-[120px] 1170px:left-[15%] phone:left-[10%] left-[12%] 1170px:bottom-[2%] bottom-[5%] translate-x-[-50%] translate-y-[-50%] rotate-[180deg]"
+            className="absolute pointer-events-none 1170px:w-[200px] big_tablet:w-[150px] small_phone:w-[120px] w-[100px] 1170px:left-[15%] phone:left-[10%] small_phone:left-[12%] left-[15%] 1170px:bottom-[2%] small_phone:bottom-[5%] bottom-[8%] translate-x-[-50%] translate-y-[-50%] rotate-[180deg]"
           />
         </div>
       </section>
@@ -80,7 +80,7 @@ const Cards = () => {
     <React.Fragment>
       {/* Card 1 */}
       <div className="right-0 card bg-dark h-auto w-full xl:w-[700px] w-full xl:gap-4 gap-2 1170px:mt-40 mt-10 rounded-2xl flex items-center">
-        <section className="left_image 1170px:w-1/3 tablet:w-[230px] phone:w-[150px] w-[120px] relative flex-wrap">
+        <section className="left_image small_phone:block hidden 1170px:w-1/3 tablet:w-[230px] phone:w-[150px] w-[120px] relative">
           <img
             src={tablet}
             alt="Big Image"
@@ -89,12 +89,12 @@ const Cards = () => {
         </section>
 
         <section className="right_content h-full 1170px:pr-8 pr-4 phone:pt-4 pt-2 1170px:pb-8 phone:pb-6 pb-4 1170px:px-8 px-4 flex gap-2 flex-col justify-between">
-          <div className="right_content_top flex gap-2 items-end justify-between relative">
+          <div className="phone:flex hidden right_content_top gap-2 items-end justify-between relative">
             <div className="tablet:w-[13%] w-[8%]">
               <img
                 src={profile_pic}
                 alt="Profile Photo"
-                className="absolute bottom-4 tablet:w-[50px] w-[35px] pointer-events-none mb-2"
+                className="absolute phone:bottom-4 bottom-6 tablet:w-[50px] w-[35px] pointer-events-none mb-2"
               />
             </div>
             <p className="name xl:text-xl tablet:text-lg text-md">
@@ -103,6 +103,28 @@ const Cards = () => {
             <p className="date_and_time xl:text-base tablet:text-sm text-xs">
               Oct 29, 2023 ; 13:30
             </p>
+            <p className="left_time xl:text-xl tablet:text-lg text-md">
+              <span className="text-light-green">5:00</span> min left
+            </p>
+          </div>
+          <div className="phone:hidden flex right_content_top gap-2 items-start justify-between relative">
+            <div>
+              <div className="tablet:w-[13%] w-[8%]">
+                <img
+                  src={profile_pic}
+                  alt="Profile Photo"
+                  className="absolute phone:bottom-4 bottom-6 tablet:w-[50px] w-[35px] pointer-events-none mb-2"
+                />
+              </div>
+              <div className="flex flex-col ml-12">
+                <p className="name xl:text-xl tablet:text-lg text-md">
+                  Lannister Grey
+                </p>
+                <p className="date_and_time xl:text-base tablet:text-sm text-xs">
+                  Oct 29, 2023 ; 13:30
+                </p>
+              </div>
+            </div>
             <p className="left_time xl:text-xl tablet:text-lg text-md">
               <span className="text-light-green">5:00</span> min left
             </p>
@@ -117,7 +139,7 @@ const Cards = () => {
 
       {/* Card 2 */}
       <div className="card bg-dark h-auto w-full xl:w-[700px] w-full xl:gap-4 gap-2 big_tablet:mb-36 mb-24 big_tablet::mt-24 mt-10 rounded-2xl flex items-center relative flex">
-        <section className="left_image 1170px:w-1/3 tablet:w-[230px] phone:w-[150px] w-[120px] relative">
+        <section className="left_image small_phone:block hidden 1170px:w-1/3 tablet:w-[230px] phone:w-[150px] w-[120px] relative">
           <img
             src={tablet}
             alt="Big Image"
@@ -126,12 +148,12 @@ const Cards = () => {
         </section>
 
         <section className="right_content h-full 1170px:pr-8 pr-4 phone:pt-4 pt-2 1170px:pb-8 phone:pb-6 pb-4 1170px:px-8 px-4 flex gap-2 flex-col justify-between">
-          <div className="right_content_top flex gap-2 items-end justify-between relative">
+          <div className="phone:flex hidden right_content_top gap-2 items-end justify-between relative">
             <div className="tablet:w-[13%] w-[8%]">
               <img
                 src={profile_pic}
                 alt="Profile Photo"
-                className="absolute bottom-4 tablet:w-[50px] w-[35px] pointer-events-none"
+                className="absolute phone:bottom-8 bottom-6 tablet:w-[50px] w-[35px] pointer-events-none"
               />
             </div>
             <p className="name xl:text-xl tablet:text-lg text-md">
@@ -140,6 +162,28 @@ const Cards = () => {
             <p className="date_and_time xl:text-base tablet:text-sm text-xs">
               Oct 29, 2023 ; 13:30
             </p>
+            <p className="left_time xl:text-xl tablet:text-lg text-md">
+              <span className="text-red">0:52</span> min left
+            </p>
+          </div>
+          <div className="phone:hidden flex right_content_top gap-2 items-start justify-between relative">
+            <div>
+              <div className="tablet:w-[13%] w-[8%]">
+                <img
+                  src={profile_pic}
+                  alt="Profile Photo"
+                  className="absolute phone:bottom-8 bottom-6 tablet:w-[50px] w-[35px] pointer-events-none"
+                />
+              </div>
+              <div className="flex flex-col ml-12">
+                <p className="name xl:text-xl tablet:text-lg text-md">
+                  Lannister Grey
+                </p>
+                <p className="date_and_time xl:text-base tablet:text-sm text-xs">
+                  Oct 29, 2023 ; 13:30
+                </p>
+              </div>
+            </div>
             <p className="left_time xl:text-xl tablet:text-lg text-md">
               <span className="text-red">0:52</span> min left
             </p>
