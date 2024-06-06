@@ -28,6 +28,7 @@ export default {
       tablet: "700px",
       big_tablet: "870px",
       laptop: "1000px",
+      '1170px': "1170px",
       large: "1025px",
       xl: "1280px",
     },
