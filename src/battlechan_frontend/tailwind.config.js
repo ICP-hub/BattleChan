@@ -26,6 +26,7 @@ export default {
       small_phone: "430px",
       phone: "550px",
       tablet: "700px",
+      '800px': "800px",
       big_tablet: "870px",
       laptop: "1000px",
       '1170px': "1170px",
